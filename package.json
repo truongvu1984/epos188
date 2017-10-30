@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node index.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
     "connect": "^3.6.5",
     "express": "^4.16.2",
     "http": "0.0.0",
+    "mysql": "^2.15.0",
     "nodemailer": "^4.3.1",
     "socket.io": "^2.0.4",
     "twilio": "^3.9.1"
