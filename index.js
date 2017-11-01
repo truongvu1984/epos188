@@ -1,5 +1,4 @@
 var express = require("express");
-console.log("vu yeu");
 var app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
@@ -19,17 +18,102 @@ var con = mysql.createConnection({
   host: "us-cdbr-iron-east-05.cleardb.net",
   user: "b04c2ff40d4e13",
   password: "0fdaedd4",
- database : "heroku_7790b5956b2a5c2"
+ database : "heroku_7790b5956b2a5c2",
+ queueLimit: 30,
+  acquireTimeout: 1000000,
+  connectionLimit: 100
 });
 var accountSid = 'ACaa41a4ddc473c35c1192aa1a7fd6dab4';
 var authToken = '94b2749230e0d3d5b379cf851c0d3c8c';
 //require the Twilio module and create a REST client
 var client = require('twilio')(accountSid, authToken);
 var stt = 0;
-con.connect(function(err) {
-  if (err) { console.log(" da co loi:" + err); } else {
-    console.log("Da co ket noi ok");
-  }});
+function ketnoi(){
+  con.connect(function(err) {
+    if (err) { console.log(" da co loi:" + err); } else {
+      console.log("Da co ket noi ok ha ha ha");
+      }});
+
+}
+ketnoi();
+// con.on('error', function(err) {
+//   console.log('ngat ket noi va ket noi lai');
+//
+//   ketnoi();
+//     // con.end(function(){
+//     //   console.log('ngat ket noi va ket noi lai');
+//     //     ketnoi();
+//     //   });
+//     });
+
+  // function keep_server(){
+  //   console.log('test');
+  //
+  // }
+  // for ( var i=0; i<10; i++){
+  //   setTimeout(keep_server, 5000);
+  // }
+
+  function waitAndDo() {
+  setTimeout(function() {
+    con.query("SELECT `number` FROM `account` WHERE `number` LIKE '123'", function(err){if(err){console.log('co loi:'+err);}});
+    waitAndDo();
+  }, 10000);
+}
+waitAndDo();
+
+
+  //con.query("SELECT `number` FROM `account` WHERE `number` LIKE '123'", function(err){if(err){console.log('co loi:'+err);}});
+  // con.on('error', function(err) {
+  //   con.end(function(){
+  //     con.connect(function(err) {
+  //       if (err) { console.log(" da co loi roi troi oi:" + err); } else {
+  //         console.log("Da co ket noi ok lan 2");
+  //       }});
+  //
+  //   });
+  //
+  // });
+
+// var del = con._protocol._delegateError;
+// con._protocol._delegateError = function(err, sequence){
+//   if (err.fatal) {
+//     console.trace('loi fatal: ' + err.message);
+//   }
+//   return del.call(this, err, sequence);
+// };
+
+//   function handleDisconnect() {
+//       con.connect(function(err) {              // The server is either down
+//       if(err) {                                     // or restarting (takes a while sometimes).
+//         console.log('error when connecting to db:', err);
+//         setTimeout(handleDisconnect, 5000);
+//       }   else {
+//
+//         console.log('Da co ket noi ok ha ha ha');
+//         con.on('error', function(err) {
+//           console.log('Co loi roi ha ha ha:', err);
+//           con.connect(function(err) { if (err){console.log('ket noi loi lan 2');}
+// else {
+//   console.log('ket noi tot lai lan 2');
+// }
+//         });
+//           if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+//             setTimeout(handleDisconnect, 5000);
+//             console.log('Ket noi da khoi dong lai:');                       // lost due to either server restart, or a
+//           } else {
+//             console.log('Ket noi bi loi 1');                                // connnection idle timeout (the wait_timeout
+//             throw err;                                  // server variable configures this)
+//           }
+//         });
+//       }                                  // to avoid a hot loop, and to allow our node script to
+//     });                                     // process asynchronous requests in the meantime.
+//                                             // If you're also serving http, display a 503 error.
+//
+//   }
+// handleDisconnect();
+
+
 io.on('connection', function (socket)
 {
   console.log('Da co ket noi moi '+socket.id);
