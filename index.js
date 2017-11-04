@@ -2,7 +2,7 @@ var express = require("express");
 var app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
-server.listen(process.env.PORT || 3000,'0.0.0.0', function(){console.log("server start")});
+server.listen(process.env.PORT || 3000,'https://epos188.herokuapp.com/', function(){console.log("server start")});
 var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
         service: 'Gmail',
