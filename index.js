@@ -234,7 +234,7 @@ io.on('connection', function (socket)
 
         });
       });
-  socket.on('fisrtlogin',function(user1, pass1){
+  socket.on('fisrtlogin',function(user1, pass1){console.log('Da dang nhap bang ten:'+user1);
     //  nếu đăng nhập đúng thì phát sự kiện để app chuyển sang giao diện main
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' AND pass LIKE '"+ pass1+"'", function(err, rows){
 	    console.log(rows.length);
