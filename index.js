@@ -195,7 +195,7 @@ io.on('connection', function (socket)
         //Nếu đăng nhập đúng
       //  socket.emit('okfirstlogin',{number:rows[0].number, pass:rows[0].pass, name:rows[0].user});
     //  socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:rows[0].user});
-      socket.emit('dangnhap_dung');
+      socket.emit('dangnhap_dung', {name:rows[0].user}, function(){console.log('Da gui su kien di');});
         console.log('Dang nhap dung voi ten:'+rows[0].user);
         // bắt đầu kiểm tra các thông tin cần gửi cho user này đang được lưu trên db
         // đầu tiên là các room gửi cho user
