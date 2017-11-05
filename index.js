@@ -62,58 +62,6 @@ ketnoi();
 }
 waitAndDo();
 
-
-  //con.query("SELECT `number` FROM `account` WHERE `number` LIKE '123'", function(err){if(err){console.log('co loi:'+err);}});
-  // con.on('error', function(err) {
-  //   con.end(function(){
-  //     con.connect(function(err) {
-  //       if (err) { console.log(" da co loi roi troi oi:" + err); } else {
-  //         console.log("Da co ket noi ok lan 2");
-  //       }});
-  //
-  //   });
-  //
-  // });
-
-// var del = con._protocol._delegateError;
-// con._protocol._delegateError = function(err, sequence){
-//   if (err.fatal) {
-//     console.trace('loi fatal: ' + err.message);
-//   }
-//   return del.call(this, err, sequence);
-// };
-
-//   function handleDisconnect() {
-//       con.connect(function(err) {              // The server is either down
-//       if(err) {                                     // or restarting (takes a while sometimes).
-//         console.log('error when connecting to db:', err);
-//         setTimeout(handleDisconnect, 5000);
-//       }   else {
-//
-//         console.log('Da co ket noi ok ha ha ha');
-//         con.on('error', function(err) {
-//           console.log('Co loi roi ha ha ha:', err);
-//           con.connect(function(err) { if (err){console.log('ket noi loi lan 2');}
-// else {
-//   console.log('ket noi tot lai lan 2');
-// }
-//         });
-//           if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-//             setTimeout(handleDisconnect, 5000);
-//             console.log('Ket noi da khoi dong lai:');                       // lost due to either server restart, or a
-//           } else {
-//             console.log('Ket noi bi loi 1');                                // connnection idle timeout (the wait_timeout
-//             throw err;                                  // server variable configures this)
-//           }
-//         });
-//       }                                  // to avoid a hot loop, and to allow our node script to
-//     });                                     // process asynchronous requests in the meantime.
-//                                             // If you're also serving http, display a 503 error.
-//
-//   }
-// handleDisconnect();
-
-
 io.on('connection', function (socket)
 {
   console.log('Da co ket noi moi '+socket.id);
