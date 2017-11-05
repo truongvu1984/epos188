@@ -194,7 +194,7 @@ io.on('connection',  (socket)=>
 			else{
         //Nếu đăng nhập đúng
       //  socket.emit('okfirstlogin',{number:rows[0].number, pass:rows[0].pass, name:rows[0].user});
-      socket.emit('dangnhap_dung', {number:""+rows[0].number, pass:""+rows[0].pass, name:""+rows[0].user});
+      socket.emit('dangnhap_dung', {number:"75477775", pass:"74567477", name:"vu truong"});
     //var doituong = {name:rows[0].user};
     //  socket.emit('dangnhap_dung',(date)=>{console.log('Da gui su kien di'+date);});
         console.log('Dang nhap dung roi voi ten:'+rows[0].user);
