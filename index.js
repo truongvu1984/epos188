@@ -194,10 +194,10 @@ io.on('connection',  (socket)=>
 			else{
         //Nếu đăng nhập đúng
       //  socket.emit('okfirstlogin',{number:rows[0].number, pass:rows[0].pass, name:rows[0].user});
-      socket.emit('dangnhap_dung', {name:"vu truong"});
+      socket.emit('dangnhap_dung', {number:""+rows[0].number, pass:""+rows[0].pass, name:""+rows[0].user});
     //var doituong = {name:rows[0].user};
     //  socket.emit('dangnhap_dung',(date)=>{console.log('Da gui su kien di'+date);});
-        console.log('Dang nhap dung voi ten:'+rows[0].user);
+        console.log('Dang nhap dung roi voi ten:'+rows[0].user);
         // bắt đầu kiểm tra các thông tin cần gửi cho user này đang được lưu trên db
         // đầu tiên là các room gửi cho user
         // tìm trong db xem các room chưa được gửi cho user
