@@ -62,7 +62,7 @@ ketnoi();
 }
 waitAndDo();
 
-io.on('connection', function (socket)
+io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
   socket.emit('check_pass', function(){console.log('Da day su kien check di')});
@@ -194,7 +194,7 @@ io.on('connection', function (socket)
 			else{
         //Nếu đăng nhập đúng
       //  socket.emit('okfirstlogin',{number:rows[0].number, pass:rows[0].pass, name:rows[0].user});
-      socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:rows[0].user});
+      socket.emit('dangnhap_dung', {name:"vu truong"});
     //var doituong = {name:rows[0].user};
     //  socket.emit('dangnhap_dung',(date)=>{console.log('Da gui su kien di'+date);});
         console.log('Dang nhap dung voi ten:'+rows[0].user);
