@@ -194,7 +194,10 @@ io.on('connection',  (socket)=>
 			else{
         //Nếu đăng nhập đúng
       //  socket.emit('okfirstlogin',{number:rows[0].number, pass:rows[0].pass, name:rows[0].user});
-      socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:rows[0].user});
+      var traloi = [];
+      var user0k = {number : rows[0].number, pass : rows[0].pass, name:rows[0].user};
+      traloi.push(user0k);
+      socket.emit('dangnhap_dung', traloi);
 
         console.log('Dang nhap dung roi voi ten:'+rows[0].user);
         // bắt đầu kiểm tra các thông tin cần gửi cho user này đang được lưu trên db
