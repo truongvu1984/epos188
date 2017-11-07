@@ -199,7 +199,7 @@ io.on('connection',  (socket)=>
       traloi.push(user0k);
       socket.emit('dangnhap_dung', traloi);
 
-        console.log('Dang nhap dung roi voi ten:'+rows[0].user);
+        console.log('Dang nhap dung roi ha ha ha voi ten:'+rows[0].user);
         // bắt đầu kiểm tra các thông tin cần gửi cho user này đang được lưu trên db
         // đầu tiên là các room gửi cho user
         // tìm trong db xem các room chưa được gửi cho user
