@@ -65,6 +65,10 @@ function strencode( data ) {
 return unescape( encodeURIComponent( JSON.stringify( data ) ) );
 }
 
+function strdecode( data ) {
+  return JSON.parse( decodeURIComponent( escape ( data ) ) );
+}
+
 io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
@@ -202,7 +206,7 @@ io.on('connection',  (socket)=>
 
       socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:strencode(rows[0].user)});
 
-        console.log('Dang nhap dung roi voi ten:'+ strencode(rows[0].user));
+        console.log('Dang nhap dung roi ha ha  voi ten:'+ strencode(rows[0].user));
         // bắt đầu kiểm tra các thông tin cần gửi cho user này đang được lưu trên db
         // đầu tiên là các room gửi cho user
         // tìm trong db xem các room chưa được gửi cho user
@@ -228,7 +232,7 @@ io.on('connection',  (socket)=>
             if ( err){console.log('co loi select user contact: '+err);}
             else if ( rows2.length>0){
               rows2.forEach(function(row2){
-                socket.emit('contact_joined', {number:row2.number,name:row2.name, code:row2.code});
+                socket.emit('contact_joined', {number:row2.number,name:strencode(row2.name), code:row2.code});
                 });
             }
             else {console.log('khong co contact nao tham gia ca');}
@@ -258,11 +262,11 @@ io.on('connection',  (socket)=>
                             var pos2;
                             a3s.forEach(function(a3)
                             {
-                               pos2 = {name:a3.name, lat:a3.lat, lon:a3.lon};
+                               pos2 = {name:strencode(a3.name), lat:a3.lat, lon:a3.lon};
                                pos3.push(pos2);
                               });
-                            socket.emit('S_guitinnhan',{ name_nguoigui:a2s[0].name,number_nguoigui:a2s[0].number,
-                               subject: a1.subject, pos: pos3, id_tinnha_client:a1.idc});
+                            socket.emit('S_guitinnhan',{ name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number,
+                               subject: strencode(a1.subject), pos: pos3, id_tinnha_client:a1.idc});
                           }
                         });
                       }
@@ -314,7 +318,7 @@ io.on('connection',  (socket)=>
                               if (a2.send_receive == 'O')
                                 {
                                   // nếu là O thì đây là danh sách thành viên tham gia
-                                  mem = {name:a2.name, number:a2.number};
+                                  mem = {name:strencode(a2.name), number:a2.number};
                                   list.push(mem);
                                   console.log('Thanh vien la:'+a2.name);
                                 }
@@ -325,7 +329,7 @@ io.on('connection',  (socket)=>
 
                             }
                           });
-                        socket.emit('S_send_room',{admin_name:ad_name, admin_number:ad_num, room_name: a1.subject,room_fullname: a1.idc, member_list: list });
+                        socket.emit('S_send_room',{admin_name:strencode(ad_name), admin_number:ad_num, room_name: strencode(a1.subject),room_fullname: a1.idc, member_list: list });
                         console.log('Da gui room di '+ad_name);
                     }
                     });
@@ -384,8 +388,8 @@ io.on('connection',  (socket)=>
                                       var val7 = [[res5.insertId, row3.name, row3.lat, row3.lon]];
                                       con.query(sql7, [val7], function (err, result) {if ( err){console.log(err);}});
                                     });
-                                    io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:mess.nguoigui_name,number_nguoigui:mess.nguoigui_number,
-                                      subject: mess.subject, pos: mess.pos, id_tinnha_client:mess.id});
+                                    io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strdecode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
+                                      subject: strencode(mess.subject), pos: mess.pos, id_tinnha_client:mess.id});
 
                                 }
                               });
@@ -437,7 +441,7 @@ io.on('connection',  (socket)=>
           {
             if (row1.number.indexOf(string) !== -1 )
             {
-              socket.emit('S_kq_check_contact_2',{user:row1.user, number: row1.number});console.log("Da tim thay:"+row1.user);
+              socket.emit('S_kq_check_contact_2',{user:strencode(row1.user), number: row1.number});console.log("Da tim thay:"+row1.user);
               s=false;
             }
           });
@@ -456,7 +460,7 @@ io.on('connection',  (socket)=>
           {
             if (row1.number.indexOf(string) !== -1 )
             {
-              socket.emit('S_kq_check_contact',{user:row1.user, number: row1.number});console.log("Da tim thay:"+row1.user);
+              socket.emit('S_kq_check_contact',{user:strencode(row1.user), number: row1.number});console.log("Da tim thay:"+row1.user);
               s=false;
             }
           });
@@ -499,7 +503,7 @@ io.on('connection',  (socket)=>
             // biết là số điện thoại đó đã tham gia.
             var val = [[ row.number, row.name,"Y",row.code]];
             con.query(sql, [val], function (err, result) {if ( err)console.log(err);});
-            contact = {name : row.name, number : row.number, code: row.code};
+            contact = {name : strencode(row.name), number : row.number, code: row.code};
             mang_contact.push(contact);
           }
           else {
@@ -521,7 +525,7 @@ io.on('connection',  (socket)=>
     if ( info != null){
       for (var j=0; j<info.room.length; j++)
         {
-          io.sockets.in(info.room[j].room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:info.user_name, number:info.user_number});
+          io.sockets.in(info.room[j].room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(info.user_name), number:info.user_number});
           console.log(info.lat + 'da gui cho '+info.room[j].room_fullname + 'AAAAA' + (stt++) + "ten la:"+ info.user_name );
         }
     }
@@ -534,9 +538,13 @@ io.on('connection',  (socket)=>
       //trả lời cho ngời gửi biết server đã nhận được room
       socket.emit('S_get_room', {room: info.fullname});
       // bắt đầu quá trình lưu room vào csdl
+      let member = [];
+      let mem = {name:"", number:""};
       if (info.member_list.length >0)
       {
         info.member_list.forEach(function(row){
+          mem = {name: strencode(row.name), number: row.number};
+          member.push(mem);
           con.query("SELECT * FROM `"+row.number+"mes_main` WHERE `idc` LIKE '"+ info.fullname +"'", function(err, rows)
             {
               console.log('So luong ban tin giong la:'+rows.length);
@@ -576,7 +584,7 @@ io.on('connection',  (socket)=>
                           }
 
                         });
-                          io.sockets.in(row.number).emit('S_send_room',info);
+                          io.sockets.in(row.number).emit('S_send_room',{admin_number: info.admin_number , admin_name: strencode(info.admin_name), room_name:strencode(info.room_name) ,member_list:member});
                           console.log('Da gui room di lan:');
                     }
                   });
