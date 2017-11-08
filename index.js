@@ -61,6 +61,9 @@ ketnoi();
   }, 10000);
 }
 waitAndDo();
+function strencode( data ) {
+return unescape( encodeURIComponent( JSON.stringify( data ) ) );
+}
 
 io.on('connection',  (socket)=>
 {
@@ -196,9 +199,10 @@ io.on('connection',  (socket)=>
       //  socket.emit('okfirstlogin',{number:rows[0].number, pass:rows[0].pass, name:rows[0].user});
       // var traloi = [];
       // var user0k = {number : rows[0].number, pass : rows[0].pass, code: ""};
-      socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:rows[0].user});
 
-        console.log('Dang nhap dung roi voi ten:'+rows[0].user);
+      socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:strencode(rows[0].user)});
+
+        console.log('Dang nhap dung roi voi ten:'+ strencode(rows[0].user));
         // bắt đầu kiểm tra các thông tin cần gửi cho user này đang được lưu trên db
         // đầu tiên là các room gửi cho user
         // tìm trong db xem các room chưa được gửi cho user
