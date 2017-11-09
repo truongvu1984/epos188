@@ -204,7 +204,7 @@ io.on('connection',  (socket)=>
       // var traloi = [];
       // var user0k = {number : rows[0].number, pass : rows[0].pass, code: ""};
 
-      socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:strencode(rows[0].user)});
+      socket.emit('dangnhap_dung', strencode({number:rows[0].number, pass:rows[0].pass, name:rows[0].user}));
 
         console.log('Dang nhap dung roi ha ha  voi ten:'+ strencode(rows[0].user));
         // bắt đầu kiểm tra các thông tin cần gửi cho user này đang được lưu trên db
