@@ -205,7 +205,7 @@ io.on('connection',  (socket)=>
       // var traloi = [];
       // var user0k = {number : rows[0].number, pass : rows[0].pass, code: ""};
 
-      socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:rows[0].user});
+      socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:strencode(rows[0].user)});
 
         console.log('Dang nhap dung roi ha ha  voi ten:'+ strencode(rows[0].user));
         // bắt đầu kiểm tra các thông tin cần gửi cho user này đang được lưu trên db
@@ -263,11 +263,11 @@ io.on('connection',  (socket)=>
                             var pos2;
                             a3s.forEach(function(a3)
                             {
-                               pos2 = {name:a3.name, lat:a3.lat, lon:a3.lon};
+                               pos2 = {name:strencode(a3.name), lat:a3.lat, lon:a3.lon};
                                pos3.push(pos2);
                               });
-                            socket.emit('S_guitinnhan',{ name_nguoigui:a2s[0].name,number_nguoigui:a2s[0].number,
-                               subject: a1.subject, pos: pos3, id_tinnha_client:a1.idc});
+                            socket.emit('S_guitinnhan',{ name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number,
+                               subject: strencode(a1.subject), pos: pos3, id_tinnha_client:a1.idc});
                           }
                         });
                       }
@@ -389,7 +389,7 @@ io.on('connection',  (socket)=>
                                       var val7 = [[res5.insertId, row3.name, row3.lat, row3.lon]];
                                       con.query(sql7, [val7], function (err, result) {if ( err){console.log(err);}});
                                     });
-                                    io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strencode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
+                                    io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strdecode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
                                       subject: strencode(mess.subject), pos: mess.pos, id_tinnha_client:mess.id});
 
                                 }
