@@ -389,7 +389,7 @@ io.on('connection',  (socket)=>
                                       var val7 = [[res5.insertId, row3.name, row3.lat, row3.lon]];
                                       con.query(sql7, [val7], function (err, result) {if ( err){console.log(err);}});
                                     });
-                                    io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strdecode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
+                                    io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strencode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
                                       subject: strencode(mess.subject), pos: mess.pos, id_tinnha_client:mess.id});
 
                                 }
