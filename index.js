@@ -268,6 +268,7 @@ io.on('connection',  (socket)=>
                               });
                             socket.emit('S_guitinnhan',{ name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number,
                                subject: strencode(a1.subject), pos: pos3, id_tinnha_client:a1.idc});
+                               console.log('Da gui tin nhan di:'+ strencode(a1.subject) + ' tu nguoi gui la:'+ strencode(a2s[0].name));
                           }
                         });
                       }
