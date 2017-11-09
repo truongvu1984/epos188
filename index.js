@@ -62,8 +62,8 @@ ketnoi();
 }
 waitAndDo();
 function strencode( data ) {
-//return unescape( encodeURIComponent( JSON.stringify( data ) ) );
-return encodeURIComponent( JSON.stringify( data ));
+return unescape( encodeURIComponent( JSON.stringify( data ) ) );
+//return encodeURIComponent( JSON.stringify( data ));
 }
 
 function strdecode( data ) {
