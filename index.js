@@ -28,31 +28,12 @@ var authToken = '94b2749230e0d3d5b379cf851c0d3c8c';
 //require the Twilio module and create a REST client
 var client = require('twilio')(accountSid, authToken);
 var stt = 0;
-function ketnoi(){
+
   con.connect(function(err) {
-    if (err) { console.log(" da co loi:" + err); } else {
+    if (err) { console.log(" da co loi:" + err); }
+    else {
       console.log("Da co ket noi ok ha ha ha");
       }});
-
-}
-ketnoi();
-// con.on('error', function(err) {
-//   console.log('ngat ket noi va ket noi lai');
-//
-//   ketnoi();
-//     // con.end(function(){
-//     //   console.log('ngat ket noi va ket noi lai');
-//     //     ketnoi();
-//     //   });
-//     });
-
-  // function keep_server(){
-  //   console.log('test');
-  //
-  // }
-  // for ( var i=0; i<10; i++){
-  //   setTimeout(keep_server, 5000);
-  // }
 
   function waitAndDo() {
   setTimeout(function() {
@@ -62,13 +43,13 @@ ketnoi();
 }
 waitAndDo();
 function strencode( data ) {
-return unescape( encodeURIComponent( JSON.stringify( data ) ) );
+return unescape( encodeURIComponent( data ) );
 //return unescape( encodeURIComponent( data ) );
 }
 
-function strdecode( data ) {
-  return JSON.parse( decodeURIComponent( escape ( data ) ) );
-}
+// function strdecode( data ) {
+//   return JSON.parse( decodeURIComponent( escape ( data ) ) );
+// }
 
 io.on('connection',  (socket)=>
 {
@@ -254,6 +235,7 @@ io.on('connection',  (socket)=>
                       else if (a2s.length>0)
                       {
                         //lấy danh sách các điểm
+
                         con.query("SELECT * FROM `"+user+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err, a3s)
                         {
                           if ( err ){console.log(err);}
@@ -268,7 +250,7 @@ io.on('connection',  (socket)=>
                               });
                             socket.emit('S_guitinnhan',{ name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number,
                                subject: strencode(a1.subject), pos: pos3, id_tinnha_client:a1.idc});
-                               console.log('Da gui tin nhan di:'+ strencode(a1.subject) + ' tu nguoi gui la:'+ strencode(a2s[0].name));
+
                           }
                         });
                       }
@@ -382,16 +364,26 @@ io.on('connection',  (socket)=>
                                   //lưu vào bảng người gửi của người nhận
                                   var sql6 = "INSERT INTO `"+row5.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
                                   var val6 = [[ res5.insertId, mess.nguoigui_number,mess.nguoigui_name,'R', 'N']];
-                                  con.query(sql6, [val6], function (err, res6) {if ( err){console.log(err);}});
-                                  // lưu vào bảng vị trí điểm của người nhận
-                                  mess.pos.forEach(function(row3){
-                                      // lưu vào bảng vị trí của người nhan
-                                      var sql7 = "INSERT INTO `"+row5.number+"mes_detail` (ids,name, lat, lon) VALUES ?";
-                                      var val7 = [[res5.insertId, row3.name, row3.lat, row3.lon]];
-                                      con.query(sql7, [val7], function (err, result) {if ( err){console.log(err);}});
-                                    });
-                                    io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strdecode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
-                                      subject: strencode(mess.subject), pos: mess.pos, id_tinnha_client:mess.id});
+                                  con.query(sql6, [val6], function (err, res6) {if ( err){console.log(err);}
+                                  else {
+                                    mess.pos.forEach(function(row3){
+                                        // lưu vào bảng vị trí của người nhan
+                                        var sql7 = "INSERT INTO `"+row5.number+"mes_detail` (ids,name, lat, lon) VALUES ?";
+                                        var val7 = [[res5.insertId, row3.name, row3.lat, row3.lon]];
+                                        con.query(sql7, [val7], function (err, result) {if ( err){console.log(err);}
+                                        else {
+                                          console.log("Da insert vao mess detail "+ result.insertId);
+                                        }
+                                      });
+                                      });
+                                      io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strencode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
+                                        subject: strencode(mess.subject), pos: mess.pos, id_tinnha_client:mess.id});
+
+                                  }
+                                });
+
+
+
 
                                 }
                               });
