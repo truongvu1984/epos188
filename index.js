@@ -171,14 +171,17 @@ io.on('connection',  (socket)=>
 
         });
       });
-  socket.on('fisrtlogin',(user1, pass1)=>{console.log('Da dang nhap bang ten:'+user1);
+  socket.on('fisrtlogin',(user1, pass1)=>{
+  //  console.log('Da dang nhap bang ten:'+user1)   ;
+
+
     //  nếu đăng nhập đúng thì phát sự kiện để app chuyển sang giao diện main
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' AND pass LIKE '"+ pass1+"'", function(err, rows){
-	    console.log(rows.length);
+	   // console.log(rows.length);
       if (rows.length ==0){
         // Nếu đăng nhập sai
         socket.emit('firscheckwrong');
-        console.log("Dang nhap first khong dung"+user1);
+      //  console.log("Dang nhap first khong dung"+user1);
         }
 			else{
         //Nếu đăng nhập đúng
@@ -188,7 +191,7 @@ io.on('connection',  (socket)=>
 
       socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:strencode(rows[0].user)});
 
-        console.log('Dang nhap dung roi ha ha  voi ten:'+ strencode(rows[0].user));
+      //  console.log('Dang nhap dung roi ha ha  voi ten:'+ strencode(rows[0].user));
         // bắt đầu kiểm tra các thông tin cần gửi cho user này đang được lưu trên db
         // đầu tiên là các room gửi cho user
         // tìm trong db xem các room chưa được gửi cho user
@@ -196,49 +199,56 @@ io.on('connection',  (socket)=>
    	  });
 	  });
   socket.on('mainlogin', function(user, pass){
-    console.log("Da nhan user "+ user);
+  //  console.log("Da nhan user "+ user);
     // kiểm tra
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user+"' AND `pass` LIKE '"+ pass+"'", function(err, rows){
-        console.log('so luong row giong la:'+rows.length);
+      //  console.log('so luong row giong la:'+rows.length);
         if (rows.length ==0){
           // Nếu đăng nhập sai
           socket.emit('main_login_wrong');
-          console.log("Dang nhap second khong dung"+user);
+        //  console.log("Dang nhap second khong dung"+user);
           }
         else{
           //Nếu đăng nhập đúng
           socket.join(user);
-          console.log('Dang nhap dung roi voi tai khoan' + user);
+        //  console.log('Dang nhap dung roi voi tai khoan' + user);
           // kiểm tra xem contact có ai mới tham gia ePOS không
           con.query("SELECT * FROM `"+user+"contact` WHERE `fr` LIKE 'N'", function(err, rows2){
-            if ( err){console.log('co loi select user contact: '+err);}
+            if ( err){
+            //  console.log('co loi select user contact: '+err);
+            }
             else if ( rows2.length>0){
               rows2.forEach(function(row2){
                 socket.emit('contact_joined', {number:row2.number,name:strencode(row2.name), code:row2.code});
                 });
             }
-            else {console.log('khong co contact nao tham gia ca');}
+            else {
+            //  console.log('khong co contact nao tham gia ca');
+
+            }
             });
           // kiểm tra xem có ai gửi tin nhắn cho không
           con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'R' AND `stt` LIKE 'N'", function(err, a1s)
               {
-              if ( err ){console.log(err);}
+              if ( err ){
+              //  console.log(err);
+              }
               else if ( a1s.length>0)
                 {
-                  console.log(a1s);
+
                   a1s.forEach(function(a1)
                   {
                   //lấy tên người gửi
                     con.query("SELECT * FROM `"+user+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"'", function(err, a2s)
                     {
-                      if ( err ){console.log(err);}
+                      if ( err ){}
                       else if (a2s.length>0)
                       {
                         //lấy danh sách các điểm
 
                         con.query("SELECT * FROM `"+user+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err, a3s)
                         {
-                          if ( err ){console.log(err);}
+                          if ( err ){ }
                           else  if ( a3s.length >0)
                             {
                             var pos3 = [];
@@ -262,7 +272,7 @@ io.on('connection',  (socket)=>
             //kiểm tra xem có ai đã nhận tin nhắn rồi không
           con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'S' AND `stt` LIKE 'Y'", function(err, a4S)
               {
-            if ( err){console.log(err);}
+            if ( err){}
             else if ( a4S.length>0)
               {
 
@@ -272,7 +282,7 @@ io.on('connection',  (socket)=>
                   con.query("SELECT * FROM `"+user+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a4.id+"'", function(err, a5s)
                   {
                     socket.emit('C_danhantinnhan',{nguoinhan_number:a5s[0], idc:a4.idc});
-                    console.log('Da gui sự kiện C_gui tin nhan di cho cac so:'+a5s[0].name);
+                    //console.log('Da gui sự kiện C_gui tin nhan di cho cac so:'+a5s[0].name);
                   });
                 });
               }
@@ -287,13 +297,13 @@ io.on('connection',  (socket)=>
                 a1s.forEach(function(a1)
                   {
                     //lấy tên người gửi và tên người tham gia room
-                    console.log('room chua gui: '+a1.subject);
+                  //  console.log('room chua gui: '+a1.subject);
                     con.query("SELECT * FROM `"+user+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err, a2s)
                   {
                       if (err){console.log(err);}
                       else
                       {
-                        console.log('Da chon 2 thanh cong' + a2s.length);
+                      //  console.log('Da chon 2 thanh cong' + a2s.length);
 
                           var list = [];
                           var mem;
@@ -304,17 +314,17 @@ io.on('connection',  (socket)=>
                                   // nếu là O thì đây là danh sách thành viên tham gia
                                   mem = {name:strencode(a2.name), number:a2.number};
                                   list.push(mem);
-                                  console.log('Thanh vien la:'+a2.name);
+                                //  console.log('Thanh vien la:'+a2.name);
                                 }
                               else
                               // còn không thì đây là tên admin của room
                             { ad_num = a2.number; ad_name = a2.name;
-                              console.log('admin la:'+a2.number);
+                            //  console.log('admin la:'+a2.number);
 
                             }
                           });
                         socket.emit('S_send_room',{admin_name:strencode(ad_name), admin_number:ad_num, room_name: strencode(a1.subject),room_fullname: a1.idc, member_list: list });
-                        console.log('Da gui room di '+ad_name);
+                      //  console.log('Da gui room di '+ad_name);
                     }
                     });
                   });
@@ -515,16 +525,18 @@ io.on('connection',  (socket)=>
     con.query("UPDATE `"+host+"contact` SET `fr` = 'OK' WHERE number LIKE '"+number+"'",function(err3, ok){ console.log('loi update'+err)});
   });
   socket.on('C_pos_online', function (info){
-    console.log('Da nhan diem');
+  //  console.log('Da nhan diem');
     if ( info != null){
     info.room.forEach(function(room){
       // for (var j=0; j<info.room.length; j++)
       //   {
           io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(info.user_name), number:info.user_number});
-          console.log(info.lat + 'da gui cho '+room.room_fullname + 'AAAAA' + (stt++) + "ten la:"+ info.user_name );
+        //  console.log(info.lat + 'da gui cho '+room.room_fullname + 'AAAAA' + (stt++) + "ten la:"+ info.user_name );
         });
     }
-    else { console.log(info);}
+    else {
+    //  console.log(info);
+    }
   });
   socket.on('C_make_room', function (info)
    	{
