@@ -517,11 +517,12 @@ io.on('connection',  (socket)=>
   socket.on('C_pos_online', function (info){
     console.log('Da nhan diem');
     if ( info != null){
-      for (var j=0; j<info.room.length; j++)
-        {
-          io.sockets.in(info.room[j].room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(info.user_name), number:info.user_number});
-          console.log(info.lat + 'da gui cho '+info.room[j].room_fullname + 'AAAAA' + (stt++) + "ten la:"+ info.user_name );
-        }
+    info.room.forEach(function(room){
+      // for (var j=0; j<info.room.length; j++)
+      //   {
+          io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(info.user_name), number:info.user_number});
+          console.log(info.lat + 'da gui cho '+room.room_fullname + 'AAAAA' + (stt++) + "ten la:"+ info.user_name );
+        });
     }
     else { console.log(info);}
   });
