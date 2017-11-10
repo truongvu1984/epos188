@@ -171,17 +171,14 @@ io.on('connection',  (socket)=>
 
         });
       });
-  socket.on('fisrtlogin',(user1, pass1)=>{
-  //  console.log('Da dang nhap bang ten:'+user1)   ;
-
-
+  socket.on('fisrtlogin',(user1, pass1)=>{console.log('Da dang nhap bang ten:'+user1);
     //  nếu đăng nhập đúng thì phát sự kiện để app chuyển sang giao diện main
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' AND pass LIKE '"+ pass1+"'", function(err, rows){
-	   // console.log(rows.length);
+	    console.log(rows.length);
       if (rows.length ==0){
         // Nếu đăng nhập sai
         socket.emit('firscheckwrong');
-      //  console.log("Dang nhap first khong dung"+user1);
+        console.log("Dang nhap first khong dung"+user1);
         }
 			else{
         //Nếu đăng nhập đúng
@@ -191,7 +188,7 @@ io.on('connection',  (socket)=>
 
       socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:strencode(rows[0].user)});
 
-      //  console.log('Dang nhap dung roi ha ha  voi ten:'+ strencode(rows[0].user));
+        console.log('Dang nhap dung roi ha ha  voi ten:'+ strencode(rows[0].user));
         // bắt đầu kiểm tra các thông tin cần gửi cho user này đang được lưu trên db
         // đầu tiên là các room gửi cho user
         // tìm trong db xem các room chưa được gửi cho user
@@ -518,18 +515,16 @@ io.on('connection',  (socket)=>
     con.query("UPDATE `"+host+"contact` SET `fr` = 'OK' WHERE number LIKE '"+number+"'",function(err3, ok){ console.log('loi update'+err)});
   });
   socket.on('C_pos_online', function (info){
-  //  console.log('Da nhan diem');
+    console.log('Da nhan diem');
     if ( info != null){
     info.room.forEach(function(room){
-      // for (var j=0; j<info.room.length; j++)
-      //   {
+    //  for (var j=0; j<info.room.length; j++)
+
           io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(info.user_name), number:info.user_number});
-        //  console.log(info.lat + 'da gui cho '+room.room_fullname + 'AAAAA' + (stt++) + "ten la:"+ info.user_name );
+          console.log('da gui cho '+room.room_fullname + 'AAAAA' + (stt++) + "ten la:"+ info.user_name );
         });
     }
-    else {
-    //  console.log(info);
-    }
+    else { console.log(info);}
   });
   socket.on('C_make_room', function (info)
    	{
