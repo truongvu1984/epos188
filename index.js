@@ -581,7 +581,7 @@ io.on('connection',  (socket)=>
                           }
 
                         });
-                          io.sockets.in(row.number).emit('S_send_room',{admin_number: info.admin_number , admin_name: strencode(info.admin_name), room_name:strencode(info.room_name) ,member_list:member});
+                          io.sockets.in(row.number).emit('S_send_room',{admin_number: info.admin_number , admin_name: strencode(info.admin_name), room_name:strencode(info.room_name) ,room_fullname:info.room_name, member_list:member});
                           console.log('Da gui room di lan:');
                     }
                   });
