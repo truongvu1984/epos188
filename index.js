@@ -533,6 +533,7 @@ io.on('connection',  (socket)=>
       //trả lời cho ngời gửi biết server đã nhận được room
       socket.emit('S_get_room', {room: info.fullname});
       // bắt đầu quá trình lưu room vào csdl
+      console.log(info);
       let member = [];
       let mem = {name:"", number:""};
       if (info.member_list.length >0)
@@ -542,7 +543,6 @@ io.on('connection',  (socket)=>
           member.push(mem);
           con.query("SELECT * FROM `"+row.number+"mes_main` WHERE `idc` LIKE '"+ info.fullname +"'", function(err, rows)
             {
-              console.log('So luong ban tin giong la:'+rows.length);
               if(err){console.log(err);}
               else
                {
@@ -559,20 +559,22 @@ io.on('connection',  (socket)=>
                         var sql2 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
                         info.member_list.forEach(function(row2)
                         {
-                          if (row2.number ==info.admin_number) {
+                          if (row2.number ==info.admin_number)
+                          {
                             var val2 = [[res.insertId,row2.number,row2.name,'OM']];
-                            con.query(sql2, [val2], function (err) {if ( err){console.log(err);}
-                            else {
-                              console.log('da insert 1');
-                            }
-                          });
+                            con.query(sql2, [val2], function (err)
+                            {
+                              if ( err){console.log(err);}
+                              else { console.log('da insert 1');}
+                            });
                           }
-                          else {
+                          else
+                          {
                             var val2 = [[res.insertId,row2.number,row2.name,'O']];
                             con.query(sql2, [val2], function (err) {if ( err){console.log(err);}
                             else {
                               console.log('da insert 2');
-                            }
+                          }
 
                           });
 
