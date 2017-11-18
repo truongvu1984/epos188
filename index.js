@@ -8,7 +8,7 @@ var transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
             user: 'vu2551984@gmail.com',
-            pass: 'vuyeuvan18101988'
+            pass: '123'
         }
     });
   //  https://www.cleardb.com/database/details?id=EC6CC143D125B9254AFD2C0DCEE155F3
@@ -21,7 +21,7 @@ var con = mysql.createConnection({
  database : "heroku_7790b5956b2a5c2",
  queueLimit: 30,
   acquireTimeout: 1000000,
-  connectionLimit: 100
+
 });
 var accountSid = 'ACaa41a4ddc473c35c1192aa1a7fd6dab4';
 var authToken = '94b2749230e0d3d5b379cf851c0d3c8c';
