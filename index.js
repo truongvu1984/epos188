@@ -308,12 +308,12 @@ io.on('connection',  (socket)=>
                                 }
                               else
                               // còn không thì đây là tên admin của room
-                            { ad_num = a2.number; ad_name = a2.name;
+                            { ad_num = a2.number; ad_name = strencode(a2.name);
                               console.log('admin la:'+a2.number);
 
                             }
                           });
-                        socket.emit('S_send_room',{admin_name:strencode(ad_name), admin_number:ad_num, room_name: strencode(a1.subject),room_fullname: a1.idc, member_list: list });
+                        socket.emit('S_send_room',{admin_name:ad_name, admin_number:ad_num, room_name: strencode(a1.subject),room_fullname: strencode(a1.idc), member_list: list });
                         console.log('Da gui room di '+ad_name);
                     }
                     });
