@@ -539,60 +539,71 @@ io.on('connection',  (socket)=>
       if (info.member_list.length >0)
       {
         info.member_list.forEach(function(row){
-          mem = {name: strencode(row.name), number: row.number};
-          member.push(mem);
-          con.query("SELECT * FROM `"+row.number+"mes_main` WHERE `idc` LIKE '"+ info.fullname +"'", function(err, rows)
+          con.query("SELECT * FROM `account` WHERE `idc` LIKE '"+ row.number +"'", function(err, kq)
             {
               if(err){console.log(err);}
-              else
-               {
-                  if ( rows.length<=0){
-                    var sql = "INSERT INTO `"+row.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
-                    var val = [[ info.room_fullname, info.room_name,'O', 'N']];
-                    con.query(sql, [val], function (err, res)
+              else {
+                if (kq.length >0){
+                  mem = {name: strencode(row.name), number: row.number};
+                  member.push(mem);
+                  con.query("SELECT * FROM `"+row.number+"mes_main` WHERE `idc` LIKE '"+ info.fullname +"'", function(err, rows)
                     {
-                      if ( err){console.log(err);}
+                      if(err){console.log(err);}
                       else
-                      {
-                        n=n+1;
-                        console.log('Da dua vao main thanh  cong lan:'+n);
-                        var sql2 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
-                        info.member_list.forEach(function(row2)
-                        {
-                          if (row2.number ==info.admin_number)
-                          {
-                            var val2 = [[res.insertId,row2.number,row2.name,'OM']];
-                            con.query(sql2, [val2], function (err)
+                       {
+                          if ( rows.length<=0){
+                            var sql = "INSERT INTO `"+row.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
+                            var val = [[ info.room_fullname, info.room_name,'O', 'N']];
+                            con.query(sql, [val], function (err, res)
                             {
                               if ( err){console.log(err);}
-                              else { console.log('da insert 1');}
-                            });
-                          }
-                          else
-                          {
-                            var val2 = [[res.insertId,row2.number,row2.name,'O']];
-                            con.query(sql2, [val2], function (err) {if ( err){console.log(err);}
-                            else {
-                              console.log('da insert 2');
-                          }
+                              else
+                              {
+                                n=n+1;
+                                console.log('Da dua vao main thanh  cong lan:'+n);
+                                var sql2 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
+                                info.member_list.forEach(function(row2)
+                                {
+                                  if (row2.number ==info.admin_number)
+                                  {
+                                    var val2 = [[res.insertId,row2.number,row2.name,'OM']];
+                                    con.query(sql2, [val2], function (err)
+                                    {
+                                      if ( err){console.log(err);}
+                                      else { console.log('da insert 1');}
+                                    });
+                                  }
+                                  else
+                                  {
+                                    var val2 = [[res.insertId,row2.number,row2.name,'O']];
+                                    con.query(sql2, [val2], function (err) {if ( err){console.log(err);}
+                                    else {
+                                      console.log('da insert 2');
+                                  }
 
+                                  });
+
+                                  }
+
+                                });
+                                  io.sockets.in(row.number).emit('S_send_room',{admin_number: info.admin_number , admin_name: strencode(info.admin_name), room_name:strencode(info.room_name) ,room_fullname:strencode(info.room_name), member_list:member});
+                                  console.log('Da gui room di lan:');
+                            }
                           });
 
+
+
                           }
+                       }
 
-                        });
-                          io.sockets.in(row.number).emit('S_send_room',{admin_number: info.admin_number , admin_name: strencode(info.admin_name), room_name:strencode(info.room_name) ,room_fullname:info.room_name, member_list:member});
-                          console.log('Da gui room di lan:');
-                    }
-                  });
+                    });
 
-
-
-                  }
-               }
-
+                }
+              }
             });
 
+// chenf vaof ow day
+// });
         });
 
       }
