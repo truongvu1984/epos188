@@ -539,7 +539,7 @@ io.on('connection',  (socket)=>
       if (info.member_list.length >0)
       {
         info.member_list.forEach(function(row){
-          con.query("SELECT * FROM `account` WHERE `idc` LIKE '"+ row.number +"'", function(err, kq)
+          con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row.number +"'", function(err, kq)
             {
               if(err){console.log(err);}
               else {
