@@ -609,7 +609,8 @@ io.on('connection',  (socket)=>
       }
    	});
   socket.on('C_get_room', function(info){
-    con.query("UPDATE `"+info.number+"mes_main` SET `stt` = 'OK' WHERE send_receive LIKE 'O' AND idc LIKE '"+info.fullname+"'",function(err){
+    console.log('Da nhan room roi:' + info.fullname);
+      con.query("UPDATE `"+info.number+"mes_main` SET `stt` = 'Y' WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+info.fullname+"'",function(err){
       if ( err){console.log(err);}
     });
 
