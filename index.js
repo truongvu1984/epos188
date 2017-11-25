@@ -640,7 +640,7 @@ io.on('connection',  (socket)=>
                     let mem = {name:"", number:""};
                     //lưu vào bảng chính
                     var sql = "INSERT INTO `"+member1.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
-                    var val = [[ info.room_fullname, info.room_name,'O', 'N']];
+                    var val = [[ info.room_full_name, info.room_name,'O', 'N']];
                     con.query(sql, [val], function (err5, res)
                     {
                       if ( err5){console.log(err5);}
