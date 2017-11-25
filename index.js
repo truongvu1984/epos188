@@ -649,7 +649,7 @@ io.on('connection',  (socket)=>
                         let sql2 = "INSERT INTO `"+member1.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
                           info.full_list.forEach(function(row4)
                             {
-                              mem = {name:strdecode(row4.name), number:row4.number}
+                              mem = {name:strencode(row4.name), number:row4.number}
                               member.push(mem);
                               if (row4.number ==info.admin)
                               {
