@@ -628,7 +628,7 @@ io.on('connection',  (socket)=>
       info.new_list.forEach((member1)=>{
        //kiểm tra xem thành viên mới này có tài khoản chưa.
        con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ member1.number +"' LIMIT 1", function(err3, kq){
-           if ( err3 || (rows.length == 0)){console.log(err3);}
+           if ( err3 || (kq.length == 0)){console.log(err3);}
            else {
              //nếu tài khoản đó đã có, kiêm tra xem cái room đó đã có trong bảng chưa
              con.query("SELECT * FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+ info.room_full_name +"' LIMIT 1", function(err4, row1s)
