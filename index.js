@@ -601,7 +601,7 @@ io.on('connection',  (socket)=>
     // xác minh tài khoản đủ điều kiện để bổ sung thành viên không
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+info.admin+"' AND `pass` LIKE '"+info.pass+"' LIMIT 1", function(err, rows6)
     {
-      if (err || (rows==0)){console.log(err);}
+      if (err || (rows6==0)){console.log(err);}
       else {
     let mem3 = {name:"", number:""};
     //bổ sung thành viên mới cho người cũ
