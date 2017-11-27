@@ -548,7 +548,7 @@ io.on('connection',  (socket)=>
                   member.push(mem);
                   con.query("SELECT * FROM `"+row.number+"mes_main` WHERE `idc` LIKE '"+ info.fullname +"' LIMIT 1", function(err, rows)
                     {
-                      if(err || (ros.length >0)){console.log(err);}
+                      if(err || (rows.length >0)){console.log(err);}
                       else
                        {
 
