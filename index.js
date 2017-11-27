@@ -446,14 +446,17 @@ io.on('connection',  (socket)=>
   socket.on('C_check_contact', function (string){
     console.log("Chuoi nhan duoc la:"+string);
     con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
-      if (!( err))
+      if (( err)){console.log(err);;}
+      else
+
       {
-        var s=true;;
+        let s=true;;
         a1.forEach(function (row1)
           {
             if (row1.number.indexOf(string) !== -1 )
             {
-              socket.emit('S_kq_check_contact',{user:strencode(row1.user), number: row1.number});console.log("Da tim thay:"+row1.user);
+              socket.emit('S_kq_check_contact',{user:strencode(row1.user), number: row1.number});
+              console.log("Da tim thay:"+row1.user);
               s=false;
             }
           });
@@ -603,6 +606,7 @@ io.on('connection',  (socket)=>
     {
       if (err || (rows6==0)){console.log(err);}
       else {
+        socket.emit ('S_get_bosung_member');
     let mem3 = {name:"", number:""};
     //bổ sung thành viên mới cho người cũ
     info.old_list.forEach((member)=>{
@@ -618,6 +622,7 @@ io.on('connection',  (socket)=>
               mem3 = {name:strencode(mem2), number:mem2.number};
               member3.push(mem);
             });
+
             io.sockets.in(member.number).emit('S_add_mem',{ room_fullname:strencode(info.room_name), member_list:member3});
             console.log('a gui room di cho nguoi cu:'+info.room_name + ' danh sach la:'+member3);
 
@@ -665,7 +670,6 @@ io.on('connection',  (socket)=>
                                 var val2 = [[res.insertId,row4.number,row4.name,'O']];
                                 con.query(sql2, [val2], function (err7) {if ( err7){console.log(err7);}
                                 else { console.log('da insert 2');}
-
 
                               });
 
