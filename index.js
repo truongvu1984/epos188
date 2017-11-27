@@ -614,13 +614,16 @@ io.on('connection',  (socket)=>
       con.query("SELECT * FROM `" + member.number+"mes_main` WHERE `idc` LIKE '"+info.room_full_name+"' LIMIT 1", function(err1, rows){
           if ( err1 || (rows.length >0 )){console.log(err1);}
           else {
-
+            console.log('Da selec duoc '+ rows[0].idc);
             let sql2 = "INSERT INTO `"+member.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
             info.new_list.forEach((mem2)=>{
               let values2 = [[rows[0].id, mem2.number, mem2.name, 'O']];
-              con.query(sql2, [values2], function (err2, res){if (err2){console.log(err2);}});
+              con.query(sql2, [values2], function (err2, res){if (err2){console.log(err2);} else {
+                console.log('Da insert thanh cong '+ res.id);
+              }});
               mem3 = {name:strencode(mem2), number:mem2.number};
               member3.push(mem);
+              console.log(mem);
             });
 
             io.sockets.in(member.number).emit('S_add_mem',{ room_fullname:strencode(info.room_name), member_list:member3});
