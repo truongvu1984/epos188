@@ -602,6 +602,7 @@ io.on('connection',  (socket)=>
    	});
 
   socket.on('C_get_add_mem', function(info){
+    console.log('Da nhan su kien C get add mem');
     // lượn qua xem tài khoản đó có tồn tại hay không
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+info.user+"' AND `pass` LIKE '"+info.pass+"' LIMIT 1", function(err, kq)
     {
@@ -629,6 +630,7 @@ io.on('connection',  (socket)=>
 
   });
   socket.on('C_bosung_member', function(info){
+console.log(info);
     // xác minh tài khoản đủ điều kiện để bổ sung thành viên không
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+info.admin+"' AND `pass` LIKE '"+info.pass+"' LIMIT 1", function(err, rows6)
     {
