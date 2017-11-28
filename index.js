@@ -600,6 +600,34 @@ io.on('connection',  (socket)=>
         });
       }
    	});
+
+  socket.on('C_get_add_mem', function(info){
+    // lượn qua xem tài khoản đó có tồn tại hay không
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+info.user+"' AND `pass` LIKE '"+info.pass+"' LIMIT 1", function(err, kq)
+    {
+      if (err || (kq==0)){console.log(err);}
+      else {
+        //kiêm tra xem room đó có trên server hay không
+        con.query("SELECT * FROM `" + info.user+"mes_main` WHERE `idc` LIKE '"+info.room_fullname+"' LIMIT 1", function(err1, rows){
+          if ( err1 || (rows.length ==0)){console.log(err);}
+          else {
+            //info.member.forEach(mem)=>{
+          info.member.forEach(function(mem)
+              {
+              con.query("UPDATE `"+info.user+"mes_sender` SET `stt` = 'Y' WHERE `number` LIKE '"+mem.number+"' AND `ids` LIKE '"+rows[0].id+"'",function(err4){if (err4){console.log(err4);}});
+            });
+            con.query("SELECT 'id' FROM `" + info.user+"mes_sender` WHERE `ids` LIKE '"+rows[0].id+"' AND `stt` LIKE 'N' LIMIT 1", function(err2, rows2){
+              if (err2 || (rows2.length >0)) {console.log(err2);}
+              else {
+                  con.query("UPDATE `"+info.user+"mes_main` SET `stt` = 'Y' WHERE `id` LIKE '"+rows[0].id+"'",function(err3){if (err3){console.log(err3);}});
+              }
+            });
+
+          }
+        });
+      }
+
+  });
   socket.on('C_bosung_member', function(info){
     // xác minh tài khoản đủ điều kiện để bổ sung thành viên không
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+info.admin+"' AND `pass` LIKE '"+info.pass+"' LIMIT 1", function(err, rows6)
@@ -614,34 +642,34 @@ io.on('connection',  (socket)=>
       con.query("SELECT * FROM `" + member.number+"mes_main` WHERE `idc` LIKE '"+info.room_full_name+"' LIMIT 1", function(err1, rows){
           if ( err1 || (rows.length >0 )){console.log(err1);}
           else {
-            console.log('Da selec duoc '+ rows[0]);
-            let sql2 = "INSERT INTO `"+member.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
+          let sql2 = "INSERT INTO `"+member.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
             info.new_list.forEach((mem2)=>{
-              let values2 = [[rows[0].id, mem2.number, mem2.name, 'O']];
+              let values2 = [[rows[0].id, mem2.number, mem2.name, 'O', 'N']];
               con.query(sql2, [values2], function (err2, res){if (err2){console.log(err2);} else {
                 console.log('Da insert thanh cong '+ res.id);
               }});
               mem3 = {name:strencode(mem2), number:mem2.number};
-              member3.push(mem);
-              console.log(mem);
+              member3.push(mem3);
+              console.log(mem3);
             });
-
+            con.query("UPDATE `"+member.number+"mes_main` SET `stt` = 'M' WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+info.room_full_name+"'",function(err3){
+                if (err3){console.log(err3);}
+              });
             io.sockets.in(member.number).emit('S_add_mem',{ room_fullname:strencode(info.room_name), member_list:member3});
             console.log('a gui room di cho nguoi cu:'+info.room_name + ' danh sach la:'+member3);
-
           }
         });
       });
       // thông báo room cho thành viên mới
       info.new_list.forEach((member1)=>{
        //kiểm tra xem thành viên mới này có tài khoản chưa.
-       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ member1.number +"' LIMIT 1", function(err3, kq){
-           if ( err3 || (kq.length == 0)){console.log(err3);}
+       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ member1.number +"' LIMIT 1", function(err4, kq){
+           if ( err4 || (kq.length == 0)){console.log(err4);}
            else {
              //nếu tài khoản đó đã có, kiêm tra xem cái room đó đã có trong bảng chưa
-             con.query("SELECT * FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+ info.room_full_name +"' LIMIT 1", function(err4, row1s)
+             con.query("SELECT * FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+ info.room_full_name +"' LIMIT 1", function(err8, row1s)
                {
-                 if(err4 || (row1s.length >0)){console.log(err4);}
+                 if(err8 || (row1s.length >0)){console.log(err4);}
                  else
                   {
                     let member = [];
@@ -693,9 +721,9 @@ io.on('connection',  (socket)=>
        }
       });
 
-   // });
+    });
 
-});
+  });
   socket.on('C_get_room', function(info){
     console.log('Da nhan room roi:' + info.fullname);
       con.query("UPDATE `"+info.number+"mes_main` SET `stt` = 'Y' WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+info.fullname+"'",function(err){
