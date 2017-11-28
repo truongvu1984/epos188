@@ -613,8 +613,7 @@ io.on('connection',  (socket)=>
           if ( err1 || (rows.length ==0)){console.log(err);}
           else {
             //info.member.forEach(mem)=>{
-          info.member.forEach(function(mem)
-              {
+            info.member.forEach(function(mem){
               con.query("UPDATE `"+info.user+"mes_sender` SET `stt` = 'Y' WHERE `number` LIKE '"+mem.number+"' AND `ids` LIKE '"+rows[0].id+"'",function(err4){if (err4){console.log(err4);}});
             });
             con.query("SELECT 'id' FROM `" + info.user+"mes_sender` WHERE `ids` LIKE '"+rows[0].id+"' AND `stt` LIKE 'N' LIMIT 1", function(err2, rows2){
@@ -623,7 +622,6 @@ io.on('connection',  (socket)=>
                   con.query("UPDATE `"+info.user+"mes_main` SET `stt` = 'Y' WHERE `id` LIKE '"+rows[0].id+"'",function(err3){if (err3){console.log(err3);}});
               }
             });
-
           }
         });
       }
