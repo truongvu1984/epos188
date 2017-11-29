@@ -643,7 +643,7 @@ io.on('connection',  (socket)=>
         info.old_list.forEach((member)=>{
             let member3 = [];
             con.query("SELECT * FROM `" + member.number+"mes_main` WHERE `idc` LIKE '"+info.room_full_name+"' LIMIT 1", function(err1, rows){
-              if ( err1 || (rows.length >0 )){console.log('co loi 2 '+err1);}
+              if ( err1 || (rows.length ==0 )){console.log('co loi 2 '+err1);}
               else { let sql2 = "INSERT INTO `"+member.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
             info.new_list.forEach((mem2)=>{
               let values2 = [[rows[0].id, mem2.number, mem2.name, 'O', 'N']];
@@ -672,7 +672,7 @@ io.on('connection',  (socket)=>
              //nếu tài khoản đó đã có, kiêm tra xem cái room đó đã có trong bảng chưa
              con.query("SELECT * FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+ info.room_full_name +"' LIMIT 1", function(err8, row1s)
                {
-                 if(err8 || (row1s.length >0)){console.log('co loi 6' + err4);}
+                 if(err8 || (row1s.length >0)){console.log('co loi 6' + err8);}
                  else {
                     let member = [];
                     let mem = {name:"", number:""};
