@@ -660,7 +660,7 @@ io.on('connection',  (socket)=>
             con.query("UPDATE `"+member.number+"mes_main` SET `stt` = 'M' WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+info.room_full_name+"'",function(err3){
                 if (err3){console.log('co loi 4'+err3);}
               });
-            io.sockets.in(member.number).emit('S_add_mem',{ room_fullname:strencode(info.room_name), member_list:member3});
+            io.sockets.in(member.number).emit('S_add_mem',{ room_fullname:strencode(info.room_full_name), member_list:member3});
             console.log('a gui room di cho nguoi cu:'+info.room_name + ' danh sach la:'+member3);
           } }); });
       // thông báo room cho thành viên mới
