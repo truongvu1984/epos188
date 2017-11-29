@@ -635,7 +635,7 @@ io.on('connection',  (socket)=>
     // xác minh tài khoản đủ điều kiện để bổ sung thành viên không
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+info.admin+"' AND `pass` LIKE '"+info.pass+"' LIMIT 1", function(err, rows6)
     {
-      if (err || (rows6==0)){console.log(err);}
+      if (err || (rows6==0)){console.log('co loi 1' + err);}
       else {
         socket.emit ('S_get_bosung_member');
         let mem3 = {name:"", number:""};
@@ -643,22 +643,22 @@ io.on('connection',  (socket)=>
         info.old_list.forEach((member)=>{
             let member3 = [];
             con.query("SELECT * FROM `" + member.number+"mes_main` WHERE `idc` LIKE '"+info.room_full_name+"' LIMIT 1", function(err1, rows){
-              if ( err1 || (rows.length >0 )){console.log(err1);}
+              if ( err1 || (rows.length >0 )){console.log('co loi 2 '+err1);}
               else { let sql2 = "INSERT INTO `"+member.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
             info.new_list.forEach((mem2)=>{
               let values2 = [[rows[0].id, mem2.number, mem2.name, 'O', 'N']];
               con.query(sql2, [values2], function (err2, res){
-                if (err2){console.log(err2);}
+                if (err2){console.log('co loi 3 '+err2);}
                 else {
                 console.log('Da insert thanh cong '+ res.id);
                 }
               });
-              mem3 = {name:strencode(mem2), number:mem2.number};
+              mem3 = {name:strencode(mem2.name), number:mem2.number};
               member3.push(mem3);
-              console.log(mem3);
+              console.log('da ok 1'+mem3);
             });
             con.query("UPDATE `"+member.number+"mes_main` SET `stt` = 'M' WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+info.room_full_name+"'",function(err3){
-                if (err3){console.log(err3);}
+                if (err3){console.log('co loi 4'+err3);}
               });
             io.sockets.in(member.number).emit('S_add_mem',{ room_fullname:strencode(info.room_name), member_list:member3});
             console.log('a gui room di cho nguoi cu:'+info.room_name + ' danh sach la:'+member3);
@@ -667,12 +667,12 @@ io.on('connection',  (socket)=>
         info.new_list.forEach((member1)=>{
        //kiểm tra xem thành viên mới này có tài khoản chưa.
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ member1.number +"' LIMIT 1", function(err4, kq){
-           if ( err4 || (kq.length == 0)){console.log(err4);}
+           if ( err4 || (kq.length == 0)){console.log('co loi 5'+err4);}
            else {
              //nếu tài khoản đó đã có, kiêm tra xem cái room đó đã có trong bảng chưa
              con.query("SELECT * FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+ info.room_full_name +"' LIMIT 1", function(err8, row1s)
                {
-                 if(err8 || (row1s.length >0)){console.log(err4);}
+                 if(err8 || (row1s.length >0)){console.log('co loi 6' + err4);}
                  else {
                     let member = [];
                     let mem = {name:"", number:""};
@@ -680,7 +680,7 @@ io.on('connection',  (socket)=>
                     var sql = "INSERT INTO `"+member1.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
                     var val = [[ info.room_full_name, info.room_name,'O', 'N']];
                     con.query(sql, [val], function (err5, res){
-                      if ( err5){console.log(err5);}
+                      if ( err5){console.log('co loi 7'+err5);}
                       else {
                         let sql2 = "INSERT INTO `"+member1.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
                           info.full_list.forEach(function(row4){
@@ -690,13 +690,13 @@ io.on('connection',  (socket)=>
                               if (row4.number ==info.admin){
                                 let val2 = [[res.insertId,row4.number,row4.name,'OM']];
                                 con.query(sql2, [val2], function (err6) {
-                                  if ( err6){console.log(err6);}
+                                  if ( err6){console.log('co loi 8'+err6);}
                                   else { console.log('da insert 1');}
                                 });
                               }
                               else  {
                                 var val2 = [[res.insertId,row4.number,row4.name,'O']];
-                                con.query(sql2, [val2], function (err7) {
+                                con.query(sql2, [val2], function ('co loi 9'+err7) {
                                   if ( err7){console.log(err7);}
                                   else { console.log('da insert 2');}
 
