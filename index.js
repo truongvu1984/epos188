@@ -696,8 +696,8 @@ io.on('connection',  (socket)=>
                               }
                               else  {
                                 var val2 = [[res.insertId,row4.number,row4.name,'O']];
-                                con.query(sql2, [val2], function ('co loi 9'+err7) {
-                                  if ( err7){console.log(err7);}
+                                con.query(sql2, [val2], function (err7) {
+                                  if ( err7){console.log('Da co loi'+err7);}
                                   else { console.log('da insert 2');}
 
                                 });
