@@ -22,10 +22,10 @@ var con = mysql.createConnection({
  queueLimit: 30,
   acquireTimeout: 1000000,
 });
-var accountSid = 'ACaa41a4ddc473c35c1192aa1a7fd6dab4';
-var authToken = '94b2749230e0d3d5b379cf851c0d3c8c';
+// var accountSid = 'ACaa41a4ddc473c35c1192aa1a7fd6dab4';
+// var authToken = '94b2749230e0d3d5b379cf851c0d3c8c';
 //require the Twilio module and create a REST client
-var client = require('twilio')(accountSid, authToken);
+//var client = require('twilio')(accountSid, authToken);
 var stt = 0;
 
   con.connect(function(err) {
@@ -317,6 +317,7 @@ io.on('connection',  (socket)=>
                   });
               }
           });
+          // kiểm tra xem có room nào cần bổ sung mmember không
           con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'O' AND `stt` LIKE 'M'", function(err7, a7s)
             {
               if ( err7 ||(a7s.length==0)){console.log(err7);}
@@ -328,8 +329,8 @@ io.on('connection',  (socket)=>
                         if ( err8 ||(a7s.length==0)){console.log(err8);}
                         else{
                           let mem = [];
-                          let mem1;
-                          member.forEach((mem2)=>{
+                          let mem1 ={name:"", number:""};
+                          members.forEach((mem2)=>{
                             mem1 = {name:strencode(mem2.name), number:mem2.number};
                             mem.push(mem1);
                           });
