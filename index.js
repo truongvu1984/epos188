@@ -21,7 +21,6 @@ var con = mysql.createConnection({
  database : "heroku_7790b5956b2a5c2",
  queueLimit: 30,
   acquireTimeout: 1000000,
-
 });
 var accountSid = 'ACaa41a4ddc473c35c1192aa1a7fd6dab4';
 var authToken = '94b2749230e0d3d5b379cf851c0d3c8c';
@@ -197,7 +196,7 @@ io.on('connection',  (socket)=>
   socket.on('mainlogin', function(user, pass){
     console.log("Da nhan user "+ user);
     // kiểm tra
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user+"' AND `pass` LIKE '"+ pass+"' LIMIT 1", function(err, rows){
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user+"' AND `pass` LIKE '"+ pass+"' LIMIT 1", function(err1, rows){
         console.log('so luong row giong la:'+rows.length);
         if (rows.length ==0){
           // Nếu đăng nhập sai
@@ -277,16 +276,16 @@ io.on('connection',  (socket)=>
               }
           });
           // kiểm tra xem có room nào gửi không
-          con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'O' AND `stt` LIKE 'N'", function(err, a1s)
+          con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'O' AND `stt` LIKE 'N'", function(err, a5s)
             {
               if ( err){console.log(err);}
-              else if ( a1s.length>0)
+              else if ( a5s.length>0)
                 {
                 var ad_num,ad_name;
-                a1s.forEach(function(a1)
+                a5s.forEach(function(a5)
                   {
                     //lấy tên người gửi và tên người tham gia room
-                    console.log('room chua gui: '+a1.subject);
+                    console.log('room chua gui: '+a5.subject);
                     con.query("SELECT * FROM `"+user+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err, a2s)
                   {
                       if (err){console.log(err);}
@@ -309,16 +308,38 @@ io.on('connection',  (socket)=>
                               // còn không thì đây là tên admin của room
                             { ad_num = a2.number; ad_name = strencode(a2.name);
                               console.log('admin la:'+a2.number);
-
                             }
                           });
-                        socket.emit('S_send_room',{admin_name:ad_name, admin_number:ad_num, room_name: strencode(a1.subject),room_fullname: strencode(a1.idc), member_list: list });
+                        socket.emit('S_send_room',{admin_name:ad_name, admin_number:ad_num, room_name: strencode(a5.subject),room_fullname: strencode(a5.idc), member_list: list });
                         console.log('Da gui room di '+ad_name);
                     }
                     });
                   });
               }
           });
+          con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'O' AND `stt` LIKE 'M'", function(err7, a7s)
+            {
+              if ( err7 ||(a7s.length==0)){console.log(err7);}
+              else
+                { //else1
+                  a7s.forEach((room)=>{
+                    con.query("SELECT * FROM `"+user+"mes_sender` WHERE `ids` LIKE '"+room.id+"' AND `stt` LIKE 'M'", function(err8, members)
+                      {
+                        if ( err8 ||(a7s.length==0)){console.log(err8);}
+                        else{
+                          let mem = [];
+                          let mem1;
+                          member.forEach((mem2)=>{
+                            mem1 = {name:strencode(mem2.name), number:mem2.number};
+                            mem.push(mem1);
+                          });
+                          socket.emit('S_add_mem',{ room_fullname:strencode(room.idc), member_list:mem});
+                        }
+                      });
+                  });
+
+                } // else1
+              });
           }
       });
 	});//hết phần socket.on mainlogin
@@ -600,7 +621,6 @@ io.on('connection',  (socket)=>
         });
       }
    	});
-
   socket.on('C_get_add_mem', function(info){
     console.log('Da nhan su kien C get add mem');
     // lượn qua xem tài khoản đó có tồn tại hay không
@@ -720,7 +740,6 @@ io.on('connection',  (socket)=>
       });
 
     });
-
   socket.on('C_get_room', function(info){
     console.log('Da nhan room roi:' + info.fullname);
       con.query("UPDATE `"+info.number+"mes_main` SET `stt` = 'Y' WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+info.fullname+"'",function(err){
