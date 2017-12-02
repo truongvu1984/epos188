@@ -286,7 +286,7 @@ io.on('connection',  (socket)=>
                   {
                     //lấy tên người gửi và tên người tham gia room
                     console.log('room chua gui: '+a5.subject);
-                    con.query("SELECT * FROM `"+user+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err, a2s)
+                    con.query("SELECT * FROM `"+user+"mes_sender` WHERE `ids` LIKE '"+a5.id+"'", function(err, a2s)
                   {
                       if (err){console.log(err);}
                       else
