@@ -269,7 +269,7 @@ io.on('connection',  (socket)=>
                 }
           });
             //kiểm tra xem có ai đã nhận tin nhắn rồi không
-          con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'S'`stt` LIKE 'G'", function(err, a4s)
+          con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'S' AND `stt` LIKE 'G'", function(err, a4s)
               {
             if ( err || (a4s.length==0)){console.log(err);}
             else
