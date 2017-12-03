@@ -269,7 +269,7 @@ io.on('connection',  (socket)=>
                 }
           });
             //kiểm tra xem có ai đã nhận tin nhắn rồi không
-          con.query("SELECT * FROM `"+user+"mes_main` WHERE `stt` LIKE 'G'", function(err, a4s)
+          con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'S'`stt` LIKE 'G'", function(err, a4s)
               {
             if ( err || (a4s.length==0)){console.log(err);}
             else
@@ -449,7 +449,7 @@ io.on('connection',  (socket)=>
         if ( err || (res.length ==0) ){console.log(err);}
         else
           {
-            con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'G' WHERE `idc` LIKE '"+idc+"'",function(err2,res2){
+            con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'G' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'S'",function(err2,res2){
               con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'G' WHERE `ids` LIKE '"+res[0].id+"' AND `number` LIKE '"+nguoinhan+"'",function(err3,res3)
                 {
 
@@ -473,10 +473,10 @@ io.on('connection',  (socket)=>
   // server, kết thúc phần gửi tin cho khách hàng đó
   socket.on('tinnhan_final', function (nguoigui, id){
 		console.log('Da nhan tin nhan final');
-      con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE idc LIKE '"+id+"' LIMIT 1", function(err, a1s){
+      con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE idc LIKE '"+id+"' AND `send_receive` LIKE 'S' LIMIT 1", function(err, a1s){
         if ( err || ( a1s.length==0)) {console.log(err);}
         else {
-          con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'OK' WHERE `idc` LIKE '"+id+"'",function(){
+          con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'OK' WHERE `idc` LIKE '"+id+"' AND `send_receive` LIKE 'S'",function(){
               console.log('ma san pham final la '+id);
             });
             con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'OK' WHERE `ids` LIKE '"+a1s[0].id+"' AND `number` LIKE '"+nguoigui+"'",function(){
