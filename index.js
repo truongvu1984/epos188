@@ -469,7 +469,7 @@ io.on('connection',  (socket)=>
   // server, kết thúc phần gửi tin cho khách hàng đó
   socket.on('tinnhan_final', function (nguoigui, id){
 		console.log('Da nhan tin nhan final');
-      con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE idc LIKE '"+idc+"' LIMIT 1", function(err, a1s){
+      con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE idc LIKE '"+id+"' LIMIT 1", function(err, a1s){
         if ( err || ( a1s.length==0)) {console.log(err);}
         else {
           con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'OK' WHERE `idc` LIKE '"+id+"'",function(){
