@@ -265,7 +265,7 @@ io.on('connection',  (socket)=>
                 }
           });
             //kiểm tra xem có ai đã nhận tin nhắn rồi không
-          con.query("SELECT * FROM `"+user+"mes_main` WHERE `stt` LIKE 'G'", function(err, a4S)
+          con.query("SELECT * FROM `"+user+"mes_main` WHERE `stt` LIKE 'G'", function(err, a4s)
               {
             if ( err || (a4s.length==0)){console.log(err);}
             else
