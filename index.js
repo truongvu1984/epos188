@@ -234,20 +234,22 @@ io.on('connection',  (socket)=>
                   a1s.forEach(function(a1)
                   {
                   //lấy tên người gửi
-                    con.query("SELECT * FROM `"+user+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err, a2s)
+                    con.query("SELECT * FROM `"+user+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err, a2s)
                     {
-                      if ( err || ( a2s.length)){console.log(err);}
+                      if ( err || ( a2s.length==0)){console.log(err);}
                       else
                       {
                         //lấy danh sách các điểm
+                        console.log('ten nguoi gui:'+a2s);
 
                         con.query("SELECT * FROM `"+user+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err, a3s)
                         {
-                          if ( err ){console.log(err);}
-                          else  if ( a3s.length >0)
+                          if ( err || ( a3s.length==0) ){console.log(err);}
+                          else
                             {
                             var pos3 = [];
                             var pos2;
+                            console.log('cac diem:'+a3s);
                             a3s.forEach(function(a3)
                             {
                                pos2 = {name:strencode(a3.name), lat:a3.lat, lon:a3.lon};
