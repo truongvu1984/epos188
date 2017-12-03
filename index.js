@@ -216,28 +216,28 @@ io.on('connection',  (socket)=>
           console.log('Dang nhap dung roi voi tai khoan' + user);
           // kiểm tra xem contact có ai mới tham gia ePOS không
           con.query("SELECT * FROM `"+user+"contact` WHERE `fr` LIKE 'N'", function(err, rows2){
-            if ( err){console.log('co loi select user contact: '+err);}
-            else if ( rows2.length>0){
+            if ( err || ( rows2.length ==0)){console.log('co loi select user contact: '+err);}
+            else {
               rows2.forEach(function(row2){
                 socket.emit('contact_joined', {number:row2.number,name:strencode(row2.name), code:row2.code});
                 });
             }
-            else {console.log('khong co contact nao tham gia ca');}
+
             });
           // kiểm tra xem có ai gửi tin nhắn cho không
           con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'R' AND `stt` LIKE 'N'", function(err, a1s)
               {
-              if ( err ){console.log(err);}
-              else if ( a1s.length>0)
+              if ( err || ( a1s.length == 0) ){console.log(err);}
+              else
                 {
                   console.log(a1s);
                   a1s.forEach(function(a1)
                   {
                   //lấy tên người gửi
-                    con.query("SELECT * FROM `"+user+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"'", function(err, a2s)
+                    con.query("SELECT * FROM `"+user+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err, a2s)
                     {
-                      if ( err ){console.log(err);}
-                      else if (a2s.length>0)
+                      if ( err || ( a2s.length)){console.log(err);}
+                      else
                       {
                         //lấy danh sách các điểm
 
@@ -253,8 +253,10 @@ io.on('connection',  (socket)=>
                                pos2 = {name:strencode(a3.name), lat:a3.lat, lon:a3.lon};
                                pos3.push(pos2);
                               });
+                              console.log(' Tin nhan gui di:'+pos3);
                             socket.emit('S_guitinnhan',{ name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number,
                                subject: strencode(a1.subject), pos: pos3, id_tinnha_client:a1.idc});
+
 
                           }
                         });
