@@ -270,7 +270,7 @@ io.on('connection',  (socket)=>
             if ( err || (a4s.length==0)){console.log(err);}
             else
               {
-                a4S.forEach(function(a4)
+                a4s.forEach(function(a4)
                   {
 
                   con.query("SELECT * FROM `"+user+"mes_sender` WHERE `ids` LIKE '"+a4.id+"' AND `stt` LIKE 'G' LIMIT 1", function(err5, a5s)
