@@ -400,7 +400,7 @@ io.on('connection',  (socket)=>
                                 {
                                   //lưu vào bảng người gửi của người nhận
                                   var sql6 = "INSERT INTO `"+row5.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
-                                  var val6 = [[ res5.insertId, mess.nguoigui_number,mess.nguoigui_name,'S']];
+                                  var val6 = [[ res5.insertId, mess.nguoigui_number,mess.nguoigui_name,'R']];
                                   con.query(sql6, [val6], function (err, res6) {
                                     if ( err){console.log(err);}
                                   else {
@@ -444,13 +444,13 @@ io.on('connection',  (socket)=>
       //  io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan_number:nguoinhan, idc:idc});
     });
 
-    con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, res)
+    con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err11, res11)
       {
-        if ( err || (res.length ==0) ){console.log(err);}
+        if ( err11 || (res11.length ==0) ){console.log(err11);}
         else
           {
             con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'G' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'S'",function(err2,res2){
-              con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'G' WHERE `ids` LIKE '"+res[0].id+"' AND `number` LIKE '"+nguoinhan+"'",function(err3,res3)
+              con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'G' WHERE `ids` LIKE '"+res11[0].id+"' AND `number` LIKE '"+nguoinhan+"'",function(err3,res3)
                 {
 
                   console.log('Da bao cho ' +nguoigui +' biet la '+nguoinhan + ' da nhan tin nhan '+idc);
