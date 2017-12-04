@@ -39,8 +39,6 @@ var stt = 0;
       //   });
 
 
-
-
   function waitAndDo() {
     setTimeout(function() {
     con.query("SELECT `number` FROM `account` WHERE `number` LIKE '123'", function(err){if(err){console.log('co loi:'+err);}});
@@ -417,6 +415,7 @@ io.on('connection',  (socket)=>
                                       });
                                       io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strencode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
                                         subject: strencode(mess.subject), pos: mess.pos, id_tinnha_client:mess.id});
+                                        console.log('Da gui tin nhan di xong');
 
                                   } //het else
                                 });
@@ -514,9 +513,8 @@ io.on('connection',  (socket)=>
   socket.on('C_check_contact', function (string){
     console.log("Chuoi nhan duoc la:"+string);
     con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
-      if (( err)){console.log(err);;}
+      if ( err){console.log(err);}
       else
-
       {
         let s=true;;
         a1.forEach(function (row1)
