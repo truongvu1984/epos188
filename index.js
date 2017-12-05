@@ -232,7 +232,7 @@ io.on('connection',  (socket)=>
                   a1s.forEach(function(a1)
                   {
                   //lấy tên người gửi
-                    con.query("SELECT * FROM `"+user+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err, a2s)
+                    con.query("SELECT * FROM `"+user+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err, a2s)
                     {
                       if ( err || ( a2s.length==0)){console.log(err);}
                       else
@@ -274,14 +274,22 @@ io.on('connection',  (socket)=>
               {
                 a4s.forEach(function(a4)
                   {
-
-                  con.query("SELECT * FROM `"+user+"mes_sender` WHERE `ids` LIKE '"+a4.id+"' AND `stt` LIKE 'G' LIMIT 1", function(err5, a5s)
+                  con.query("SELECT * FROM `"+user+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a4.id+"' AND `stt` LIKE 'G'", function(err5, a5s)
                   {
 
                   if ( err5 || (a5s.length==0)){console.log(err5);}
                   else
                     {
-                      socket.emit('C_danhantinnhan',{nguoinhan_number:a5s[0].number, idc:a4.idc});
+                      let nhoms_nguoinhan = [];
+                      let nguoinhan = {number:"", name:""};
+
+                      a5s.forEach(function(a5)
+                        {
+                          nguoinhan = {number:a5.number, name: strencode(a5.name)};
+                          nhoms_nguoinhan.push(nguoinhan);
+                        });
+
+                      socket.emit('C_danhantinnhan',{nguoinhan:nhoms_nguoinhan, idc:a4.idc});
                       console.log('Da gui sự kiện C_gui tin nhan di cho cac so:'+a5s[0].number +' ma la '+ a4.idc);
                     }
                   });
