@@ -444,6 +444,9 @@ io.on('connection',  (socket)=>
     }); // end socket.on('sendmess', function(test)
   socket.on('danhantinnhan', function (nguoinhan, nguoigui, idc)
    	{
+      let nhoms_nguoinhan = [{number:nguoinhan}];
+
+      io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan_number:nhoms_nguoinhan, idc:idc});
 		console.log("user:" + nguoinhan+" đã nhan tin nhan:" + idc+ " tu nguoi gui;"+ nguoigui);
     //chuyển trạng thái trong db thành người nhận đã đọc được tin, báo về cho người gửi biết
     con.query("UPDATE `"+nguoinhan+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"'",function(){
@@ -460,8 +463,8 @@ io.on('connection',  (socket)=>
               con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'G' WHERE `ids` LIKE '"+res11[0].id+"' AND `number` LIKE '"+nguoinhan+"'",function(err3,res3)
                 {
 
-                  console.log('Da bao cho ' +nguoigui +' biet la '+nguoinhan + ' da nhan tin nhan '+idc);
-                  io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan_number:nguoinhan, idc:idc});
+                  //console.log('Da bao cho ' +nguoigui +' biet la '+nguoinhan + ' da nhan tin nhan '+idc);
+
                 });
 
           });
