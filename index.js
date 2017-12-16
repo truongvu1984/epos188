@@ -444,8 +444,9 @@ io.on('connection',  (socket)=>
     }); // end socket.on('sendmess', function(test)
   socket.on('danhantinnhan', function (nguoinhan, nguoigui, idc)
    	{
-      let nhoms_nguoinhan = [{number:nguoinhan}];
-
+      let nhoms_nguoinhan = [];
+      let nguoinhan = {number:nguoinhan, name:""};
+      nhoms_nguoinhan.push(nguoinhan);
       io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan_number:nhoms_nguoinhan, idc:idc});
 		console.log("user:" + nguoinhan+" đã nhan tin nhan:" + idc+ " tu nguoi gui;"+ nguoigui);
     //chuyển trạng thái trong db thành người nhận đã đọc được tin, báo về cho người gửi biết
