@@ -447,7 +447,7 @@ io.on('connection',  (socket)=>
       let nhoms_nguoinhan = [];
       let nguoinhan1 = {number:nguoinhan, name:""};
       nhoms_nguoinhan.push(nguoinhan1);
-      io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan_number:nhoms_nguoinhan, idc:idc});
+      io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:nhoms_nguoinhan, idc:idc});
 		console.log("user:" + nguoinhan+" đã nhan tin nhan:" + idc+ " tu nguoi gui;"+ nguoigui);
     //chuyển trạng thái trong db thành người nhận đã đọc được tin, báo về cho người gửi biết
     con.query("UPDATE `"+nguoinhan+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"'",function(){
