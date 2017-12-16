@@ -482,17 +482,23 @@ io.on('connection',  (socket)=>
   });
   // khi người gửi biết rằng khách đã nhận được tin, chuyển màu sắc người nhận trong mục send sang đỏ và báo lại
   // server, kết thúc phần gửi tin cho khách hàng đó
-  socket.on('tinnhan_final', function (nguoigui, id){
+  socket.on('tinnhan_final', function (nguoigui, id, nhom_nguoinhan){
+
 		console.log('Da nhan tin nhan final');
-      con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE idc LIKE '"+id+"' AND `send_receive` LIKE 'S' LIMIT 1", function(err, a1s){
+      con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE `idc` LIKE '"+id+"' AND `stt` LIKE 'G' LIMIT 1", function(err, a1s){
         if ( err || ( a1s.length==0)) {console.log(err);}
         else {
-          con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'OK' WHERE `idc` LIKE '"+id+"' AND `send_receive` LIKE 'S'",function(){
+
+          con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'OK' WHERE `idc` LIKE '"+id+"' AND `stt` LIKE 'G'",function(){
               console.log('ma san pham final la '+id);
             });
-            con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'OK' WHERE `ids` LIKE '"+a1s[0].id+"' AND `number` LIKE '"+nguoigui+"'",function(){
-                console.log('ma san pham final la '+id);
-              });
+            nhom_nguoinhan.forEach((nguoinhan)=>{
+              con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'OK' WHERE `ids` LIKE '"+a1s[0].id+"' AND `number` LIKE '"+nguoinhan+"'",function(){
+                  console.log('ma san pham final la '+id);
+                });
+
+            });
+
 
       		//	kết thúc quá trình gửi tin nhắn
 
