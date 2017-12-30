@@ -27,6 +27,8 @@ var con = mysql.createConnection({
 //require the Twilio module and create a REST client
 //var client = require('twilio')(accountSid, authToken);
 var stt = 0;
+var bodyParser = require('body-parser');
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
   con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err); }
@@ -37,8 +39,57 @@ var stt = 0;
       //   {
       // console.log(res);
       //   });
+      app.set('view engine', 'ejs');
+      app.set('views', './views');
+      app.use(express.static('public'));
+      app.get('/', (req, res) => res.render('dangnhap'));
+      app.post('/', urlencodedParser, function (req, res) {
+        if (!req.body) return res.sendStatus(400)
+        con.query("SELECT * FROM `account` WHERE `number` LIKE '"+req.body.number+"' AND `pass` LIKE '"+req.body.pass+"' LIMIT 1", function(err, rows){
+          console.log(rows.length);
+          if (rows.length ==0){
+            res.send("Dang nhap khong dung");
+            console.log("Dang nhap first khong dung"+req.body.number);
+            }
+          else{
+            // vào CSDL lấy dữ liệu của username này ra
+            // một là mục inbox: hiển thị số tin mới chưa chuyển đến điện thoại,nội dung của inbox
+            // khi nhấp chuột vào sẽ hiện ra 10 tin đầu tiên theo thời gian, bên dưới cùng là hiển thị thêm.
+          // với mục contact thì hiển thị ra banj mới tham gia.
+          // các mục đều hiển thị 10 mục đầu tiên.
+          //các mục này không có sẵn mà khi nhập vào thì mới load trên server về.
+        // đồng thời gán cái name cho cái socket đó là tên người dùng.
 
+        con.query("SELECT * FROM `"+req.body.number+"mes_main` WHERE `send_receive` LIKE 'R'", function(err, a1s)
+            {
+            if ( err || ( a1s.length == 0) ){console.log(err);}
+            else
+              {
+                con.query("SELECT * FROM `"+req.body.number+"mes_main` WHERE `send_receive` LIKE 'S'", function(err2, a2s)
+                    {
+                    if ( err2 || ( a2s.length == 0) ){console.log(err2);}
+                    else
+                      {
+                        con.query("SELECT * FROM `"+req.body.number+"mes_main` WHERE `send_receive` LIKE 'O'", function(err3, a3s)
+                            {
+                            if ( err3 || ( a3s.length == 0) ){console.log(err3);}
+                            else
+                              {
+                                res.render('home1', {inbox:a1s, send:a2s, online:a3s, number:req.body.number});
+                                console.log('Da render xong');
 
+                              }
+                            });
+
+                      }
+                    });
+
+              }
+            });
+
+          }
+        });
+      })
   function waitAndDo() {
     setTimeout(function() {
     con.query("SELECT `number` FROM `account` WHERE `number` LIKE '123'", function(err){if(err){console.log('co loi:'+err);}});
@@ -53,10 +104,50 @@ var stt = 0;
 // function strdecode( data ) {
 //   return JSON.parse( decodeURIComponent( escape ( data ) ) );
 // }
-
 io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
+  socket.on('w_get_inbox', function(data, number){
+     console.log(data);
+     console.log(number);
+    con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+data+"' LIMIT 1", function(err, a1s)
+         {
+         if ( err || ( a1s.length == 0) ){console.log('1'+err);}
+         else
+           {
+             con.query("SELECT * FROM `"+number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1s[0].id+"'", function(err2, a2s)
+                 {
+                 if ( err2 || ( a2s.length == 0) ){console.log('2'+err2);}
+                 else
+                   {
+
+                     con.query("SELECT * FROM `"+number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s)
+                         {
+                         if ( err3 || ( a3s.length == 0) ){console.log('3'+err3);}
+                         else
+                           {
+                             let diems =[];
+                             let diem = {lat:0.0, lon:0.0};
+                             a3s.forEach((a3)=>{
+                               diem = {lat:a3.lat, lon:a3.lon, name:a3.name}
+                               diems.push(diem);
+
+                             });
+                            socket.emit('S_send_inbox', {subject:a1s[0].subject, point:diems});
+                           }
+                         });
+
+
+                   }
+                 });
+
+           }
+         });
+
+
+
+
+   });
   socket.emit('check_pass', function(){console.log('Da day su kien check di')});
   socket.on('disconnect', function(){ console.log('user da disconnect')});
   // lắng nghe sự kiện đăng ký tài khoản mới
@@ -601,7 +692,6 @@ io.on('connection',  (socket)=>
     con.query("UPDATE `"+host+"contact` SET `fr` = 'OK' WHERE number LIKE '"+number+"'",function(err3, ok){ console.log('loi update'+err)});
   });
   socket.on('C_pos_online', function (info){
-    console.log('Da nhan diem');
     if ( info != null){
     info.room.forEach(function(room){
           io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(info.user_name), number:info.user_number});

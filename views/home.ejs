@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Socket.io</title>
+    <script src="jquery-3.1.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      $(document).ready(() => {
+        let socket = io.connect();
+        socket.on('SERVER_REPLY', num => {
+            console.log(num);
+            $('#list').append('<li> ${num} </li>');
+        });
+        $('#xacnhan').click(() => {
+          let txt = $('#text').val();
+          socket.emit('CLIENT_SEND_MESSAGE', txt);
+        });
+        // $('#xacnhan').click(()=>{
+        //   let us = $('#user').val();
+        //   socket.emit('dangky', ${} )
+        // })
+      });
+</script>
+
+<style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    order:2;
+}
+html, body, #map {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+#map {
+    position: relative;
+
+}
+
+
+
+</style>
+  </head>
+  <body>
+
+
+    <a href="#" id="send" class="button">MAP</a>
+    <button id="send2" class="button">POSITION</button>
+    <button id="send3" class="button">CONTACT</button>
+    <button id="send3" class="button">ONLINE</button>
+    <button id="send3" class="button">ACCOUNT</button>
+    <br>
+    <input type="text" name="" value="" id= "user"></input>
+    <button type="button" name="button" id="xacnhan">bam nut</button>
+    <input type="text" name="" value="" id = "text" placeholder="nhap ten"></input>
+    <!-- <div id="map" style="width:100%;height:100"> -->
+  <div id="map">
+    </div>
+    <script>
+          function myMap() {
+            var mapOptions = {
+            center: new google.maps.LatLng(51.5, -0.12),
+            zoom: 10,
+            mapTypeId: google.maps.MapTypeId.HYBRID,
+            scrollwheel: true,
+            navigationControl: false,
+            scaleControl: false,
+            draggable: true,
+            disableDoubleClickZoom: false
+            }
+          var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+          }
+        </script>
+         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript">
+         </script>
+
+  </body>
+</html>
