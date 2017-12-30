@@ -41,7 +41,8 @@
           mangmarker.forEach(function(mar){
              if (mar.number == data.number){
              //  // nếu đã có điểm rồi thì chỉ cập nhật điểm đó thôi
-             //  mar.setPosition(new google.maps.LatLng(data.lat, data.lon));
+             var latlng = new google.maps.LatLng(data.lat, data.lon);
+               mar.marker.setPosition(latlng);
              //  test= false;
              //  break;
               }
