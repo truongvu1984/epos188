@@ -21,6 +21,7 @@
     "connect": "^3.6.5",
     "express": "^4.16.2",
     "http": "0.0.0",
+    "ejs": "^1.0.0",
     "mysql": "^2.15.0",
     "nodemailer": "^4.3.1",
     "socket.io": "^2.0.4",
