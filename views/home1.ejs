@@ -36,16 +36,16 @@
                 marker1 = {marker:marker2, name:data.name, number:data.number}
                 mangmarker.push(marker1);
               }
-        // else {
-        //   var test = true;
-        //   mangmarker.forEach((mar)=>{
-        //     if (mar.number == data.number){
-        //       // nếu đã có điểm rồi thì chỉ cập nhật điểm đó thôi
-        //       mar.setPosition(new google.maps.LatLng(data.lat, data.lon));
-        //       t= false;
-        //       break;
-        //     }
-        //   });
+        else {
+          var test = true;
+          mangmarker.forEach((mar)=>{
+            if (mar.number == data.number){
+              // nếu đã có điểm rồi thì chỉ cập nhật điểm đó thôi
+              mar.setPosition(new google.maps.LatLng(data.lat, data.lon));
+              t= false;
+              break;
+            }
+          });
         //     if(t) {
         //       // nếu điểm đó chưa có thì thêm mới vào
         //       marker2 = new google.maps.Marker({
