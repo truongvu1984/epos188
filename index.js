@@ -26,7 +26,6 @@ var con = mysql.createConnection({
 // var authToken = '94b2749230e0d3d5b379cf851c0d3c8c';
 //require the Twilio module and create a REST client
 //var client = require('twilio')(accountSid, authToken);
-var stt = 0;
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
@@ -695,7 +694,7 @@ io.on('connection',  (socket)=>
     if ( info != null){
     info.room.forEach(function(room){
           io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(info.user_name), number:info.user_number});
-          console.log('da gui cho '+room.room_fullname + 'AAAAA' + (stt++) + "ten la:"+ info.user_name );
+          console.log('da gui cho '+room.room_fullname + 'AAAAA' +info.stt+ "ten la:"+ info.user_name );
         });
     }
     else { console.log(info);}
