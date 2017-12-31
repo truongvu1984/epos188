@@ -199,6 +199,17 @@ html, body, #map {
    text-decoration: none;
    display: block;
 }
+.my_btn_membera {
+   color: black;
+   padding: 12px 16px;
+   text-decoration: none;
+   display: none;
+   position: absolute;
+   background-color: #f9f9f9;
+   right: 0px;
+   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+   z-index: 1;
+}
 
 /* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #f1f1f1}
@@ -227,6 +238,19 @@ document.getElementById("myDropdown4").classList.toggle("show1");
 }
 function myFunction5() {
 document.getElementById("myDropdown5").classList.toggle("show1");
+}
+function myFunction6() {
+document.getElementById("btn_member").classList.toggle("show1");
+}
+function myFunction7() {
+  var dropdowns = document.getElementsByClassName("my_btn_member");
+  var i;
+  for (i = 0; i < dropdowns.length; i++) {
+  var openDropdown = dropdowns[i];
+  if (openDropdown.classList.contains('show1')) {
+   openDropdown.classList.remove('show1');
+  }
+  }
 }
 
 // Close the dropdown menu if the user clicks outside of it
@@ -288,7 +312,7 @@ if (openDropdown.classList.contains('show1')) {
   <body>
       <div class="wrapper">
     <div class="dropdown5">
-     <button onclick="myFunction5()" class="dropbtn5">ACCOUNT</button>
+     <button onclick="myFunction5(); myFunction7();" class="dropbtn5">ACCOUNT</button>
      <div id="myDropdown5" class="dropdown-content5">
        <a href="#">Link 1</a>
        <a href="#">Link 2</a>
@@ -296,7 +320,7 @@ if (openDropdown.classList.contains('show1')) {
      </div>
     </div>
     <div class="dropdown4">
-     <button onclick="myFunction4()" class="dropbtn4">ONLINE</button>
+     <button onclick="myFunction4(); myFunction7();" class="dropbtn4">ONLINE</button>
      <div id="myDropdown4" class="dropdown-content4">
        <%
         for ( var i=0; i<online.length; i++)
@@ -304,15 +328,14 @@ if (openDropdown.classList.contains('show1')) {
        var abc3=''+online[i].id;
         %>
         <a href="#"> <%= online[i].subject %></a>
-    <a href="#" id="<%= abc3 %>" onclick=" socket.emit('C_join_room','<%= online[i].idc %>' );"> <%= online[i].subject %></a>
-
+    <a href="#" id="<%= abc3 %>" onclick=" myFunction5();myFunction7(); socket.emit('C_join_room','<%= online[i].idc %>' );"> <%= online[i].subject %></a>
         <%
       }
     %>
      </div>
    </div>
     <div class="dropdown3">
-     <button onclick="myFunction3()" class="dropbtn3">SAVE</button>
+     <button onclick="myFunction3();myFunction7(); " class="dropbtn3">SAVE</button>
      <div id="myDropdown3" class="dropdown-content3">
        	<!-- <a href="#" id="251">fghfhfh</a> -->
        <a href="#">Link 2</a>
@@ -320,7 +343,7 @@ if (openDropdown.classList.contains('show1')) {
      </div>
    </div>
    <div class="dropdown2">
-    <button onclick="myFunction2()" class="dropbtn2">SEND</button>
+    <button onclick="myFunction2(); myFunction7();" class="dropbtn2">SEND</button>
     <div id="myDropdown2" class="dropdown-content2">
       <%
        for ( var i=0; i<send.length; i++)
@@ -334,7 +357,7 @@ if (openDropdown.classList.contains('show1')) {
     </div>
   </div>
     <div class="dropdown1">
-     <button onclick="myFunction()" id="btn_inbox" class="dropbtn">INBOX</button>
+     <button onclick="myFunction(); myFunction7();" id="btn_inbox" class="dropbtn">INBOX</button>
      <div id="myDropdown" class="dropdown-content" >
        <!-- <ul style="width: 300px; height: 600px; overflow: auto"> -->
        <%
@@ -353,6 +376,7 @@ if (openDropdown.classList.contains('show1')) {
 
    </div>
  </div>
+ <button onclick="myFunction6()" class="my_btn_member" id = "btn_member">MEMBER</button>
  <div id="map">
  </div>
 
