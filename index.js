@@ -45,7 +45,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
       app.post('/', urlencodedParser, function (req, res) {
         if (!req.body) return res.sendStatus(400)
         con.query("SELECT * FROM `account` WHERE `number` LIKE '"+req.body.number+"' AND `pass` LIKE '"+req.body.pass+"' LIMIT 1", function(err, rows){
-          console.log(rows.length);
           if (rows.length ==0){
             res.send("Dang nhap khong dung");
             console.log("Dang nhap first khong dung"+req.body.number);
@@ -107,11 +106,10 @@ io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
   socket.on('w_get_inbox', function(data, number){
-     console.log(data);
-     console.log(number);
+     console.log("Da nhan number");
     con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+data+"' LIMIT 1", function(err, a1s)
          {
-         if ( err || ( a1s.length == 0) ){console.log('1'+err);}
+         if ( err || ( a1s.length == 0) ){console.log('5'+err);}
          else
            {
              con.query("SELECT * FROM `"+number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1s[0].id+"'", function(err2, a2s)
@@ -119,7 +117,7 @@ io.on('connection',  (socket)=>
                  if ( err2 || ( a2s.length == 0) ){console.log('2'+err2);}
                  else
                    {
-
+                     console.log("Da chọn");
                      con.query("SELECT * FROM `"+number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s)
                          {
                          if ( err3 || ( a3s.length == 0) ){console.log('3'+err3);}
@@ -132,7 +130,8 @@ io.on('connection',  (socket)=>
                                diems.push(diem);
 
                              });
-                            socket.emit('S_send_inbox', {subject:a1s[0].subject, point:diems});
+                            socket.emit('S_send_inbox', {subject:a1s[0].subject, point:diems, nguoigui:a2s[0].name});
+                            console.log('nguoi gui là:'+a2s[0].name);
                            }
                          });
 
@@ -142,10 +141,6 @@ io.on('connection',  (socket)=>
 
            }
          });
-
-
-
-
    });
   socket.emit('check_pass', function(){console.log('Da day su kien check di')});
   socket.on('disconnect', function(){ console.log('user da disconnect')});
@@ -643,6 +638,32 @@ io.on('connection',  (socket)=>
   socket.on('C_join_room', function (room)  {
     socket.join(room);
     console.log('da join user vao room '+ room);
+
+  });
+
+  socket.on('W_join_room', function (room, number)  {
+    socket.join(room);
+    console.log('da join vao number '+ number);
+    con.query("SELECT id FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+room+"' LIMIT 1", function(err7, a7s)
+      {
+        if ( err7 ||(a7s.length==0)){console.log(err7);}
+        else{
+          console.log(a7s[0].id);
+          con.query("SELECT number, name FROM `"+number+"mes_sender` WHERE `ids` LIKE '"+a7s[0].id+"'", function(err8, a8s)
+            {
+              if ( err8 ||(a8s.length==0)){console.log(err8);}
+              else{
+              socket.emit('S_send_room_member', a8s);
+
+              }
+            });
+
+        }
+      });
+
+
+
+
 
   });
   socket.on('C_leave_room', function (room) {

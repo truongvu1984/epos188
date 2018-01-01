@@ -6,7 +6,8 @@
     <script src="jquery-3.1.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-    var socket = io("https://epos188.herokuapp.com/");
+  //  var socket = io("https://epos188.herokuapp.com/");
+  var socket = io("10.0.10.124:3000");
     var map;
     var mangmarker = [];
     var marker1 = {};
@@ -61,15 +62,43 @@
 
          }
       });
+function showalert(number){
+
+  if ( mangmarker.length>0){
+  mangmarker.forEach(function(mar){
+  if(mar.number == number){
+    var lat = mar.marker.getPosition().lat();
+    var lng = mar.marker.getPosition().lng();
+    // map.panTo(new google.maps.LatLng(lat, lon));
+
+     map.panTo(new google.maps.LatLng(mar.marker.getPosition().lat(), mar.marker.getPosition().lng()));
+     map.setZoom(14);
+    // break;
+  }
+
+});
+}
+alert('abc'+mangmarker.length);
+
+}
+
+      socket.on('S_send_room_member', function(data){
+        var ten ="";
+        data.forEach(function(member){
+          ten = ten+ "<a href='#' onclick='showalert("+member.number+");'>"+member.name + "</a>";
+          });
+
+          $("#myDropdown6").html( ten);
+      });
     socket.on('S_send_inbox', function(data){
-      $("#view").html( "Subject: "+data.point.length);
+      $("#view").html( "Inbox: "+data.subject + "</br>"+"From:"+data.nguoigui);
       if (data.point.length==1){
       var marker3 = new google.maps.Marker({
                 position: { lat: data.point[0].lat, lng: data.point[0].lon },
                 label: data.point[0].name,
                 map: map
               });
-      map.panTo(new google.maps.LatLng(data.point[0].lat, data.point[0].lon),);
+      map.panTo(new google.maps.LatLng(data.point[0].lat, data.point[0].lon));
       map.setZoom(14);
     }
      else {
@@ -87,13 +116,6 @@
    map.fitBounds(bounds);
  }
 
-      // map.animateCamera({
-      //   target: bangalore,
-      //   tilt: 60,
-      //   zoom: 14,
-      //   bearing: 140,
-      //   duration: 5000 // = 5 sec.
-      // }, function(){alert('fasdff')});
 
 // });
     });
@@ -113,7 +135,7 @@ html, body, #map {
 
 }
 /* Dropdown Button */
-.dropbtn, .dropbtn2, .dropbtn3, .dropbtn4, .dropbtn5{
+.dropbtn, .dropbtn2, .dropbtn3, .dropbtn4, .dropbtn5 {
    background-color: #4CAF50;
    color: white;
    padding: 16px;
@@ -121,6 +143,15 @@ html, body, #map {
    border: none;
    cursor: pointer;
 }
+.dropbtn6 {
+   background-color: #4CAF50;
+   color: white;
+   padding: 5px;
+   font-size: 16px;
+   border: none;
+   cursor: pointer;
+}
+
 .txt {
   background-color: white;
   padding: 10px;
@@ -135,15 +166,25 @@ html, body, #map {
 }
 
 /* The container <div> - needed to position the dropdown content */
-.dropdown1, .dropdown2, .dropdown3, .dropdown4, .dropdown5, .txt {
+.dropdown1, .dropdown2, .dropdown3, .dropdown4, .dropdown5,.txt{
    position: relative;
    display: inline-block;
    float:right;
    margin-right: 10px
 }
+.dropdown6{
+   position: absolute;
+   display: none;
+   top: 60px;
+   right: 10px;
+   z-index: 1;
+
+}
+/* The container <div> - needed to position the dropdown content */
+
 
 /* Dropdown Content (Hidden by Default) */
-.dropdown-content, .dropdown-content2,.dropdown-content3,.dropdown-content4,.dropdown-content5 {
+.dropdown-content, .dropdown-content2,.dropdown-content3,.dropdown-content4,.dropdown-content5{
    display: none;
    position: absolute;
    background-color: #f9f9f9;
@@ -154,19 +195,25 @@ html, body, #map {
    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
    z-index: 1;
 }
+
+.dropdown-content6  {
+   display: none;
+   position: absolute;
+   background-color: #f9f9f9;
+   min-width: 160px;
+   height: 200px;
+   max-height: 500px;
+   overflow: auto;
+   right: 0px;
+   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+   z-index: 1;
+}
+
 .wrapper {
   z-index: 3;
   position: absolute;
   right: 0px;
 }
-/* .dropdown-content2 {
-   display: none;
-   position: absolute;
-   background-color: #f9f9f9;
-   min-width: 160px;
-   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-   z-index: 1;
-} */
 
 /* Links inside the dropdown */
 .dropdown-content a {
@@ -199,16 +246,11 @@ html, body, #map {
    text-decoration: none;
    display: block;
 }
-.my_btn_membera {
+.dropdown-content6 a {
    color: black;
    padding: 12px 16px;
    text-decoration: none;
-   display: none;
-   position: absolute;
-   background-color: #f9f9f9;
-   right: 0px;
-   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-   z-index: 1;
+   display: block;
 }
 
 /* Change color of dropdown links on hover */
@@ -217,6 +259,7 @@ html, body, #map {
 .dropdown-content3 a:hover {background-color: #f1f1f1}
 .dropdown-content4 a:hover {background-color: #f1f1f1}
 .dropdown-content5 a:hover {background-color: #f1f1f1}
+.dropdown-content6 a:hover {background-color: #f1f1f1}
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show1 {display:block;}
@@ -240,7 +283,13 @@ function myFunction5() {
 document.getElementById("myDropdown5").classList.toggle("show1");
 }
 function myFunction6() {
-document.getElementById("btn_member").classList.toggle("show1");
+document.getElementById("id_dropdown6").style.display = "block";
+}
+function myFunction8() {
+document.getElementById("id_dropdown6").style.display = "none";
+}
+function myFunction9() {
+document.getElementById("myDropdown6").classList.toggle("show1");
 }
 function myFunction7() {
   var dropdowns = document.getElementsByClassName("my_btn_member");
@@ -312,7 +361,7 @@ if (openDropdown.classList.contains('show1')) {
   <body>
       <div class="wrapper">
     <div class="dropdown5">
-     <button onclick="myFunction5(); myFunction7();" class="dropbtn5">ACCOUNT</button>
+     <button onclick="myFunction5(); myFunction7;" class="dropbtn5">ACCOUNT</button>
      <div id="myDropdown5" class="dropdown-content5">
        <a href="#">Link 1</a>
        <a href="#">Link 2</a>
@@ -320,36 +369,35 @@ if (openDropdown.classList.contains('show1')) {
      </div>
     </div>
     <div class="dropdown4">
-     <button onclick="myFunction4(); myFunction7();" class="dropbtn4">ONLINE</button>
+     <button onclick="myFunction4()" class="dropbtn4">ONLINE</button>
      <div id="myDropdown4" class="dropdown-content4">
        <%
         for ( var i=0; i<online.length; i++)
      {
        var abc3=''+online[i].id;
         %>
-        <a href="#"> <%= online[i].subject %></a>
-    <a href="#" id="<%= abc3 %>" onclick=" myFunction5();myFunction7(); socket.emit('C_join_room','<%= online[i].idc %>' );"> <%= online[i].subject %></a>
+        <a href="#" id="<%= abc3 %>" onclick=" myFunction6(); myFunction5(); socket.emit('W_join_room','<%= online[i].idc %>','<%= number %>' );"> <%= online[i].subject %></a>
         <%
       }
     %>
      </div>
    </div>
     <div class="dropdown3">
-     <button onclick="myFunction3();myFunction7(); " class="dropbtn3">SAVE</button>
+     <button onclick="myFunction3(); " class="dropbtn3">SAVE</button>
      <div id="myDropdown3" class="dropdown-content3">
        	<!-- <a href="#" id="251">fghfhfh</a> -->
-       <a href="#">Link 2</a>
+       <a href="#" onclick=" myFunction8()">Link 2</a>
        <a href="#">Link 3</a>
      </div>
    </div>
    <div class="dropdown2">
-    <button onclick="myFunction2(); myFunction7();" class="dropbtn2">SEND</button>
+    <button onclick="myFunction2()" class="dropbtn2">SEND</button>
     <div id="myDropdown2" class="dropdown-content2">
       <%
        for ( var i=0; i<send.length; i++)
     {
        %>
-       <a href="#"> <%= send[i].subject %></a>
+       <a href="#" onclick=" myFunction8()"> <%= send[i].subject %></a>
        <%
      }
    %>
@@ -357,7 +405,7 @@ if (openDropdown.classList.contains('show1')) {
     </div>
   </div>
     <div class="dropdown1">
-     <button onclick="myFunction(); myFunction7();" id="btn_inbox" class="dropbtn">INBOX</button>
+     <button onclick="myFunction()" id="btn_inbox" class="dropbtn">INBOX</button>
      <div id="myDropdown" class="dropdown-content" >
        <!-- <ul style="width: 300px; height: 600px; overflow: auto"> -->
        <%
@@ -365,23 +413,26 @@ if (openDropdown.classList.contains('show1')) {
      {
        var abc=''+inbox[i].id;
 				%>
-				<a href="#" id="<%= abc %>" onclick=" socket.emit('w_get_inbox','<%= inbox[i].idc %>','<%= number %>' );"> <%= inbox[i].subject %></a>
+				<a href="#" id="<%= abc %>" onclick=" myFunction8();socket.emit('w_get_inbox','<%= inbox[i].idc %>','<%= number %>' );"> <%= inbox[i].subject %></a>
 				<%
 			}
 		%>
-      </ul>
-     </div>
+           </div>
    </div>
-   <div class="txt" id="view">  ha ha ha
-
-   </div>
+   <div class="txt" id="view"> </div>
  </div>
- <button onclick="myFunction6()" class="my_btn_member" id = "btn_member">MEMBER</button>
+
+
  <div id="map">
  </div>
 
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript">
       </script>
+      <div class="dropdown6" id="id_dropdown6">
+       <button onclick="myFunction9()" id="btn_inbox6" class="dropbtn6">MEMBER</button>
+       <div id="myDropdown6" class="dropdown-content6" >
+       </div>
+     </div>
 
 
   </body>
