@@ -28,7 +28,6 @@ var con = mysql.createConnection({
 //var client = require('twilio')(accountSid, authToken);
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
-
   con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err); }
     else {
@@ -42,9 +41,17 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
       app.set('views', './views');
       app.use(express.static('public'));
       app.get('/', (req, res) => res.render('dangnhap'));
+      app.get('/icon/1', (req, res)=>{
+        res.sendFile(__dirname + "/mar2.png");
+
+      });
       app.post('/', urlencodedParser, function (req, res) {
         if (!req.body) return res.sendStatus(400)
-        con.query("SELECT * FROM `account` WHERE `number` LIKE '"+req.body.number+"' AND `pass` LIKE '"+req.body.pass+"' LIMIT 1", function(err, rows){
+        else {
+          var full_number = "+"+req.body.code + req.body.number.replace('0','');
+          console.log(full_number);
+
+        con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' AND `pass` LIKE '"+req.body.pass+"' LIMIT 1", function(err, rows){
           if (rows.length ==0){
             res.send("Dang nhap khong dung");
             console.log("Dang nhap first khong dung"+req.body.number);
@@ -58,22 +65,22 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
           //các mục này không có sẵn mà khi nhập vào thì mới load trên server về.
         // đồng thời gán cái name cho cái socket đó là tên người dùng.
 
-        con.query("SELECT * FROM `"+req.body.number+"mes_main` WHERE `send_receive` LIKE 'R'", function(err, a1s)
+        con.query("SELECT * FROM `"+full_number+"mes_main` WHERE `send_receive` LIKE 'R'", function(err, a1s)
             {
             if ( err || ( a1s.length == 0) ){console.log(err);}
             else
               {
-                con.query("SELECT * FROM `"+req.body.number+"mes_main` WHERE `send_receive` LIKE 'S'", function(err2, a2s)
+                con.query("SELECT * FROM `"+full_number+"mes_main` WHERE `send_receive` LIKE 'S'", function(err2, a2s)
                     {
                     if ( err2 || ( a2s.length == 0) ){console.log(err2);}
                     else
                       {
-                        con.query("SELECT * FROM `"+req.body.number+"mes_main` WHERE `send_receive` LIKE 'O'", function(err3, a3s)
+                        con.query("SELECT * FROM `"+full_number+"mes_main` WHERE `send_receive` LIKE 'O'", function(err3, a3s)
                             {
                             if ( err3 || ( a3s.length == 0) ){console.log(err3);}
                             else
                               {
-                                res.render('home1', {inbox:a1s, send:a2s, online:a3s, number:req.body.number});
+                                res.render('home2', {inbox:a1s, send:a2s, online:a3s, number:full_number, name:rows[0].user});
                                 console.log('Da render xong');
 
                               }
@@ -87,6 +94,8 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
           }
         });
+
+      }
       })
   function waitAndDo() {
     setTimeout(function() {
@@ -677,11 +686,12 @@ io.on('connection',  (socket)=>
     });
     //sự kiến check_contact xảy ra khi người dùng được thông báo acitve thành công, app sẽ lấy  toàn bộ danh sách
     // để gửi lên server để server lưu và kiểm tra xe liệu trong đó có ai đã tham gia ePos rồi chưa
-  socket.on('check_contact', function (arr_contact){
+  socket.on('check_contact_full', function (arr_contact){
     //người dùng mới đăng nhập và sẽ gửi lên một đống cái contact, lúc này
     //server không gửi trả về từng contact mà gửi chung cả cụm.
     var mang_contact = [];
     var contact = {name : "", number : "", code: ""};
+    console.log("Contact nhan duoc la:"+arr_contact.contact.length);
     var sql = "INSERT INTO `"+arr_contact.hostnumber+"contact` (number, name, fr, code) VALUES ?";
     //từng contact một, cái nào đã có trong account rồi thì lưu dưới fr = Y và gửi thông báo cáo account đó biết
     // chưa thì lưu = N

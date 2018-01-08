@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ePos</title>
+    <script src="jquery-3.1.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+  //  var socket = io("https://epos188.herokuapp.com/");
+  var socket = io("10.0.10.129:3000");
+    var map;
+    var mangmarker = [];
+    var marker1 = {};
+    var rectangle;
+    var fourdiem = [];
+  //  var marker2;
+    function myMap() {
+      var mapOptions = {
+      center: new google.maps.LatLng(41.5, -0.12),
+      zoom: 10,
+      // mapTypeId: google.maps.MapTypeId.HYBRID,
+      scrollwheel: true,
+      navigationControl: true,
+      scaleControl: true,
+      draggable: true,
+      disableDoubleClickZoom: true,
+      fullscreenControl: false,
+      mapTypeControl:  true,
+    }
+      $(document).ready(function(){
+          map = new google.maps.Map(document.getElementById("map"), mapOptions);
+         });
+    }
+      socket.on('S_pos_online', function(data){
+              if (mangmarker.length == 0){
+      var  marker2 = new google.maps.Marker({
+                  position: { lat: data.lat, lng: data.lon },
+                  label: data.name,
+                  map: map,
+
+                });
+                marker1 = {marker:marker2, name:data.name, number:data.number};
+                mangmarker.push(marker1);
+              }
+        else {
+           var test = true;
+          mangmarker.forEach(function(mar){
+             if (mar.number == data.number){
+             //  // nếu đã có điểm rồi thì chỉ cập nhật điểm đó thôi
+             var latlng = new google.maps.LatLng(data.lat, data.lon);
+               mar.marker.setPosition(latlng);
+             //  test= false;
+             //  break;
+              }
+          });
+            // if(test) {
+            //   // nếu điểm đó chưa có thì thêm mới vào
+            //   marker2 = new google.maps.Marker({
+            //             position: { lat: data.lat, lng: data.lon },
+            //             label: data.name,
+            //             map: map
+            //           });
+            //           marker1 = {marker:marker2, name:data.name, number:data.number}
+            //           mangmarker.push(marker1);
+            // }
+
+
+         }
+      });
+function showalert(number){
+
+  if ( mangmarker.length>0){
+  mangmarker.forEach(function(mar){
+  if(mar.number == number){
+    var lat = mar.marker.getPosition().lat();
+    var lng = mar.marker.getPosition().lng();
+    // map.panTo(new google.maps.LatLng(lat, lon));
+     map.panTo(new google.maps.LatLng(mar.marker.getPosition().lat(), mar.marker.getPosition().lng()));
+     map.setZoom(18);
+    // break;
+  }
+
+});
+}
+
+}
+
+      socket.on('S_send_room_member', function(data){
+        var ten ="";
+
+        data.forEach(function(member){
+          ten = ten+ "<a href='#' onclick='showalert("+member.number+");'>"+member.name + "</a>";
+          });
+
+          $("#myDropdown6").html( ten);
+      });
+    socket.on('S_send_inbox', function(data){
+      $("#view").html( "Inbox: "+data.subject + "</br>"+"From:"+data.nguoigui);
+//       var anh = {
+//     url: 'http://10.0.10.124:3000/icon/1', // url
+//     scaledSize: new google.maps.Size(500, 500), // scaled size
+//     origin: new google.maps.Point(0,0), // origin
+//     // anchor: new google.maps.Point(0, 0) // anchor
+// };
+      if (data.point.length==1){
+        // var rectangle = new google.maps.Rectangle({
+        //           strokeColor: '#FF0000',
+        //          // strokeOpacity: 0.8,
+        //           strokeWeight: 2,
+        //           fillColor: '#FF0000',
+        //           // fillOpacity: 0.35,
+        //           map: map,
+        //           bounds: {
+        //             north: data.point[0].lat + 0.001,
+        //             south: data.point[0].lat - 0.001,
+        //             east: data.point[0].lon + 0.001,
+        //             west: data.point[0].lon - 0.001
+        //           }
+        //         });
+
+
+            var thongtin = "vu yeu van";
+              var marker3 = new google.maps.Marker({
+                position: { lat: data.point[0].lat, lng: data.point[0].lon },
+                label:{
+                  text:data.point[0].name,
+                  color:'white'
+                },
+                //icon: 'http://10.0.10.100:3000/icon/1',
+                map: map
+              });
+        var infowindow = new google.maps.InfoWindow({
+          content: thongtin
+        });
+        marker3.addListener('click', function() {
+          infowindow.open(map, marker3);
+        });
+
+
+      map.panTo(new google.maps.LatLng(data.point[0].lat, data.point[0].lon));
+      map.setZoom(14);
+    }
+     else {
+
+
+       var bounds = new google.maps.LatLngBounds();
+      data.point.forEach(function(p){
+            var thongtin = ""+p.name;
+       var marker4 = new google.maps.Marker({
+           position: { lat: p.lat, lng: p.lon },
+             label:{
+             text:p.name,
+             color:'white'
+           },
+           map: map
+         });
+
+         var infowindow = new google.maps.InfoWindow({
+           content: thongtin
+         });
+         infowindow.open(map, marker4);
+         // marker4.addListener('click', function() {
+         //   infowindow.open(map, marker4);
+         // });
+         bounds.extend(new google.maps.LatLng(p.lat, p.lon));
+
+     });
+    // map.panToBounds(bounds);
+   map.fitBounds(bounds);
+ }
+// https://github.com/googlemaps/js-map-label/pull/13/commits/2da40474fc95f4b5578f6c930b0e660218709894
+
+// });
+    });
+
+// function vehinh(){
+//   var bounds = {
+//           north: 44.599,
+//           south: 44.490,
+//           east: -78.443,
+//           west: -78.649
+//         };
+//
+//         // Define a rectangle and set its editable property to true.
+//         var rectangle = new google.maps.Rectangle({
+//           bounds: bounds,
+//           editable: true
+//         });
+//         rectangle.setMap(map);
+//
+// }
+
+function myFunction5() {
+document.getElementById("myDropdown5").classList.toggle("show1");
+
+}
+function myFunction6(subject) {
+document.getElementById("id_dropdown6").style.display = "block";
+//setMapOnAll(null);
+  $("#view").html( "Online: "+subject);
+
+}
+
+
+
+    </script>
+
+<style>
+
+html, body, #map {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+#map {
+    position: relative;
+
+}
+/* Dropdown Button */
+.dropbtn, .dropbtn2, .dropbtn3, .dropbtn4, .dropbtn5 {
+   background-color: #4CAF50;
+   color: white;
+   padding: 5px;
+   font-size: 16px;
+   border: none;
+   cursor: pointer;
+}
+.dropbtn6 {
+   background-color: #4CAF50;
+   color: white;
+   padding: 5px;
+   font-size: 16px;
+   border: none;
+   cursor: pointer;
+}
+
+.txt {
+  background-color: white;
+  padding: 5px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus,.dropbtn2:hover, .dropbtn2:focus,.dropbtn3:hover, .dropbtn3:focus,.dropbtn4:hover, .dropbtn4:focus,.dropbtn5:hover, .dropbtn5:focus,  {
+   background-color: #3e8e41;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown1, .dropdown2, .dropdown3, .dropdown4, .dropdown5,.txt, .my_login_number, .my_submit, .my_edit_pos{
+   position: relative;
+   display: inline-block;
+   float:right;
+   margin-right: 10px
+}
+
+.my_login_number{
+background-color: #4CAF50;
+}
+
+.dropdown6{
+   position: absolute;
+   display: none;
+   top: 60px;
+   right: 10px;
+   z-index: 1;
+
+}
+/* The container <div> - needed to position the dropdown content */
+
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content, .dropdown-content2,.dropdown-content3,.dropdown-content4,.dropdown-content5{
+   display: none;
+   position: absolute;
+   background-color: #f9f9f9;
+   min-width: 160px;
+   max-height: 500px;
+   overflow: auto;
+   right: 0px;
+   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+   z-index: 1;
+}
+
+.dropdown-content6  {
+   display: none;
+   position: absolute;
+   background-color: #f9f9f9;
+   min-width: 160px;
+   height: 200px;
+   max-height: 500px;
+   overflow: auto;
+   right: 0px;
+   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+   z-index: 1;
+}
+
+.wrapper {
+  z-index: 3;
+  position: absolute;
+  right: 0px;
+  height: 80px;
+  width: 800px;
+  margin-left: 50px;
+  margin-top: 10px
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+   color: black;
+   padding: 12px 16px;
+   text-decoration: none;
+   display: block;
+}
+.dropdown-content2 a {
+   color: black;
+   padding: 12px 16px;
+   text-decoration: none;
+   display: block;
+}
+.dropdown-content3 a {
+   color: black;
+   padding: 12px 16px;
+   text-decoration: none;
+   display: block;
+}
+.dropdown-content4 a {
+   color: black;
+   padding: 12px 16px;
+   text-decoration: none;
+   display: block;
+}
+.dropdown-content5 a {
+   color: black;
+   padding: 12px 16px;
+   text-decoration: none;
+   display: block;
+}
+.dropdown-content6 a {
+   color: black;
+   padding: 12px 16px;
+   text-decoration: none;
+   display: block;
+}
+.wrap2{
+  position: relative;
+  display: inline-block;
+  float:right;
+  margin-right: 10px;
+  height:100%;
+  width: 370px;
+  /* background:  #96B76A; */
+
+}
+.wrap2_1{
+  width: 100%;
+  position: absolute;
+  /* bottom: 0px; */
+  /* background: #4CAF50 */
+}
+.wrap3{
+  position: relative;
+  display: inline-block;
+  float:right;
+  margin-right: 10px;
+  width: 300px;
+  height: 50px;
+  background: #4CAF50
+}
+.my_edit_pos{
+  position: relative;
+  display: inline-block;
+  float: left;
+  margin-left: 10px;
+}
+.my_btn_send_tinnhan{
+  position: relative;
+  display: inline-block;
+  float: left;
+  height: 32px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+
+
+
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+.dropdown-content2 a:hover {background-color: #f1f1f1}
+.dropdown-content3 a:hover {background-color: #f1f1f1}
+.dropdown-content4 a:hover {background-color: #f1f1f1}
+.dropdown-content5 a:hover {background-color: #f1f1f1}
+.dropdown-content6 a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show1 {display:block;}
+
+
+</style>
+<script>
+function myFunction() {
+document.getElementById("myDropdown").classList.toggle("show1");
+}
+function myFunction2() {
+document.getElementById("myDropdown2").classList.toggle("show1");
+}
+function myFunction3() {
+document.getElementById("myDropdown3").classList.toggle("show1");
+}
+function myFunction4() {
+document.getElementById("myDropdown4").classList.toggle("show1");
+}
+
+function myFunction8() {
+document.getElementById("id_dropdown6").style.display = "none";
+}
+function myFunction9() {
+document.getElementById("myDropdown6").classList.toggle("show1");
+}
+function myFunction7() {
+  var dropdowns = document.getElementsByClassName("my_btn_member");
+  var i;
+  for (i = 0; i < dropdowns.length; i++) {
+  var openDropdown = dropdowns[i];
+  if (openDropdown.classList.contains('show1')) {
+   openDropdown.classList.remove('show1');
+  }
+  }
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+if (!event.target.matches('.dropbtn')) {
+var dropdowns = document.getElementsByClassName("dropdown-content");
+var i;
+for (i = 0; i < dropdowns.length; i++) {
+var openDropdown = dropdowns[i];
+if (openDropdown.classList.contains('show1')) {
+ openDropdown.classList.remove('show1');
+}
+}
+}
+if (!event.target.matches('.dropbtn2')) {
+var dropdowns = document.getElementsByClassName("dropdown-content2");
+var i;
+for (i = 0; i < dropdowns.length; i++) {
+var openDropdown = dropdowns[i];
+if (openDropdown.classList.contains('show1')) {
+ openDropdown.classList.remove('show1');
+}
+}
+}
+if (!event.target.matches('.dropbtn3')) {
+var dropdowns = document.getElementsByClassName("dropdown-content3");
+var i;
+for (i = 0; i < dropdowns.length; i++) {
+var openDropdown = dropdowns[i];
+if (openDropdown.classList.contains('show1')) {
+ openDropdown.classList.remove('show1');
+}
+}
+}
+if (!event.target.matches('.dropbtn4')) {
+var dropdowns = document.getElementsByClassName("dropdown-content4");
+var i;
+for (i = 0; i < dropdowns.length; i++) {
+var openDropdown = dropdowns[i];
+if (openDropdown.classList.contains('show1')) {
+ openDropdown.classList.remove('show1');
+}
+}
+}
+
+if (!event.target.matches('.dropbtn5')) {
+var dropdowns = document.getElementsByClassName("dropdown-content5");
+var i;
+for (i = 0; i < dropdowns.length; i++) {
+var openDropdown = dropdowns[i];
+if (openDropdown.classList.contains('show1')) {
+ openDropdown.classList.remove('show1');
+}
+}
+}
+}
+   </script>
+  </head>
+  <body>
+      <div class="wrapper">
+      <div class="wrap2">
+        <div class="wrap2_1">
+    <div class="dropdown5">
+     <button onclick="myFunction5(); myFunction7;" class="dropbtn5"><%= name %></button>
+     <div id="myDropdown5" class="dropdown-content5">
+       <a href="#">Link 1</a>
+       <a href="#">Link 2</a>
+       <a href="#">Link 3</a>
+     </div>
+    </div>
+    <div class="dropdown4">
+     <button onclick="myFunction4()" class="dropbtn4">ONLINE</button>
+     <div id="myDropdown4" class="dropdown-content4">
+       <%
+        for ( var i=0; i<online.length; i++)
+     {
+       var abc3=''+online[i].id;
+        %>
+        <a href="#" id="<%= abc3 %>" onclick=" myFunction6('<%= online[i].subject %>'); myFunction5(); socket.emit('W_join_room','<%= online[i].idc %>','<%= number %>' );"> <%= online[i].subject %></a>
+        <%
+      }
+    %>
+     </div>
+   </div>
+    <div class="dropdown3">
+     <button onclick="myFunction3(); " class="dropbtn3">SAVE</button>
+     <div id="myDropdown3" class="dropdown-content3">
+       	<!-- <a href="#" id="251">fghfhfh</a> -->
+       <a href="#" onclick=" myFunction8()">Link 2</a>
+       <a href="#">Link 3</a>
+     </div>
+   </div>
+   <div class="dropdown2">
+    <button onclick="myFunction2()" class="dropbtn2">SEND</button>
+    <div id="myDropdown2" class="dropdown-content2">
+      <%
+       for ( var i=0; i<send.length; i++)
+    {
+       %>
+       <a href="#" onclick=" myFunction8()"> <%= send[i].subject %></a>
+       <%
+     }
+   %>
+
+    </div>
+  </div>
+    <div class="dropdown1">
+     <button onclick="myFunction()" id="btn_inbox" class="dropbtn">INBOX</button>
+     <div id="myDropdown" class="dropdown-content" >
+       <!-- <ul style="width: 300px; height: 600px; overflow: auto"> -->
+       <%
+        for ( var i=0; i<inbox.length; i++)
+     {
+       var abc=''+inbox[i].id;
+				%>
+				<a href="#" id="<%= abc %>" onclick=" myFunction8();socket.emit('w_get_inbox','<%= inbox[i].idc %>','<%= number %>' );"> <%= inbox[i].subject %></a>
+				<%
+			}
+		%>
+           </div>
+   </div>
+ </div>
+</div>
+<div class="wrap3">
+<button id="btn_send_tinnhan" class="my_btn_send_tinnhan">GỬI TIN NHẮN</button>
+  <div id="login_number" class="my_edit_pos">
+    <div id="login_number_1">Nhập số điện thoại</div>
+    <input type="text" name="number" value="" id= "login_number_2"></input>
+  </div>
+
+
+</div>
+
+   <div class="txt" id="view"> </div>
+ </div>
+ <div id="map">
+ </div>
+
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript">
+      </script>
+      <div class="dropdown6" id="id_dropdown6">
+       <button onclick="myFunction9()" id="btn_inbox6" class="dropbtn6">MEMBER</button>
+       <div id="myDropdown6" class="dropdown-content6" >
+       </div>
+     </div>
+
+
+  </body>
+</html>
