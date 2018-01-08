@@ -713,7 +713,7 @@ io.on('connection',  (socket)=>
           }
         }
       });
-      socket.emit('first_contact_joined', mang_contact);
+      // socket.emit('first_contact_joined', mang_contact);
     });//arr_contact.contact.forEach
     });//check_contact
   socket.on('C_got_friend', function (host, number){
