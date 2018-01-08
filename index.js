@@ -180,7 +180,7 @@ io.on('connection',  (socket)=>
                       var sql = "INSERT INTO `active_account` (number,user, pass, string ,code ) VALUES ?";
                       var values = [[user_info.number, user_info.user,user_info.pass,string, user_info.code]];
                       con.query(sql, [values], function(err, result) {
-                      socket.emit('regis_ok_1', {number: user_info.number, code: user_info.code, pass: user_info.pass},function(){console.log('Da gui su kien regis ok')});
+                      socket.emit('regis_ok_1', {number: user_info.number, name: strencode(user_info.user), code: user_info.code, pass: user_info.pass},function(){console.log('Da gui su kien regis ok')});
                               // client.messages.create({
                               //     to: "+84982025401",
                               //     from: "+17323875504",
