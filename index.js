@@ -159,6 +159,7 @@ io.on('connection',  (socket)=>
         // Tìn tronbg db danh sách các tài khoản có number như number đăng ký không
 		      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user_info.number +"'", function(err, rows){
               // nếu tài khoản đã có người đăng ký rồi thì:
+            if(!(err)){
               if (rows.length >0 )	{
         	 	       socket.emit('regis_already_account',{number:user_info.number} );
         	 	       console.log("Da ton tai user nay");
@@ -193,15 +194,14 @@ io.on('connection',  (socket)=>
 					                       }//end else 2
 				                           });//end db.acive account
         	                        } //end else 1
+                                }
    		      });//end db.account
 	  }); //end socket.on.regis
   // lắng nghe sự kiện xác nhận tài khoản
   socket.on('active', function (active_info){
-  		console.log("Chuoi so da nhan duoc"+ active_info.string);
-      console.log(active_info.number);
-      con.query("SELECT * FROM `active_account` WHERE `number` LIKE '"+ active_info.number +"'", function(err, rows)
+  		con.query("SELECT * FROM `active_account` WHERE `number` LIKE '"+ active_info.number +"'", function(err, rows)
   		  {
-          if (rows.length==0){ socket.emit('active_no_number', {mail:active_info.number});}
+          if (err||rows.length==0){ socket.emit('active_no_number', {mail:active_info.number});}
           else
             {
               if (rows[0].string == active_info.string & rows[0].pass==active_info.pass)
@@ -270,9 +270,8 @@ io.on('connection',  (socket)=>
       });
   socket.on('fisrtlogin',(user1, pass1)=>{console.log('Da dang nhap bang ten:'+user1);
     //  nếu đăng nhập đúng thì phát sự kiện để app chuyển sang giao diện main
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' AND pass LIKE '"+ pass1+"' LIMIT 1", function(err, rows){
-	    console.log(rows.length);
-      if (rows.length ==0){
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' AND `pass` LIKE '"+ pass1+"' LIMIT 1", function(err, rows){
+	     if (err || rows.length ==0){
         // Nếu đăng nhập sai
         socket.emit('firscheckwrong');
         console.log("Dang nhap first khong dung"+user1);
@@ -294,10 +293,9 @@ io.on('connection',  (socket)=>
 	  });
   socket.on('mainlogin', function(user, pass){
     console.log("Da nhan user "+ user);
-    // kiểm tra
+    // kiểm tra mật khẩu và tài khoản
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user+"' AND `pass` LIKE '"+ pass+"' LIMIT 1", function(err1, rows){
-        console.log('so luong row giong la:'+rows.length);
-        if (rows.length ==0){
+        if (err1||rows.length ==0){
           // Nếu đăng nhập sai
           socket.emit('main_login_wrong');
           console.log("Dang nhap second khong dung"+user);
@@ -307,7 +305,7 @@ io.on('connection',  (socket)=>
           socket.join(user);
           console.log('Dang nhap dung roi voi tai khoan' + user);
           // kiểm tra xem contact có ai mới tham gia ePOS không
-          con.query("SELECT * FROM `"+user+"contact` WHERE `fr` LIKE 'N'", function(err, rows2){
+          con.query("SELECT * FROM `"+user+"contact` WHERE `fr` LIKE 'Y'", function(err, rows2){
             if ( err || ( rows2.length ==0)){console.log('co loi select user contact: '+err);}
             else {
               rows2.forEach(function(row2){
@@ -691,35 +689,46 @@ io.on('connection',  (socket)=>
     //server không gửi trả về từng contact mà gửi chung cả cụm.
     var mang_contact = [];
     var contact = {name : "", number : "", code: ""};
-    console.log("Contact nhan duoc la:"+arr_contact.contact.length);
-    var sql = "INSERT INTO `"+arr_contact.hostnumber+"contact` (number, name, fr, code) VALUES ?";
-    //từng contact một, cái nào đã có trong account rồi thì lưu dưới fr = Y và gửi thông báo cáo account đó biết
-    // chưa thì lưu = N
-    arr_contact.contact.forEach(function(row){
-      con.query("SELECT `number` FROM `account` WHERE `number` LIKE '"+ row.number +"'", function(err, row1s){
-        if ( err){console.log('select check_contact bị loi '+err);}
-        else {
-          if (row1s.length >0){
-            // nếu sđt đó có trong accout thì lưu là Y và đưa sđt đó vào JSON contact để gửi trả về báo cho người dùng
-            // biết là số điện thoại đó đã tham gia.
-            var val = [[ row.number, row.name,"Y",row.code]];
-            con.query(sql, [val], function (err, result) {if ( err)console.log(err);});
-            contact = {name : strencode(row.name), number : row.number, code: row.code};
-            mang_contact.push(contact);
-          }
-          else {
-            var val = [[row.number, row.name,"N",row.code]];
-            con.query(sql, [val], function (err, result) {if ( err)console.log(err);});
-          }
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+arr_contact.hostnumber+"' AND `pass` LIKE '"+ arr_contact.pass+"' LIMIT 1", function(err1, rows1){
+        if (err1 || rows1.length ==0){
+        // Nếu đăng nhập sai
+        socket.emit('firscheckwrong');
+        console.log("Dang nhap first khong dung"+user1);
         }
-      });
-      // socket.emit('first_contact_joined', mang_contact);
-    });//arr_contact.contact.forEach
+      else{
+            console.log("Contact nhan duoc la:"+arr_contact.contact.length);
+            var sql = "INSERT INTO `"+arr_contact.hostnumber+"contact` (number, name, fr, code) VALUES ?";
+            //từng contact một, cái nào đã có trong account rồi thì lưu dưới fr = Y và gửi thông báo cáo account đó biết
+            // chưa thì lưu = N
+            arr_contact.contact.forEach(function(row){
+              con.query("SELECT `number` FROM `account` WHERE `number` LIKE '"+ row.number +"'", function(err, row1s){
+                if ( err){console.log('select check_contact bị loi '+err);}
+                else {
+                  if (row1s.length >0){
+                    // nếu sđt đó có trong accout thì lưu là Y và đưa sđt đó vào JSON contact để gửi trả về báo cho người dùng
+                    // biết là số điện thoại đó đã tham gia.
+                    var val = [[ row.number, row.name,"Y",row.code]];
+                    con.query(sql, [val], function (err2, result) {if ( err2)console.log(err2);});
+                    contact = {name : strencode(row.name), number : row.number, code: row.code};
+                    mang_contact.push(contact);
+                  }
+                  else {
+                    var val = [[row.number, row.name,"N",row.code]];
+                    con.query(sql, [val], function (err2, result) {if ( err2)console.log(err2);});
+                  }
+                }
+              });
+              // socket.emit('first_contact_joined', mang_contact);
+            });//arr_contact.contact.forEach
+
+      }
+    });
+
     });//check_contact
-  socket.on('C_got_friend', function (host, number){
+  socket.on('C_got_friend', function (host,pass,number){
     console.log(host+" " + number);
-    con.query("DELETE FROM `"+host+"contact` WHERE `number` LIKE '"+number+"'", function(err){console.log('loi delete'+err)});
-    con.query("UPDATE `"+host+"contact` SET `fr` = 'OK' WHERE number LIKE '"+number+"'",function(err3, ok){ console.log('loi update'+err)});
+    // con.query("DELETE FROM `"+host+"contact` WHERE `number` LIKE '"+number+"'", function(err){console.log('loi delete'+err)});
+    con.query("UPDATE `"+host+"contact` SET `fr` = 'OK' WHERE `number` LIKE '"+number+"'",function(err3, ok){ console.log('loi update'+err)});
   });
   socket.on('C_pos_online', function (info){
     if ( info != null){
