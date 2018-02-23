@@ -37,10 +37,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
       app.set('views', './views');
       app.use(express.static('public'));
       app.get('/', (req, res) => res.render('dangnhap'));
-      app.get('/icon/1', (req, res)=>{
-        res.sendFile(__dirname + "/mar2.png");
-
-      });
       app.post('/', urlencodedParser, function (req, res) {
         if (!req.body) return res.sendStatus(400)
         else {
