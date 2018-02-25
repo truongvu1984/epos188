@@ -570,7 +570,7 @@ io.on('connection',  (socket)=>
   // khi người gửi biết rằng khách đã nhận được tin, chuyển màu sắc người nhận trong mục send sang đỏ và báo lại
   // server, kết thúc phần gửi tin cho khách hàng đó
   socket.on('tinnhan_final', function (nguoigui, id, nhom_nguoinhan){
-		console.log('Da nhan tin nhan final');
+		  console.log('Da nhan tin nhan final');
       con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE `idc` LIKE '"+id+"' AND `stt` LIKE 'G' LIMIT 1", function(err, a1s){
         if ( err || ( a1s.length==0)) {console.log(err);}
         else {
@@ -593,8 +593,8 @@ io.on('connection',  (socket)=>
       });
 
 
-  	});
-  //CREATE  TABLE  IF NOT EXISTS "main"."abc" ("id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , "name1" VARCHAR, "name 2" VARCHAR)
+  });
+    //CREATE  TABLE  IF NOT EXISTS "main"."abc" ("id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , "name1" VARCHAR, "name 2" VARCHAR)
   socket.on('search_contact', function (string){
     console.log("Chuoi nhan duoc la:"+string);
     con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
@@ -748,34 +748,31 @@ io.on('connection',  (socket)=>
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+arr_contact.hostnumber+"' AND `pass` LIKE '"+ arr_contact.pass+"' LIMIT 1", function(err1, rows1){
         if (err1 || rows1.length ==0){
         // Nếu đăng nhập sai
-        socket.emit('firscheckwrong');
         console.log("Dang nhap first khong dung"+user1);
         }
       else{
-            console.log("Contact nhan duoc la:"+arr_contact.contact.length);
+            console.log("Contact nhan duoc la:"+arr_contact.contact);
             var sql = "INSERT INTO `"+arr_contact.hostnumber+"contact` (number, name, fr, code) VALUES ?";
             //từng contact một, cái nào đã có trong account rồi thì lưu dưới fr = Y và gửi thông báo cáo account đó biết
             // chưa thì lưu = N
-            arr_contact.contact.forEach(function(row){
-              con.query("SELECT `number` FROM `account` WHERE `number` LIKE '"+ row.number +"'", function(err, row1s){
+
+              con.query("SELECT `number` FROM `account` WHERE `number` LIKE '"+arr_contact.contact.number +"'", function(err, row1s){
                 if ( err){console.log('select check_contact bị loi '+err);}
                 else {
                   if (row1s.length >0){
                     // nếu sđt đó có trong accout thì lưu là Y và đưa sđt đó vào JSON contact để gửi trả về báo cho người dùng
                     // biết là số điện thoại đó đã tham gia.
-                    var val = [[ row.number, row.name,"Y",row.code]];
+                    var val = [[ arr_contact.contact.number, arr_contact.contact.name,"Y",arr_contact.contact.code]];
                     con.query(sql, [val], function (err2, result) {if ( err2)console.log(err2);});
-                    contact = {name : strencode(row.name), number : row.number, code: row.code};
-                    mang_contact.push(contact);
+
                   }
                   else {
-                    var val = [[row.number, row.name,"N",row.code]];
-                    con.query(sql, [val], function (err2, result) {if ( err2)console.log(err2);});
+                    var val = [[arr_contact.contact.number, arr_contact.contact.name,"N",arr_contact.contact.code]];
+                    con.quearr_contact.contacty(sql, [val], function (err2, result) {if ( err2)console.log(err2);});
                   }
                 }
               });
-              // socket.emit('first_contact_joined', mang_contact);
-            });//arr_contact.contact.forEach
+                        
 
       }
     });
