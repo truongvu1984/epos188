@@ -743,6 +743,7 @@ io.on('connection',  (socket)=>
   socket.on('check_contact_full', function (arr_contact){
     //người dùng mới đăng nhập và sẽ gửi lên một đống cái contact, lúc này
     //server không gửi trả về từng contact mà gửi chung cả cụm.
+    console.log(arr_contact);
     var mang_contact = [];
     var contact = {name : "", number : "", code: ""};
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+arr_contact.hostnumber+"' AND `pass` LIKE '"+ arr_contact.pass+"' LIMIT 1", function(err1, rows1){
@@ -772,7 +773,7 @@ io.on('connection',  (socket)=>
                   }
                 }
               });
-                        
+
 
       }
     });
