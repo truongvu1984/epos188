@@ -194,7 +194,7 @@ io.on('connection',  (socket)=>
 	  }); //end socket.on.regis
   // lắng nghe sự kiện xác nhận tài khoản
   socket.on('active', function (active_info){
-    console.log('active_info');
+    console.log(active_info);
   		con.query("SELECT * FROM `active_account` WHERE `number` LIKE '"+ active_info.number +"'", function(err, rows)
   		  {
           if (err||rows.length==0){ socket.emit('active_no_number', {mail:active_info.number});}
