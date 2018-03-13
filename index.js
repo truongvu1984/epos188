@@ -735,7 +735,7 @@ io.on('connection',  (socket)=>
   socket.on('C_join_room', function (room)  {
     socket.join(room);
     console.log('ten room la:' +room);
-    console.log('da join user vao room '+ socket.adapter.rooms);
+
 
   });
   socket.on('W_join_room', function (room, number)  {
@@ -764,9 +764,10 @@ io.on('connection',  (socket)=>
 
   });
   socket.on('C_leave_room', function (room) {
+      if ( room !=null || room!=''){
       socket.leave(room);
       console.log('Da leave user khoi room 111: '+room);
-      console.log('Room hien tai la: '+socket.adapter.rooms);
+    }
 
     });
   socket.on('C_leave_off',function(number){
