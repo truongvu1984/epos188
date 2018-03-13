@@ -734,8 +734,8 @@ io.on('connection',  (socket)=>
   })
   socket.on('C_join_room', function (room)  {
     socket.join(room);
-    console.log(socket);
-    console.log('da join user vao room '+ room);
+    console.log('ten room la:' +room);
+    console.log('da join user vao room '+ socket.adapter.rooms);
 
   });
   socket.on('W_join_room', function (room, number)  {
