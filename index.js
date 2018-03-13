@@ -13,6 +13,8 @@ var transporter = nodemailer.createTransport({
     });
   //  https://www.cleardb.com/database/details?id=EC6CC143D125B9254AFD2C0DCEE155F3
   //  b0bd8d2dadd7e9:4ef561c7@us-cdbr-iron-east-05.cleardb.net/heroku_22d08a1219bdc10?reconnect=tr
+// DELETE FROM `table` WHERE `timestamp` &gt; DATE_SUB(NOW(), INTERVAL 10 MINUTE);
+
 var mysql = require('mysql');
 var con = mysql.createConnection({
   host: "us-cdbr-iron-east-05.cleardb.net",
@@ -107,9 +109,38 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
     return unescape( encodeURIComponent( data ) );
   }
 
-// function strdecode( data ) {
-//   return JSON.parse( decodeURIComponent( escape ( data ) ) );
-// }
+function strdecode( data ) {
+  return JSON.parse( decodeURIComponent( escape ( data ) ) );
+}
+
+// var sql123 = "INSERT INTO `active_account` (number,user, pass, string, code,date ) VALUES ?";
+// sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 5 phút
+function check_active_string() {
+  setTimeout(function() {
+    var date2 = Math.floor(Date.now() / 1000) - 500;
+    con.query(" DELETE FROM `active_account` WHERE `date` < "+date2, function(err){if(err){console.log('co loi:'+err);}});
+  check_active_string();
+  }, 60000);
+}
+check_active_string();
+
+// var date3 = date2 - ( Math.floor(date2 / 100000000)*100000000 );
+// console.log(date2);
+// console.log(date3);
+// var min  = date1.getMinutes();
+// var values333 = [["vu1123","van123", "1234", "333", "2133",new Date()]];
+// var values333 = [["vu1123","van123", "1234", "333", "2133",date2]];
+// con.query(sql123, [values333], function (err, result) {if ( err){console.log(err);}});
+// con.query("DELETE FROM `active_account` WHERE `date` < DATE_ADD(mi,-5,GETDATE())", function(err, rows)
+//   {
+//   if(err){console.log(err);}
+//   else {
+//     console.log(rows);
+//   }
+//   });
+
+
+
 io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
@@ -702,6 +733,7 @@ io.on('connection',  (socket)=>
   })
   socket.on('C_join_room', function (room)  {
     socket.join(room);
+    console.log(socket);
     console.log('da join user vao room '+ room);
 
   });
@@ -870,6 +902,27 @@ io.on('connection',  (socket)=>
         });
       }
    	});
+  socket.on('C_change_pass', function(user, oldpass, newpass){
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user +" AND `pass` LIKE '"+ oldpass+"' LIMIT 1", function(err, rows)
+      {
+        if (err||rows.length==0){ socket.emit('change_pass_thatbai');}
+        else
+          {
+            con.query("UPDATE `accout` SET `pass` = '"+newpass+"' WHERE `number` LIKE '"+user+"'",function(err3, ok)
+            {
+              //gửi thông báo cho ngươi kia biết là ông này đã tham gia ePos
+              if ( err3 ){console.log('update bị loi'+err3);}
+              else
+                {
+                  console.log('updat thanh cong' + ok);
+                  sockets.emit('change_pass_ok', {passmoi:newpass});
+                }
+            });
+          }
+        });
+
+
+  });
   socket.on('C_get_add_mem', function(info){
     console.log('Da nhan su kien C get add mem');
     // lượn qua xem tài khoản đó có tồn tại hay không
