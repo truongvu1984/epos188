@@ -766,7 +766,7 @@ io.on('connection',  (socket)=>
   socket.on('C_leave_room', function (room) {
       if ( room !=null || room!=''){
       socket.leave(room);
-      console.log('Da leave user khoi room 111: '+room);
+      console.log('Da leave user khoi room 111: '+room+'hihihi');
     }
 
     });
