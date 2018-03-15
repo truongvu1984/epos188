@@ -532,8 +532,8 @@ io.on('connection',  (socket)=>
                                   else {
                                     mess.pos.forEach(function(row3){
                                         // lưu vào bảng vị trí của người nhan
-                                        var sql7 = "INSERT INTO `"+row5.number+"mes_detail` (ids,name, lat, lon) VALUES ?";
-                                        var val7 = [[res5.insertId, row3.name, row3.lat, row3.lon]];
+                                        var sql7 = "INSERT INTO `"+row5.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
+                                        var val7 = [[res5.insertId, row3.id, row3.name, row3.lat, row3.lon]];
                                         con.query(sql7, [val7], function (err, result) {
                                           if ( err){console.log(err);}
                                         else {
