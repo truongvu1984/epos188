@@ -42,9 +42,8 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
         app.post('/', urlencodedParser, function (req, res) {
         if (!req.body) return res.sendStatus(400)
         else {
-          var full_number = "+"+req.body.code + req.body.number.replace('0','');
-          console.log(full_number);
-
+        var full_number = "+"+req.body.code + req.body.number.replace('0','');
+        console.log(full_number);
         con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' AND `pass` LIKE '"+req.body.pass+"' LIMIT 1", function(err, rows){
           if (err || rows.length ==0){
             res.send("Dang nhap khong dung");
@@ -123,23 +122,6 @@ function check_active_string() {
   }, 60000);
 }
 check_active_string();
-
-// var date3 = date2 - ( Math.floor(date2 / 100000000)*100000000 );
-// console.log(date2);
-// console.log(date3);
-// var min  = date1.getMinutes();
-// var values333 = [["vu1123","van123", "1234", "333", "2133",new Date()]];
-// var values333 = [["vu1123","van123", "1234", "333", "2133",date2]];
-// con.query(sql123, [values333], function (err, result) {if ( err){console.log(err);}});
-// con.query("DELETE FROM `active_account` WHERE `date` < DATE_ADD(mi,-5,GETDATE())", function(err, rows)
-//   {
-//   if(err){console.log(err);}
-//   else {
-//     console.log(rows);
-//   }
-//   });
-
-
 
 io.on('connection',  (socket)=>
 {
@@ -370,7 +352,7 @@ io.on('connection',  (socket)=>
                             console.log('cac diem:'+a3s);
                             a3s.forEach(function(a3)
                             {
-                               pos2 = {name:strencode(a3.name), lat:a3.lat, lon:a3.lon};
+                               pos2 = {name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:strencode(a3.id)};
                                pos3.push(pos2);
                               });
                               console.log(' Tin nhan gui di:'+pos3);
