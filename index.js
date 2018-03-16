@@ -530,11 +530,14 @@ io.on('connection',  (socket)=>
                                   con.query(sql6, [val6], function (err, res6) {
                                     if ( err){console.log(err);}
                                   else {
-                                    var mangtinnhan = [[]];
+                                    var array_tinnhan = [];
+                                    var tin = {lat:0.1, lon:0.0, name:"", id:""};
                                     mess.pos.forEach(function(row3){
                                         // lưu vào bảng vị trí của người nhan
                                         var sql7 = "INSERT INTO `"+row5.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
                                         var val7 = [[res5.insertId, row3.id, row3.name, row3.lat, row3.lon]];
+                                        tin = {lat:row3.lat, lon: row3.lon, name:strencode(row3.name), id:strencode(row3.id)};
+                                        array_tinnhan.push(tin);
                                         con.query(sql7, [val7], function (err, result) {
                                           if ( err){console.log(err);}
                                         else {
@@ -545,7 +548,7 @@ io.on('connection',  (socket)=>
                                       // io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strencode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
                                       //   subject: strencode(mess.subject), pos: mess.pos, id_tinnha_client:mess.id});
                                         sockets.emit('S_guitinnhan',{ name_nguoigui:strencode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
-                                          subject: strencode(mess.subject), pos: mess.pos, id_tinnha_client:mess.id});
+                                          subject: strencode(mess.subject), pos: array_tinnhan, id_tinnha_client:mess.id});
                                         console.log('Da gui tin nhan di xong');
 
                                   } //het else
