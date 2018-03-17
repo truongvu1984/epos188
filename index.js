@@ -897,7 +897,7 @@ io.on('connection',  (socket)=>
     console.log(user+":"+oldpass);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user +" AND `pass` LIKE '"+ oldpass+"' LIMIT 1", function(err, rows)
       {
-        if (err||rows.length==0){ socket.emit('change_pass_thatbai');}
+        if (err||rows.length==0){ console.log(rows);socket.emit('change_pass_thatbai');}
         else
           {
             con.query("UPDATE `accout` SET `pass` = '"+newpass+"' WHERE `number` LIKE '"+user+"'",function(err3, ok)
