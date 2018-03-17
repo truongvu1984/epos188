@@ -894,6 +894,7 @@ io.on('connection',  (socket)=>
       }
    	});
   socket.on('C_change_pass', function(user, oldpass, newpass){
+    console.log(user+":"+oldpass);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user +" AND `pass` LIKE '"+ oldpass+"' LIMIT 1", function(err, rows)
       {
         if (err||rows.length==0){ socket.emit('change_pass_thatbai');}
@@ -901,7 +902,6 @@ io.on('connection',  (socket)=>
           {
             con.query("UPDATE `accout` SET `pass` = '"+newpass+"' WHERE `number` LIKE '"+user+"'",function(err3, ok)
             {
-              //gửi thông báo cho ngươi kia biết là ông này đã tham gia ePos
               if ( err3 ){console.log('update bị loi'+err3);}
               else
                 {
