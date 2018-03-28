@@ -906,7 +906,7 @@ io.on('connection',  (socket)=>
               else
                 {
                   console.log('updat thanh cong' + ok);
-                  sockets.emit('change_pass_ok', {passmoi:newpass});
+                  socket.emit('change_pass_ok', {passmoi:newpass});
                 }
             });
           }
