@@ -169,8 +169,8 @@ io.on('connection',  (socket)=>
   socket.emit('check_pass', function(){console.log('Da day su kien check di')});
   socket.on('disconnect', function(){ console.log('user da disconnect')});
   socket.on('regis1', function(idphone,number){
-      cb.phoneInformation('+84982401', (error, response) => {
-            if(error){console.error(); socket.emit('regis1_sai');}
+      cb.phoneInformation('+84982025401', (error, response) => {
+            if(error){console.log(error); socket.emit('regis1_sai');}
             else {
               console.log(response);
               socket.emit('send_string_ok');
