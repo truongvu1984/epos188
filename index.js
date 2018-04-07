@@ -169,20 +169,36 @@ io.on('connection',  (socket)=>
   socket.emit('check_pass', function(){console.log('Da day su kien check di')});
   socket.on('disconnect', function(){ console.log('user da disconnect')});
   socket.on('regis1', function(idphone,number){
-      cb.phoneInformation('+84982025401', (error, response) => {
-            if(error){console.log(error); socket.emit('regis1_sai');}
-            else {
-              console.log(response);
-              socket.emit('send_string_ok');
-              var string = Math.floor(Math.random() * (89998)) + 10001;
-              // fs.writeFile(num+".png",img, (err, result)=>console.log(result));
-              var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid) VALUES ?";
-              var values = [[number, string,idphone]];
-              con.query(sql, [values], function(err, result){
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user_info.number +"'", function(err, rows){
+        // nếu tài khoản đã có người đăng ký rồi thì:
+      if(err){console.log(err);}
+      else {
+        if (rows.length >0 )	{
+             socket.emit('regis_already_account',{number:user_info.number} );
+             console.log("Da ton tai user nay");
+          }
+          else {
+            cb.phoneInformation('+84982025401', (error, response) => {
+                  if(error){console.log(error); socket.emit('regis1_sai');}
+                  else {
+                    console.log(response);
+                    socket.emit('send_string_ok');
+                    var string = Math.floor(Math.random() * (89998)) + 10001;
+                    // fs.writeFile(num+".png",img, (err, result)=>console.log(result));
+                    var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid) VALUES ?";
+                    var values = [[number, string,idphone]];
+                    con.query(sql, [values], function(err, result){
 
-              });
-            }
+                    });
+                  }
+            });
+          }
+        }
       });
+
+
+
+
 
 
 
