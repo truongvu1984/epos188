@@ -4,6 +4,7 @@ var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start")});
 var nodemailer = require('nodemailer');
+let CheckMobi = require('omrs-checkmobi');
 var transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
@@ -24,17 +25,22 @@ var con = mysql.createConnection({
  queueLimit: 30,
   acquireTimeout: 1000000,
 });
-// var accountSid = 'ACaa41a4ddc473c35c1192aa1a7fd6dab4';
-// var authToken = '94b2749230e0d3d5b379cf851c0d3c8c';
-//require the Twilio module and create a REST client
-//var client = require('twilio')(accountSid, authToken);
+
+let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
+// cb.phoneInformation('+84982025401', (error, response) => {
+//       if(error){console.error();}
+//       else {
+//         console.log(response);
+//       }
+// });
+
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
   con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err); }
     else {
       console.log("Da co ket noi ok ha ha ha");
-      }});
+
       app.set('view engine', 'ejs');
       app.set('views', './views');
       app.use(express.static('public'));
@@ -162,49 +168,113 @@ io.on('connection',  (socket)=>
    });
   socket.emit('check_pass', function(){console.log('Da day su kien check di')});
   socket.on('disconnect', function(){ console.log('user da disconnect')});
+  socket.on('regis1', function(idphone,number){
+      cb.phoneInformation('+84982401', (error, response) => {
+            if(error){console.error(); socket.emit('regis1_sai');}
+            else {
+              console.log(response);
+              socket.emit('send_string_ok');
+              var string = Math.floor(Math.random() * (89998)) + 10001;
+              // fs.writeFile(num+".png",img, (err, result)=>console.log(result));
+              var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid) VALUES ?";
+              var values = [[number, string,idphone]];
+              con.query(sql, [values], function(err, result){
+
+              });
+            }
+      });
+
+
+
+
+  });
   // lắng nghe sự kiện đăng ký tài khoản mới
   socket.on('regis', function (user_info){
 		    console.log("User want to regis with account: "+ user_info.number);
         // Tìn tronbg db danh sách các tài khoản có number như number đăng ký không
 		      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user_info.number +"'", function(err, rows){
               // nếu tài khoản đã có người đăng ký rồi thì:
-            if(!(err)){
+            if(err){console.log(err);}
+            else {
               if (rows.length >0 )	{
         	 	       socket.emit('regis_already_account',{number:user_info.number} );
         	 	       console.log("Da ton tai user nay");
         	      }
 
               else {
-                // Tiếp tục tìm trong db đang chờ acitve
-                //  con.query("SELECT * FROM customers", function (err, result, fields) {
-                con.query("SELECT * FROM `active_account` WHERE `number` LIKE '"+ user_info.number +"'", function(err, row1s) {
-					          if (row1s.length >0 ){
-        	 			       socket.emit('regis_wait_acitve', {number:user_info.number});
-        	 			       console.log("Da ton tai user dang cho active");
-                         // tính toán thời gian còn lại cho việc actvie
-        			         }
-            			  else {   //nếu user không có trong account lẫn active account thì ok, do it now
-				              //xuất ra chuỗi ngẫu nhiên để kích hoạt, gửi trả lại cho app và lưu vào hệ thống
-                      var string = Math.floor(Math.random() * (89998)) + 10001;
-                      // fs.writeFile(num+".png",img, (err, result)=>console.log(result));
-                      var sql = "INSERT INTO `active_account` (number,user, pass, string ,code ) VALUES ?";
-                      var values = [[user_info.number, user_info.user,user_info.pass,string, user_info.code]];
-                      con.query(sql, [values], function(err, result) {
-                      socket.emit('regis_ok_1', {number: user_info.number, name: strencode(user_info.user), code: user_info.code, pass: user_info.pass},function(){console.log('Da gui su kien regis ok')});
-                              // client.messages.create({
-                              //     to: "+84982025401",
-                              //     from: "+17323875504",
-                              //     body: string,
-                              // }, function(err, message) {
-                              //     console.log(err);
-                              // });
-                              });
+                // Tìm xem liệu số điện thoại đó có đúng là của người đó không
+                con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ user_info.number +"' AND `chuoi`LIKE '"+user_info.string+"'", function(err1, row1s) {
+					     		  if((err1)|| (row1s.length==0)) {
+                      socket.emit('chuoi_ko_dung');
 
-					                       }//end else 2
-				                           });//end db.acive account
-        	                        } //end else 1
-                                }
-   		      });//end db.account
+                    }
+                    else {
+
+                      // nếu số điện thoại và mã xác nhận khớp nhau
+                      console.log('Đăng ký thành công');
+                      //active thành công, trả thông tin người dùng về lại cho khách hàng
+                      // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
+                      // 1. Bảng chính: lưu id của bản tin đó trên server, id của người dùng, tên tin nhắn, tin nhắn gửi đi hay tin nhắn nhận về, trạng thái gửi đi hay nhận về.
+                      con.query("CREATE TABLE IF NOT EXISTS  `"+active_info.number+"mes_main` (`id` INT NOT NULL AUTO_INCREMENT,`idc` CHAR(25) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                      //2. Bảng địa điểm: lưu id bản tin đó trên server, tên điểm, tọa độ điểm
+                      con.query("CREATE TABLE IF NOT EXISTS `"+active_info.number+"mes_detail` (`id` INT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                      //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
+                      con.query("CREATE TABLE IF NOT EXISTS `"+active_info.number+"mes_sender` (`id` INT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NULL,`send_receive` VARCHAR(5), `stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                      con.query("CREATE TABLE IF NOT EXISTS `"+active_info.number+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`fr` VARCHAR(5) NULL,`code` VARCHAR(10) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                      con.query("SELECT number FROM `account` ", function(err, row3s)
+                        {
+                          if (err) {console.log('select loi '+ err);}
+                          else if ( row3s.length >0)
+                            {
+                              row3s.forEach(function (row3)
+                                {
+                                  con.query("SELECT * FROM `"+row3.number+"contact` WHERE `number` LIKE '"+active_info.number+"'", function(err, row4s)
+                                    {
+                                      console.log('bang '+row3.number + ' so dien thoai la:'+active_info.number);
+                                      if ( err) {console.log('có loi select');}
+                                      else if (row4s.length >0)
+                                        {
+                                          console.log('da select '+row3.number+' '+active_info.number);
+                                          con.query("UPDATE `"+row3.number+"contact` SET `fr` = 'Y' WHERE `number` LIKE '"+active_info.number+"'",function(err3, ok)
+                                          {
+                                            //gửi thông báo cho ngươi kia biết là ông này đã tham gia ePos
+                                            if ( err3 ){console.log('update bị loi'+err3);}
+                                            else
+                                              {
+                                                console.log('updat thanh cong' + ok);
+                                                io.sockets.in(row3.number).emit('contact_joined', {number:rows[0].number,name:rows[0].user, code:rows[0].code});
+                                              }
+                                          });
+                                        }
+                                    });
+                                });
+                            }
+
+                        });
+                      // lưu tài khoản vào db
+                      var sql = "INSERT INTO `account` (number,user, pass, code ) VALUES ?";
+                      var values = [[rows[0].number,rows[0].user, rows[0].pass, rows[0].code]];
+                      con.query(sql, [values], function (err, result) {if ( err){console.log(err);}});
+                      // xóa bản tin trong bảng active đi, coi như quá trình active hoàn tất
+                      console.log('sẽ xóa bản tin active có number như sau:'+active_info.number);
+                      con.query("DELETE FROM `active_account` WHERE `number` LIKE '"+active_info.number+"'", function(err){
+                        if ( err){console.log('loi delete'+err);  }
+                        else {
+                          console.log('Da xoa ok');
+                          socket.emit('acive_success');
+                          // socket.emit('acive_success', {number:rows[0].number, user: rows[0].user, code:rows[0].code});
+
+                        }
+
+
+                    });
+
+
+					          }//end else 2
+				       });//end db.acive account
+        	    } //end else 1
+            }
+   		   });//end db.account
 	  }); //end socket.on.regis
   // lắng nghe sự kiện xác nhận tài khoản
   socket.on('active', function (active_info){
@@ -894,10 +964,9 @@ io.on('connection',  (socket)=>
       }
    	});
   socket.on('C_change_pass', function(user, oldpass, newpass){
-    console.log(user+":"+oldpass);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user +"' AND `pass` LIKE '"+ oldpass+"' LIMIT 1", function(err, rows)
       {
-        if (err||rows.length==0){ console.log(err+":"+rows);socket.emit('change_pass_thatbai');}
+        if (err||rows.length==0){ console.log(err+":"+rows);socket.emit('change_pass_sai_old_pass');}
         else
           {
             con.query("UPDATE `account` SET `pass` = '"+newpass+"' WHERE `number` LIKE '"+user+"'",function(err3, ok)
@@ -905,7 +974,6 @@ io.on('connection',  (socket)=>
               if ( err3 ){console.log('update bị loi'+err3);}
               else
                 {
-                  console.log('updat thanh cong' + ok);
                   socket.emit('change_pass_ok', {passmoi:newpass});
                 }
             });
@@ -1041,3 +1109,4 @@ io.on('connection',  (socket)=>
 
   });
 });
+}});
