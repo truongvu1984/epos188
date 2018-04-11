@@ -267,7 +267,7 @@ io.on('connection',  (socket)=>
 
               else {
                 // Tìm xem liệu số điện thoại đó có đúng là của người đó không
-                con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ user_info.number +"' AND `chuoi`LIKE '"+user_info.string+"'", function(err1, row1s) {
+                con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ user_info.number +"' AND `chuoi`LIKE '"+user_info.string+"' AND `status` LIKE 'Y'", function(err1, row1s) {
 					     		  if((err1)|| (row1s.length==0)) {
                       socket.emit('chuoi_ko_dung');
 
