@@ -35,6 +35,12 @@ let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
 // });
 
 var bodyParser = require('body-parser');
+function waitAndDo() {
+setTimeout(function() {
+  con.query("SELECT `number` FROM `account` WHERE `number` LIKE '123'", function(err){if(err){console.log('co loi:'+err);}});
+  waitAndDo();
+}, 10000);
+}
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
   con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err); }
@@ -110,6 +116,8 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 function strdecode( data ) {
   return JSON.parse( decodeURIComponent( escape ( data ) ) );
 }
+
+waitAndDo();
 
 // var sql123 = "INSERT INTO `active_account` (number,user, pass, string, code,date ) VALUES ?";
 function kiemtra_taikhoan(){
