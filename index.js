@@ -195,7 +195,7 @@ io.on('connection',  (socket)=>
                           var date = Math.floor(Date.now() / 1000);
                           var string = Math.floor(Math.random() * (89998)) + 10001;
                           //kiểm tra xem bảng xác thực đã có số điện thoại đó chưa, nếu có rồi thì update, nếu chưa có thì thêm mới
-                          con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err6, rows6){
+                          con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err6, rows6){
                             if(err6){console.log(err6);}
                             else {
                                 // cho phép đăng ký liên tục 3 lần, nếu là lần đầu
@@ -204,15 +204,19 @@ io.on('connection',  (socket)=>
                                 var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid,date,status) VALUES ?";
                                 var values = [[num, string,idphone,date,'Y']];
                                 con.query(sql, [values], function(err, result){
-                                  con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err9, rows9){
-                                    console.log('ket qua:'+rows9);
-                                    if(rows9.length >=3){
-                                      console.log('da khoa number');
-                                      var sql = "INSERT INTO `danhsachkhoa` (number,date) VALUES ?";
-                                      var values = [[num, date]];
-                                      con.query(sql, [values], function(err, result){ if(err)console.log(err);});
-                                    }
-                                  });
+                                  if(err){console.log(err);}
+                                  else {
+
+
+                                  // con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err9, rows9){
+                                  //   console.log('ket qua:'+rows9);
+                                  //   if(rows9.length >=3){
+                                  //     console.log('da khoa number');
+                                  //     var sql = "INSERT INTO `danhsachkhoa` (number,date) VALUES ?";
+                                  //     var values = [[num, date]];
+                                  //     con.query(sql, [values], function(err, result){ if(err)console.log(err);});
+                                  //   }
+                                  // });
                                   con.query("SELECT * FROM `xacthuc` WHERE `phoneid` LIKE '"+ idphone +"'", function(err9, rows9){
 
                                     if(rows9.length >=3){
@@ -222,6 +226,7 @@ io.on('connection',  (socket)=>
                                       con.query(sql, [values], function(err, result){ if(err)console.log(err);});
                                     }
                                   });
+                                }
                                 });
                             }
                                 // còn nếu trước đó đã có rồi
@@ -229,24 +234,26 @@ io.on('connection',  (socket)=>
                                 console.log('update xac thuc');
                                 con.query("UPDATE `xacthuc` SET `status` = 'N' WHERE `number` LIKE '"+num+"'",function(){
                                     //sau khi update rồi thì insert vào
-                                    var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid,date,status) VALUES ?";
-                                    var values = [[num, string,idphone,date,'Y']];
-                                    con.query(sql, [values], function(err, result){
+                                    // var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid,date,status) VALUES ?";
+                                    // var values = [[num, string,idphone,date,'Y']];
+                                    // con.query(sql, [values], function(err, result){
                                       con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err9, rows9){
+                                        console.log('ket qua:'+rows9);
                                         if(rows9.length >=3){
                                           var sql = "INSERT INTO `danhsachkhoa` (number,date) VALUES ?";
                                           var values = [[num, date]];
                                           con.query(sql, [values], function(err, result){ if(err)console.log(err);});
                                         }
                                       });
-                                      con.query("SELECT * FROM `xacthuc` WHERE `phoneid` LIKE '"+ idphone +"'", function(err9, rows9){
-                                        if(rows9.length >=3){
+                                      con.query("SELECT * FROM `xacthuc` WHERE `phoneid` LIKE '"+ idphone +"'", function(err10, rows10){
+                                        console.log('ket qua:'+rows10);
+                                        if(rows10.length >=3){
                                           var sql = "INSERT INTO `danhsachkhoa` (phoneid,date) VALUES ?";
                                           var values = [[idphone,date]];
                                           con.query(sql, [values], function(err, result){ if(err)console.log(err);});
                                         }
                                       });
-                                    });
+
 
 
                                 });
