@@ -200,6 +200,7 @@ io.on('connection',  (socket)=>
                             else {
                                 // cho phép đăng ký liên tục 3 lần, nếu là lần đầu
                               if(rows6.length==0){
+                                  console.log('xac thuc moi');
                                 var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid,date,status) VALUES ?";
                                 var values = [[num, string,idphone,date,'Y']];
                                 con.query(sql, [values], function(err, result){
@@ -221,6 +222,7 @@ io.on('connection',  (socket)=>
                             }
                                 // còn nếu trước đó đã có rồi
                               else {
+                                console.log('update xac thuc');
                                 con.query("UPDATE `xacthuc` SET `status` = 'N' WHERE `number` LIKE '"+num+"'",function(){
                                     //sau khi update rồi thì insert vào
                                     var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid,date,status) VALUES ?";
