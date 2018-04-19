@@ -205,14 +205,18 @@ io.on('connection',  (socket)=>
                                 var values = [[num, string,idphone,date,'Y']];
                                 con.query(sql, [values], function(err, result){
                                   con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err9, rows9){
+                                    console.log(rows9);
                                     if(rows9.length >=3){
+                                      console.log('da khoa number');
                                       var sql = "INSERT INTO `danhsachkhoa` (number,date) VALUES ?";
                                       var values = [[num, date]];
                                       con.query(sql, [values], function(err, result){ if(err)console.log(err);});
                                     }
                                   });
                                   con.query("SELECT * FROM `xacthuc` WHERE `phoneid` LIKE '"+ idphone +"'", function(err9, rows9){
+                                    
                                     if(rows9.length >=3){
+                                      console.log('da insert khoa idphone');
                                       var sql = "INSERT INTO `danhsachkhoa` (phoneid,date) VALUES ?";
                                       var values = [[idphone,date]];
                                       con.query(sql, [values], function(err, result){ if(err)console.log(err);});
