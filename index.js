@@ -172,6 +172,7 @@ io.on('connection',  (socket)=>
   socket.emit('check_pass', function(){console.log('Da day su kien check di')});
   socket.on('disconnect', function(){ console.log('user da disconnect')});
   socket.on('regis1', function(idphone,num){
+    console.log('so dien thoai:'+num);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"'", function(err, rows){
         // nếu tài khoản đã có người đăng ký rồi thì:
       if(err){console.log(err);}
