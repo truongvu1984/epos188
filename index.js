@@ -136,7 +136,6 @@ function kiemtra_taikhoan(){
 io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
-  console.log('Room la: '+ socket.adapter.rooms);
   socket.on('w_get_inbox', function(data, number){
      console.log("Da nhan number");
     con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+data+"' LIMIT 1", function(err, a1s)
