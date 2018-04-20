@@ -132,6 +132,7 @@ function kiemtra_taikhoan(){
   kiemtra_taikhoan();
   }, 60000);
 }
+kiemtra_taikhoan();
 
 io.on('connection',  (socket)=>
 {
@@ -234,9 +235,9 @@ io.on('connection',  (socket)=>
                                 console.log('update xac thuc');
                                 con.query("UPDATE `xacthuc` SET `status` = 'N' WHERE `number` LIKE '"+num+"'",function(){
                                     //sau khi update rồi thì insert vào
-                                    // var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid,date,status) VALUES ?";
-                                    // var values = [[num, string,idphone,date,'Y']];
-                                    // con.query(sql, [values], function(err, result){
+                                    var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid,date,status) VALUES ?";
+                                    var values = [[num, string,idphone,date,'Y']];
+                                    con.query(sql, [values], function(err, result){
                                       con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err9, rows9){
                                         console.log('ket qua:'+rows9);
                                         if(rows9.length >=3){
@@ -253,6 +254,7 @@ io.on('connection',  (socket)=>
                                           con.query(sql, [values], function(err, result){ if(err)console.log(err);});
                                         }
                                       });
+                                    });
 
 
 
