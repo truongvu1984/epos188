@@ -41,6 +41,7 @@ setTimeout(function() {
   waitAndDo();
 }, 10000);
 }
+waitAndDo();
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
   con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err); }
@@ -109,17 +110,12 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
       }
       })
-  function strencode( data ) {
+function strencode( data ) {
     return unescape( encodeURIComponent( data ) );
   }
-
 function strdecode( data ) {
   return JSON.parse( decodeURIComponent( escape ( data ) ) );
 }
-
-waitAndDo();
-
-// var sql123 = "INSERT INTO `active_account` (number,user, pass, string, code,date ) VALUES ?";
 function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
@@ -189,7 +185,7 @@ io.on('connection',  (socket)=>
                   if(rows4.length >0){socket.emit('regis1_quasolan_number');}
                   else {
                     cb.phoneInformation('+84982025401', (error, response) => {
-                        if(error){console.log(error); socket.emit('regis1_sai');}
+                        if(error){console.log(error); socket.emit('sodienthoaikhongdung');}
                         else {
                           console.log(response);
                           socket.emit('send_string_ok');// để Client chuyển sang giao diện chờ nhập chuỗi
@@ -363,6 +359,119 @@ io.on('connection',  (socket)=>
             }
    		   });//end db.account
 	  }); //end socket.on.regis
+  socket.on('C_yeucau_chuoi_forgotpass',function(idphone, num){
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"'", function(err, rows){
+        // nếu tài khoản đã có người đăng ký rồi thì:
+      if(err){console.log(err);}
+      else {
+        if (rows.length == 0 )	{
+             socket.emit('taikhoankhongco');
+             console.log("forgotpass: không có tài khoản này");
+          }
+          else {
+              con.query("SELECT * FROM `danhsachkhoa` WHERE `number` LIKE '"+ num +"' OR `phoneid` LIKE '"+idphone+"' LIMIT 1", function(err4, rows4){
+                if(err4){console.log(err4);}
+                else {
+                  if(rows4.length >0){socket.emit('C_yeucauchuoi_quasolan');}
+                  else {
+                    cb.phoneInformation('+84982025401', (error, response) => {
+                        if(error){console.log(error); socket.emit('sodienthoaikhongtontai');}
+                        else {
+                          console.log(response);
+                          socket.emit('S_guichuoi_xacnhan_forget');// để Client chuyển sang giao diện chờ nhập chuỗi
+                          var date = Math.floor(Date.now() / 1000);
+                          var string = Math.floor(Math.random() * (89998)) + 10001;
+                          //kiểm tra xem bảng xác thực đã có số điện thoại đó chưa, nếu có rồi thì update, nếu chưa có thì thêm mới
+                          con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err6, rows6){
+                            if(err6){console.log(err6);}
+                            else {
+                                // cho phép đăng ký liên tục 3 lần, nếu là lần đầu
+                              if(rows6.length==0){
+                                  console.log('xac thuc moi');
+                                var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid,date,status) VALUES ?";
+                                var values = [[num, string,idphone,date,'Y']];
+                                con.query(sql, [values], function(err, result){
+                                  if(err){console.log(err);}
+                                  else {
+                                  // con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err9, rows9){
+                                  //   console.log('ket qua:'+rows9);
+                                  //   if(rows9.length >=3){
+                                  //     console.log('da khoa number');
+                                  //     var sql = "INSERT INTO `danhsachkhoa` (number,date) VALUES ?";
+                                  //     var values = [[num, date]];
+                                  //     con.query(sql, [values], function(err, result){ if(err)console.log(err);});
+                                  //   }
+                                  // });
+                                  con.query("SELECT * FROM `xacthuc` WHERE `phoneid` LIKE '"+ idphone +"'", function(err9, rows9){
+
+                                    if(rows9.length >=3){
+                                      console.log('da insert khoa idphone');
+                                      var sql = "INSERT INTO `danhsachkhoa` (phoneid,date) VALUES ?";
+                                      var values = [[idphone,date]];
+                                      con.query(sql, [values], function(err, result){ if(err)console.log(err);});
+                                    }
+                                  });
+                                }
+                                });
+                            }
+                                // còn nếu trước đó đã có rồi
+                              else {
+                                console.log('update xac thuc');
+                                con.query("UPDATE `xacthuc` SET `status` = 'N' WHERE `number` LIKE '"+num+"'",function(){
+                                    //sau khi update rồi thì insert vào
+                                    var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid,date,status) VALUES ?";
+                                    var values = [[num, string,idphone,date,'Y']];
+                                    con.query(sql, [values], function(err, result){
+                                      con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err9, rows9){
+                                        console.log('ket qua:'+rows9);
+                                        if(rows9.length >=3){
+                                          var sql = "INSERT INTO `danhsachkhoa` (number,date) VALUES ?";
+                                          var values = [[num, date]];
+                                          con.query(sql, [values], function(err, result){ if(err)console.log(err);});
+                                        }
+                                      });
+                                      con.query("SELECT * FROM `xacthuc` WHERE `phoneid` LIKE '"+ idphone +"'", function(err10, rows10){
+                                        console.log('ket qua:'+rows10);
+                                        if(rows10.length >=3){
+                                          var sql = "INSERT INTO `danhsachkhoa` (phoneid,date) VALUES ?";
+                                          var values = [[idphone,date]];
+                                          con.query(sql, [values], function(err, result){ if(err)console.log(err);});
+                                        }
+                                      });
+                                    });
+
+
+
+                                });
+                              }
+
+                            }
+                          });
+
+                        }
+
+                    });
+
+                  }
+                }
+              });
+            }
+          }
+        });
+  });
+  socket.on('C_send_chuoi_forgot',function(num,chuoi,pass){
+    con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"' AND `chuoi`LIKE '"+chuoi+"' AND `status` LIKE 'Y'", function(err1, row1s) {
+        if((err1)|| (row1s.length==0)) {
+          socket.emit('S_chuoikhongdung');
+        }
+        else {
+          con.query("UPDATE `account` SET `pass` = '"+pass+"' WHERE `number` LIKE '"+num+"'",function(){
+          socket.emit('S_doipass_thanhcong');
+        });
+        }
+    });
+
+  });
   socket.on('dangky_thanhcong_ok', function(number){
       con.query(" DELETE FROM `xacthuc` WHERE `number` LIKE'"+number+"'", function(err){if(err){console.log('co loi dangky_thanhcong_ok:'+err);}});
 
