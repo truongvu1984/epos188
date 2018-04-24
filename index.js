@@ -35,13 +35,13 @@ let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
 // });
 
 var bodyParser = require('body-parser');
-function waitAndDo() {
-setTimeout(function() {
-  con.query("SELECT `number` FROM `account` WHERE `number` LIKE '123'", function(err){if(err){console.log('co loi:'+err);}});
-  waitAndDo();
-}, 10000);
-}
-waitAndDo();
+// function waitAndDo() {
+// setTimeout(function() {
+//   con.query("SELECT `number` FROM `account` WHERE `number` LIKE '123'", function(err){if(err){console.log('co loi:'+err);}});
+//   waitAndDo();
+// }, 10000);
+// }
+// waitAndDo();
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
   con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err); }
@@ -126,7 +126,7 @@ function kiemtra_taikhoan(){
     con.query(" DELETE FROM `xacthuc` WHERE `date` < "+date2, function(err){if(err){console.log('co loi HA HA HA:'+err);}});
         // nếu tài khoản đã có người đăng ký rồi thì:
   kiemtra_taikhoan();
-  }, 60000);
+}, 10000);
 }
 kiemtra_taikhoan();
 
