@@ -360,6 +360,7 @@ io.on('connection',  (socket)=>
    		   });//end db.account
 	  }); //end socket.on.regis
   socket.on('C_yeucau_chuoi_forgotpass',function(idphone, num){
+    console.log('nguoi dung yeu cau chuoi');
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"'", function(err, rows){
         // nếu tài khoản đã có người đăng ký rồi thì:
       if(err){console.log(err);}
@@ -460,7 +461,7 @@ io.on('connection',  (socket)=>
         });
   });
   socket.on('C_send_chuoi_forgot',function(num,chuoi,pass){
-    con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"' AND `chuoi`LIKE '"+chuoi+"' AND `status` LIKE 'Y'", function(err1, row1s) {
+    con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"' AND `chuoi` LIKE '"+chuoi+"' AND `status` LIKE 'Y'", function(err1, row1s) {
         if((err1)|| (row1s.length==0)) {
           socket.emit('S_chuoikhongdung');
         }
