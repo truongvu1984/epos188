@@ -40,13 +40,7 @@ let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
 // });
 
 var bodyParser = require('body-parser');
-// function waitAndDo() {
-// setTimeout(function() {
-//   con.query("SELECT `number` FROM `account` WHERE `number` LIKE '123'", function(err){if(err){console.log('co loi:'+err);}});
-//   waitAndDo();
-// }, 10000);
-// }
-// waitAndDo();
+
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
   con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err); }
@@ -137,7 +131,7 @@ kiemtra_taikhoan();
 io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
-  console.log(socket.username);
+  console.log('ten la:'+socket.username);
   socket.on('w_get_inbox', function(data, number){
      console.log("Da nhan number");
     con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+data+"' LIMIT 1", function(err, a1s)
