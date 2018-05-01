@@ -132,6 +132,12 @@ io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
   console.log('ten la:'+socket.username);
+  if(socket.username){
+    console.log('vu yeu van');
+  }
+  else {
+    console.log('vu yeu ngan');
+  }
   socket.on('w_get_inbox', function(data, number){
      console.log("Da nhan number");
     con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+data+"' LIMIT 1", function(err, a1s)
