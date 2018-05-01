@@ -25,6 +25,7 @@
     "mysql": "^2.15.0",
     "nodemailer": "^4.3.1",
     "omrs-checkmobi": "^1.0.0",
+    "password-hash": "^1.2.2",
     "socket.io": "^2.0.4",
     "twilio": "^3.9.1"
   }
