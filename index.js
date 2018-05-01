@@ -132,6 +132,14 @@ io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
   console.log('ten la:'+socket.username);
+
+  if(socket.username){
+    console.log('vu yeu van');
+  }
+  else {
+    console.log('vu yeu ngan');
+  }
+  socket.username = 'vu';
   if(socket.username){
     console.log('vu yeu van');
   }
