@@ -128,24 +128,10 @@ function kiemtra_taikhoan(){
   }, 10000);
 }
 kiemtra_taikhoan();
+
 io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
-  console.log('ten la:'+socket.username);
-
-  if(socket.username){
-    console.log('vu yeu van');
-  }
-  else {
-    console.log('vu yeu ngan');
-  }
-  socket.username = 'vu';
-  if(socket.username){
-    console.log('vu yeu van');
-  }
-  else {
-    console.log('vu yeu ngan');
-  }
   socket.on('w_get_inbox', function(data, number){
      console.log("Da nhan number");
     con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+data+"' LIMIT 1", function(err, a1s)
@@ -480,18 +466,18 @@ io.on('connection',  (socket)=>
 
   });
   socket.on('login',(user1, pass1)=>{
-    console.log('Da dang nhap bang ten:'+user1);
-    //  nếu đăng nhập đúng thì phát sự kiện để app chuyển sang giao diện main
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
 	     if (err || rows.length ==0){
           socket.emit('khong_co_taikhoan');
-          console.log("Dang nhap first khong co tai khoan "+user1);
+          console.log("Tai khoan dang nhap khong dung "+user1);
         }
 			else{
         if (passwordHash.verify(pass1, rows[0].pass)){
           socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:strencode(rows[0].user)});
-          socket.username = user1;
+          socket.number = user1;
+          socket.username = rows[0].user;
           console.log('Dang nhap dung roi voi tai khoan' + user);
+          // xem có ai gửi tin cho mình trong thời gian offline không
           con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'R' AND `stt` LIKE 'N'", function(err, a1s)
               {
               if ( err || ( a1s.length == 0) ){console.log(err);}
@@ -635,7 +621,7 @@ io.on('connection',  (socket)=>
               });
         }
         else {
-        socket.emit('firscheckwrong');
+        socket.emit('dangnhapsai');
       }
       }
    	  });
@@ -799,6 +785,7 @@ io.on('connection',  (socket)=>
 	});//hết phần socket.on mainlogin
   socket.on('C_gui_tinnhan', function(mess){
     console.log(mess);
+    if (socket.number){
     socket.emit('S_get_tinnhan',mess.id);
     // lưu vào bảng chính của người gửi
     var sql2 = "INSERT INTO `"+mess.nguoigui_number+"mes_main` (idc,subject, send_receive) VALUES ?";
@@ -836,7 +823,7 @@ io.on('connection',  (socket)=>
                                 {
                                   //lưu vào bảng người gửi của người nhận
                                   var sql6 = "INSERT INTO `"+row5.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
-                                  var val6 = [[ res5.insertId, mess.nguoigui_number,mess.nguoigui_name,'R']];
+                                  var val6 = [[ res5.insertId, socket.number,socket.username,'R']];
                                   con.query(sql6, [val6], function (err, res6) {
                                     if ( err){console.log(err);}
                                   else {
@@ -857,7 +844,7 @@ io.on('connection',  (socket)=>
                                       });
                                       // io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strencode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
                                       //   subject: strencode(mess.subject), pos: mess.pos, id_tinnha_client:mess.id});
-                                        io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strencode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
+                                        io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
                                           subject: strencode(mess.subject), pos: array_tinnhan, id_tinnha_client:mess.id});
                                         console.log('Da gui tin nhan di xong');
 
@@ -877,16 +864,14 @@ io.on('connection',  (socket)=>
                     });
           }
       });
+    }
     }); // end socket.on('sendmess', function(test)
-  socket.on('danhantinnhan', function (nguoinhan, nguoigui, idc)
+  socket.on('danhantinnhan', function (nguoigui, idc)
    	{
-      let nhoms_nguoinhan = [];
-      let nguoinhan1 = {number:nguoinhan, name:""};
-      nhoms_nguoinhan.push(nguoinhan1);
-      io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:nhoms_nguoinhan, idc:idc});
-		console.log("user:" + nguoinhan+" đã nhan tin nhan ha ha ha:" + idc+ " tu nguoi gui;"+ nguoigui);
-    //chuyển trạng thái trong db thành người nhận đã đọc được tin, báo về cho người gửi biết
-    con.query("UPDATE `"+nguoinhan+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"'",function(){
+      if (socket.number){
+      io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number, idc:idc});
+	    //chuyển trạng thái trong db thành người nhận đã đọc được tin, báo về cho người gửi biết
+    con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"'",function(){
       console.log('ma san pham la '+idc);
       //  io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan_number:nguoinhan, idc:idc});
     });
@@ -910,25 +895,23 @@ io.on('connection',  (socket)=>
 
         });
 
-
-
-
     //trạng thái G cho biết, có một ai đó trong danh sách nhận đã nhận tin nhắn,
-
+    }
   });
   // khi người gửi biết rằng khách đã nhận được tin, chuyển màu sắc người nhận trong mục send sang đỏ và báo lại
   // server, kết thúc phần gửi tin cho khách hàng đó
-  socket.on('tinnhan_final', function (nguoigui, id, nhom_nguoinhan){
+  socket.on('tinnhan_final', function ( id, nhom_nguoinhan){
+      if (socket.number){
 		console.log('Da nhan tin nhan final');
-      con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE `idc` LIKE '"+id+"' AND `stt` LIKE 'G' LIMIT 1", function(err, a1s){
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+id+"' AND `stt` LIKE 'G' LIMIT 1", function(err, a1s){
         if ( err || ( a1s.length==0)) {console.log(err);}
         else {
 
-          con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'OK' WHERE `idc` LIKE '"+id+"' AND `stt` LIKE 'G'",function(){
+          con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'OK' WHERE `idc` LIKE '"+id+"' AND `stt` LIKE 'G'",function(){
               console.log('ma san pham final la '+id);
             });
             nhom_nguoinhan.forEach((nguoinhan)=>{
-              con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'OK' WHERE `ids` LIKE '"+a1s[0].id+"' AND `number` LIKE '"+nguoinhan+"'",function(){
+              con.query("UPDATE `"+socket.number+"mes_sender` SET `stt` = 'OK' WHERE `ids` LIKE '"+a1s[0].id+"' AND `number` LIKE '"+nguoinhan+"'",function(){
                   console.log('ma san pham final la '+id);
                 });
 
@@ -940,9 +923,11 @@ io.on('connection',  (socket)=>
         }
 
       });
+    }
   });
     //CREATE  TABLE  IF NOT EXISTS "main"."abc" ("id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , "name1" VARCHAR, "name 2" VARCHAR)
   socket.on('search_contact', function (string){
+    if (socket.number){
     console.log("Chuoi nhan duoc la:"+string);
     con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
       if (!( err))
@@ -959,9 +944,10 @@ io.on('connection',  (socket)=>
         if (s){socket.emit('S_kq_check_contact_zero_2');}
       }
     });
-
+    }
   });
   socket.on('C_check_contact', function (string){
+      if (socket.number){
     console.log("Chuoi nhan duoc la:"+string);
     con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
       if ( err){console.log(err);}
@@ -983,13 +969,13 @@ io.on('connection',  (socket)=>
             }
           });
         if (s){socket.emit('S_kq_check_contact_zero');}
-
       }
     });
-
+    }
   });
   socket.on('W_check_contact', function (string){
     console.log("Chuoi nhan duoc la:"+string);
+    if (socket.number){
     string = string.trim();
     if (string.charAt(0)=='0'){
       string = string.substr(1);
@@ -1016,8 +1002,10 @@ io.on('connection',  (socket)=>
       }
     });
     }
+  }
   });
   socket.on('W_add_friend',function(data){
+      if (socket.number){
     console.log('Da nhan:'+data.password);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.admin+"' AND `pass` LIKE '"+ data.password+"' LIMIT 1", function(err, rows){
        if (err || rows.length ==0){
@@ -1044,15 +1032,19 @@ io.on('connection',  (socket)=>
       });
 
       }
-    })
-  })
+    });
+  }
+  });
   socket.on('C_join_room', function (room)  {
+      if (socket.number){
     socket.join(room);
     console.log('ten room la:' +room);
-
+    }
 
   });
+  // kiểm tra lại biến number
   socket.on('W_join_room', function (room, number)  {
+      if (socket.number){
     socket.join(room);
     console.log('da join vao number '+ number);
     con.query("SELECT id FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+room+"' LIMIT 1", function(err7, a7s)
@@ -1073,37 +1065,28 @@ io.on('connection',  (socket)=>
       });
 
 
-
+    }
 
 
   });
   socket.on('C_leave_room', function (room) {
+      if (socket.number){
       if ( room !=null || room!=""){
       socket.leave(room);
       console.log('Da leave user khoi room 111: '+room+'hihihi');
     }
-
-    });
-  socket.on('C_leave_off',function(number){
-      socket.leave(number);
-      socket.emit('S_ok_log_off');//server đồng ý cho Client log off
-    });
+    }
+  });
     //sự kiến check_contact xảy ra khi người dùng được thông báo acitve thành công, app sẽ lấy  toàn bộ danh sách
     // để gửi lên server để server lưu và kiểm tra xe liệu trong đó có ai đã tham gia ePos rồi chưa
   socket.on('check_contact_full', function (arr_contact){
+      if (socket.number){
     //người dùng mới đăng nhập và sẽ gửi lên một đống cái contact, lúc này
     //server không gửi trả về từng contact mà gửi chung cả cụm.
     var mang_contact = [];
     var contact = {name : "", number : "", code: ""};
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+arr_contact.hostnumber+"' AND `pass` LIKE '"+ arr_contact.pass+"' LIMIT 1", function(err1, rows1){
-        if (err1 || rows1.length ==0){
-        // Nếu đăng nhập sai
-        socket.emit('firscheckwrong');
-        console.log("Dang nhap first khong dung"+user1);
-        }
-      else{
-            console.log("Contact nhan duoc la:"+arr_contact.contact.length);
-            var sql = "INSERT INTO `"+arr_contact.hostnumber+"contact` (number, name, fr, code) VALUES ?";
+        console.log("Contact nhan duoc la:"+arr_contact.contact.length);
+            var sql = "INSERT INTO `"+socket.number+"contact` (number, name, fr, code) VALUES ?";
             //từng contact một, cái nào đã có trong account rồi thì lưu dưới fr = Y và gửi thông báo cáo account đó biết
             // chưa thì lưu = N
             arr_contact.contact.forEach(function(row){
@@ -1127,28 +1110,31 @@ io.on('connection',  (socket)=>
               // socket.emit('first_contact_joined', mang_contact);
             });//arr_contact.contact.forEach
 
-      }
-    });
 
-    });//check_contact
-  socket.on('C_got_friend', function (host,pass,number){
-    console.log(host+" " + number);
+      }
+  });//check_contact
+  socket.on('C_got_friend', function (number){
+      if (socket.number){
+    console.log('Người dùng đã lưu friend la:'+number);
     // con.query("DELETE FROM `"+host+"contact` WHERE `number` LIKE '"+number+"'", function(err){console.log('loi delete'+err)});
-    con.query("UPDATE `"+host+"contact` SET `fr` = 'OK' WHERE `number` LIKE '"+number+"'",function(err3, ok){ console.log('loi update'+err)});
+    con.query("UPDATE `"+socket.number+"contact` SET `fr` = 'OK' WHERE `number` LIKE '"+number+"'",function(err3, ok){ console.log('loi update'+err)});
+    }
   });
   socket.on('C_pos_online', function (info){
-    if ( info != null){
-    info.room.forEach(function(room){
-          io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(info.user_name), number:info.user_number});
-          console.log('da gui cho '+room.room_fullname + 'AAAAA' +info.stt+ "ten la:"+ info.user_name );
+    if (socket.number){
+      if ( info != null){
+        info.room.forEach(function(room){
+          io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(socket.username), number:socket.number});
+          console.log('da gui cho '+room.room_fullname + 'AAAAA' +info.stt+ "ten la:"+ socket.username );
         });
     }
-    else { console.log(info);}
+
+    }
   });
   socket.on('C_make_room', function (info)
    	{
+    if (socket.number){
       var n=0;
-      console.log('Da nhan room moi tu ứng dụng '+info.admin_name);
       //trả lời cho ngời gửi biết server đã nhận được room
       socket.emit('S_get_room', {room: info.fullname});
       // bắt đầu quá trình lưu room vào csdl
@@ -1181,7 +1167,7 @@ io.on('connection',  (socket)=>
                               let sql2 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
                                 info.member_list.forEach(function(row2)
                                 {
-                                  if (row2.number ==info.admin_number)
+                                  if (row2.number ==socket.number)
                                   {
                                     let val2 = [[res.insertId,row2.number,row2.name,'OM']];
                                     con.query(sql2, [val2], function (err)
@@ -1203,7 +1189,7 @@ io.on('connection',  (socket)=>
                                   }
 
                                 });
-                                  io.sockets.in(row.number).emit('S_send_room',{admin_number: info.admin_number , admin_name: strencode(info.admin_name), room_name:strencode(info.room_name) ,room_fullname:strencode(info.room_fullname), member_list:member});
+                                  io.sockets.in(row.number).emit('S_send_room',{admin_number: socket.number , admin_name: strencode(socket.username), room_name:strencode(info.room_name) ,room_fullname:strencode(info.room_fullname), member_list:member});
                                   console.log('Da gui room di lan:');
                             }
                           });
@@ -1218,62 +1204,50 @@ io.on('connection',  (socket)=>
 
         });
       }
+    }
    	});
-  socket.on('C_change_pass', function(user, oldpass, newpass){
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user +"' AND `pass` LIKE '"+ oldpass+"' LIMIT 1", function(err, rows)
+  socket.on('C_change_pass', function(newpass){
+   if (socket.number){
+    con.query("UPDATE `account` SET `pass` = '"+newpass+"' WHERE `number` LIKE '"+socket.number+"'",function(err3, ok)
       {
-        if (err||rows.length==0){ console.log(err+":"+rows);socket.emit('change_pass_sai_old_pass');}
-        else
-          {
-            con.query("UPDATE `account` SET `pass` = '"+newpass+"' WHERE `number` LIKE '"+user+"'",function(err3, ok)
-          {
-              if ( err3 ){console.log('update bị loi'+err3);}
-              else
+        if ( err3 ){console.log('update bị loi'+err3);}
+          else
                 {
                   socket.emit('change_pass_ok', {passmoi:newpass});
                 }
-            });
-          }
-        });
-
-
+      });
+    }
   });
   socket.on('C_get_add_mem', function(info){
+   if (socket.number){
     console.log('Da nhan su kien C get add mem');
     // lượn qua xem tài khoản đó có tồn tại hay không
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+info.user+"' AND `pass` LIKE '"+info.pass+"' LIMIT 1", function(err, kq)
-    {
-      if (err || (kq==0)){console.log(err);}
-      else {
         //kiêm tra xem room đó có trên server hay không
-        con.query("SELECT * FROM `" + info.user+"mes_main` WHERE `idc` LIKE '"+info.room_fullname+"' LIMIT 1", function(err1, rows){
+        con.query("SELECT * FROM `" + socket.number+"mes_main` WHERE `idc` LIKE '"+info.room_fullname+"' LIMIT 1", function(err1, rows){
           if ( err1 || (rows.length ==0)){console.log(err);}
           else {
             //info.member.forEach(mem)=>{
           info.member.forEach(function(mem)
               {
-              con.query("UPDATE `"+info.user+"mes_sender` SET `stt` = 'Y' WHERE `number` LIKE '"+mem.number+"' AND `ids` LIKE '"+rows[0].id+"'",function(err4){if (err4){console.log(err4);}});
+              con.query("UPDATE `"+socket.number+"mes_sender` SET `stt` = 'Y' WHERE `number` LIKE '"+mem.number+"' AND `ids` LIKE '"+rows[0].id+"'",function(err4){if (err4){console.log(err4);}});
             });
-            con.query("SELECT 'id' FROM `" + info.user+"mes_sender` WHERE `ids` LIKE '"+rows[0].id+"' AND `stt` LIKE 'N' LIMIT 1", function(err2, rows2){
+            con.query("SELECT 'id' FROM `" + socket.number+"mes_sender` WHERE `ids` LIKE '"+rows[0].id+"' AND `stt` LIKE 'N' LIMIT 1", function(err2, rows2){
               if (err2 || (rows2.length >0)) {console.log(err2);}
               else {
-                  con.query("UPDATE `"+info.user+"mes_main` SET `stt` = 'Y' WHERE `id` LIKE '"+rows[0].id+"'",function(err3){if (err3){console.log(err3);}});
+                  con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `id` LIKE '"+rows[0].id+"'",function(err3){if (err3){console.log(err3);}});
               }
             });
 
           }
         });
-      }
-    });
 
+
+    }
   });
   socket.on('C_bosung_member', function(info){
+   if (socket.number){
     console.log(info);
     // xác minh tài khoản đủ điều kiện để bổ sung thành viên không
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+info.admin+"' AND `pass` LIKE '"+info.pass+"' LIMIT 1", function(err, rows6)
-    {
-      if (err || (rows6==0)){console.log('co loi 1' + err);}
-      else {
         socket.emit ('S_get_bosung_member');
         let mem3 = {name:"", number:""};
     //bổ sung thành viên mới cho người cũ
@@ -1324,7 +1298,7 @@ io.on('connection',  (socket)=>
 
                               mem = {name:strencode(row4.name), number:row4.number}
                               member.push(mem);
-                              if (row4.number ==info.admin){
+                              if (row4.number ==socket.number){
                                 let val2 = [[res.insertId,row4.number,row4.name,'OM']];
                                 con.query(sql2, [val2], function (err6) {
                                   if ( err6){console.log('co loi 8'+err6);}
@@ -1341,7 +1315,7 @@ io.on('connection',  (socket)=>
 
                               }
                             });
-                            io.sockets.in(member1.number).emit('S_send_room',{admin_number: info.admin , admin_name: strencode(rows6.user), room_name:strencode(info.room_name) ,room_fullname:strencode(info.room_full_name), member_list:member});
+                            io.sockets.in(member1.number).emit('S_send_room',{admin_number: socket.number , admin_name: strencode(socket.username), room_name:strencode(info.room_name) ,room_fullname:strencode(info.room_full_name), member_list:member});
                             console.log('Da gui room di cho nguoi moi ');
 
                       }
@@ -1353,16 +1327,16 @@ io.on('connection',  (socket)=>
             }
          });
       });
-       }
-      });
 
+      }
     });
-  socket.on('C_get_room', function(info){
-    console.log('Da nhan room roi:' + info.fullname);
-      con.query("UPDATE `"+info.number+"mes_main` SET `stt` = 'Y' WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+info.fullname+"'",function(err){
+  socket.on('C_get_room', function(room_fullname){
+      if (socket.number){
+    console.log('Da nhan room roi:' + room_fullname);
+      con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+room_fullname+"'",function(err){
       if ( err){console.log(err);}
     });
-
+    }
   });
 });
 }});
