@@ -324,7 +324,7 @@ io.on('connection',  (socket)=>
                       // lưu tài khoản vào db
                       var sql = "INSERT INTO `account` (number,user, pass, code ) VALUES ?";
                       var matkhau = passwordHash.generate(user_info.pass);
-                      var values = [[user_info.number,user_info.user, matkhau, rows[0].code]];
+                      var values = [[user_info.number,user_info.user, matkhau, user_info.code]];
                       con.query(sql, [values], function (err, result) {if ( err){console.log(err);}});
                       // xóa bản tin trong bảng active đi, coi như quá trình active hoàn tất
                       console.log('dang ky thanh cong:'+user_info.number);
