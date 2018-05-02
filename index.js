@@ -474,7 +474,7 @@ io.on('connection',  (socket)=>
           socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:strencode(rows[0].user)});
           socket.number = user1;
           socket.username = rows[0].user;
-          console.log('Dang nhap dung roi voi tai khoan' + user);
+          console.log('Dang nhap dung roi voi tai khoan' + user1);
           // xem có ai gửi tin cho mình trong thời gian offline không
           con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'R' AND `stt` LIKE 'N'", function(err, a1s)
               {
