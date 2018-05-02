@@ -464,6 +464,8 @@ io.on('connection',  (socket)=>
 
   });
   socket.on('login',(user1, pass1)=>{
+    console.log('Dang login voi tai khoan:'+user1);
+    console.log('Mat khau la:'+pass1);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
 	     if (err || rows.length ==0){
           socket.emit('khong_co_taikhoan');
