@@ -285,12 +285,12 @@ io.on('connection',  (socket)=>
                       //active thành công, trả thông tin người dùng về lại cho khách hàng
                       // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
                       // 1. Bảng chính: lưu id của bản tin đó trên server, id của người dùng, tên tin nhắn, tin nhắn gửi đi hay tin nhắn nhận về, trạng thái gửi đi hay nhận về.
-                      con.query("CREATE TABLE IF NOT EXISTS  `"+active_info.number+"mes_main` (`id` INT NOT NULL AUTO_INCREMENT,`idc` CHAR(25) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                      con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` INT NOT NULL AUTO_INCREMENT,`idc` CHAR(25) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //2. Bảng địa điểm: lưu id bản tin đó trên server, tên điểm, tọa độ điểm
-                      con.query("CREATE TABLE IF NOT EXISTS `"+active_info.number+"mes_detail` (`id` INT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                      con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"mes_detail` (`id` INT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
-                      con.query("CREATE TABLE IF NOT EXISTS `"+active_info.number+"mes_sender` (`id` INT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NULL,`send_receive` VARCHAR(5), `stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
-                      con.query("CREATE TABLE IF NOT EXISTS `"+active_info.number+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`fr` VARCHAR(5) NULL,`code` VARCHAR(10) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                      con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"mes_sender` (`id` INT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NULL,`send_receive` VARCHAR(5), `stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                      con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`fr` VARCHAR(5) NULL,`code` VARCHAR(10) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       con.query("SELECT number FROM `account` ", function(err, row3s)
                         {
                           if (err) {console.log('select loi '+ err);}
@@ -298,14 +298,14 @@ io.on('connection',  (socket)=>
                             {
                               row3s.forEach(function (row3)
                                 {
-                                  con.query("SELECT * FROM `"+row3.number+"contact` WHERE `number` LIKE '"+active_info.number+"'", function(err, row4s)
+                                  con.query("SELECT * FROM `"+row3.number+"contact` WHERE `number` LIKE '"+user_info.number+"'", function(err, row4s)
                                     {
-                                      console.log('bang '+row3.number + ' so dien thoai la:'+active_info.number);
+                                      console.log('bang '+row3.number + ' so dien thoai la:'+user_info.number);
                                       if ( err) {console.log('có loi select');}
                                       else if (row4s.length >0)
                                         {
-                                          console.log('da select '+row3.number+' '+active_info.number);
-                                          con.query("UPDATE `"+row3.number+"contact` SET `fr` = 'Y' WHERE `number` LIKE '"+active_info.number+"'",function(err3, ok)
+                                          console.log('da select '+row3.number+' '+user_info.number);
+                                          con.query("UPDATE `"+row3.number+"contact` SET `fr` = 'Y' WHERE `number` LIKE '"+user_info.number+"'",function(err3, ok)
                                           {
                                             //gửi thông báo cho ngươi kia biết là ông này đã tham gia ePos
                                             if ( err3 ){console.log('update bị loi'+err3);}
@@ -327,18 +327,16 @@ io.on('connection',  (socket)=>
                       var values = [[rows[0].number,rows[0].user, matkhau, rows[0].code]];
                       con.query(sql, [values], function (err, result) {if ( err){console.log(err);}});
                       // xóa bản tin trong bảng active đi, coi như quá trình active hoàn tất
-                      console.log('sẽ xóa bản tin active có number như sau:'+active_info.number);
-                      con.query("DELETE FROM `active_account` WHERE `number` LIKE '"+active_info.number+"'", function(err){
-                        if ( err){console.log('loi delete'+err);  }
-                        else {
-                          console.log('Da xoa ok');
-                          socket.emit('dangky_thanhcong');
-                          // socket.emit('acive_success', {number:rows[0].number, user: rows[0].user, code:rows[0].code});
-
-                        }
-
-
-                    });
+                      console.log('dang ky thanh cong:'+user_info.number);
+                      socket.emit('dangky_thanhcong');
+                    //   con.query("DELETE FROM `active_account` WHERE `number` LIKE '"+active_info.number+"'", function(err){
+                    //     if ( err){console.log('loi delete'+err);  }
+                    //     else {
+                    //       console.log('Da xoa ok');
+                    //       socket.emit('dangky_thanhcong');
+                    //       // socket.emit('acive_success', {number:rows[0].number, user: rows[0].user, code:rows[0].code});
+                    //     }
+                    // });
 
 
 					          }//end else 2
