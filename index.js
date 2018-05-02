@@ -312,7 +312,7 @@ io.on('connection',  (socket)=>
                                             else
                                               {
                                                 console.log('updat thanh cong' + ok);
-                                                io.sockets.in(row3.number).emit('contact_joined', {number:rows[0].number,name:rows[0].user, code:rows[0].code});
+                                                io.sockets.in(row3.number).emit('contact_joined', {number:user_info.number,name:user_info.user, code:user_info.code});
                                               }
                                           });
                                         }
