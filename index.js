@@ -461,19 +461,41 @@ io.on('connection',  (socket)=>
       con.query(" DELETE FROM `xacthuc` WHERE `number` LIKE'"+number+"'", function(err){if(err){console.log('co loi dangky_thanhcong_ok:'+err);}});
 
   });
-  socket.on('login',(user1, pass1)=>{
+  socket.on('login1',(user1, pass1)=>{
     console.log('Dang login voi tai khoan:'+user1);
     console.log('Mat khau la:'+pass1);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
 	     if (err || rows.length ==0){
-          socket.emit('khong_co_taikhoan');
+          socket.emit('login1_khongcotaikhoan');
           console.log("Tai khoan dang nhap khong co "+user1);
         }
 			else{
         if (passwordHash.verify(pass1, rows[0].pass)){
-          socket.emit('dangnhap_dung', {number:rows[0].number, pass:rows[0].pass, name:strencode(rows[0].user)});
+          socket.emit('login1_dung');
+          console.log('Dang nhap 1 dung roi voi tai khoan' + user1);
+        }
+        else {
+          console.log('dang nhap 1 sai roi');
+        socket.emit('login1_sai');
+      }
+      }
+   	  });
+	});
+  // login 2 là khi người dùng đã chuyển qua giao diện chính rồi, khi đó chỉ là âm thầm lưu socket đó thành đúng tên đó
+  // đồng thời kiểm tra xem có dữ liệu gì cần gửi cho người đó không thì gửi thôi
+  socket.on('login2',(user1, pass1)=>{
+    console.log('Dang login2 voi tai khoan:'+user1);
+    console.log('Mat khau la:'+pass1);
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
+	     if (err || rows.length ==0){
+          socket.emit('login2_khongtaikhoan');
+          console.log("Login 2 khong co tai khoan "+user1);
+        }
+			else{
+        if (passwordHash.verify(pass1, rows[0].pass)){
           socket.number = user1;
           socket.username = rows[0].user;
+          socket.emit('login2_ok', {name: strencode(rows[0].user)});
           console.log('Dang nhap dung roi voi tai khoan' + user1);
           // xem có ai gửi tin cho mình trong thời gian offline không
           con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'R' AND `stt` LIKE 'N'", function(err, a1s)
@@ -620,174 +642,17 @@ io.on('connection',  (socket)=>
         }
         else {
           console.log('dang nhap sai roi');
-        socket.emit('dangnhapsai');
+        socket.emit('login2_sai');
       }
       }
    	  });
 	});
-  // socket.on('mainlogin', function(user, pass){
-  //   console.log("Da nhan user "+ user);
-  //   // kiểm tra mật khẩu và tài khoản
-  //   con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user+"' AND `pass` LIKE '"+ pass+"' LIMIT 1", function(err1, rows){
-  //       if (err1||rows.length ==0){
-  //         // Nếu đăng nhập sai
-  //         socket.emit('main_login_wrong');
-  //         console.log("Dang nhap second khong dung"+user);
-  //         }
-  //       else{
-  //         //Nếu đăng nhập đúng
-  //         socket.join(user);
-  //         console.log('Dang nhap dung roi voi tai khoan' + user);
-  //         con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'R' AND `stt` LIKE 'N'", function(err, a1s)
-  //             {
-  //             if ( err || ( a1s.length == 0) ){console.log(err);}
-  //             else
-  //               {
-  //                 console.log(a1s);
-  //                 a1s.forEach(function(a1)
-  //                 {
-  //                 //lấy tên người gửi
-  //                   con.query("SELECT * FROM `"+user+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err, a2s)
-  //                   {
-  //                     if ( err || ( a2s.length==0)){console.log(err);}
-  //                     else
-  //                     {
-  //                       //lấy danh sách các điểm
-  //                       console.log('ten nguoi gui:'+a2s);
-  //
-  //                       con.query("SELECT * FROM `"+user+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err, a3s)
-  //                       {
-  //                         if ( err || ( a3s.length==0) ){console.log(err);}
-  //                         else
-  //                           {
-  //                           var pos3 = [];
-  //                           var pos2;
-  //                           console.log('cac diem:'+a3s);
-  //                           a3s.forEach(function(a3)
-  //                           {
-  //                              pos2 = {name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:strencode(a3.id)};
-  //                              pos3.push(pos2);
-  //                             });
-  //                             console.log(' Tin nhan gui di:'+pos3);
-  //                           socket.emit('S_guitinnhan',{ name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number,
-  //                              subject: strencode(a1.subject), pos: pos3, id_tinnha_client:a1.idc});
-  //
-  //
-  //                         }
-  //                       });
-  //                     }
-  //                   });
-  //                 });
-  //
-  //               }
-  //         });
-  //           //kiểm tra xem có ai đã nhận tin nhắn rồi không
-  //         con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'S' AND `stt` LIKE 'G'", function(err, a4s)
-  //             {
-  //           if ( err || (a4s.length==0)){console.log(err);}
-  //           else
-  //             {
-  //               a4s.forEach(function(a4)
-  //                 {
-  //                 con.query("SELECT * FROM `"+user+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a4.id+"' AND `stt` LIKE 'G'", function(err5, a5s)
-  //                 {
-  //
-  //                 if ( err5 || (a5s.length==0)){console.log(err5);}
-  //                 else
-  //                   {
-  //                     let nhoms_nguoinhan = [];
-  //                     let nguoinhan = {number:"", name:""};
-  //
-  //                     a5s.forEach(function(a5)
-  //                       {
-  //                         nguoinhan = {number:a5.number, name: strencode(a5.name)};
-  //                         nhoms_nguoinhan.push(nguoinhan);
-  //                       });
-  //
-  //                     socket.emit('C_danhantinnhan',{nguoinhan:nhoms_nguoinhan, idc:a4.idc});
-  //                     console.log('Da gui sự kiện C_gui tin nhan di cho cac so:'+a5s[0].number +' ma la '+ a4.idc);
-  //                   }
-  //                 });
-  //
-  //                 });
-  //
-  //             }
-  //         });
-  //         // kiểm tra xem có room nào gửi không
-  //         con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'O' AND `stt` LIKE 'N'", function(err, a5s)
-  //           {
-  //             if ( err){console.log(err);}
-  //             else if ( a5s.length>0)
-  //               {
-  //               var ad_num,ad_name;
-  //               a5s.forEach(function(a5)
-  //                 {
-  //                   //lấy tên người gửi và tên người tham gia room
-  //                   console.log('room chua gui: '+a5.subject);
-  //                   con.query("SELECT * FROM `"+user+"mes_sender` WHERE `ids` LIKE '"+a5.id+"'", function(err, a2s)
-  //                 {
-  //                     if (err){console.log(err);}
-  //                     else
-  //                     {
-  //                       console.log('Da chon 2 thanh cong' + a2s.length);
-  //
-  //                         var list = [];
-  //                         var mem;
-  //                         a2s.forEach(function(a2)
-  //                           {
-  //                             if (a2.send_receive == 'O')
-  //                               {
-  //                                 // nếu là O thì đây là danh sách thành viên tham gia
-  //                                 mem = {name:strencode(a2.name), number:a2.number};
-  //                                 list.push(mem);
-  //                                 console.log('Thanh vien la:'+a2.name);
-  //                               }
-  //                             else
-  //                             // còn không thì đây là tên admin của room
-  //                           { ad_num = a2.number; ad_name = strencode(a2.name);
-  //                             console.log('admin la:'+a2.number);
-  //                           }
-  //                         });
-  //                       socket.emit('S_send_room',{admin_name:ad_name, admin_number:ad_num, room_name: strencode(a5.subject),room_fullname: strencode(a5.idc), member_list: list });
-  //                       console.log('Da gui room di '+ad_name);
-  //                   }
-  //                   });
-  //                 });
-  //             }
-  //         });
-  //         // kiểm tra xem có room nào cần bổ sung mmember không
-  //         con.query("SELECT * FROM `"+user+"mes_main` WHERE `send_receive` LIKE 'O' AND `stt` LIKE 'M'", function(err7, a7s)
-  //           {
-  //             if ( err7 ||(a7s.length==0)){console.log(err7);}
-  //             else
-  //               { //else1
-  //                 a7s.forEach((room)=>{
-  //                   con.query("SELECT * FROM `"+user+"mes_sender` WHERE `ids` LIKE '"+room.id+"' AND `stt` LIKE 'M'", function(err8, members)
-  //                     {
-  //                       if ( err8 ||(a7s.length==0)){console.log(err8);}
-  //                       else{
-  //                         let mem = [];
-  //                         let mem1 ={name:"", number:""};
-  //                         members.forEach((mem2)=>{
-  //                           mem1 = {name:strencode(mem2.name), number:mem2.number};
-  //                           mem.push(mem1);
-  //                         });
-  //                         socket.emit('S_add_mem',{ room_fullname:strencode(room.idc), member_list:mem});
-  //                       }
-  //                     });
-  //                 });
-  //
-  //               } // else1
-  //             });
-  //         }
-  //     });
-	// });//hết phần socket.on mainlogin
   socket.on('C_gui_tinnhan', function(mess){
     console.log(mess);
     if (socket.number){
     socket.emit('S_get_tinnhan',mess.id);
     // lưu vào bảng chính của người gửi
-    var sql2 = "INSERT INTO `"+mess.nguoigui_number+"mes_main` (idc,subject, send_receive) VALUES ?";
+    var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive) VALUES ?";
     var values2 = [[mess.id, mess.subject,'S']];
     con.query(sql2, [values2], function (err, res)
       {
@@ -795,14 +660,14 @@ io.on('connection',  (socket)=>
         else {
               console.log('Da luu voi id:'+ mess.id);
                 // lưu vào bảng vị trí của người gửi
-                var sql3 = "INSERT INTO `"+mess.nguoigui_number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
+                var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
                 mess.pos.forEach(function(row)
                   {
                     var val = [[res.insertId, row.id, row.name, row.lat, row.lon]];
                     con.query(sql3, [val], function (err, res2) {if ( err){console.log(err);}});
                   });
                   // lưu vào bảng người nhận của người gửi
-                var sql4 = "INSERT INTO `"+mess.nguoigui_number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
+                var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
                 mess.nguoinhan.forEach(function(row5)
                   {
                     var val4 = [[res.insertId, row5.number, row5.name, 'S']];
