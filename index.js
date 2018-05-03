@@ -471,7 +471,7 @@ io.on('connection',  (socket)=>
         }
 			else{
         if (passwordHash.verify(pass1, rows[0].pass)){
-          socket.emit('login1_dung');
+          socket.emit('login1_dung', {name:strencode(rows[0].user)});
           console.log('Dang nhap 1 dung roi voi tai khoan' + user1);
         }
         else {
