@@ -1179,7 +1179,7 @@ io.on('connection',  (socket)=>
   //   });
   socket.on('C_get_room', function(room_fullname){
       if (socket.number){
-        console.log(socket.user+' da nhan room roi:' + room_fullname);
+        console.log(socket.username+' da nhan room roi:' + room_fullname);
       con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+room_fullname+"'",function(err){
       if ( err){console.log(err);}
     });
