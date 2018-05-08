@@ -984,6 +984,7 @@ io.on('connection',  (socket)=>
       var room_id = passwordHash.generate(info.room_fullname);
       var room_full_server = {room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number};
       // gửi lại cho admin cái room đầy đủ để lưu hành trên hệ thống
+      console.log('Da nhan room la:'+info);
       var sql = "INSERT INTO `"+socket.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
       var val = [[ room_id, info.room_name,'O', 'N']];
       con.query(sql, [val], function (err, res)
