@@ -574,9 +574,9 @@ io.on('connection',  (socket)=>
               }
           });
           // kiểm tra xem có room nào gửi không
-          con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'O' AND `stt` LIKE 'N'", function(err, a5s)
+          con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'O' AND `stt` LIKE 'N'", function(err2, a5s)
             {
-              if ( err){console.log(err);}
+              if ( err2){console.log(err2);}
               else if ( a5s.length>0)
                 {
                 var ad_num,ad_name;
@@ -584,9 +584,9 @@ io.on('connection',  (socket)=>
                   {
                     //lấy tên admin của room
                     console.log('room chua gui: '+a5.subject);
-                    con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `ids` LIKE '"+a5.id+"' LIMIT 1", function(err, a2s)
+                    con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `ids` LIKE '"+a5.id+"' LIMIT 1", function(err3, a2s)
                     {
-                      if (err){console.log(err);}
+                      if (err3){console.log(err3);}
                       else
                       {
                       var room_full_server = {room_name:strencode(a5.subject), room_id_server:a5.idc, admin_name:strencode(a2s[0].name), admin_number:a2s[0].number};
@@ -993,10 +993,10 @@ io.on('connection',  (socket)=>
         else
         {
           let sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
-          var val = [[ res.insertId,socket.number, socket.user,'O']];
-          con.query(sql, [val], function (err, res)
+          var val2 = [[ res.insertId,socket.number, socket.user,'O']];
+          con.query(sql2, [val2], function (err2, res2)
           {
-            if ( err){console.log(err);}
+            if ( err2){console.log(err2);}
             else
             {
                 socket.emit('S_send_room', room_full_server );
@@ -1013,27 +1013,27 @@ io.on('connection',  (socket)=>
       {
         info.member_list.forEach(function(row){
           // kiểm tra xem thành viên này có tài khoản chưa
-          con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row.number +"' LIMIT 1", function(err, kq)
+          con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row.number +"' LIMIT 1", function(err3, kq)
             {
-              if(err || (kq.length ==0)){console.log(err);}
+              if(err3 || (kq.length ==0)){console.log(err3);}
               else {
-                  con.query("SELECT * FROM `"+row.number+"mes_main` WHERE `idc` LIKE '"+ info.fullname +"' LIMIT 1", function(err, rows)
+                  con.query("SELECT * FROM `"+row.number+"mes_main` WHERE `idc` LIKE '"+ info.fullname +"' LIMIT 1", function(err4, rows)
                     {
-                      if(err || (rows.length >0)){console.log(err);}
+                      if(err4 || (rows.length >0)){console.log(err4);}
                       else
                        {
                             var sql = "INSERT INTO `"+row.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
                             var val = [[ room_id, info.room_name,'O', 'N']];
-                            con.query(sql, [val], function (err, res)
+                            con.query(sql, [val], function (err5, res)
                             {
-                              if ( err){console.log(err);}
+                              if ( err5){console.log(err5);}
                               else
                               {
                               let sql2 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
-                              var val = [[ res.insertId,socket.number, socket.user,'O']];
-                              con.query(sql, [val], function (err, res)
+                              var val2 = [[ res.insertId,socket.number, socket.user,'O']];
+                              con.query(sq2l, [val2], function (err2, res2)
                               {
-                                if ( err){console.log(err);}
+                                if ( err2){console.log(err2);}
                                 else
                                 {
                                   io.sockets.in(row.number).emit('S_send_room',room_full_server);
