@@ -652,8 +652,7 @@ io.on('connection',  (socket)=>
                                       console.log(row5.number);
                                         io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
                                           subject: strencode(mess.subject), pos: array_tinnhan, id_tinnha_client:mess.id});
-                                          socket.emit('S_guitinnhan',{ name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
-                                            subject: strencode(mess.subject), pos: array_tinnhan, id_tinnha_client:mess.id});
+                                      
 
                                         console.log('Da gui tin nhan di xong');
 
