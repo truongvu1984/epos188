@@ -648,6 +648,8 @@ io.on('connection',  (socket)=>
                                       });
                                       // io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strencode(mess.nguoigui_name),number_nguoigui:mess.nguoigui_number,
                                       //   subject: strencode(mess.subject), pos: mess.pos, id_tinnha_client:mess.id});
+                                      console.log('nguoi nhan');
+                                      console.log(row5.number);
                                         io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
                                           subject: strencode(mess.subject), pos: array_tinnhan, id_tinnha_client:mess.id});
                                         console.log('Da gui tin nhan di xong');
