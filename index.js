@@ -474,6 +474,7 @@ io.on('connection',  (socket)=>
           socket.emit('login1_dung', {name:strencode(rows[0].user)});
           socket.number = user1;
           socket.username = rows[0].user;
+          socket.join(user1);
           // socket.emit('login2_ok', {name: strencode(rows[0].user)});
           console.log('Dang nhap dung roi voi tai khoan' + user1);
           // xem có ai gửi tin cho mình trong thời gian offline không
@@ -590,6 +591,7 @@ io.on('connection',  (socket)=>
   socket.on('C_gui_tinnhan', function(mess){
     console.log(mess);
     if (socket.number){
+      console.log('nguoi dung la:'+socket.number);
     socket.emit('S_get_tinnhan',mess.id);
     // lưu vào bảng chính của người gửi
     var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive) VALUES ?";
@@ -652,9 +654,8 @@ io.on('connection',  (socket)=>
                                       console.log(row5.number);
                                         io.sockets.in(row5.number).emit('S_guitinnhan',{ name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
                                           subject: strencode(mess.subject), pos: array_tinnhan, id_tinnha_client:mess.id});
-                                      
 
-                                        console.log('Da gui tin nhan di xong');
+                                      console.log('Da gui tin nhan di xong');
 
                                   } //het else
                                 });
