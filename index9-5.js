@@ -461,6 +461,28 @@ io.on('connection',  (socket)=>
       con.query(" DELETE FROM `xacthuc` WHERE `number` LIKE'"+number+"'", function(err){if(err){console.log('co loi dangky_thanhcong_ok:'+err);}});
 
   });
+  // socket.on('login3',(user1, pass1)=>{
+  //   console.log('Dang login voi tai khoan:'+user1);
+  //   console.log('Mat khau la:'+pass1);
+  //   con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
+	//      if (err || rows.length ==0){
+  //         socket.emit('login1_khongcotaikhoan');
+  //         console.log("Tai khoan dang nhap khong co "+user1);
+  //       }
+	// 		else{
+  //       if (passwordHash.verify(pass1, rows[0].pass)){
+  //         socket.emit('login1_dung', {name:strencode(rows[0].user)});
+  //         console.log('Dang nhap 1 dung roi voi tai khoan' + user1);
+  //       }
+  //       else {
+  //         console.log('dang nhap 1 sai roi');
+  //       socket.emit('login1_sai');
+  //     }
+  //     }
+  //  	  });
+	// });
+  // login 2 là khi người dùng đã chuyển qua giao diện chính rồi, khi đó chỉ là âm thầm lưu socket đó thành đúng tên đó
+  // đồng thời kiểm tra xem có dữ liệu gì cần gửi cho người đó không thì gửi thôi
   socket.on('login1',(user1, pass1)=>{
     console.log('Dang login2 voi tai khoan:'+user1);
     console.log('Mat khau la:'+pass1);
@@ -492,8 +514,7 @@ io.on('connection',  (socket)=>
                       else
                       {
                         //lấy danh sách các điểm
-                        console.log('ten nguoi gui:');
-                        console.log(a2s);
+                        console.log('ten nguoi gui:'+a2s);
 
                         con.query("SELECT * FROM `"+user1+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err, a3s)
                         {
@@ -502,15 +523,13 @@ io.on('connection',  (socket)=>
                             {
                             var pos3 = [];
                             var pos2;
-                            console.log('cac diem:');
-                            console.log(a3s);
+                            console.log('cac diem:'+a3s);
                             a3s.forEach(function(a3)
                             {
                                pos2 = {name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:strencode(a3.id)};
                                pos3.push(pos2);
-                               console.log(pos3);
                               });
-                              console.log(' Tin nhan gui di:');
+                              console.log(' Tin nhan gui di:'+pos3);
                             socket.emit('S_guitinnhan',{ name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number,
                                subject: strencode(a1.subject), pos: pos3, id_tinnha_client:a1.idc});
 
@@ -578,7 +597,30 @@ io.on('connection',  (socket)=>
                   });
               }
           });
-
+          // kiểm tra xem có room nào cần bổ sung mmember không
+          // con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'O' AND `stt` LIKE 'M'", function(err7, a7s)
+          //   {
+          //     if ( err7 ||(a7s.length==0)){console.log(err7);}
+          //     else
+          //       { //else1
+          //         a7s.forEach((room)=>{
+          //           con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `ids` LIKE '"+room.id+"' AND `stt` LIKE 'M'", function(err8, members)
+          //             {
+          //               if ( err8 ||(a7s.length==0)){console.log(err8);}
+          //               else{
+          //                 let mem = [];
+          //                 let mem1 ={name:"", number:""};
+          //                 members.forEach((mem2)=>{
+          //                   mem1 = {name:strencode(mem2.name), number:mem2.number};
+          //                   mem.push(mem1);
+          //                 });
+          //                 socket.emit('S_add_mem',{ room_fullname:strencode(room.idc), member_list:mem});
+          //               }
+          //             });
+          //         });
+          //
+          //       } // else1
+          //     });
         }
         else {
           console.log('dang nhap sai roi');
