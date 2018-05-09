@@ -461,7 +461,7 @@ io.on('connection',  (socket)=>
       con.query(" DELETE FROM `xacthuc` WHERE `number` LIKE'"+number+"'", function(err){if(err){console.log('co loi dangky_thanhcong_ok:'+err);}});
 
   });
-  socket.on('login1',(user1, pass1)=>{
+  socket.on('login3',(user1, pass1)=>{
     console.log('Dang login voi tai khoan:'+user1);
     console.log('Mat khau la:'+pass1);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
@@ -483,7 +483,7 @@ io.on('connection',  (socket)=>
 	});
   // login 2 là khi người dùng đã chuyển qua giao diện chính rồi, khi đó chỉ là âm thầm lưu socket đó thành đúng tên đó
   // đồng thời kiểm tra xem có dữ liệu gì cần gửi cho người đó không thì gửi thôi
-  socket.on('login2',(user1, pass1)=>{
+  socket.on('login1',(user1, pass1)=>{
     console.log('Dang login2 voi tai khoan:'+user1);
     console.log('Mat khau la:'+pass1);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
@@ -493,9 +493,10 @@ io.on('connection',  (socket)=>
         }
 			else{
         if (passwordHash.verify(pass1, rows[0].pass)){
+          socket.emit('login1_dung', {name:strencode(rows[0].user)});
           socket.number = user1;
           socket.username = rows[0].user;
-          socket.emit('login2_ok', {name: strencode(rows[0].user)});
+          // socket.emit('login2_ok', {name: strencode(rows[0].user)});
           console.log('Dang nhap dung roi voi tai khoan' + user1);
           // xem có ai gửi tin cho mình trong thời gian offline không
           con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'R' AND `stt` LIKE 'N'", function(err, a1s)
