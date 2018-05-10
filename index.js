@@ -704,7 +704,7 @@ io.on('connection',  (socket)=>
 
         });
 
-    //trạng thái G cho biết, có một ai đó trong danh sách nhận đã nhận tin nhắn,
+    //trạng thái G cho biết, có một ai đó trong danh sách nhận đã nhận tin nhắn, nhưng người gửi chưa biết
     }
   });
   // khi người gửi biết rằng khách đã nhận được tin, chuyển màu sắc người nhận trong mục send sang đỏ và báo lại
