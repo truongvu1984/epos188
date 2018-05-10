@@ -715,6 +715,7 @@ io.on('connection',  (socket)=>
           con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+id+"' AND `send_receive` LIKE 'S' LIMIT 1", function(err, a1s){
             if ( err || ( a1s.length==0)) {console.log(err);}
             else {
+              console.log('Da tim thay ma dung 1');
               con.query("UPDATE `"+socket.number+"mes_sender` SET `stt` = 'OK' WHERE `ids` LIKE '"+a1s[0].id+"' AND `number` LIKE '"+nguoinhan+"'",function(err2){
                   if(err2){console.log(err2);}
                   else {
@@ -723,9 +724,11 @@ io.on('connection',  (socket)=>
                   con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1s[0].id+"' AND `send_receive` LIKE 'S' AND `stt` LIKE 'G' LIMIT 1", function(err3, a3s){
                     if ( err3 ) {console.log(err3);}
                     else {
+                      console.log('Da tim thay ma dung 2');
                       if(a3s.length == 0){
+                        console.log('Da tim thay ma dung 3');
                       con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'OK' WHERE `idc` LIKE '"+id+"' AND `stt` LIKE 'G'",function(err4){
-                        if(err4){console.log(err4);} 
+                        if(err4){console.log(err4);}
                         else {
                           console.log('ma san pham final la '+id);
                         }
