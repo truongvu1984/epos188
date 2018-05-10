@@ -538,17 +538,13 @@ io.on('connection',  (socket)=>
                   if ( err5 || (a5s.length==0)){console.log(err5);}
                   else
                     {
-                      let nhoms_nguoinhan = [];
-                      let nguoinhan = {number:"", name:""};
-
                       a5s.forEach(function(a5)
                         {
-                          nguoinhan = {number:a5.number, name: strencode(a5.name)};
-                          nhoms_nguoinhan.push(nguoinhan);
+                          socket.emit('C_danhantinnhan',{nguoinhan:a5.number, idc:a4.idc});
+                          console.log('Da gui sự kiện C_gui tin nhan di cho cac so:'+a5.number +' ma la '+ a4.idc);
                         });
 
-                      socket.emit('C_danhantinnhan',{nguoinhan:nhoms_nguoinhan, idc:a4.idc});
-                      console.log('Da gui sự kiện C_gui tin nhan di cho cac so:'+a5s[0].number +' ma la '+ a4.idc);
+
                     }
                   });
 
