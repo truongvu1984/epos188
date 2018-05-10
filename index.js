@@ -130,6 +130,7 @@ kiemtra_taikhoan();
 io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
+  socket.emit('C_danhantinnhan',{nguoinhan:'hhhhhh', idc:'sdff'});
   socket.on('w_get_inbox', function(data, number){
      console.log("Da nhan number");
     con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+data+"' LIMIT 1", function(err, a1s)
@@ -674,11 +675,12 @@ io.on('connection',  (socket)=>
   socket.on('danhantinnhan', function (nguoigui, idc)
    	{
       if (socket.number){
+
       io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number, idc:idc});
 	    //chuyển trạng thái trong db thành người nhận đã đọc được tin, báo về cho người gửi biết
     con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"'",function(){
       console.log('ma san pham la '+idc);
-      //  io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan_number:nguoinhan, idc:idc});
+
     });
 
     con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err11, res11)
