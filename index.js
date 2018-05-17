@@ -917,11 +917,20 @@ io.on('connection',  (socket)=>
 
 
   });
-  socket.on('C_leave_room', function () {
+  socket.on('C_leave_off', function () {
       if (socket.number){
 
       socket.leave(socket.number);
-      console.log('Da leave user khoi room 111: '+socket.number);
+      console.log('Da leave user khoi user'+socket.number);
+      socket.number = undefined;
+
+    }
+  });
+  socket.on('C_leave_room', function (room) {
+      if (socket.number){
+
+      socket.leave(room);
+      console.log('Da leave user khoi room: '+room);
       socket.number = undefined;
 
     }
