@@ -461,8 +461,7 @@ io.on('connection',  (socket)=>
       con.query(" DELETE FROM `xacthuc` WHERE `number` LIKE'"+number+"'", function(err){if(err){console.log('co loi dangky_thanhcong_ok:'+err);}});
 
   });
-  socket.on('login2',(user1, pass1)=>{
-    // login2 là login mà sẽ gửi toàn bộ về, lần lượt 20 cái một
+  socket.on('login1',(user1, pass1)=>{
     console.log('Dang login2 voi tai khoan:'+user1);
     console.log('Mat khau la:'+pass1);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
@@ -472,29 +471,7 @@ io.on('connection',  (socket)=>
         }
 			else{
         if (passwordHash.verify(pass1, rows[0].pass)){
-          socket.emit('login2_dung', {name:strencode(rows[0].user)});
-          console.log('login 2 đung:');
-
-        }
-        else {
-          socket.emit('login2_sai', {name:strencode(rows[0].user)});
-          console.log('login 2 sai');
-        }
-      }
-    });
-  });
-  socket.on('login1',(user1, pass1)=>{
-    //login 1 là login mà user đang ở mainactivity rồi, chi cần gửi dữ liệu về thôi.
-    console.log('Dang login1 voi tai khoan:'+user1);
-    console.log('Mat khau la:'+pass1);
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
-	     if (err || rows.length ==0){
-          socket.emit('login2_khongtaikhoan');
-          console.log("Login 2 khong co tai khoan "+user1);
-        }
-			else{
-        if (passwordHash.verify(pass1, rows[0].pass)){
-          // socket.emit('login1_dung', {name:strencode(rows[0].user)});
+          socket.emit('login1_dung', {name:strencode(rows[0].user)});
           socket.number = user1;
           socket.username = rows[0].user;
           socket.join(user1);
@@ -913,12 +890,11 @@ io.on('connection',  (socket)=>
 
 
   });
-  socket.on('C_leave_room', function () {
+  socket.on('C_leave_room', function (room) {
       if (socket.number){
       if ( room !=null || room!=""){
-      socket.leave(socket.number);
-      console.log('Da leave user khoi room 111: '+socket.number);
-      socket.number = undefined;
+      socket.leave(room);
+      console.log('Da leave user khoi room 111: '+room+'hihihi');
     }
     }
   });
