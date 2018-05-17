@@ -493,7 +493,7 @@ io.on('connection',  (socket)=>
     console.log('Mat khau la:'+pass1);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
 	     if (err || rows.length ==0){
-          socket.emit('login2_khongtaikhoan');
+          socket.emit('login1_khongtaikhoan');
           console.log("Login 2 khong co tai khoan "+user1);
         }
 			else{
@@ -606,7 +606,7 @@ io.on('connection',  (socket)=>
         }
         else {
           console.log('dang nhap sai roi');
-        socket.emit('login2_sai');
+        socket.emit('login1_sai');
       }
       }
    	  });
@@ -919,11 +919,11 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_leave_room', function () {
       if (socket.number){
-      if ( room !=null || room!=""){
+
       socket.leave(socket.number);
       console.log('Da leave user khoi room 111: '+socket.number);
       socket.number = undefined;
-    }
+
     }
   });
     //sự kiến check_contact xảy ra khi người dùng được thông báo acitve thành công, app sẽ lấy  toàn bộ danh sách
