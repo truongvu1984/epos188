@@ -474,6 +474,10 @@ io.on('connection',  (socket)=>
         if (passwordHash.verify(pass1, rows[0].pass)){
           socket.emit('login2_dung', {name:strencode(rows[0].user)});
           console.log('login 2 đung:');
+          socket.number = user1;
+          socket.username = rows[0].user;
+          socket.join(user1);
+          // lấy toàn bộ dữ liệu mới nhất gửi cho ông này
 
         }
         else {
