@@ -928,10 +928,9 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_leave_room', function (room) {
       if (socket.number){
-
       socket.leave(room);
       console.log('Da leave user khoi room: '+room);
-      socket.number = undefined;
+
 
     }
   });
