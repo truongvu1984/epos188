@@ -126,6 +126,8 @@ function kiemtra_taikhoan(){
   }, 10000);
 }
 kiemtra_taikhoan();
+var ngay= new Date().getTime();
+console.log(ngay);
 
 io.on('connection',  (socket)=>
 {
@@ -283,7 +285,7 @@ io.on('connection',  (socket)=>
                       //active thành công, trả thông tin người dùng về lại cho khách hàng
                       // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
                       // 1. Bảng chính: lưu id của bản tin đó trên server, id của người dùng, tên tin nhắn, tin nhắn gửi đi hay tin nhắn nhận về, trạng thái gửi đi hay nhận về.
-                      con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` INT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                      con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` INT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL ,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //2. Bảng địa điểm: lưu id bản tin đó trên server, tên điểm, tọa độ điểm
                       con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"mes_detail` (`id` INT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
@@ -478,7 +480,54 @@ io.on('connection',  (socket)=>
           socket.username = rows[0].user;
           socket.join(user1);
           // lấy toàn bộ dữ liệu mới nhất gửi cho ông này
-
+          // lấy dữ liệu inbox
+          con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
+             {
+               if ( err || ( a1s.length == 0) ){console.log(err);}
+               else
+                 {
+                   a1s.forEach(function(a1){
+                      con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
+                        if(err2){console.log(err2);}
+                        else {
+                          con.query("SELECT * FROM `"+user1+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err3, a3s){
+                            if(err3){console.log(err3);}
+                            else {
+                              let pos=[];
+                              a3s.forEach(function(a3){pos.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
+                              socket.emit('S_send_inbox',{subject:strencode(a1.subject), idc:a1.idc,trangthai:a1.stt, nguoigui_number:a2s[0].number,
+                                nguoigui_name:strencode(a2s[0].name), vitri:pos});
+                            }
+                          });
+                        }
+                      });
+                   });
+                 }
+            });
+          con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
+               {
+                 if ( err || ( a1s.length == 0) ){console.log(err);}
+                 else
+                   {
+                     a1s.forEach(function(a1){
+                       let nhomnguoinhan =[];
+                        con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
+                          if(err2){console.log(err2);}
+                          else {
+                            a2s.forEach(function(a2){nhomnguoinhan.push({number:a2.number, name:strencode(a2.name)}); });
+                            con.query("SELECT * FROM `"+user1+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err3, a3s){
+                              if(err3){console.log(err3);}
+                              else {
+                                let pos=[];
+                                a3s.forEach(function(a3){pos.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
+                                socket.emit('S_send_send',{subject:strencode(a1.subject), idc:a1.idc,trangthai:a1.stt, nguoinhan:nhomnguoinhan, vitri:pos});
+                              }
+                            });
+                          }
+                        });
+                     });
+                   }
+              });
         }
         else {
           socket.emit('login2_sai', {name:strencode(rows[0].user)});
