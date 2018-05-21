@@ -490,7 +490,7 @@ io.on('connection',  (socket)=>
                               let position=[];
                               a3s.forEach(function(a3){position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
   socket.emit('S_send_inbox',{name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read,
-  , pos:position});
+  pos:position});
 
 
 
