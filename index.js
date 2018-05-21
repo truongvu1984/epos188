@@ -91,22 +91,16 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
                                         console.log('Da render xong' +a4s.length);
                                     }
                                   });
-
-
                               }
-                            });
-
+                          });
                       }
-                    });
-
+                  });
               }
             });
-
           }
         });
-
-      }
-      })
+    }
+})
 function strencode( data ) {
     return unescape( encodeURIComponent( data ) );
   }
@@ -521,6 +515,7 @@ io.on('connection',  (socket)=>
                                 let pos=[];
                                 a3s.forEach(function(a3){pos.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
                                 socket.emit('S_send_send',{subject:strencode(a1.subject), idc:a1.idc,trangthai:a1.stt, nguoinhan:nhomnguoinhan, vitri:pos});
+                                console.log('Server đã gửi inibox');
                               }
                             });
                           }
