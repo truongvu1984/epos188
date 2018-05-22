@@ -686,7 +686,7 @@ io.on('connection',  (socket)=>
                     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row5.number +"' LIMIT 1", function(err4, res4)
                       {
                         if ( err4 ){console.log(err4);}
-                        else if ( res.length >0)
+                        else if ( res4.length >0)
                           {
                               // lưu vào bảng chính của người nhận
                               var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read,time) VALUES ?";
