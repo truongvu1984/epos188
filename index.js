@@ -675,32 +675,32 @@ io.on('connection',  (socket)=>
                 mess.pos.forEach(function(row)
                   {
                     var val = [[res.insertId, row.id, row.name, row.lat, row.lon]];
-                    con.query(sql3, [val], function (err, res2) {if ( err){console.log(err);}});
+                    con.query(sql3, [val], function (err2, res2) {if ( err2){console.log(err2);}});
                   });
                   // lưu vào bảng người nhận của người gửi
                 var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
                 mess.nguoinhan.forEach(function(row5)
                   {
                     var val4 = [[res.insertId, row5.number, row5.name, 'S', 'N']];
-                    con.query(sql4, [val4], function (err, res3) {if ( err){console.log(err);}});
-                    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row5.number +"' LIMIT 1", function(err, res)
+                    con.query(sql4, [val4], function (err3, res3) {if ( err3){console.log(err3);}});
+                    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row5.number +"' LIMIT 1", function(err4, res4)
                       {
-                        if ( err ){console.log(err);}
+                        if ( err4 ){console.log(err4);}
                         else if ( res.length >0)
                           {
                               // lưu vào bảng chính của người nhận
                               var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read,time) VALUES ?";
-                              var val5 = [[mess.id, mess.subject,'R','N','N', 'N']];
-                              con.query(sql5, [val5], function (err, res5)
+                              var val5 = [[mess.id, mess.subject,'R','N','N','N']];
+                              con.query(sql5, [val5], function (err5, res5)
                               {
-                                if ( err){console.log(err);}
+                                if ( err5){console.log(err5);}
                                 else
                                 {
                                   //lưu vào bảng người gửi của người nhận
                                   var sql6 = "INSERT INTO `"+row5.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
                                   var val6 = [[ res5.insertId, socket.number,socket.username,'R']];
-                                  con.query(sql6, [val6], function (err, res6) {
-                                    if ( err){console.log(err);}
+                                  con.query(sql6, [val6], function (err6, res6) {
+                                    if ( err6){console.log(err6);}
                                   else {
                                     var array_tinnhan = [];
                                     var tin = {lat:0.1, lon:0.0, name:"", id:""};
@@ -710,8 +710,8 @@ io.on('connection',  (socket)=>
                                         var val7 = [[res5.insertId, row3.id, row3.name, row3.lat, row3.lon]];
                                         tin = {lat:row3.lat, lon: row3.lon, name:strencode(row3.name), id:strencode(row3.id)};
                                         array_tinnhan.push(tin);
-                                        con.query(sql7, [val7], function (err, result) {
-                                          if ( err){console.log(err);}
+                                        con.query(sql7, [val7], function (err7, result) {
+                                          if ( err7){console.log(err7);}
                                         else {
                                           console.log("Da insert vao mess detail "+ result.insertId);
                                         }
