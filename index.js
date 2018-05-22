@@ -690,7 +690,7 @@ io.on('connection',  (socket)=>
                           {
                               // lưu vào bảng chính của người nhận
                               // var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read,time) VALUES ?";
-                                var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read) VALUES ?";
+                                var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, time) VALUES ?";
                               var val5 = [[mess.id, mess.subject,'R','N','N']];
                               con.query(sql5, [val5], function (err5, res5)
                               {
