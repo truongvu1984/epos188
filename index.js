@@ -279,7 +279,7 @@ io.on('connection',  (socket)=>
                       //active thành công, trả thông tin người dùng về lại cho khách hàng
                       // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
                       // 1. Bảng chính: lưu id của bản tin đó trên server, id của người dùng, tên tin nhắn, tin nhắn gửi đi hay tin nhắn nhận về, trạng thái gửi đi hay nhận về.
-                      con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` INT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read` CHAR(3), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                      con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` INT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read` CHAR(3), `time` CHAR(20), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //2. Bảng địa điểm: lưu id bản tin đó trên server, tên điểm, tọa độ điểm
                       con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"mes_detail` (`id` INT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
@@ -489,11 +489,8 @@ io.on('connection',  (socket)=>
                             else {
                               let position=[];
                               a3s.forEach(function(a3){position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
-  socket.emit('S_send_inbox',{name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read,
-  pos:position});
-
-
-
+                              socket.emit('S_send_inbox',{name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read, stt: a1.stt,
+                                pos:position, thoigian:a1.time});
                                 console.log('Server đã gửi inibox');
                             }
                           });
@@ -502,6 +499,7 @@ io.on('connection',  (socket)=>
                    });
                  }
             });
+            // lấy bảng send
           con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
                {
                  if ( err || ( a1s.length == 0) ){console.log(err);}
@@ -512,13 +510,13 @@ io.on('connection',  (socket)=>
                         con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                           if(err2){console.log(err2);}
                           else {
-                            a2s.forEach(function(a2){nhomnguoinhan.push({number:a2.number, name:strencode(a2.name)}); });
+                            a2s.forEach(function(a2){nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),trangthai:a2.stt}); });
                             con.query("SELECT * FROM `"+user1+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err3, a3s){
                               if(err3){console.log(err3);}
                               else {
                                 let pos=[];
                                 a3s.forEach(function(a3){pos.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
-                                socket.emit('S_send_send',{subject:strencode(a1.subject), idc:a1.idc,trangthai:a1.stt, nguoinhan:nhomnguoinhan, vitri:pos});
+                                socket.emit('S_send_send',{subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time, nguoinhan:nhomnguoinhan, vitri:pos});
 
                               }
                             });
@@ -665,8 +663,8 @@ io.on('connection',  (socket)=>
       console.log('nguoi dung la:'+socket.number);
     socket.emit('S_get_tinnhan',mess.id);
     // lưu vào bảng chính của người gửi
-    var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive) VALUES ?";
-    var values2 = [[mess.id, mess.subject,'S']];
+    var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
+    var values2 = [[mess.id, mess.subject,'S',mess.thoigian]];
     con.query(sql2, [values2], function (err, res)
       {
         if ( err){console.log(err);}
@@ -680,10 +678,10 @@ io.on('connection',  (socket)=>
                     con.query(sql3, [val], function (err, res2) {if ( err){console.log(err);}});
                   });
                   // lưu vào bảng người nhận của người gửi
-                var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
+                var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
                 mess.nguoinhan.forEach(function(row5)
                   {
-                    var val4 = [[res.insertId, row5.number, row5.name, 'S']];
+                    var val4 = [[res.insertId, row5.number, row5.name, 'S', 'N']];
                     con.query(sql4, [val4], function (err, res3) {if ( err){console.log(err);}});
                     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row5.number +"' LIMIT 1", function(err, res)
                       {
@@ -691,8 +689,8 @@ io.on('connection',  (socket)=>
                         else if ( res.length >0)
                           {
                               // lưu vào bảng chính của người nhận
-                              var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt) VALUES ?";
-                              var val5 = [[mess.id, mess.subject,'R','N']];
+                              var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read,time) VALUES ?";
+                              var val5 = [[mess.id, mess.subject,'R','N','N', 'N']];
                               con.query(sql5, [val5], function (err, res5)
                               {
                                 if ( err){console.log(err);}
@@ -746,13 +744,13 @@ io.on('connection',  (socket)=>
       });
     }
     }); // end socket.on('sendmess', function(test)
-  socket.on('danhantinnhan', function (nguoigui, idc)
+  socket.on('danhantinnhan', function (nguoigui, idc, thoigian)
    	{
       if (socket.number){
 
       io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number, idc:idc});
 	    //chuyển trạng thái trong db thành người nhận đã đọc được tin, báo về cho người gửi biết
-    con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"'",function(){
+    con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y',`time` = '"+thoigian+"' WHERE `idc` LIKE '"+idc+"'",function(){
       console.log('ma san pham la '+idc);
 
     });
