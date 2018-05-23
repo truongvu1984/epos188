@@ -777,6 +777,14 @@ io.on('connection',  (socket)=>
     //trạng thái G cho biết, có một ai đó trong danh sách nhận đã nhận tin nhắn, nhưng người gửi chưa biết
     }
   });
+  socket.on('C_read_mes',(idc)=>{
+    if(socket.nuber){
+      con.query("UPDATE `"+socket.number+"mes_main` SET `read_1` = 'OK' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'R'",function(err2){
+          if(err2){console.log(err2);}
+        });
+
+    }
+  });
   // khi người gửi biết rằng khách đã nhận được tin, chuyển màu sắc người nhận trong mục send sang đỏ và báo lại
   // server, kết thúc phần gửi tin cho khách hàng đó
   socket.on('tinnhan_final', function ( id, nguoinhan){
