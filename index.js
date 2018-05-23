@@ -747,38 +747,25 @@ io.on('connection',  (socket)=>
   socket.on('danhantinnhan', function (nguoigui, idc, thoigian)
    	{
       if (socket.number){
-
-      io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number, idc:idc});
+        io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number, idc:idc});
 	    //chuyển trạng thái trong db thành người nhận đã đọc được tin, báo về cho người gửi biết
-    con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y',`time` = '"+thoigian+"' WHERE `idc` LIKE '"+idc+"'",function(){
-      console.log('ma san pham la '+idc);
-
-    });
-
-    con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err11, res11)
-      {
-        if ( err11 || (res11.length ==0) ){console.log(err11);}
-        else
-          {
-            con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'G' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'S'",function(err2,res2){
-              con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'G' WHERE `ids` LIKE '"+res11[0].id+"' AND `number` LIKE '"+socket.number+"'",function(err3,res3)
-                {
-
-                  //console.log('Da bao cho ' +nguoigui +' biet la '+nguoinhan + ' da nhan tin nhan '+idc);
-
-                });
-
-          });
-
-          }
-
+        con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y',`time` = '"+thoigian+"' WHERE `idc` LIKE '"+idc+"'",function(){
+          console.log('ma san pham la '+idc);
         });
+        con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'G' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'S'",function(err2,res2){
+          if(err2){console.log(err2);}
+          else {
+            console.log(res2);
+            con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'G' WHERE `ids` LIKE '"+res2[0].insertId+"' AND `number` LIKE '"+socket.number+"'",function(err3,res3)
+            {
 
+            });
+          }
+        });
     //trạng thái G cho biết, có một ai đó trong danh sách nhận đã nhận tin nhắn, nhưng người gửi chưa biết
     }
   });
   socket.on('C_read_mes',(idc)=>{
-
     if(socket.number){
       console.log('Da nhan su kien read');;
       con.query("UPDATE `"+socket.number+"mes_main` SET `read_1` = 'OK' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'R'",function(err2){
