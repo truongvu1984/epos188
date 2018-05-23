@@ -779,8 +779,12 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_read_mes',(idc)=>{
     if(socket.nuber){
+      console.log('Da nhan su kien read');;
       con.query("UPDATE `"+socket.number+"mes_main` SET `read_1` = 'OK' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'R'",function(err2){
           if(err2){console.log(err2);}
+          else {
+            console.log('Da read xong');
+          }
         });
 
     }
