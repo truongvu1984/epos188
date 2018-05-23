@@ -44,7 +44,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
     if (err) { console.log(" da co loi:" + err); }
     else {
       console.log("Da co ket noi ok ha ha ha");
-
       app.set('view engine', 'ejs');
       app.set('views', './views');
       app.use(express.static('public'));
@@ -517,7 +516,7 @@ io.on('connection',  (socket)=>
                                 let pos=[];
                                 a3s.forEach(function(a3){pos.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
                                 socket.emit('S_send_send',{subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time, nguoinhan:nhomnguoinhan, vitri:pos});
-
+                                  console.log('Server đã gửi send');
                               }
                             });
                           }
