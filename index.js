@@ -278,7 +278,7 @@ io.on('connection',  (socket)=>
                       //active thành công, trả thông tin người dùng về lại cho khách hàng
                       // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
                       // 1. Bảng chính: lưu id của bản tin đó trên server, id của người dùng, tên tin nhắn, tin nhắn gửi đi hay tin nhắn nhận về, trạng thái gửi đi hay nhận về.
-                      con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` INT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read` CHAR(3), `time` CHAR(20), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                      con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` INT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read_1` CHAR(3), `time` CHAR(20), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //2. Bảng địa điểm: lưu id bản tin đó trên server, tên điểm, tọa độ điểm
                       con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"mes_detail` (`id` INT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
@@ -322,17 +322,7 @@ io.on('connection',  (socket)=>
                       // xóa bản tin trong bảng active đi, coi như quá trình active hoàn tất
                       console.log('dang ky thanh cong:'+user_info.number);
                       socket.emit('dangky_thanhcong');
-                    //   con.query("DELETE FROM `active_account` WHERE `number` LIKE '"+active_info.number+"'", function(err){
-                    //     if ( err){console.log('loi delete'+err);  }
-                    //     else {
-                    //       console.log('Da xoa ok');
-                    //       socket.emit('dangky_thanhcong');
-                    //       // socket.emit('acive_success', {number:rows[0].number, user: rows[0].user, code:rows[0].code});
-                    //     }
-                    // });
-
-
-					          }//end else 2
+                    					          }//end else 2
 				       });//end db.acive account
         	    } //end else 1
             }
@@ -498,7 +488,7 @@ io.on('connection',  (socket)=>
                    });
                  }
             });
-            // lấy bảng send
+          // lấy bảng send
           con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
                {
                  if ( err || ( a1s.length == 0) ){console.log(err);}
@@ -515,7 +505,7 @@ io.on('connection',  (socket)=>
                               else {
                                 let pos=[];
                                 a3s.forEach(function(a3){pos.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
-                                socket.emit('S_send_send',{subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time, nguoinhan:nhomnguoinhan, vitri:pos});
+                                socket.emit('S_send_send',{subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time, nguoinhan:nhomnguoinhan, vitri:pos, trangthai:a1.stt});
                                   console.log('Server đã gửi send');
                               }
                             });
@@ -524,6 +514,20 @@ io.on('connection',  (socket)=>
                      });
                    }
               });
+          // lấy bảng contact
+          con.query("SELECT * FROM `"+user1+"contact` ORDER BY `id` ", function(err, a1s)
+                 {
+                   if ( err || ( a1s.length == 0) ){console.log(err);}
+                   else
+                     {
+                       a1s.forEach(function(a1){
+                         socket.emit('contact_joined',{name:strencode(a1.name), number:a1.number});
+                           console.log('Server đã gửi send');
+
+                       });
+                     }
+                   });
+
         }
         else {
           socket.emit('login2_sai', {name:strencode(rows[0].user)});
