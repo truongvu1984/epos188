@@ -957,6 +957,24 @@ io.on('connection',  (socket)=>
 
   });
   // kiểm tra lại biến number
+
+  socket.on('C_send_contact', function (contact)  {
+      if (socket.number){
+        var sql2 = "INSERT INTO `"+socket.number+"contact` (name,number) VALUES ?";
+        var values2 = [[contact.name,contact.number]];
+        con.query(sql2, [values2], function (err, res)
+          {
+            if ( err){console.log(err);}
+            else {
+              console.log('Da them contact vao danh sach');
+            }
+          });
+
+      }
+      });
+
+
+
   socket.on('W_join_room', function (room, number)  {
       if (socket.number){
     socket.join(room);
