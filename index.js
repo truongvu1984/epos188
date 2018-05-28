@@ -515,18 +515,43 @@ io.on('connection',  (socket)=>
                    }
               });
           // lấy bảng contact
-          con.query("SELECT * FROM `"+user1+"contact` ORDER BY `id` ", function(err, a1s)
+          con.query("SELECT * FROM `"+user1+"contact` ORDER BY `id` ", function(err3, a1s)
                  {
-                   if ( err || ( a1s.length == 0) ){console.log(err);}
+                   if ( err3 || ( a1s.length == 0) ){console.log('Da co loi contact:'+err3);}
                    else
                      {
                        a1s.forEach(function(a1){
-                         socket.emit('contact_joined',{name:strencode(a1.name), number:a1.number});
-                           console.log('Server đã gửi send');
+                         socket.emit('S_send_contact',{name:strencode(a1.name), number:a1.number});
+                           console.log('Server đã gửi contact');
 
                        });
                      }
-                   });
+
+          });
+          // Lấy danh sách room
+          con.query("SELECT * FROM `"+user1+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC LIMIT 20 ", function(err4, a4s)
+                 {
+                   if ( err4 || ( a4s.length == 0) ){console.log('Da co loi contact:'+err4);}
+                   else
+                     {
+                       a4s.forEach(function(a4){
+                         con.query("SELECT * FROM `"+user1+"mes_main`  WHERE `send_receive` LIKE 'O' AND `ids` LIKE '"+a4.id+"' LIMIT 1", function(err5, a5s)
+                            {
+                                  if ( err5 || ( a5s.length == 0) ){console.log('Da co loi contact:'+err5);}
+                                  else
+                                    {
+                                      var room_full_server = {room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5.name), admin_number:a5.number};
+                                      socket.emit('S_send_room',room_full_server);
+                                        console.log('Server đã gửi room');
+                                    }
+                          });
+
+
+                       });
+                     }
+
+          });
+
 
         }
         else {
@@ -972,9 +997,6 @@ io.on('connection',  (socket)=>
 
       }
       });
-
-
-
   socket.on('W_join_room', function (room, number)  {
       if (socket.number){
     socket.join(room);
