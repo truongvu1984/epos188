@@ -1098,11 +1098,11 @@ io.on('connection',  (socket)=>
     if (socket.number){
       // bắt đầu xử lý cái room
       var room_id = passwordHash.generate(info.room_name);
-      var room_full_server = {room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list:info.member_list};
+
       // gửi lại cho admin cái room đầy đủ để lưu hành trên hệ thống
       console.log('Da nhan room la:'+info);
-      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
-      var val = [[ room_id, info.room_name,'O', 'N']];
+      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc, subject, send_receive, stt,time ) VALUES ?";
+      var val = [[ room_id, info.room_name,'O', 'N','N']];
       con.query(sql, [val], function (err, res)
       {
         if ( err){console.log(err);}
@@ -1110,12 +1110,14 @@ io.on('connection',  (socket)=>
           // lưu thành viên vào bảng
           var sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, name, number) VALUES ?";
           var val2;
+          var member5=[];
           info.member_list.forEach((member)=>{
+            member5.push({name:strencode(member.name),number:member.number});
             val2 = [[ res.insertId, member.name,member.number]];
             con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
           });
           socket.emit('S_get_room');
-          socket.emit('S_send_room',room_full_server);
+          socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list:member5});
         }
       });
 
@@ -1142,15 +1144,16 @@ io.on('connection',  (socket)=>
                                 {
                                   let sql7 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name ) VALUES ?";
                                   var val7;
+                                  var thanhvien = [];
                                   info.member_list.forEach((mem)=>{
+                                    thanhvien.push({name:strencode(mem.name),number:mem.number});
                                     val7 = [[ res.insertId,socket.number, socket.user]];
                                     con.query(sql7, [val7], function (err7, res7)
                                     {
                                       if ( err7){console.log(err7);}
-
                                     });
                                   });
-                                  io.sockets.in(row.number).emit('S_send_room',room_full_server);
+                                  io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list:member5});
                                   console.log('Da gui room di lan:');
                                 }
                               });
