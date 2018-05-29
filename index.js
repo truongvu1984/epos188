@@ -535,25 +535,29 @@ io.on('connection',  (socket)=>
                    else
                      {
                        a4s.forEach(function(a4){
-                         con.query("SELECT * FROM `"+user1+"mes_sender`  WHERE `send_receive` LIKE 'O' AND `ids` LIKE '"+a4.id+"'", function(err5, a5s)
+                         con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `ids` LIKE '"+a4.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
                             {
                                   if ( err5 || ( a5s.length == 0) ){console.log('Da co loi contact:'+err5);}
                                   else
                                     {
-                                      var thanhvien=[];
-                                      a5s.forEach((mem)=>{
-                                        var vien = {name:strencode(mem.name),number:mem.number};
-                                        thanhvien.push(vien);
+                                      con.query("SELECT * FROM `"+user1+"mes_sender`  WHERE `send_receive` LIKE 'B' AND `ids` LIKE '"+a4.id+"'", function(err6, a6s)
+                                         {
+                                               if ( err6 || ( a6s.length == 0) ){console.log('Da co loi contact:'+err6);}
+                                               else{
+                                                var thanhvien=[];
+                                                a6s.forEach((a6)=>{
+                                                  var vien = {name:strencode(a6.name),number:a6.number};
+                                                  thanhvien.push(vien);
+                                                });
+
+                                                 socket.emit('S_send_room',{room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, member_list1:thanhvien, time:a4.time});
+                                                 console.log('Server đã gửi room:'+thanhvien);
+                                               }
                                       });
-                                      socket.emit('S_send_room',{room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5.name), admin_number:a5.number, member_list1:thanhvien, time:a4.time});
-                                      console.log('Server đã gửi room:'+thanhvien);
                                     }
                           });
-
-
                        });
                      }
-
           });
 
 
@@ -566,7 +570,7 @@ io.on('connection',  (socket)=>
     });
   });
   socket.on('login1',(user1, pass1)=>{
-    //login 1 là login mà user đang ở mainactivity rồi, chi cần gửi dữ liệu về thôi.
+    //login 1 là login mà user đang ở mainactivity rồi, chi cần gửi dữ liệu mới về thôi.
     console.log('Dang login1 voi tai khoan:'+user1);
     console.log('Mat khau la:'+pass1);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
@@ -583,27 +587,27 @@ io.on('connection',  (socket)=>
           // socket.emit('login2_ok', {name: strencode(rows[0].user)});
           console.log('Dang nhap dung roi voi tai khoan' + user1);
           // xem có ai gửi tin cho mình trong thời gian offline không
-          con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'R' AND `stt` LIKE 'N'", function(err, a1s)
+          con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'R' AND `stt` LIKE 'N'", function(err1, a1s)
               {
-              if ( err || ( a1s.length == 0) ){console.log(err);}
+              if ( err1 || ( a1s.length == 0) ){console.log(err1);}
               else
                 {
                   console.log(a1s);
                   a1s.forEach(function(a1)
                   {
                   //lấy tên người gửi
-                    con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err, a2s)
+                    con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s)
                     {
-                      if ( err || ( a2s.length==0)){console.log(err);}
+                      if ( err2 || ( a2s.length==0)){console.log(err2);}
                       else
                       {
                         //lấy danh sách các điểm
                         console.log('ten nguoi gui:');
                         console.log(a2s);
 
-                        con.query("SELECT * FROM `"+user1+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err, a3s)
+                        con.query("SELECT * FROM `"+user1+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err3, a3s)
                         {
-                          if ( err || ( a3s.length==0) ){console.log(err);}
+                          if ( err3 || ( a3s.length==0) ){console.log(err3);}
                           else
                             {
                             var pos3 = [];
@@ -630,14 +634,14 @@ io.on('connection',  (socket)=>
                 }
           });
             //kiểm tra xem có ai đã nhận tin nhắn rồi không
-          con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'S' AND `stt` LIKE 'G'", function(err, a4s)
+          con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'S' AND `stt` LIKE 'G'", function(err1, a1s)
               {
-            if ( err || (a4s.length==0)){console.log(err);}
+            if ( err1 || (a1s.length==0)){console.log(err1);}
             else
               {
-                a4s.forEach(function(a4)
+                a1s.forEach(function(a1)
                   {
-                  con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a4.id+"' AND `stt` LIKE 'G'", function(err5, a5s)
+                  con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"' AND `stt` LIKE 'G'", function(err5, a5s)
                   {
 
                   if ( err5 || (a5s.length==0)){console.log(err5);}
@@ -645,8 +649,8 @@ io.on('connection',  (socket)=>
                     {
                       a5s.forEach(function(a5)
                         {
-                          socket.emit('C_danhantinnhan',{nguoinhan:a5.number, idc:a4.idc});
-                          console.log('Da gui sự kiện C_gui tin nhan di cho cac so:'+a5.number +' ma la '+ a4.idc);
+                          socket.emit('C_danhantinnhan',{nguoinhan:a5.number, idc:a1.idc});
+                          console.log('Da gui sự kiện C_gui tin nhan di cho cac so:'+a5.number +' ma la '+ a1.idc);
                         });
 
 
@@ -663,18 +667,28 @@ io.on('connection',  (socket)=>
               if ( err2){console.log(err2);}
               else if ( a5s.length>0)
                 {
-                var ad_num,ad_name;
                 a5s.forEach(function(a5)
                   {
                     //lấy tên admin của room
                     console.log('room chua gui: '+a5.subject);
-                    con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `ids` LIKE '"+a5.id+"' LIMIT 1", function(err3, a2s)
+                    con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `ids` LIKE '"+a5.id+"' AND `send_receive` LIKE 'A' LIMIT 1", function(err3, a2s)
                     {
                       if (err3){console.log(err3);}
                       else
                       {
-                      var room_full_server = {room_name:strencode(a5.subject), room_id_server:a5.idc, admin_name:strencode(a2s[0].name), admin_number:a2s[0].number};
-                      socket.emit('S_send_room', room_full_server );
+                        con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `ids` LIKE '"+a5.id+"' AND `send_receive` LIKE 'B' ", function(err4, a4s)
+                        {
+                          if (err4){console.log(err4);}
+                          else
+                          {
+                            var thanhvien=[];
+                            a4s.forEach((mem)=>{thanhvien.push({name:mem.name,number:mem.number});});
+                            var room_full_server = {room_name:strencode(a5.subject), room_id_server:a5.idc, admin_name:strencode(a2s[0].name), admin_number:a2s[0].number, member_list1:thanhvien};
+                            socket.emit('S_send_room', room_full_server );
+                          }
+                        });
+
+
                     }
                     });
                   });
@@ -1112,18 +1126,24 @@ io.on('connection',  (socket)=>
         if ( err){console.log(err);}
         else {
           // lưu thành viên vào bảng
-          var sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, name, number) VALUES ?";
-          var val2;
+          var sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, name, number, send_receive) VALUES ?";
           var member5=[];
-          info.member_list.forEach((member)=>{
-            var thanh = {name:strencode(member.name),number:member.number};
-            member5.push(thanh);
-            val2 = [[ res.insertId, member.name,member.number]];
-            con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
-          });
-          socket.emit('S_get_room');
-          socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list1:member5, time:'N'});
-        }
+          var abc = [[ res.insertId, socket.name,socket.numbe,'A']];
+          con.query(sql2, [abc], function (err9, res9){if ( err9){console.log(err9);}
+            else {
+            info.member_list.forEach((member)=>{
+              var thanh = {name:strencode(member.name),number:member.number};
+              member5.push(thanh);
+              val2 = [[ res.insertId, member.name,member.number,'B']];
+              con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
+              });
+              socket.emit('S_get_room');
+              socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list1:member5, time:'N'});
+              }
+            });
+          }
+
+
       });
 
       // gửi room cho các thành viên
@@ -1133,31 +1153,27 @@ io.on('connection',  (socket)=>
             {
               if(err3 || (kq.length ==0)){console.log(err3);}
               else {
-                      var sql5 = "INSERT INTO `"+row.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
-                      var val5 = [[ room_id, info.room_name,'O', 'N']];
+                      var sql5 = "INSERT INTO `"+row.number+"mes_main` (idc, subject, send_receive, stt, time ) VALUES ?";
+                      var val5 = [[ room_id, info.room_name,'O', 'N','N']];
                       con.query(sql5, [val5], function (err5, res5)
                             {
                               if ( err5){console.log(err5);}
                               else
                               {
                               let sql6 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
-                              var val6 = [[ res5.insertId,socket.number, socket.user,'O']];
-                              con.query(sql6, [val6], function (err6, res6)
+                              var ab = [[ res5.insertId,socket.number, socket.user,'A']];
+                              con.query(sql6, [ab], function (err6, res6)
                               {
                                 if ( err6){console.log(err6);}
                                 else
                                 {
-                                  let sql7 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name ) VALUES ?";
                                   var val7;
                                   var thanhvien = [];
                                   info.member_list.forEach((mem)=>{
                                     var vien = {name:strencode(mem.name),number:mem.number};
                                     thanhvien.push(vien);
-                                    val7 = [[ res5.insertId,socket.number, socket.user]];
-                                    con.query(sql7, [val7], function (err7, res7)
-                                    {
-                                      if ( err7){console.log(err7);}
-                                    });
+                                    val7 = [[ res5.insertId,mem.number, mem.name,'B']];
+                                    con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
                                   });
                                   io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list1:thanhvien, time:'N'});
                                   console.log('Da gui room di lan:');
@@ -1165,7 +1181,6 @@ io.on('connection',  (socket)=>
                               });
                             }
                           });
-
               }
             });
 
