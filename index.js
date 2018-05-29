@@ -559,8 +559,6 @@ io.on('connection',  (socket)=>
                        });
                      }
           });
-
-
         }
         else {
           socket.emit('login2_sai', {name:strencode(rows[0].user)});
@@ -676,15 +674,17 @@ io.on('connection',  (socket)=>
                       if (err3){console.log(err3);}
                       else
                       {
-                        con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `ids` LIKE '"+a5.id+"' AND `send_receive` LIKE 'B' ", function(err4, a4s)
+                        con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `ids` LIKE '"+a5.id+"' AND `send_receive` LIKE 'B' ", function(err4, a8s)
                         {
                           if (err4){console.log(err4);}
                           else
                           {
+                            if(a8s.length >0){
                             var thanhvien=[];
-                            a4s.forEach((mem)=>{thanhvien.push({name:mem.name,number:mem.number});});
+                            a8s.forEach((mem)=>{thanhvien.push({name:strencode(mem.name),number:mem.number});});
                             var room_full_server = {room_name:strencode(a5.subject), room_id_server:a5.idc, admin_name:strencode(a2s[0].name), admin_number:a2s[0].number, member_list1:thanhvien};
                             socket.emit('S_send_room', room_full_server );
+                          }
                           }
                         });
 
@@ -1128,7 +1128,7 @@ io.on('connection',  (socket)=>
           // lưu thành viên vào bảng
           var sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, name, number, send_receive) VALUES ?";
           var member5=[];
-          var abc = [[ res.insertId, socket.name,socket.numbe,'A']];
+          var abc = [[ res.insertId, socket.name,socket.number,'A']];
           con.query(sql2, [abc], function (err9, res9){if ( err9){console.log(err9);}
             else {
             info.member_list.forEach((member)=>{
