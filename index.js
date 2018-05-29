@@ -982,7 +982,6 @@ io.on('connection',  (socket)=>
 
   });
   // kiểm tra lại biến number
-
   socket.on('C_send_contact', function (contact)  {
       if (socket.number){
         var sql2 = "INSERT INTO `"+socket.number+"contact` (name,number) VALUES ?";
@@ -1097,10 +1096,9 @@ io.on('connection',  (socket)=>
   socket.on('C_make_room', function (info)
    	{
     if (socket.number){
-      socket.emit('S_get_room');
       // bắt đầu xử lý cái room
-      var room_id = passwordHash.generate(info.room_fullname);
-      var room_full_server = {room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number};
+      var room_id = passwordHash.generate(info.room_name);
+      var room_full_server = {room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list:info.member_list};
       // gửi lại cho admin cái room đầy đủ để lưu hành trên hệ thống
       console.log('Da nhan room la:'+info);
       var sql = "INSERT INTO `"+socket.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
@@ -1108,52 +1106,50 @@ io.on('connection',  (socket)=>
       con.query(sql, [val], function (err, res)
       {
         if ( err){console.log(err);}
-        else
-        {
-          let sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
-          var val2 = [[ res.insertId,socket.number, socket.user,'O']];
-          con.query(sql2, [val2], function (err2, res2)
-          {
-            if ( err2){console.log(err2);}
-            else
-            {
-                socket.emit('S_send_room', room_full_server );
-                console.log('Da gui room lai cho admin');
-            }
+        else {
+          // lưu thành viên vào bảng
+          var sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, name, number) VALUES ?";
+          var val2;
+          info.member_list.forEach((member)=>{
+            val2 = [[ res.insertId, member.name,member.number]];
+            con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
           });
-
+          socket.emit('S_get_room');
+          socket.emit('S_send_room',room_full_server);
         }
       });
 
-          // bắt đầu quá trình lưu room vào csdl
-      console.log(info);
-      if (info.member_list.length >0)
-      {
+      // gửi room cho các thành viên
         info.member_list.forEach(function(row){
           // kiểm tra xem thành viên này có tài khoản chưa
           con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row.number +"' LIMIT 1", function(err3, kq)
             {
               if(err3 || (kq.length ==0)){console.log(err3);}
               else {
-                  con.query("SELECT * FROM `"+row.number+"mes_main` WHERE `idc` LIKE '"+ info.fullname +"' LIMIT 1", function(err4, rows)
-                    {
-                      if(err4 || (rows.length >0)){console.log(err4);}
-                      else
-                       {
-                            var sql = "INSERT INTO `"+row.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
-                            var val = [[ room_id, info.room_name,'O', 'N']];
-                            con.query(sql, [val], function (err5, res)
+                      var sql5 = "INSERT INTO `"+row.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
+                      var val5 = [[ room_id, info.room_name,'O', 'N']];
+                      con.query(sql5, [val5], function (err5, res5)
                             {
                               if ( err5){console.log(err5);}
                               else
                               {
-                              let sql2 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
-                              var val2 = [[ res.insertId,socket.number, socket.user,'O']];
-                              con.query(sq2l, [val2], function (err2, res2)
+                              let sql6 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
+                              var val6 = [[ res.insertId,socket.number, socket.user,'O']];
+                              con.query(sql6, [val6], function (err6, res6)
                               {
                                 if ( err2){console.log(err2);}
                                 else
                                 {
+                                  let sql7 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name ) VALUES ?";
+                                  var val7;
+                                  info.member_list.forEach((mem)=>{
+                                    val7 = [[ res.insertId,socket.number, socket.user]];
+                                    con.query(sql7, [val7], function (err7, res7)
+                                    {
+                                      if ( err7){console.log(err7);}
+
+                                    });
+                                  });
                                   io.sockets.in(row.number).emit('S_send_room',room_full_server);
                                   console.log('Da gui room di lan:');
                                 }
@@ -1161,14 +1157,11 @@ io.on('connection',  (socket)=>
                             }
                           });
 
-                       }
-
-                    });
               }
             });
 
         });
-      }
+
     }
    	});
   socket.on('C_change_pass', function(newpass){
@@ -1183,125 +1176,126 @@ io.on('connection',  (socket)=>
       });
     }
   });
-  // socket.on('C_get_add_mem', function(info){
-  //  if (socket.number){
-  //   console.log('Da nhan su kien C get add mem');
-  //   // lượn qua xem tài khoản đó có tồn tại hay không
-  //       //kiêm tra xem room đó có trên server hay không
-  //       con.query("SELECT * FROM `" + socket.number+"mes_main` WHERE `idc` LIKE '"+info.room_fullname+"' LIMIT 1", function(err1, rows){
-  //         if ( err1 || (rows.length ==0)){console.log(err);}
-  //         else {
-  //           //info.member.forEach(mem)=>{
-  //         info.member.forEach(function(mem)
-  //             {
-  //             con.query("UPDATE `"+socket.number+"mes_sender` SET `stt` = 'Y' WHERE `number` LIKE '"+mem.number+"' AND `ids` LIKE '"+rows[0].id+"'",function(err4){if (err4){console.log(err4);}});
-  //           });
-  //           con.query("SELECT 'id' FROM `" + socket.number+"mes_sender` WHERE `ids` LIKE '"+rows[0].id+"' AND `stt` LIKE 'N' LIMIT 1", function(err2, rows2){
-  //             if (err2 || (rows2.length >0)) {console.log(err2);}
-  //             else {
-  //                 con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `id` LIKE '"+rows[0].id+"'",function(err3){if (err3){console.log(err3);}});
-  //             }
-  //           });
-  //
-  //         }
-  //       });
-  //
-  //
-  //   }
-  // });
-  // socket.on('C_bosung_member', function(info){
-  //  if (socket.number){
-  //   console.log(info);
-  //   // xác minh tài khoản đủ điều kiện để bổ sung thành viên không
-  //       socket.emit ('S_get_bosung_member');
-  //       let mem3 = {name:"", number:""};
-  //   //bổ sung thành viên mới cho người cũ
-  //       info.old_list.forEach((member)=>{
-  //           let member3 = [];
-  //           con.query("SELECT * FROM `" + member.number+"mes_main` WHERE `idc` LIKE '"+info.room_full_name+"' LIMIT 1", function(err1, rows){
-  //             if ( err1 || (rows.length ==0 )){console.log('co loi 2 '+err1);}
-  //             else { let sql2 = "INSERT INTO `"+member.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
-  //           info.new_list.forEach((mem2)=>{
-  //             let values2 = [[rows[0].id, mem2.number, mem2.name, 'O', 'N']];
-  //             con.query(sql2, [values2], function (err2, res){
-  //               if (err2){console.log('co loi 3 '+err2);}
-  //               else {
-  //               console.log('Da insert thanh cong '+ res.id);
-  //               }
-  //             });
-  //             mem3 = {name:strencode(mem2.name), number:mem2.number};
-  //             member3.push(mem3);
-  //             console.log('da ok 1'+mem3);
-  //           });
-  //           con.query("UPDATE `"+member.number+"mes_main` SET `stt` = 'M' WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+info.room_full_name+"'",function(err3){
-  //               if (err3){console.log('co loi 4'+err3);}
-  //             });
-  //           io.sockets.in(member.number).emit('S_add_mem',{ room_fullname:strencode(info.room_full_name), member_list:member3});
-  //           console.log('a gui room di cho nguoi cu:'+info.room_name + ' danh sach la:'+member3);
-  //         } }); });
-  //     // thông báo room cho thành viên mới
-  //       info.new_list.forEach((member1)=>{
-  //      //kiểm tra xem thành viên mới này có tài khoản chưa.
-  //           con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ member1.number +"' LIMIT 1", function(err4, kq){
-  //          if ( err4 || (kq.length == 0)){console.log('co loi 5'+err4);}
-  //          else {
-  //            //nếu tài khoản đó đã có, kiêm tra xem cái room đó đã có trong bảng chưa
-  //            con.query("SELECT * FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+ info.room_full_name +"' LIMIT 1", function(err8, row1s)
-  //              {
-  //                if(err8 || (row1s.length >0)){console.log('co loi 6' + err8);}
-  //                else {
-  //                   let member = [];
-  //                   let mem = {name:"", number:""};
-  //                   //lưu vào bảng chính
-  //                   var sql = "INSERT INTO `"+member1.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
-  //                   var val = [[ info.room_full_name, info.room_name,'O', 'N']];
-  //                   con.query(sql, [val], function (err5, res){
-  //                     if ( err5){console.log('co loi 7'+err5);}
-  //                     else {
-  //                       let sql2 = "INSERT INTO `"+member1.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
-  //                         info.full_list.forEach(function(row4){
-  //
-  //                             mem = {name:strencode(row4.name), number:row4.number}
-  //                             member.push(mem);
-  //                             if (row4.number ==socket.number){
-  //                               let val2 = [[res.insertId,row4.number,row4.name,'OM']];
-  //                               con.query(sql2, [val2], function (err6) {
-  //                                 if ( err6){console.log('co loi 8'+err6);}
-  //                                 else { console.log('da insert 1');}
-  //                               });
-  //                             }
-  //                             else  {
-  //                               var val2 = [[res.insertId,row4.number,row4.name,'O']];
-  //                               con.query(sql2, [val2], function (err7) {
-  //                                 if ( err7){console.log('Da co loi'+err7);}
-  //                                 else { console.log('da insert 2');}
-  //
-  //                               });
-  //
-  //                             }
-  //                           });
-  //                           io.sockets.in(member1.number).emit('S_send_room',{admin_number: socket.number , admin_name: strencode(socket.username), room_name:strencode(info.room_name) ,room_fullname:strencode(info.room_full_name), member_list:member});
-  //                           console.log('Da gui room di cho nguoi moi ');
-  //
-  //                     }
-  //                   });
-  //
-  //                 }
-  //
-  //             });
-  //           }
-  //        });
-  //     });
-  //
-  //     }
-  //   });
-  socket.on('C_get_room', function(room_fullname){
+  socket.on('C_get_add_mem', function(info){
+   if (socket.number){
+    console.log('Da nhan su kien C get add mem');
+    // lượn qua xem tài khoản đó có tồn tại hay không
+        //kiêm tra xem room đó có trên server hay không
+        con.query("SELECT * FROM `" + socket.number+"mes_main` WHERE `idc` LIKE '"+info.room_fullname+"' LIMIT 1", function(err1, rows){
+          if ( err1 || (rows.length ==0)){console.log(err);}
+          else {
+            //info.member.forEach(mem)=>{
+          info.member.forEach(function(mem)
+              {
+              con.query("UPDATE `"+socket.number+"mes_sender` SET `stt` = 'Y' WHERE `number` LIKE '"+mem.number+"' AND `ids` LIKE '"+rows[0].id+"'",function(err4){if (err4){console.log(err4);}});
+            });
+            con.query("SELECT 'id' FROM `" + socket.number+"mes_sender` WHERE `ids` LIKE '"+rows[0].id+"' AND `stt` LIKE 'N' LIMIT 1", function(err2, rows2){
+              if (err2 || (rows2.length >0)) {console.log(err2);}
+              else {
+                  con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `id` LIKE '"+rows[0].id+"'",function(err3){if (err3){console.log(err3);}});
+              }
+            });
+
+          }
+        });
+
+
+    }
+  });
+  socket.on('C_bosung_member', function(info){
+   if (socket.number){
+    console.log(info);
+    // xác minh tài khoản đủ điều kiện để bổ sung thành viên không
+        socket.emit ('S_get_bosung_member');
+        let mem3 = {name:"", number:""};
+    //bổ sung thành viên mới cho người cũ
+        info.old_list.forEach((member)=>{
+            let member3 = [];
+            con.query("SELECT * FROM `" + member.number+"mes_main` WHERE `idc` LIKE '"+info.room_full_name+"' LIMIT 1", function(err1, rows){
+              if ( err1 || (rows.length ==0 )){console.log('co loi 2 '+err1);}
+              else { let sql2 = "INSERT INTO `"+member.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
+            info.new_list.forEach((mem2)=>{
+              let values2 = [[rows[0].id, mem2.number, mem2.name, 'O', 'N']];
+              con.query(sql2, [values2], function (err2, res){
+                if (err2){console.log('co loi 3 '+err2);}
+                else {
+                console.log('Da insert thanh cong '+ res.id);
+                }
+              });
+              mem3 = {name:strencode(mem2.name), number:mem2.number};
+              member3.push(mem3);
+              console.log('da ok 1'+mem3);
+            });
+            con.query("UPDATE `"+member.number+"mes_main` SET `stt` = 'M' WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+info.room_full_name+"'",function(err3){
+                if (err3){console.log('co loi 4'+err3);}
+              });
+            io.sockets.in(member.number).emit('S_add_mem',{ room_fullname:strencode(info.room_full_name), member_list:member3});
+            console.log('a gui room di cho nguoi cu:'+info.room_name + ' danh sach la:'+member3);
+          } }); });
+      // thông báo room cho thành viên mới
+        info.new_list.forEach((member1)=>{
+       //kiểm tra xem thành viên mới này có tài khoản chưa.
+            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ member1.number +"' LIMIT 1", function(err4, kq){
+           if ( err4 || (kq.length == 0)){console.log('co loi 5'+err4);}
+           else {
+             //nếu tài khoản đó đã có, kiêm tra xem cái room đó đã có trong bảng chưa
+             con.query("SELECT * FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+ info.room_full_name +"' LIMIT 1", function(err8, row1s)
+               {
+                 if(err8 || (row1s.length >0)){console.log('co loi 6' + err8);}
+                 else {
+                    let member = [];
+                    let mem = {name:"", number:""};
+                    //lưu vào bảng chính
+                    var sql = "INSERT INTO `"+member1.number+"mes_main` (idc, subject, send_receive, stt ) VALUES ?";
+                    var val = [[ info.room_full_name, info.room_name,'O', 'N']];
+                    con.query(sql, [val], function (err5, res){
+                      if ( err5){console.log('co loi 7'+err5);}
+                      else {
+                        let sql2 = "INSERT INTO `"+member1.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
+                          info.full_list.forEach(function(row4){
+
+                              mem = {name:strencode(row4.name), number:row4.number}
+                              member.push(mem);
+                              if (row4.number ==socket.number){
+                                let val2 = [[res.insertId,row4.number,row4.name,'OM']];
+                                con.query(sql2, [val2], function (err6) {
+                                  if ( err6){console.log('co loi 8'+err6);}
+                                  else { console.log('da insert 1');}
+                                });
+                              }
+                              else  {
+                                var val2 = [[res.insertId,row4.number,row4.name,'O']];
+                                con.query(sql2, [val2], function (err7) {
+                                  if ( err7){console.log('Da co loi'+err7);}
+                                  else { console.log('da insert 2');}
+
+                                });
+
+                              }
+                            });
+                            io.sockets.in(member1.number).emit('S_send_room',{admin_number: socket.number , admin_name: strencode(socket.username), room_name:strencode(info.room_name) ,room_fullname:strencode(info.room_full_name), member_list:member});
+                            console.log('Da gui room di cho nguoi moi ');
+
+                      }
+                    });
+
+                  }
+
+              });
+            }
+         });
+      });
+
+      }
+    });
+  socket.on('C_get_room', function(room_fullname,time){
       if (socket.number){
         console.log(socket.username+' da nhan room roi:' + room_fullname);
-      con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+room_fullname+"'",function(err){
+      con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y', `time` = '"+time+"' WHERE `idc` LIKE '"+room_fullname+"'",function(err){
       if ( err){console.log(err);}
     });
     }
   });
+
 });
 }});
