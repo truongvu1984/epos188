@@ -1156,7 +1156,7 @@ io.on('connection',  (socket)=>
                                       if ( err7){console.log(err7);}
                                     });
                                   });
-                                  io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list:member5});
+                                  io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list:thanhvien});
                                   console.log('Da gui room di lan:');
                                 }
                               });
