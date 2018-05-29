@@ -1136,7 +1136,7 @@ io.on('connection',  (socket)=>
                               else
                               {
                               let sql6 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
-                              var val6 = [[ res.insertId,socket.number, socket.user,'O']];
+                              var val6 = [[ res5.insertId,socket.number, socket.user,'O']];
                               con.query(sql6, [val6], function (err6, res6)
                               {
                                 if ( err2){console.log(err2);}
@@ -1147,7 +1147,7 @@ io.on('connection',  (socket)=>
                                   var thanhvien = [];
                                   info.member_list.forEach((mem)=>{
                                     thanhvien.push({name:strencode(mem.name),number:mem.number});
-                                    val7 = [[ res.insertId,socket.number, socket.user]];
+                                    val7 = [[ res5.insertId,socket.number, socket.user]];
                                     con.query(sql7, [val7], function (err7, res7)
                                     {
                                       if ( err7){console.log(err7);}
