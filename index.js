@@ -535,14 +535,17 @@ io.on('connection',  (socket)=>
                    else
                      {
                        a4s.forEach(function(a4){
-                         con.query("SELECT * FROM `"+user1+"mes_main`  WHERE `send_receive` LIKE 'O' AND `ids` LIKE '"+a4.id+"' LIMIT 1", function(err5, a5s)
+                         con.query("SELECT * FROM `"+user1+"mes_sender`  WHERE `send_receive` LIKE 'O' AND `ids` LIKE '"+a4.id+"'", function(err5, a5s)
                             {
                                   if ( err5 || ( a5s.length == 0) ){console.log('Da co loi contact:'+err5);}
                                   else
                                     {
-                                      var room_full_server = {room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5.name), admin_number:a5.number};
-                                      socket.emit('S_send_room',room_full_server);
-                                        console.log('Server đã gửi room');
+                                      var thanhvien=[];
+                                      a5s.forEach((mem)=>{
+                                        thanhvien.push({name:strencode(mem.name),number:mem.number});
+                                      });
+                                      socket.emit('S_send_room',{room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5.name), admin_number:a5.number, member_list:thanhvien});
+                                      console.log('Server đã gửi room');
                                     }
                           });
 
