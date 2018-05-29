@@ -546,7 +546,7 @@ io.on('connection',  (socket)=>
                                         thanhvien.push(vien);
                                       });
                                       socket.emit('S_send_room',{room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5.name), admin_number:a5.number, member_list1:thanhvien, time:a4.time});
-                                      console.log('Server đã gửi room');
+                                      console.log('Server đã gửi room:'+thanhvien);
                                     }
                           });
 
