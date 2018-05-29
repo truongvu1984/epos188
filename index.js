@@ -1128,7 +1128,7 @@ io.on('connection',  (socket)=>
           // lưu thành viên vào bảng
           var sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, name, number, send_receive) VALUES ?";
           var member5=[];
-          var abc = [[ res.insertId, socket.name,socket.number,'A']];
+          var abc = [[ res.insertId, socket.username,socket.number,'A']];
           con.query(sql2, [abc], function (err9, res9){if ( err9){console.log(err9);}
             else {
             info.member_list.forEach((member)=>{
@@ -1161,7 +1161,7 @@ io.on('connection',  (socket)=>
                               else
                               {
                               let sql6 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
-                              var ab = [[ res5.insertId,socket.number, socket.user,'A']];
+                              var ab = [[ res5.insertId,socket.number, socket.username,'A']];
                               con.query(sql6, [ab], function (err6, res6)
                               {
                                 if ( err6){console.log(err6);}
