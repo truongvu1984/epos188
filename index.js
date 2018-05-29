@@ -542,9 +542,10 @@ io.on('connection',  (socket)=>
                                     {
                                       var thanhvien=[];
                                       a5s.forEach((mem)=>{
-                                        thanhvien.push({name:strencode(mem.name),number:mem.number});
+                                        var vien = {name:strencode(mem.name),number:mem.number};
+                                        thanhvien.push(vien);
                                       });
-                                      socket.emit('S_send_room',{room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5.name), admin_number:a5.number, member_list:thanhvien, time:a4.time});
+                                      socket.emit('S_send_room',{room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5.name), admin_number:a5.number, member_list1:thanhvien, time:a4.time});
                                       console.log('Server đã gửi room');
                                     }
                           });
@@ -1115,12 +1116,13 @@ io.on('connection',  (socket)=>
           var val2;
           var member5=[];
           info.member_list.forEach((member)=>{
-            member5.push({name:strencode(member.name),number:member.number});
+            var thanh = {name:strencode(member.name),number:member.number};
+            member5.push(thanh);
             val2 = [[ res.insertId, member.name,member.number]];
             con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
           });
           socket.emit('S_get_room');
-          socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list:member5, time:'N'});
+          socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list1:member5, time:'N'});
         }
       });
 
@@ -1149,14 +1151,15 @@ io.on('connection',  (socket)=>
                                   var val7;
                                   var thanhvien = [];
                                   info.member_list.forEach((mem)=>{
-                                    thanhvien.push({name:strencode(mem.name),number:mem.number});
+                                    var vien = {name:strencode(mem.name),number:mem.number};
+                                    thanhvien.push(vien);
                                     val7 = [[ res5.insertId,socket.number, socket.user]];
                                     con.query(sql7, [val7], function (err7, res7)
                                     {
                                       if ( err7){console.log(err7);}
                                     });
                                   });
-                                  io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list:thanhvien, time:'N'});
+                                  io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list1:thanhvien, time:'N'});
                                   console.log('Da gui room di lan:');
                                 }
                               });
