@@ -1142,7 +1142,7 @@ io.on('connection',  (socket)=>
                               var val6 = [[ res5.insertId,socket.number, socket.user,'O']];
                               con.query(sql6, [val6], function (err6, res6)
                               {
-                                if ( err2){console.log(err2);}
+                                if ( err6){console.log(err6);}
                                 else
                                 {
                                   let sql7 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name ) VALUES ?";
