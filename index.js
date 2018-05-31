@@ -995,7 +995,8 @@ io.on('connection',  (socket)=>
   socket.on('C_join_room', function (room)  {
       if (socket.number){
     socket.join(room);
-    socket.emit('S_get_join_room');// cái này cho app chuyển sang giao diên map
+    socket.emit('S_get_join_room');
+    // cái này cho app chuyển sang giao diên map
     // gửi danh sách thành viên cho app
     con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+room+"' LIMIT 1", function(err, a1s)
        {
