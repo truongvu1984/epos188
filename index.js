@@ -995,6 +995,28 @@ io.on('connection',  (socket)=>
   socket.on('C_join_room', function (room)  {
       if (socket.number){
     socket.join(room);
+    socket.emit('S_get_join_room');// cái này cho app chuyển sang giao diên map
+    // gửi danh sách thành viên cho app
+    con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+room+"' LIMIT 1", function(err, a1s)
+       {
+         if ( err || ( a1s.length == 0) ){console.log(err);}
+         else
+           {
+             con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err2, a2s)
+                {
+                  if ( err2 || ( a2s.length == 0) ){console.log(err2);}
+                  else
+                    {
+                      a2s.forEach((member)=>{
+                          socket.emit('S_send_member',{name:strencode(member.name), number:member.number, admin:member.send_receive});
+                      });
+
+                    }
+              });
+
+
+           }
+    });
     console.log('ten room la:' +room);
     }
 
@@ -1127,18 +1149,16 @@ io.on('connection',  (socket)=>
         else {
           // lưu thành viên vào bảng
           var sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, name, number, send_receive) VALUES ?";
-          var member5=[];
+
           var abc = [[ res.insertId, socket.username,socket.number,'A']];
           con.query(sql2, [abc], function (err9, res9){if ( err9){console.log(err9);}
             else {
             info.member_list.forEach((member)=>{
-              var thanh = {name:strencode(member.name),number:member.number};
-              member5.push(thanh);
               val2 = [[ res.insertId, member.name,member.number,'B']];
               con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
               });
               socket.emit('S_get_room');
-              socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list1:member5, time:'N'});
+              socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:'N'});
               }
             });
           }
@@ -1168,14 +1188,12 @@ io.on('connection',  (socket)=>
                                 else
                                 {
                                   var val7;
-                                  var thanhvien = [];
+
                                   info.member_list.forEach((mem)=>{
-                                    var vien = {name:strencode(mem.name),number:mem.number};
-                                    thanhvien.push(vien);
                                     val7 = [[ res5.insertId,mem.number, mem.name,'B']];
                                     con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
                                   });
-                                  io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, member_list1:thanhvien, time:'N'});
+                                  io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:'N'});
                                   console.log('Da gui room di lan:');
                                 }
                               });
@@ -1232,28 +1250,23 @@ io.on('connection',  (socket)=>
     // xác minh tài khoản đủ điều kiện để bổ sung thành viên không
         socket.emit ('S_get_bosung_member');
         let mem3 = {name:"", number:""};
-    //bổ sung thành viên mới cho người cũ
+        //bổ sung thành viên mới cho người cũ
         info.old_list.forEach((member)=>{
             let member3 = [];
             con.query("SELECT * FROM `" + member.number+"mes_main` WHERE `idc` LIKE '"+info.room_full_name+"' LIMIT 1", function(err1, rows){
               if ( err1 || (rows.length ==0 )){console.log('co loi 2 '+err1);}
-              else { let sql2 = "INSERT INTO `"+member.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
-            info.new_list.forEach((mem2)=>{
-              let values2 = [[rows[0].id, mem2.number, mem2.name, 'O', 'N']];
-              con.query(sql2, [values2], function (err2, res){
-                if (err2){console.log('co loi 3 '+err2);}
-                else {
-                console.log('Da insert thanh cong '+ res.id);
-                }
-              });
-              mem3 = {name:strencode(mem2.name), number:mem2.number};
-              member3.push(mem3);
-              console.log('da ok 1'+mem3);
-            });
+              else {
+                let sql2 = "INSERT INTO `"+member.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
+                info.new_list.forEach((mem2)=>{
+                  let values2 = [[rows[0].id, mem2.number, mem2.name, 'B']];
+                  con.query(sql2, [values2], function (err2, res){if (err2){console.log('co loi 3 '+err2);}});
+                  mem3 = {name:strencode(mem2.name), number:mem2.number};
+                  member3.push(mem3);
+                });
             con.query("UPDATE `"+member.number+"mes_main` SET `stt` = 'M' WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+info.room_full_name+"'",function(err3){
                 if (err3){console.log('co loi 4'+err3);}
               });
-            io.sockets.in(member.number).emit('S_add_mem',{ room_fullname:strencode(info.room_full_name), member_list:member3});
+            io.sockets.in(member.number).emit('S_add_mem',{ room_fullname:info.room_full_name, member_list:member3});
             console.log('a gui room di cho nguoi cu:'+info.room_name + ' danh sach la:'+member3);
           } }); });
       // thông báo room cho thành viên mới
