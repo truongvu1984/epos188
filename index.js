@@ -995,6 +995,7 @@ io.on('connection',  (socket)=>
   socket.on('C_join_room', function (room)  {
       if (socket.number){
     socket.join(room);
+    socket.roomabc = room;
     socket.emit('S_get_join');
     // cái này cho app chuyển sang giao diên map
     // gửi danh sách thành viên cho app
@@ -1246,11 +1247,33 @@ io.on('connection',  (socket)=>
     }
   });
   socket.on('C_bosung_member', function(info){
-   if (socket.number){
+   if (socket.roomabc){
     console.log(info);
-    // xác minh tài khoản đủ điều kiện để bổ sung thành viên không
-        socket.emit ('S_get_bosung_member');
-        let mem3 = {name:"", number:""};
+    socket.emit ('S_get_bosung_member');
+    // lưu thành viên mới vào cơ sở dữ liệu của các thành viên cũ
+    con.query("SELECT * FROM `" + socket.number+"mes_main` WHERE `idc` LIKE '"+socket.roomabc+"' LIMIT 1", function(err1, rows){
+      if ( err1 || (rows.length ==0 )){console.log('co loi 2 '+err1);}
+      else {
+        let sql = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
+        info.forEach((mem)=>{
+          let values = [[rows[0].id, mem.number, mem.name, 'B']];
+          con.query(sql2, [values2], function (err2, res){if (err2){console.log('co loi 3 '+err2);}});
+          io.sockets.in(socket.roomabc).emit('S_send_member',{ name:strencode(mem.name), number:mem.number});
+        });
+        con.query("SELECT * FROM `" + socket.number+"mes_sender` WHERE `idc` LIKE '"+rows[0].id+"'", function(err3, row3s){
+          if ( err3 || (row3s.length ==0 )){console.log('co loi 2 '+err3);}
+          else {
+            console.log('so luong mem sau khi:'+row3s.length);
+          }
+        });
+
+
+
+      }
+    });
+    // bổ sung member cho các thành viên cũ
+
+    let mem3 = {name:"", number:""};
         //bổ sung thành viên mới cho người cũ
         info.old_list.forEach((member)=>{
             let member3 = [];
