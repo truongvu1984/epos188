@@ -1257,7 +1257,7 @@ io.on('connection',  (socket)=>
         let sql = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
         info.forEach((mem)=>{
           let values = [[rows[0].id, mem.number, mem.name, 'B']];
-          con.query(sql2, [values2], function (err2, res){if (err2){console.log('co loi 3 '+err2);}});
+          con.query(sql, [values], function (err2, res){if (err2){console.log('co loi 3 '+err2);}});
           io.sockets.in(socket.roomabc).emit('S_send_member',{ name:strencode(mem.name), number:mem.number});
         });
         con.query("SELECT * FROM `" + socket.number+"mes_sender` WHERE `idc` LIKE '"+rows[0].id+"'", function(err3, row3s){
