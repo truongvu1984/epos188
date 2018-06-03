@@ -1254,16 +1254,53 @@ io.on('connection',  (socket)=>
     con.query("SELECT * FROM `" + socket.number+"mes_main` WHERE `idc` LIKE '"+socket.roomabc+"' LIMIT 1", function(err1, rows){
       if ( err1 || (rows.length ==0 )){console.log('co loi 2 '+err1);}
       else {
-        let sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
-        info.forEach((mem)=>{
-          let values = [[rows[0].id, mem.number, mem.name, 'B']];
-          con.query(sql2, [values], function (err2, res){if (err2){console.log('co loi 3 '+err2);}});
-          io.sockets.in(socket.roomabc).emit('S_send_member',{ name:strencode(mem.name), number:mem.number});
-        });
-        con.query("SELECT * FROM `" + socket.number+"mes_sender` WHERE `ids` LIKE '"+rows[0].id+"'", function(err3, row3s){
-          if ( err3 || (row3s.length ==0 )){console.log('co loi 2 '+err3);}
+        con.query("SELECT * FROM `" + socket.number+"mes_sender` WHERE `ids` LIKE '"+rows[0].id+"'", function(err2, row2s){
+          if ( err2 || (row2s.length ==0 )){console.log('co loi 2 '+err2);}
           else {
-            console.log('so luong mem sau khi:'+row3s.length);
+            rows2.forEach((old_member)=>{
+              con.query("SELECT * FROM `" +old_member+"mes_main` WHERE `idc` LIKE '"+socket.roomabc+"' LIMIT 1", function(err3, row3s){
+                if ( err3 || (row3s.length ==0 )){console.log('co loi 2 '+err3);}
+                else {
+                  let sql2 = "INSERT INTO `"+old_member+"mes_sender` (ids,number, name, send_receive) VALUES ?";
+                  info.forEach((mem)=>{
+                    let values = [[row3s[0].id, mem.number, mem.name, 'B']];
+                    con.query(sql2, [values], function (err4){if (err4){console.log('co loi 3 '+err4);}});
+                    io.sockets.in(socket.roomabc).emit('S_send_member',{ name:strencode(mem.name), number:mem.number});
+                    socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:rows[0].idc, admin_name:strencode(socket.username), admin_number:socket.number, time:'N'});
+                    var sql3 = "INSERT INTO `"+mem.number+"mes_main` (idc, subject, send_receive, stt,time ) VALUES ?";
+                    var val3 = [[ rows[0].idc, rows[0].subject,'O', 'N','N']];
+                    con.query(sql3, [val3], function (err3, res3)
+                    {
+                      if(err3){console.log(err3);}
+                      else {
+                          rows2.forEach((old_member)=>{
+                          let sql4 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
+                          var ab = [[ res3.insertId,old_member.number, old_member.name,old_member.send_receive]];
+                          con.query(sql4, [ab], function (err4)
+                          {
+                            if ( err4){console.log(err4);}
+                          });
+                          });
+
+                          info.forEach((new_member)=>{
+                          let sql5 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
+                          var ab5 = [[ res3.insertId,new_member.number, new_member.name,'B']];
+                          con.query(sql5, [ab5], function (err5)
+                          {
+                            if ( err5){console.log(err5);}
+                          });
+                          });
+
+                      }
+
+                    });
+
+                  });
+
+                }
+              });
+
+            });
           }
         });
       }
