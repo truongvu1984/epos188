@@ -1257,7 +1257,7 @@ io.on('connection',  (socket)=>
         con.query("SELECT * FROM `" + socket.number+"mes_sender` WHERE `ids` LIKE '"+rows[0].id+"'", function(err2, row2s){
           if ( err2 || (row2s.length ==0 )){console.log('co loi 2 '+err2);}
           else {
-            rows2.forEach((old_member)=>{
+            row2s.forEach((old_member)=>{
               con.query("SELECT * FROM `" +old_member+"mes_main` WHERE `idc` LIKE '"+socket.roomabc+"' LIMIT 1", function(err3, row3s){
                 if ( err3 || (row3s.length ==0 )){console.log('co loi 2 '+err3);}
                 else {
@@ -1273,7 +1273,7 @@ io.on('connection',  (socket)=>
                     {
                       if(err3){console.log(err3);}
                       else {
-                          rows2.forEach((old_member)=>{
+                          row2s.forEach((old_member)=>{
                           let sql4 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
                           var ab = [[ res3.insertId,old_member.number, old_member.name,old_member.send_receive]];
                           con.query(sql4, [ab], function (err4)
