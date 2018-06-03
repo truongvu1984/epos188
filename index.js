@@ -1287,7 +1287,7 @@ io.on('connection',  (socket)=>
                           var ab5 = [[ res3.insertId,new_member.number, new_member.name,'B']];
                           con.query(sql5, [ab5], function (err5)
                           {
-                            if ( err5){console.log(err5);}
+                            if ( err5){console.log('loi 6:'+err5);}
                           });
                           });
 
