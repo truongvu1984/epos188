@@ -1255,13 +1255,13 @@ io.on('connection',  (socket)=>
       if ( err1 || (rows.length ==0 )){console.log('co loi 2 '+err1);}
       else {
         con.query("SELECT * FROM `" + socket.number+"mes_sender` WHERE `ids` LIKE '"+rows[0].id+"'", function(err2, row2s){
-          if ( err2 || (row2s.length ==0 )){console.log('co loi 2 '+err2);}
+          if ( err2 || (row2s.length ==0 )){console.log('co loi 3 '+err2);}
           else {
             row2s.forEach((old_member)=>{
-              con.query("SELECT * FROM `" +old_member+"mes_main` WHERE `idc` LIKE '"+socket.roomabc+"' LIMIT 1", function(err3, row3s){
-                if ( err3 || (row3s.length ==0 )){console.log('co loi 2 '+err3);}
+              con.query("SELECT * FROM `" +old_member.number+"mes_main` WHERE `idc` LIKE '"+socket.roomabc+"' LIMIT 1", function(err3, row3s){
+                if ( err3 || (row3s.length ==0 )){console.log('co loi 4 '+err3);}
                 else {
-                  let sql2 = "INSERT INTO `"+old_member+"mes_sender` (ids,number, name, send_receive) VALUES ?";
+                  let sql2 = "INSERT INTO `"+old_member.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
                   info.forEach((mem)=>{
                     let values = [[row3s[0].id, mem.number, mem.name, 'B']];
                     con.query(sql2, [values], function (err4){if (err4){console.log('co loi 3 '+err4);}});
@@ -1274,7 +1274,7 @@ io.on('connection',  (socket)=>
                       if(err3){console.log(err3);}
                       else {
                           row2s.forEach((old_member)=>{
-                          let sql4 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
+                          let sql4 = "INSERT INTO `"+mem.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
                           var ab = [[ res3.insertId,old_member.number, old_member.name,old_member.send_receive]];
                           con.query(sql4, [ab], function (err4)
                           {
@@ -1283,7 +1283,7 @@ io.on('connection',  (socket)=>
                           });
 
                           info.forEach((new_member)=>{
-                          let sql5 = "INSERT INTO `"+row.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
+                          let sql5 = "INSERT INTO `"+mem.number+"mes_sender` (ids, number, name, send_receive ) VALUES ?";
                           var ab5 = [[ res3.insertId,new_member.number, new_member.name,'B']];
                           con.query(sql5, [ab5], function (err5)
                           {
