@@ -515,7 +515,7 @@ io.on('connection',  (socket)=>
                    }
               });
           // lấy bảng contact
-          con.query("SELECT * FROM `"+user1+"contact` ORDER BY `id` ", function(err3, a1s)
+          con.query("SELECT * FROM `"+user1+"contact` ORDER BY `name` ASC ", function(err3, a1s)
                  {
                    if ( err3 || ( a1s.length == 0) ){console.log('Da co loi contact:'+err3);}
                    else
