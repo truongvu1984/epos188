@@ -435,7 +435,8 @@ io.on('connection',  (socket)=>
           socket.emit('S_chuoikhongdung');
         }
         else {
-          con.query("UPDATE `account` SET `pass` = '"+pass+"' WHERE `number` LIKE '"+num+"'",function(){
+  
+          con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
           socket.emit('S_doipass_thanhcong');
         });
         }
@@ -1024,7 +1025,6 @@ io.on('connection',  (socket)=>
     }
 
   });
-  // kiểm tra lại biến number
   socket.on('C_send_contact', function (contact)  {
       if (socket.number){
         var sql2 = "INSERT INTO `"+socket.number+"contact` (name,number) VALUES ?";
@@ -1211,7 +1211,8 @@ io.on('connection',  (socket)=>
    	});
   socket.on('C_change_pass', function(newpass){
    if (socket.number){
-    con.query("UPDATE `account` SET `pass` = '"+newpass+"' WHERE `number` LIKE '"+socket.number+"'",function(err3, ok)
+     var matkhau = passwordHash.generate(newpass);
+    con.query("UPDATE `account` SET `pass` = '"+matkhau+"' WHERE `number` LIKE '"+socket.number+"'",function(err3, ok)
       {
         if ( err3 ){console.log('update bị loi'+err3);}
           else
