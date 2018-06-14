@@ -1219,16 +1219,13 @@ io.on('connection',  (socket)=>
   socket.on('C_change_pass', function(oldpass,newpass){
    if (socket.number){
      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
-        if (err || rows.length ==0){
-
-           console.log("Doi mat khau bi loi ");
-         }
+        if (err || rows.length ==0){ socket.emit('change_pass_thatbai');}
        else{
          if (passwordHash.verify(oldpass, rows[0].pass)){
            var matkhau = passwordHash.generate(newpass);
           con.query("UPDATE `account` SET `pass` = '"+matkhau+"' WHERE `number` LIKE '"+socket.number+"'",function(err3, ok)
             {
-              if ( err3 ){console.log('update bị loi'+err3);}
+              if ( err3 ){socket.emit('change_pass_thatbai');}
                 else
                       {
                         socket.emit('change_pass_ok');
@@ -1236,6 +1233,9 @@ io.on('connection',  (socket)=>
             });
 
 
+         }
+         else {
+           socket.emit('change_pass_sai_old_pass');
          }
        }
      });
