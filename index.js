@@ -994,7 +994,7 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_join_room', function (room)  {
       if (socket.number){
-        if(socket.roomabc){socket.leave(socket.number);}
+        if(socket.roomabc){socket.leave(socket.roomabc);}
         socket.join(room);
         socket.roomabc = room;
         socket.emit('S_get_join');
