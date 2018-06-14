@@ -645,7 +645,7 @@ io.on('connection',  (socket)=>
                       if(err2){console.log(err2);}
                       else {
                         a2s.forEach(function(a2){nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),trangthai:a2.stt}); });
-                        con.query("SELECT * FROM `"+user1+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err3, a3s){
+                        con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err3, a3s){
                           if(err3){console.log(err3);}
                           else {
                             let pos=[];
