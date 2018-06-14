@@ -1216,17 +1216,30 @@ io.on('connection',  (socket)=>
 
     }
    	});
-  socket.on('C_change_pass', function(newpass){
+  socket.on('C_change_pass', function(oldpass,newpass){
    if (socket.number){
-     var matkhau = passwordHash.generate(newpass);
-    con.query("UPDATE `account` SET `pass` = '"+matkhau+"' WHERE `number` LIKE '"+socket.number+"'",function(err3, ok)
-      {
-        if ( err3 ){console.log('update bị loi'+err3);}
-          else
-                {
-                  socket.emit('change_pass_ok', {passmoi:newpass});
-                }
-      });
+     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
+        if (err || rows.length ==0){
+
+           console.log("Doi mat khau bi loi ");
+         }
+       else{
+         if (passwordHash.verify(oldpass, rows[0].pass)){
+           var matkhau = passwordHash.generate(newpass);
+          con.query("UPDATE `account` SET `pass` = '"+matkhau+"' WHERE `number` LIKE '"+socket.number+"'",function(err3, ok)
+            {
+              if ( err3 ){console.log('update bị loi'+err3);}
+                else
+                      {
+                        socket.emit('change_pass_ok');
+                      }
+            });
+
+
+         }
+       }
+     });
+
     }
   });
   socket.on('C_get_add_mem', function(info){
