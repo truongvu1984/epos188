@@ -671,8 +671,8 @@ io.on('connection',  (socket)=>
                           else {
                             let pos=[];
                               a3s.forEach(function(a3){pos.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
-                              socket.emit('S_send_send',{subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time, nguoinhan:nhomnguoinhan, vitri:pos, trangthai:a1.stt});
-                              console.log('Server đã gửi send');
+                              socket.emit('S_send_save',{subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time, vitri:pos});
+                              console.log('Server đã gửi save');
                           }
                             });
 
