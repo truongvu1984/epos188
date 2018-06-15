@@ -659,6 +659,26 @@ io.on('connection',  (socket)=>
                  });
                }
           });
+          // lấy bảng save
+          con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'SA' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
+               {
+                 if ( err || ( a1s.length == 0) ){console.log(err);}
+                 else
+                   {
+                     a1s.forEach(function(a1){
+                        con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err3, a3s){
+                          if(err3){console.log(err3);}
+                          else {
+                            let pos=[];
+                              a3s.forEach(function(a3){pos.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
+                              socket.emit('S_send_send',{subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time, nguoinhan:nhomnguoinhan, vitri:pos, trangthai:a1.stt});
+                              console.log('Server đã gửi send');
+                          }
+                            });
+
+                     });
+                   }
+              });
       // lấy bảng contact
       con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name` DESC ", function(err3, a1s)
              {
@@ -798,6 +818,26 @@ io.on('connection',  (socket)=>
       });
     }
     }); // end socket.on('sendmess', function(test)
+  socket.on('C_save_pos', (mess)=>{
+    if(socket.number){
+      socket.emit('S_get_save_pos');
+      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
+      var val = [[mess.maso, mess.subject,'SA',mess.thoigian]];
+      con.query(sql, [val], function (err, res)
+        {
+          if(err){socket.emit('S_save_pos_err');}
+          else {
+            var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
+            mess.vitri.forEach(function(row)
+              {
+                var val3 = [[res.insertId, row.id, row.name, row.lat, row.lon]];
+                con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
+              });
+
+          }
+      });
+    }
+  });
   socket.on('danhantinnhan', function (nguoigui, idc, thoigian)
    	{
       if (socket.number){
