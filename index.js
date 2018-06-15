@@ -635,7 +635,7 @@ io.on('connection',  (socket)=>
         });
       // lấy bảng send
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
-           {
+        {
              if ( err || ( a1s.length == 0) ){console.log(err);}
              else
                {
@@ -658,11 +658,11 @@ io.on('connection',  (socket)=>
                     });
                  });
                }
-          });
-          // lấy bảng save
-          con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'SA' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
-               {
-                 if ( err || ( a1s.length == 0) ){console.log(err);}
+      });
+      // lấy bảng save
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'SA' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
+        {
+            if ( err || ( a1s.length == 0) ){console.log(err);}
                  else
                    {
                      a1s.forEach(function(a1){
@@ -670,12 +670,13 @@ io.on('connection',  (socket)=>
                           if(err3){console.log(err3);}
                           else {
                             let pos=[];
-                              a3s.forEach(function(a3){pos.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
+                              a3s.forEach(function(a3){
+                                pos.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
+                              });
                               socket.emit('S_send_save',{subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time, vitri:pos});
                               console.log('Server đã gửi save');
-                          }
-                            });
-
+                            }
+                          });
                      });
                    }
               });
