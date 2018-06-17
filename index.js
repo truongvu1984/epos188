@@ -621,7 +621,7 @@ io.on('connection',  (socket)=>
                   con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                     if(err2){console.log(err2);}
                     else {
-                      console.log('sender la:'+strencode(a2s[0].name);
+                      console.log('sender la:'+strencode(a2s[0].name));
                       tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,thoigian:a1.time});
                     }
                   });
