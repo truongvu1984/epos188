@@ -625,7 +625,7 @@ io.on('connection',  (socket)=>
                   });
                });
                socket.emit('S_send_inbox',{tinnhan:tinfull});
-               console.log('Server đã gửi inibox');
+               console.log('Server đã gửi inibox:'+tinfull.length);
                }
         });
       // con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC", function(err, a1s)
