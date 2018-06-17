@@ -612,10 +612,11 @@ io.on('connection',  (socket)=>
       // lấy bảng inbox
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC", function(err, a1s)
          {
-           if ( err || ( a1s.length == 0) ){console.log(err);}
+           if ( err || ( a1s.length == 0) ){console.log('ko co inbox'+err);}
            else
              {
                let tinfull=[];
+               console.log('CSDL là:'+a1s.length);
                a1s.forEach(function(a1){
                   con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                     if(err2){console.log(err2);}
