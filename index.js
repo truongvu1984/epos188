@@ -624,7 +624,7 @@ io.on('connection',  (socket)=>
                       console.log('sender la:'+strencode(a2s[0].name));
                       tinfull.push();
                       socket.emit('S_send_inbox',{name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,thoigian:a1.time});
-console.log('Server đã gửi inibox:'+tinfull.length);
+                        console.log('Server đã gửi inibox:'+tinfull.length);
                     }
                   });
                });
@@ -632,30 +632,6 @@ console.log('Server đã gửi inibox:'+tinfull.length);
 
                }
         });
-      // con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC", function(err, a1s)
-      //    {
-      //      if ( err || ( a1s.length == 0) ){console.log(err);}
-      //      else
-      //        {
-      //          a1s.forEach(function(a1){
-      //             con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
-      //               if(err2){console.log(err2);}
-      //               else {
-      //                 con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1.id+"'", function(err3, a3s){
-      //                   if(err3){console.log(err3);}
-      //                   else {
-      //                     let position=[];
-      //                     a3s.forEach(function(a3){position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
-      //                     socket.emit('S_send_inbox',{name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,
-      //                       pos:position, thoigian:a1.time});
-      //                       console.log('Server đã gửi inibox');
-      //                   }
-      //                 });
-      //               }
-      //             });
-      //          });
-      //        }
-      //   });
       // lấy bảng send
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
         {
@@ -761,6 +737,7 @@ console.log('Server đã gửi inibox:'+tinfull.length);
                         if(err3){console.log(err3);}
                         else {
                           let position=[];
+                          console.log('Du lieu pos la:'+a3s.length);
                           a3s.forEach(function(a3){position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
                           socket.emit('S_send_point_inbox',{pos:position});
                           console.log('Server đã gửi inbox point');
