@@ -617,6 +617,7 @@ io.on('connection',  (socket)=>
         else
           {
             let tinfull = [];
+            console.log('CSDL la:'+a1s.length);
             a1s.forEach(function(a1,key){
                con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                  if(err2){console.log(err2);}
