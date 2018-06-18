@@ -621,8 +621,8 @@ io.on('connection',  (socket)=>
               con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1s[i].id+"' LIMIT 1", function(err2, a2s){
                 if(err2){console.log(err2);}
                 else {
-                  tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,
-                     thoigian:a1.time});
+                  tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1s[i].subject), id_tinnha_client:a1s[i].idc,trangthai:a1s[i].read_1, stt: a1s[i].stt,
+                     thoigian:a1s[i].time});
                      if(i==(a1s.length-1)){console.log('Da inbox la:'+tinfull.length);}
 
                     // socket.emit('S_send_inbox',);
