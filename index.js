@@ -611,7 +611,28 @@ io.on('connection',  (socket)=>
     console.log('C yeu cau full data');
     if(socket.number){
       // lấy bảng inbox
-      abc2();
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
+      {
+        if ( err || ( a1s.length == 0) ){console.log(err);}
+        else
+          {
+            let tinfull=[];
+            for(i=0;i<a1s.length;i++){
+              con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1s[i].id+"' LIMIT 1", function(err2, a2s){
+                if(err2){console.log(err2);}
+                else {
+                  tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,
+                     thoigian:a1.time});
+                     if(i==(a1s.length-1)){console.log('Da inbox la:'+tinfull.length);}
+
+                    // socket.emit('S_send_inbox',);
+                }
+              });
+
+            }
+
+          }
+     });
 
       // lấy bảng send
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
@@ -707,32 +728,6 @@ io.on('connection',  (socket)=>
       });
     }
   });
-  let abc = ()=>{
-    return new Promise((res,rej)=>{
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC", function(err, a1s)
-         {
-           if ( err || ( a1s.length == 0) ){console.log('ko co inbox'+err);}
-           else
-             {
-               let tinfull = [];
-               a1s.forEach(function(a1){
-                  con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
-                    if(err2){console.log(err2);}
-                    else {
-                      tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,thoigian:a1.time});
-                      res(tinfull);
-                    }
-                  });
-               });
-             }
-        });
-    });
-  }
-  let abc2 = async()=>{
-    let tinnhan = await abc();
-    console.log('ket qua là:'+tinnhan.length);
-  }
-
   socket.on('C_reques_point_inbox',(idc)=>{
     if(socket.number){
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
