@@ -615,22 +615,27 @@ io.on('connection',  (socket)=>
            if ( err || ( a1s.length == 0) ){console.log('ko co inbox'+err);}
            else
              {
-               let tinfull=[];
-               console.log('CSDL là:'+a1s.length);
-               a1s.forEach(function(a1){
-                  con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
-                    if(err2){console.log(err2);}
-                    else {
-                      console.log('sender la:'+strencode(a2s[0].name));
-                      tinfull.push();
-                      socket.emit('S_send_inbox',{name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,thoigian:a1.time});
-                        console.log('Server đã gửi inibox:'+tinfull.length);
-                    }
-                  });
+
+               let abc = new Promise((res1,rej)=>{
+                  let tinfull=[];
+                 a1s.forEach(function(a1){
+                    con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
+                      if(err2){console.log(err2);}
+                      else {
+                        tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,thoigian:a1.time});
+                        // socket.emit('S_send_inbox',);
+
+                      }
+                    });
+                 });
+                 res1(tinfull);
+               });
+               abc.then((tin)=>{
+                 console.log('so luong tin la:'+tin.length);
+
                });
 
-
-               }
+             }
         });
       // lấy bảng send
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
