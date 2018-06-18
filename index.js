@@ -720,7 +720,7 @@ io.on('connection',  (socket)=>
                     if(err2){console.log(err2);}
                     else {
                       tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,thoigian:a1.time});
-                      res1(tinfull);
+                      res(tinfull);
                     }
                   });
                });
