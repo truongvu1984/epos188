@@ -740,7 +740,7 @@ io.on('connection',  (socket)=>
                           console.log('Du lieu pos la:'+a3s.length);
                           a3s.forEach(function(a3){position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
                           socket.emit('S_send_point_inbox',{pos:position});
-                          console.log('Server đã gửi inbox point');
+                          console.log('Server đã gửi inbox point:'+position);
                         }
                 });
 
