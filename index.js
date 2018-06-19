@@ -648,7 +648,7 @@ io.on('connection',  (socket)=>
                         a2s.forEach(function(a2,key2){
                           nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),trangthai:a2.stt});
                           if(key2 === (a2s.length-1)){
-                            tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time, nguoinhan:nhomnguoinhan, vitri:pos, trangthai:a1.stt});
+                            tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time, nguoinhan:nhomnguoinhan, trangthai:a1.stt});
                             if(key === (a1s.length-1)){  socket.emit('S_send_send',{tin:tinfull2});console.log('Server đã gửi send');}
                           }
                         });
