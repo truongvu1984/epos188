@@ -698,7 +698,7 @@ io.on('connection',  (socket)=>
                               else
                                 {
                                     tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:a4.time});
-                                    if(key===(a4s.length-1)){socket.emit('S_send_room',{tin:tinfull});console.log('Server đã gửi room:'+thanhvien);}
+                                    if(key===(a4s.length-1)){socket.emit('S_send_room',{tin:tinfull});console.log('Server đã gửi room:');}
                                 }
                       });
                    });
