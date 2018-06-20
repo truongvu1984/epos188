@@ -717,10 +717,15 @@ io.on('connection',  (socket)=>
                         if(err3){console.log(err3);}
                         else {
                           let position=[];
-                          console.log('Du lieu pos la:'+a3s.length);
-                          a3s.forEach(function(a3){position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp}); });
-                          socket.emit('S_send_point_inbox',{pos:position});
-                          console.log('Server đã gửi inbox point:'+position);
+                          a3s.forEach(function(a3,key){
+                            position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
+                            if(key===(a3s.length-1)){
+                              socket.emit('S_send_point_inbox',{pos:position});
+                              console.log('Server đã gửi inbox point:'+position);
+                            }
+
+                          });
+
                         }
                 });
 
@@ -728,6 +733,54 @@ io.on('connection',  (socket)=>
         });
 
     }
+  });
+  socket.on('C_reques_point_send',(idc)=>{
+    if(socket.number){
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
+         {
+           if ( err || ( a1s.length == 0) ){console.log(err);}
+           else
+             {
+               con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
+                        if(err3){console.log(err3);}
+                        else {
+                          let position=[];
+                          a3s.forEach(function(a3,key){
+                            position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
+                            if(key===(a3s.length-1)){socket.emit('S_send_point_send',{pos:position});}
+                          });
+                        }
+                });
+
+             }
+        });
+
+    }
+
+  });
+  socket.on('C_reques_point_save',(idc)=>{
+    if(socket.number){
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
+         {
+           if ( err || ( a1s.length == 0) ){console.log(err);}
+           else
+             {
+               con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
+                        if(err3){console.log(err3);}
+                        else {
+                          let position=[];
+                          a3s.forEach(function(a3,key){
+                            position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
+                            if(key===(a3s.length-1)){socket.emit('S_send_point_save',{pos:position});}
+                          });
+                        }
+                });
+
+             }
+        });
+
+    }
+
   });
   socket.on('C_gui_tinnhan', function(mess){
     console.log(mess);
