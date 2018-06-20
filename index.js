@@ -658,7 +658,7 @@ io.on('connection',  (socket)=>
                }
       });
       // lấy bảng save
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'SA' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
         {
             if ( err || ( a1s.length == 0) ){console.log(err);}
                  else
@@ -874,7 +874,7 @@ io.on('connection',  (socket)=>
     if(socket.number){
       socket.emit('S_get_save_pos');
       var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
-      var val = [[mess.maso, mess.subject,'SA',mess.thoigian]];
+      var val = [[mess.maso, mess.subject,'H',mess.thoigian]];
       con.query(sql, [val], function (err, res)
         {
           if(err){socket.emit('S_save_pos_err');}
