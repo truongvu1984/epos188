@@ -782,6 +782,7 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_reques_point_import',(list)=>{
     if(socket.number){
+      console.log('Da nhan yeu cau point');
       list.forEach((list1,key1)=>{
         let position=[];
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+list1.id+"' LIMIT 1", function(err, a1s)
