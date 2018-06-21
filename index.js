@@ -778,34 +778,32 @@ io.on('connection',  (socket)=>
 
              }
         });
-
     }
-
   });
   socket.on('C_reques_point_import',(list)=>{
     if(socket.number){
-      l
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
-         {
-           if ( err || ( a1s.length == 0) ){console.log(err);}
-           else
-             {
-               con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
-                        if(err3){console.log(err3);}
-                        else {
-                          let position=[];
-                          a3s.forEach(function(a3,key){
-                            position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
-                            if(key===(a3s.length-1)){socket.emit('S_send_point_import',{pos:position});}
-                          });
-                        }
-                });
+      list.forEach((list1,key1)=>{
+        let position=[];
+        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+list1.id+"' LIMIT 1", function(err, a1s)
+           {
+             if ( err || ( a1s.length == 0) ){console.log(err);}
+             else
+               {
+                 con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
+                          if(err3){console.log(err3);}
+                          else {
+                            a3s.forEach(function(a3,key){
+                              position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
+                              if(key1===(list1.length-1)&&key===(a3s.length-1)){socket.emit('S_send_point_import',{listpoint:position});}
+                            });
+                          }
+                  });
 
-             }
-        });
+               }
+          });
 
+      });
     }
-
   });
   socket.on('C_gui_tinnhan', function(mess){
     console.log(mess);
