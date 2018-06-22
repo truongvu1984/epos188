@@ -790,12 +790,15 @@ io.on('connection',  (socket)=>
              if ( err || ( a1s.length == 0) ){console.log('ha ha ha:'+err);}
              else
                {
+                 console.log('Ket qua 1 la:'+a1s[0].subject);
                  con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
                           if(err3 || (a3s.length==0)){console.log('ko co:'+err3);}
                           else {
                             a3s.forEach(function(a3,key){
                               position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
-                              if((key1===(list1.length-1))&&(key===(a3s.length-1))){socket.emit('S_send_point_import',{listpoint:position});console.log('Da gui tin import đi');}
+                              if((key1===(list1.length-1))&&(key===(a3s.length-1))){
+                                socket.emit('S_send_point_import',{listpoint:position});console.log('Da gui tin import đi');
+                              }
                             });
                           }
                   });
