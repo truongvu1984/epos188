@@ -787,11 +787,11 @@ io.on('connection',  (socket)=>
         let position=[];
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+list1.id+"' LIMIT 1", function(err, a1s)
            {
-             if ( err || ( a1s.length == 0) ){console.log(err);}
+             if ( err || ( a1s.length == 0) ){console.log('ha ha ha:'+err);}
              else
                {
                  con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
-                          if(err3 || (a3s.length==0)){console.log('ko co:'err3);}
+                          if(err3 || (a3s.length==0)){console.log('ko co:'+err3);}
                           else {
                             a3s.forEach(function(a3,key){
                               position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
