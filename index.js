@@ -797,7 +797,7 @@ io.on('connection',  (socket)=>
                           else {
                             a3s.forEach(function(a3,key){
                               position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
-                              if((key1===(list1.length-1))&&(key===(a3s.length-1))){
+                              if(key1===(list.length-1) && key===(a3s.length-1)){
                                 socket.emit('S_send_point_import',{listpoint:position});console.log('Da gui tin import đi');
                               }
                             });
