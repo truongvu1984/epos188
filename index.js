@@ -12,8 +12,6 @@ var transporter = nodemailer.createTransport({
             pass: '123'
         }
     });
-
-
 var mysql = require('mysql');
 var con = mysql.createConnection({
   host: "us-cdbr-iron-east-05.cleardb.net",
@@ -35,7 +33,6 @@ let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
 // });
 
 var bodyParser = require('body-parser');
-
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
   con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err); }
@@ -112,8 +109,8 @@ function kiemtra_taikhoan(){
     // xóa giá trị cho chuỗi số vừa tạo ra
     con.query(" DELETE FROM `xacthuc` WHERE `date` < "+date2, function(err){if(err){console.log('co loi HA HA HA:'+err);}});
         // nếu tài khoản đã có người đăng ký rồi thì:
-  kiemtra_taikhoan();
-}, 5000);
+        kiemtra_taikhoan();
+  }, 5000);
 }
 kiemtra_taikhoan();
 var ngay= new Date().getTime();
@@ -598,14 +595,14 @@ io.on('connection',  (socket)=>
     console.log('C yeu cau full data');
     if(socket.number){
       // lấy bảng inbox
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC", function(err, a1s)
       {
         if ( err || ( a1s.length == 0) ){console.log(err);}
         else
           {
             let tinfull = [];
             a1s.forEach(function(a1,key){
-               con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
+               con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                  if(err2){console.log(err2);}
                  else {
                    tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,
@@ -817,7 +814,7 @@ io.on('connection',  (socket)=>
                     var val = [[res.insertId, row.id, row.name, row.lat, row.lon]];
                     con.query(sql3, [val], function (err2, res2) {if ( err2){console.log(err2);}});
                   });
-                  // lưu vào bảng người nhận của người gửi
+                  // lưu danh sách người nhận vào bảng của người gửi
                 var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
                 mess.nguoinhan.forEach(function(row5)
                   {
@@ -933,17 +930,18 @@ io.on('connection',  (socket)=>
   socket.on('danhantinnhan', function (nguoigui, idc, thoigian)
    	{
       if (socket.number){
-
-	    //chuyển trạng thái trong db thành người nhận đã đọc được tin, báo về cho người gửi biết
-    con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y',`time` = '"+thoigian+"' WHERE `idc` LIKE '"+idc+"'",function(){
+	    //chuyển trạng thái trong db của người nhận thành đã nhận tin nhắn, lần sau login 2 không phải gửi về nữa
+    con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y',`time` = '"+thoigian+"' WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"'",function()
+      {
       console.log('ma san pham la '+idc);
     });
+    // báo cho người gửi biết là thằng socket.number đã nhận tin nhắn
     con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE `idc` LIKE '"+idc+"'  AND `send_receive` LIKE 'S' LIMIT 1", function(err11, res11)
       {
         if ( err11 || (res11.length ==0) ){console.log(err11);}
         else
           {
-            con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'G' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'S'",function(err2,res2){
+            con.query("UPDATE `"+nguoigui+"mes_main` SET `stt` = 'G' WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+idc+"'",function(err2,res2){
               if(err2){console.log(err2);}
               else {
               con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'G' WHERE `ids` LIKE '"+res11[0].id+"' AND `number` LIKE '"+socket.number+"'",function(err3,res3)
@@ -952,8 +950,6 @@ io.on('connection',  (socket)=>
                   else {
                       io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number, idc:idc});
                   }
-                  //console.log('Da bao cho ' +nguoigui +' biet la '+nguoinhan + ' da nhan tin nhan '+idc);
-
                 });
               }
 
@@ -967,7 +963,6 @@ io.on('connection',  (socket)=>
     }
   });
   socket.on('C_read_mes',(idc)=>{
-
     if(socket.number){
       console.log('Da nhan su kien read');;
       con.query("UPDATE `"+socket.number+"mes_main` SET `read_1` = 'OK' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'R'",function(err2){
