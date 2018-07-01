@@ -682,12 +682,10 @@ io.on('connection',  (socket)=>
                      a2s.forEach(function(a2,key2){
                        mangcontact.push({name:strencode(a2.name), number:a2.number});
                        if(key2===(a2s.length-1)){
-                         tinfull.push(subject:strencode(a1.subject),contact_list:mangcontact);
+                         tinfull.push({subject:strencode(a1.subject),contact_list:mangcontact});
                          if(key===(a1s.length-1)){socket.emit('S_send_group',{group:tinfull});}
                        }
-
                      });
-
 
                  }
                });
