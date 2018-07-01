@@ -596,7 +596,7 @@ io.on('connection',  (socket)=>
     if(socket.number){
       // lấy bảng inbox
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC", function(err, a1s)
-      {
+       {
         if ( err || ( a1s.length == 0) ){console.log(err);}
         else
           {
@@ -615,8 +615,7 @@ io.on('connection',  (socket)=>
                });
             });
           }
-     });
-
+        });
       // lấy bảng send
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` DESC", function(err, a1s)
         {
@@ -974,6 +973,59 @@ io.on('connection',  (socket)=>
 
     }
   });
+  socket.on('C_send_group',(mess)=>{
+    if(socket.number){
+      socket.emit('S_newgroup_ok');
+      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive) VALUES ?";
+      var values = [[mess.id, mess.name,'P']];
+      // P là ký hiệu cho biết đây là group
+      con.query(sql, [values], function (err, res)
+        {
+          if ( err){console.log(err);}
+          else {
+            var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
+            mess.contact_list.forEach(function(contact)
+              {
+                var val4 = [[res.insertId, contact.contact_number, contact.contact_name, 'P']];
+                con.query(sql4, [val4], function (err3, res3) {if ( err3){console.log(err3);}});
+              });
+          }
+        });
+    }
+  });
+  socket.on('C_send__edit_group',(mess)=>{
+    if(socket.number){
+      con.query("UPDATE `"+socket.number+"mes_main` SET `subject` = '"+mess.name+"' WHERE `send_receive` LIKE 'P' AND `idc` LIKE '"+mess.id+"'",function()
+      {
+        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mess.id+"'  AND `send_receive` LIKE 'P' LIMIT 1", function(err11, res11)
+          {
+            if ( err11 || (res11.length ==0) ){console.log(err11);}
+            else
+              {
+                con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res11[0].id+"'  AND `send_receive` LIKE 'P'", function(err11)
+                  {
+                    if ( err11 || (res11.length ==0) ){console.log(err11);}
+                    else {
+                      var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
+                      mess.contact_list.forEach(function(contact)
+                        {
+                          var val4 = [[res11[0].id, contact.contact_number, contact.contact_name, 'P']];
+                          con.query(sql4, [val4], function (err3, res3) {if ( err3){console.log(err3);}});
+                        });
+
+                    }
+                  });
+
+
+              }
+            });
+
+      });
+
+
+    }
+  });
+
   // khi người gửi biết rằng khách đã nhận được tin, chuyển màu sắc người nhận trong mục send sang đỏ và báo lại
   // server, kết thúc phần gửi tin cho khách hàng đó
   socket.on('tinnhan_final', function ( id, nguoinhan){
