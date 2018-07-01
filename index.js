@@ -641,7 +641,7 @@ io.on('connection',  (socket)=>
                }
       });
       // lấy bảng save
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' ORDER BY `id` DESC LIMIT 20", function(err, a1s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' ORDER BY `id` DESC", function(err, a1s)
         {
             if ( err || ( a1s.length == 0) ){console.log(err);}
                  else
@@ -667,8 +667,35 @@ io.on('connection',  (socket)=>
                  }
 
       });
+      //lấy danh sách C_send_group
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' ORDER BY `id` DESC", function(err, a1s)
+       {
+        if ( err || ( a1s.length == 0) ){console.log(err);}
+        else
+          {
+            let tinfull = [];
+            a1s.forEach(function(a1,key){
+                let mangcontact = [];
+                con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err2, a2s){
+                 if(err2){console.log(err2);}
+                 else {
+                     a2s.forEach(function(a2,key2){
+                       mangcontact.push({name:strencode(a2.name), number:a2.number});
+                       if(key2===(a2s.length-1)){
+                         tinfull.push(subject:strencode(a1.subject),contact_list:mangcontact);
+                         if(key===(a1s.length-1)){socket.emit('S_send_group',{group:tinfull});}
+                       }
+
+                     });
+
+
+                 }
+               });
+            });
+          }
+        });
       // Lấy danh sách room
-      con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC LIMIT 20 ", function(err4, a4s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC", function(err4, a4s)
              {
                if ( err4 || ( a4s.length == 0) ){console.log('Da co loi contact:'+err4);}
                else
@@ -1025,7 +1052,6 @@ io.on('connection',  (socket)=>
 
     }
   });
-
   // khi người gửi biết rằng khách đã nhận được tin, chuyển màu sắc người nhận trong mục send sang đỏ và báo lại
   // server, kết thúc phần gửi tin cho khách hàng đó
   socket.on('tinnhan_final', function ( id, nguoinhan){
