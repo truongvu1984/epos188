@@ -1020,6 +1020,7 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_send__edit_group',(mess)=>{
     if(socket.number){
+      console.log('Da nhan yeu cau edit'+mess);
       con.query("UPDATE `"+socket.number+"mes_main` SET `subject` = '"+mess.name+"' WHERE `send_receive` LIKE 'P' AND `idc` LIKE '"+mess.id+"'",function()
       {
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mess.id+"'  AND `send_receive` LIKE 'P' LIMIT 1", function(err11, res11)
