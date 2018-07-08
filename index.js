@@ -902,7 +902,7 @@ io.on('connection',  (socket)=>
                                 if (err3){console.log(err3);}
                                 else {
                                   console.log('Da xoa ban tin');
-                                  if(key===(mes.length-1)){socket.emit('S_del_mes');}
+                                  if(key===(mes.length-1)){socket.emit('S_del_inbox');}
 
                                 }
                             });
@@ -911,6 +911,77 @@ io.on('connection',  (socket)=>
 
                     }
                 });
+
+              }
+        });
+
+
+      });
+    }
+  });
+  socket.on('C_del_send',(mes)=>{
+    if(socket.number){
+      mes.forEach((mes1,key)=>{
+        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'S' LIMIT 1", function(err, res)
+          {
+            if ( err|| (res.length ==0) ){console.log(err);}
+            else
+              {
+                con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res[0].id+"'  AND `send_receive` LIKE 'S'", function(err1)
+                  {
+                    if ( err1){console.log(err1);}
+                    else {
+                      con.query("DELETE FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+res[0].id+"'", function(err2)
+                        {
+                          if (err2){console.log(err2);}
+                          else {
+                            con.query("DELETE FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"' AND `send_receive` LIKE 'S'", function(err3)
+                              {
+                                if (err3){console.log(err3);}
+                                else {
+                                  console.log('Da xoa ban tin');
+                                  if(key===(mes.length-1)){socket.emit('S_del_send');}
+
+                                }
+                            });
+                          }
+                      });
+
+                    }
+                });
+
+              }
+        });
+
+
+      });
+    }
+  });
+  socket.on('C_del_save',(mes)=>{
+    if(socket.number){
+      mes.forEach((mes1,key)=>{
+        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'H' LIMIT 1", function(err, res)
+          {
+            if ( err|| (res.length ==0) ){console.log(err);}
+            else
+              {
+                  con.query("DELETE FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+res[0].id+"'", function(err2)
+                        {
+                          if (err2){console.log(err2);}
+                          else {
+                            con.query("DELETE FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"' AND `send_receive` LIKE 'H'", function(err3)
+                              {
+                                if (err3){console.log(err3);}
+                                else {
+                                  console.log('Da xoa ban tin');
+                                  if(key===(mes.length-1)){socket.emit('S_del_save');}
+
+                                }
+                            });
+                          }
+                      });
+
+
 
               }
         });
