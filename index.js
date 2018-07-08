@@ -884,7 +884,7 @@ io.on('connection',  (socket)=>
   socket.on('C_del_inbox',(mes)=>{
     if(socket.number){
       mes.forEach((mes1,key)=>{
-        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mess.id+"'  AND `send_receive` LIKE 'R' LIMIT 1", function(err, res)
+        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'R' LIMIT 1", function(err, res)
           {
             if ( err|| (res.length ==0) ){console.log(err);}
             else
