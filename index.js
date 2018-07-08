@@ -881,6 +881,44 @@ io.on('connection',  (socket)=>
       });
     }
   });
+  socket.on('C_del_inbox',(mes)=>{
+    if(socket.number){
+      mes.forEach((mes1,key)=>{
+        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mess.id+"'  AND `send_receive` LIKE 'R' LIMIT 1", function(err, res)
+          {
+            if ( err|| (res.length ==0) ){console.log(err);}
+            else
+              {
+                con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res[0].id+"'  AND `send_receive` LIKE 'R'", function(err1)
+                  {
+                    if ( err1){console.log(err1);}
+                    else {
+                      con.query("DELETE FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+res[0].id+"'", function(err2)
+                        {
+                          if (err2){console.log(err2);}
+                          else {
+                            con.query("DELETE FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'", function(err3)
+                              {
+                                if (err3){console.log(err3);}
+                                else {
+                                  console.log('Da xoa ban tin');
+                                  if(key===(mes.length-1)){socket.emit('S_del_mes');}
+
+                                }
+                            });
+                          }
+                      });
+
+                    }
+                });
+
+              }
+        });
+
+
+      });
+    }
+  });
   // socket.on('C_reques_point_inbox',(idc)=>{
   //   if(socket.number){
   //     con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
@@ -1200,9 +1238,9 @@ io.on('connection',  (socket)=>
             if ( err11 || (res11.length ==0) ){console.log(err11);}
             else
               {
-                con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res11[0].id+"'  AND `send_receive` LIKE 'P'", function(err11)
+                con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res11[0].id+"'  AND `send_receive` LIKE 'P'", function(err12)
                   {
-                    if ( err11 || (res11.length ==0) ){console.log(err11);}
+                    if ( err12){console.log(err12);}
                     else {
                       var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
                       mess.contact_list.forEach(function(contact)
