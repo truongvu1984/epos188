@@ -990,6 +990,55 @@ io.on('connection',  (socket)=>
       });
     }
   });
+  socket.on('C_del_online',(mes)=>{
+    if(socket.number){
+      mes.forEach((mes1)=>{
+        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err, res)
+          {
+            if ( err|| (res.length ==0) ){console.log(err);}
+            else
+              {
+                con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res[0].idc+"'", function(err1, res1)
+                  {
+                    if ( err1|| (res1.length ==0) ){console.log(err1);}
+                    else
+                      {
+                        res1.forEach((member1,key1)=>{
+                          con.query("SELECT * FROM `"+member1+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err2, res2)
+                            {
+                              if ( err2|| (res2.length ==0) ){console.log(err2);}
+                              else
+                                {
+                                  con.query("DELETE FROM `"+member1+"mes_sender` WHERE `ids` LIKE '"+res2[0].id+"'", function(err3)
+                                    {
+                                        if (err3){console.log(err3);}
+                                        else {
+                                          if(key1===(res1.length-1)){
+                                            con.query("DELETE FROM `"+member1+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"' AND `send_receive` LIKE 'O'", function(err4)
+                                              {
+                                                  if (err4){console.log(err4);}
+                                                  else {
+                                                    if(key===(mes.length -1)){socket.emit('S_del_online');}
+                                                  }
+                                              });
+
+                                          }
+
+                                        }
+                                    });
+
+                                }
+                            });
+
+                        });
+                      }
+                });
+
+              }
+        });
+      });
+    }
+  });
   // socket.on('C_reques_point_inbox',(idc)=>{
   //   if(socket.number){
   //     con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
