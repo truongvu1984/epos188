@@ -998,11 +998,13 @@ io.on('connection',  (socket)=>
             if ( err|| (res.length ==0) ){console.log(err);}
             else
               {
+                console.log('Da nhan 1');
                 con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res[0].idc+"'", function(err1, res1)
                   {
                     if ( err1|| (res1.length ==0) ){console.log(err1);}
                     else
                       {
+                          console.log('Da nhan 2');
                         res1.forEach((member1,key1)=>{
                           con.query("SELECT * FROM `"+member1+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err2, res2)
                             {
@@ -1018,6 +1020,7 @@ io.on('connection',  (socket)=>
                                               {
                                                   if (err4){console.log(err4);}
                                                   else {
+                                                      console.log('Da nhan 3');
                                                     if(key===(mes.length -1)){socket.emit('S_del_online');}
                                                   }
                                               });
