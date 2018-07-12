@@ -996,20 +996,20 @@ io.on('connection',  (socket)=>
       mes.forEach((mes1)=>{
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err, res)
           {
-            if ( err|| (res.length ==0) ){console.log(err);}
+            if ( err|| (res.length ==0) ){console.log('1:'+err);}
             else
               {
                 console.log('Da nhan 1');
                 con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res[0].idc+"'", function(err1, res1)
                   {
-                    if ( err1|| (res1.length ==0) ){console.log(err1);}
+                    if ( err1|| (res1.length ==0) ){console.log('2:'+err1);}
                     else
                       {
                           console.log('Da nhan 2');
                         res1.forEach((member1,key1)=>{
                           con.query("SELECT * FROM `"+member1+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err2, res2)
                             {
-                              if ( err2|| (res2.length ==0) ){console.log(err2);}
+                              if ( err2|| (res2.length ==0) ){console.log('3:'+err2);}
                               else
                                 {
                                   con.query("DELETE FROM `"+member1+"mes_sender` WHERE `ids` LIKE '"+res2[0].id+"'", function(err3)
