@@ -993,7 +993,7 @@ io.on('connection',  (socket)=>
   socket.on('C_del_online',(mes)=>{
     if(socket.number){
       console.log(mes);
-      mes.forEach((mes1)=>{
+      mes.forEach((mes1,key)=>{
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err, res)
           {
             if ( err|| (res.length ==0) ){console.log('1:'+err);}
