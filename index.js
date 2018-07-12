@@ -1000,7 +1000,7 @@ io.on('connection',  (socket)=>
             else
               {
                 console.log('Da nhan 1');
-                con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res[0].idc+"'", function(err1, res1)
+                con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res[0].id+"'", function(err1, res1)
                   {
                     if ( err1|| (res1.length ==0) ){console.log('2:'+err1);}
                     else
