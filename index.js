@@ -1007,17 +1007,17 @@ io.on('connection',  (socket)=>
                       {
                           console.log('Da nhan 2');
                         res1.forEach((member1,key1)=>{
-                          con.query("SELECT * FROM `"+member1+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err2, res2)
+                          con.query("SELECT * FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err2, res2)
                             {
                               if ( err2|| (res2.length ==0) ){console.log('3:'+err2);}
                               else
                                 {
-                                  con.query("DELETE FROM `"+member1+"mes_sender` WHERE `ids` LIKE '"+res2[0].id+"'", function(err3)
+                                  con.query("DELETE FROM `"+member1.number+"mes_sender` WHERE `ids` LIKE '"+res2[0].id+"'", function(err3)
                                     {
                                         if (err3){console.log(err3);}
                                         else {
                                           if(key1===(res1.length-1)){
-                                            con.query("DELETE FROM `"+member1+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"' AND `send_receive` LIKE 'O'", function(err4)
+                                            con.query("DELETE FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"' AND `send_receive` LIKE 'O'", function(err4)
                                               {
                                                   if (err4){console.log(err4);}
                                                   else {
