@@ -113,9 +113,6 @@ function kiemtra_taikhoan(){
   }, 5000);
 }
 kiemtra_taikhoan();
-var ngay= new Date().getTime();
-console.log(ngay);
-
 io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
@@ -1044,6 +1041,18 @@ io.on('connection',  (socket)=>
       });
     }
   });
+  socket.on('C_del_friend',(numbers)=>{
+    if(socket.number){
+      socket.emit('S_del_friend');
+      numbers.forEach((number)=>{
+        con.query("DELETE FROM `"+socket.number+"contact` WHERE `number` LIKE '"+number+"'", function(err3)
+          {
+              if (err3){console.log(err3);}
+
+        });
+      });
+    }
+  });
   // socket.on('C_reques_point_inbox',(idc)=>{
   //   if(socket.number){
   //     con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
@@ -1573,16 +1582,20 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_send_contact', function (contact)  {
       if (socket.number){
-        var sql2 = "INSERT INTO `"+socket.number+"contact` (name,number) VALUES ?";
-        var values2 = [[contact.name,contact.number]];
-        con.query(sql2, [values2], function (err, res)
-          {
-            if ( err){console.log(err);}
-            else {
-              console.log('Da them contact vao danh sach');
-            }
+        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
+           {
+             if ( err || ( a1s.length == 0) ){console.log(err);}
+             else
+               {
+                  var sql2 = "INSERT INTO `"+socket.number+"contact` (name,number) VALUES ?";
+                  var values2 = [[contact.name,contact.number]];
+                  con.query(sql2, [values2], function (err, res)
+                    {
+                      if ( err){console.log(err);}
+                      else {console.log('Da them contact vao danh sach');}
+                  });
+               }
           });
-
       }
       });
   socket.on('W_join_room', function (room, number)  {
