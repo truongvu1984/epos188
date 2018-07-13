@@ -1044,12 +1044,11 @@ io.on('connection',  (socket)=>
   socket.on('C_del_friend',(numbers)=>{
     if(socket.number){
       socket.emit('S_del_friend');
-      console.log('day so la:'+numbers);
+      console.log('day so la:'+numbers[0].idc);
       numbers.forEach((number)=>{
-        con.query("DELETE FROM `"+socket.number+"contact` WHERE `number` LIKE '"+number+"'", function(err3)
+        con.query("DELETE FROM `"+socket.number+"contact` WHERE `number` LIKE '"+number.idc+"'", function(err3)
           {
               if (err3){console.log(err3);}
-
         });
       });
     }
