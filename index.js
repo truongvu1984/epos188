@@ -761,7 +761,7 @@ io.on('connection',  (socket)=>
       // lấy bảng inbox
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC", function(err, a1s)
        {
-        if ( err || ( a1s.length == 0) ){console.log(err);}
+        if ( err ){console.log(err);}
         else
           {
             let tinfull = [];
@@ -783,7 +783,7 @@ io.on('connection',  (socket)=>
       // lấy bảng send
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` DESC", function(err, a1s)
         {
-             if ( err || ( a1s.length == 0) ){console.log(err);}
+             if ( err ){console.log(err);}
              else
                {
                  let tinfull2=[];
@@ -807,7 +807,7 @@ io.on('connection',  (socket)=>
       // lấy bảng save
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' ORDER BY `id` DESC", function(err, a1s)
         {
-            if ( err || ( a1s.length == 0) ){console.log(err);}
+            if ( err ){console.log(err);}
                  else
                    {
                      let tinfull = [];
@@ -820,7 +820,7 @@ io.on('connection',  (socket)=>
       // lấy bảng contact
       con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name` DESC ", function(err3, a1s)
              {
-               if ( err3 || ( a1s.length == 0) ){console.log('Da co loi contact:'+err3);}
+               if ( err3 ){console.log('Da co loi contact full:'+err3);}
                else
                  {
                    let mangcontact = [];
@@ -834,7 +834,7 @@ io.on('connection',  (socket)=>
       //lấy danh sách C_send_group
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' ORDER BY `id` DESC", function(err, a1s)
        {
-        if ( err || ( a1s.length == 0) ){console.log(err);}
+        if ( err ) ){console.log(err);}
         else
           {
             let tinfull = [];
@@ -859,7 +859,7 @@ io.on('connection',  (socket)=>
       // Lấy danh sách room
       con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC", function(err4, a4s)
              {
-               if ( err4 || ( a4s.length == 0) ){console.log('Da co loi contact:'+err4);}
+               if ( err4) ){console.log('Da co loi room full:'+err4);}
                else
                  {
                    let tinfull = [];
