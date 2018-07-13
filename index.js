@@ -859,7 +859,7 @@ io.on('connection',  (socket)=>
       // Lấy danh sách room
       con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC", function(err4, a4s)
              {
-               if ( err4) ){console.log('Da co loi room full:'+err4);}
+               if ( err4){console.log('Da co loi room full:'+err4);}
                else
                  {
                    let tinfull = [];
