@@ -453,10 +453,6 @@ io.on('connection',  (socket)=>
           con.query("UPDATE `account` SET `inbox` = 'A',`send` = 'A',`save` = 'A',`room` = 'A',`contact` = 'A', `group`='A' WHERE `number` LIKE '"+user1+"'",function(){
             console.log('da update account xong');
           });
-
-          // lấy toàn bộ dữ liệu mới nhất gửi cho ông này
-          // lấy dữ liệu inbox
-
         }
         else {
           socket.emit('login2_sai', {name:strencode(rows[0].user)});
@@ -481,10 +477,10 @@ io.on('connection',  (socket)=>
           socket.username = rows[0].user;
           socket.join(user1);
           console.log('Dang nhap dung roi voi tai khoan' + user1);
-          con.query("SELECT `inbox` FROM `account` WHERE `number` LIKE '"+user1+"' AND `inbox` LIKE 'A'", function(err1, a1s){
+          con.query("SELECT `inbox` FROM `account` WHERE `number` LIKE '"+user1+"' AND `inbox` LIKE 'A' LIMIT 1", function(err1, b1s){
             if(err){console.log(err);}
             else {
-              if(a1s.length>0){
+              if(b1s.length>0){
                 // lấy bảng inbox
                 con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC", function(err, a1s)
                  {
@@ -559,10 +555,10 @@ io.on('connection',  (socket)=>
               }
             }
           });
-          con.query("SELECT `send` FROM `account` WHERE `number` LIKE '"+user1+"' AND `send` LIKE 'A'", function(err1, a1s){
+          con.query("SELECT `send` FROM `account` WHERE `number` LIKE '"+user1+"' AND `send` LIKE 'A' LIMIT 1", function(err1, b1s){
             if(err){console.log(err);}
             else {
-              if(a1s.length>0){
+              if(b1s.length>0){
                 // lấy bảng send
                 con.query("SELECT * FROM `"+user1+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` DESC", function(err, a1s)
                   {
@@ -621,10 +617,10 @@ io.on('connection',  (socket)=>
 
             }
           });
-          con.query("SELECT `room` FROM `account` WHERE `number` LIKE '"+user1+"' AND `room` LIKE 'A'", function(err1, a1s){
+          con.query("SELECT `room` FROM `account` WHERE `number` LIKE '"+user1+"' AND `room` LIKE 'A' LIMIT 1", function(err1, b1s){
             if(err){console.log(err);}
             else {
-              if(a1s.length>0){
+              if(b1s.length>0){
                 // Lấy danh sách room
                 con.query("SELECT * FROM `"+user1+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC", function(err4, a4s)
                        {
@@ -672,10 +668,10 @@ io.on('connection',  (socket)=>
               }
             }
           });
-          con.query("SELECT `save` FROM `account` WHERE `number` LIKE '"+user1+"' AND `save` LIKE 'A'", function(err1, a1s){
+          con.query("SELECT `save` FROM `account` WHERE `number` LIKE '"+user1+"' AND `save` LIKE 'A' LIMIT 1", function(err1, b1s){
             if(err){console.log(err);}
             else {
-              if(a1s.length>0){
+              if(b1s.length>0){
                 // lấy bảng save
                 con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' ORDER BY `id` DESC", function(err, a1s)
                   {
@@ -692,18 +688,18 @@ io.on('connection',  (socket)=>
               }
             }
           });
-          con.query("SELECT `contact` FROM `account` WHERE `number` LIKE '"+user1+"' AND `contact` LIKE 'A'", function(err1, a1s){
+          con.query("SELECT `contact` FROM `account` WHERE `number` LIKE '"+user1+"' AND `contact` LIKE 'A' LIMIT 1", function(err1, a1s){
             if(err){console.log(err);}
             else {
               if(a1s.length>0){
                 // lấy bảng contact
-                con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name` DESC ", function(err3, a1s)
+                con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name` DESC ", function(err3, a3s)
                        {
-                         if ( err3 || ( a1s.length == 0) ){console.log('Da co loi contact:'+err3);}
+                         if ( err3){console.log('Da co loi contact:'+err3);}
                          else
                            {
                              let mangcontact = [];
-                             a1s.forEach(function(a1,key){
+                             a3s.forEach(function(a1,key){
                                mangcontact.push({name:strencode(a1.name), number:a1.number});
                                if(key===(a1s.length-1)){socket.emit('S_send_contact',{tin:mangcontact});console.log('Server đã gửi contact');}
                              });
@@ -718,13 +714,13 @@ io.on('connection',  (socket)=>
             else {
               if(a1s.length>0){
                 //lấy danh sách C_send_group
-                con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' ORDER BY `id` DESC", function(err, a1s)
+                con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' ORDER BY `id` DESC", function(err, a3s)
                  {
-                  if ( err || ( a1s.length == 0) ){console.log(err);}
+                  if ( err ){console.log(err);}
                   else
                     {
                       let tinfull = [];
-                      a1s.forEach(function(a1,key){
+                      a3s.forEach(function(a1,key){
                           let mangcontact = [];
                           con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err2, a2s){
                            if(err2){console.log(err2);}
