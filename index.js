@@ -834,7 +834,7 @@ io.on('connection',  (socket)=>
       //lấy danh sách C_send_group
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' ORDER BY `id` DESC", function(err, a1s)
        {
-        if ( err ) ){console.log(err);}
+        if ( err ){console.log(err);}
         else
           {
             let tinfull = [];
