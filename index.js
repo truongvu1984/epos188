@@ -624,14 +624,14 @@ io.on('connection',  (socket)=>
                 // Lấy danh sách room
                 con.query("SELECT * FROM `"+user1+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC", function(err4, a4s)
                        {
-                         if ( err4 || ( a4s.length == 0) ){console.log('Da co loi contact:'+err4);}
+                         if ( err4 ){console.log('Da co loi contact:'+err4);}
                          else
                            {
                              let tinfull = [];
                              a4s.forEach(function(a4,key){
                                 con.query("SELECT * FROM `"+user1+"mes_sender` WHERE `ids` LIKE '"+a4.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
                                   {
-                                        if ( err5 || ( a5s.length == 0) ){console.log('Da co loi contact:'+err5);}
+                                        if ( err5 ){console.log('Da co loi contact:'+err5);}
                                         else
                                           {
                                               tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:a4.time});
@@ -862,7 +862,7 @@ io.on('connection',  (socket)=>
                    a4s.forEach(function(a4,key){
                       con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a4.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
                         {
-                              if ( err5 || ( a5s.length == 0) ){console.log('Da co loi contact:'+err5);}
+                              if ( err5 ){console.log(err5);}
                               else
                                 {
                                     tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:a4.time});
