@@ -1044,6 +1044,7 @@ io.on('connection',  (socket)=>
   socket.on('C_del_friend',(numbers)=>{
     if(socket.number){
       socket.emit('S_del_friend');
+      console.log('day so la:'+numbers);
       numbers.forEach((number)=>{
         con.query("DELETE FROM `"+socket.number+"contact` WHERE `number` LIKE '"+number+"'", function(err3)
           {
