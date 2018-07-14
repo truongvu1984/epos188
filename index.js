@@ -1586,18 +1586,21 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_send_contact', function (contact)  {
       if (socket.number){
+        console.log('C gửi new contact'+contact.name);
         con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
            {
-             if ( err || ( a1s.length == 0) ){console.log(err);}
+             if ( err){console.log(err);}
              else
                {
+                 if(a1s.length===0){
                   var sql2 = "INSERT INTO `"+socket.number+"contact` (name,number) VALUES ?";
                   var values2 = [[contact.name,contact.number]];
                   con.query(sql2, [values2], function (err, res)
                     {
                       if ( err){console.log(err);}
-                      else {console.log('Da them contact vao danh sach');}
+                      else {console.log('Da them contact vao danh sach');socket.emit('S_add_contact_ok');}
                   });
+                }
                }
           });
       }
