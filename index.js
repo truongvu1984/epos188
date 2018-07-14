@@ -1002,7 +1002,7 @@ io.on('connection',  (socket)=>
             else
               {
                 console.log('Da nhan 1');
-                con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res[0].id+"'", function(err1, res1)
+                con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` = "+res[0].id, function(err1, res1)
                   {
                     if ( err1|| (res1.length ==0) ){console.log('2:'+err1);}
                     else
@@ -1014,12 +1014,12 @@ io.on('connection',  (socket)=>
                               if ( err2|| (res2.length ==0) ){console.log('3:'+err2);}
                               else
                                 {
-                                  con.query("DELETE FROM `"+member1.number+"mes_sender` WHERE `ids` LIKE '"+res2[0].id+"'", function(err3)
+                                  con.query("DELETE FROM `"+member1.number+"mes_sender` WHERE `ids` = "+res2[0].id, function(err3)
                                     {
                                         if (err3){console.log(err3);}
                                         else {
                                           if(key1===(res1.length-1)){
-                                            con.query("DELETE FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"' AND `send_receive` LIKE 'O'", function(err4)
+                                            con.query("DELETE FROM `"+member1.number+"mes_main` WHERE `id` = "+res2[0].id+" AND `send_receive` LIKE 'O'", function(err4)
                                               {
                                                   if (err4){console.log(err4);}
                                                   else {
