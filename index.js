@@ -634,8 +634,10 @@ io.on('connection',  (socket)=>
                                         if ( err5 ){console.log('Da co loi contact:'+err5);}
                                         else
                                           {
+                                              if(a5s.length>0){
                                               tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:a4.time});
                                               if(key===(a4s.length-1)){socket.emit('S_send_room_full',{tin:tinfull});console.log('Server đã gửi room:');}
+                                              }
                                           }
                                 });
                              });
@@ -858,6 +860,7 @@ io.on('connection',  (socket)=>
                if ( err4){console.log('Da co loi room full:'+err4);}
                else
                  {
+                   console.log('Online là:'+a4s);
                    let tinfull = [];
                    a4s.forEach(function(a4,key){
                       con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a4.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
