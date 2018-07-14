@@ -1007,7 +1007,7 @@ io.on('connection',  (socket)=>
                     if ( err1|| (res1.length ==0) ){console.log('2:'+err1);}
                     else
                       {
-                          console.log('Da nhan 2');
+                          console.log('Da nhan 2:'+res1.length);
                         res1.forEach((member1,key1)=>{
                           con.query("SELECT * FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err2, res2)
                             {
@@ -1648,8 +1648,6 @@ io.on('connection',  (socket)=>
 
     }
   });
-    //sự kiến check_contact xảy ra khi người dùng được thông báo acitve thành công, app sẽ lấy  toàn bộ danh sách
-    // để gửi lên server để server lưu và kiểm tra xe liệu trong đó có ai đã tham gia ePos rồi chưa
   socket.on('check_contact_full', function (arr_contact){
       if (socket.number){
     //người dùng mới đăng nhập và sẽ gửi lên một đống cái contact, lúc này
