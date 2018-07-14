@@ -868,8 +868,13 @@ io.on('connection',  (socket)=>
                               if ( err5 ){console.log(err5);}
                               else
                                 {
+                                  if(a5s.length>0){
                                     tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:a4.time});
                                     if(key===(a4s.length-1)){socket.emit('S_send_room_full',{tin:tinfull});console.log('Server đã gửi room:');}
+                                  }
+                                  else {
+                                    console.log('id là:'+ a4.id);
+                                  }
                                 }
                       });
                    });
