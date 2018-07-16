@@ -1018,7 +1018,7 @@ io.on('connection',  (socket)=>
                                     {
                                         if (err3){console.log(err3);}
                                         else {
-                                          console.log('Da xoa tai khoan:'+member1.name);
+                                          if(key1===(res1.length-1)){                                          console.log('Da xoa tai khoan:'+member1.name);
                                           con.query("DELETE FROM `"+socket.number+"mes_main` WHERE `id` = "+res[0].id, function(err9)
                                             {
                                                 if (err9){console.log(err9);}
@@ -1029,6 +1029,7 @@ io.on('connection',  (socket)=>
                                                   if (err8){console.log(err8);}
                                                   else {console.log('Da xoa member');}
                                           });
+                                        }
                                         }
 
                                     });
