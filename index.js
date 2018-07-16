@@ -1008,16 +1008,6 @@ io.on('connection',  (socket)=>
                     else
                       {
                         console.log('Da nhan 2:'+res1.length);
-                        con.query("DELETE FROM `"+socket.number+"mes_main` WHERE `id` = "+res[0].id, function(err9)
-                          {
-                              if (err9){console.log(err9);}
-                              else {console.log('Da xoa main');}
-                          });
-                        con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` = "+res[0].id , function(err8)
-                            {
-                                if (err8){console.log(err8);}
-                                else {console.log('Da xoa member');}
-                        });
                         res1.forEach((member1,key1)=>{
                           con.query("SELECT * FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err2, res2)
                             {
@@ -1027,6 +1017,19 @@ io.on('connection',  (socket)=>
                                   con.query("DELETE FROM `"+member1.number+"mes_sender` WHERE `ids` = "+res2[0].id + " AND `number` LIKE '"+socket.number+"'", function(err3)
                                     {
                                         if (err3){console.log(err3);}
+                                        else {
+                                          console.log('Da xoa tai khoan:'+member1.name);
+                                          con.query("DELETE FROM `"+socket.number+"mes_main` WHERE `id` = "+res[0].id, function(err9)
+                                            {
+                                                if (err9){console.log(err9);}
+                                                else {console.log('Da xoa main');}
+                                            });
+                                          con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` = "+res[0].id , function(err8)
+                                              {
+                                                  if (err8){console.log(err8);}
+                                                  else {console.log('Da xoa member');}
+                                          });
+                                        }
 
                                     });
 
