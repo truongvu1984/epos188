@@ -1024,7 +1024,7 @@ io.on('connection',  (socket)=>
                                             {
                                                 if (err9){console.log(err9);}
                                                 else {console.log('Da xoa main');}
-                                            });
+                                          });
                                           con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` = "+res[0].id , function(err8)
                                               {
                                                   if (err8){console.log(err8);}
@@ -1322,7 +1322,7 @@ io.on('connection',  (socket)=>
                 {
                   if(err3){console.log(err3);}
                   else {
-                      io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number, idc:idc});
+                      io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,tennguoinhan:strencode(socket.username), idc:idc});
                   }
                 });
               }
