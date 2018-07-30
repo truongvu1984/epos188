@@ -660,8 +660,10 @@ io.on('connection',  (socket)=>
                             if (err3){console.log(err3);}
                             else
                             {
+                                  if(a2s.length>0){
                                   var room_full_server = {room_name:strencode(a5.subject), room_id_server:a5.idc, admin_name:strencode(a2s[0].name), admin_number:a2s[0].number };
                                   socket.emit('S_send_room', room_full_server );
+                                }
                           }
                           });
                         });
