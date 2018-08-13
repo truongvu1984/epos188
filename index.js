@@ -3,8 +3,9 @@ var app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start")});
+let CheckMobi = require('omrs-checkmobi');
 // var nodemailer = require('nodemailer');
-// let CheckMobi = require('omrs-checkmobi');
+
 // var transporter = nodemailer.createTransport({
 //         service: 'Gmail',
 //         auth: {
@@ -24,7 +25,7 @@ var con = mysql.createConnection({
 
 var passwordHash = require('password-hash');
 // var ketqua = passwordHash.verify('vuyeuvan', pass);
-// let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
+let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
 // cb.phoneInformation('+84982025401', (error, response) => {
 //       if(error){console.error();}
 //       else {
@@ -38,62 +39,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
     if (err) { console.log(" da co loi:" + err); }
     else {
       console.log("Da co ket noi ok ha ha ha");
-      // app.set('view engine', 'ejs');
-      // app.set('views', './views');
-      // app.use(express.static('public'));
-      // app.get('/', (req, res) => res.render('dangnhap'));
-      //   app.post('/', urlencodedParser, function (req, res) {
-      //   if (!req.body) return res.sendStatus(400)
-      //   else {
-      //   var full_number = "+"+req.body.code + req.body.number.replace('0','');
-      //   console.log(full_number);
-      //   con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' AND `pass` LIKE '"+req.body.pass+"' LIMIT 1", function(err, rows){
-      //     if (err || rows.length ==0){
-      //       res.send("Dang nhap khong dung");
-      //       console.log("Dang nhap first khong dung"+req.body.number);
-      //       }
-      //     else{
-      //       // vào CSDL lấy dữ liệu của username này ra
-      //       // một là mục inbox: hiển thị số tin mới chưa chuyển đến điện thoại,nội dung của inbox
-      //       // khi nhấp chuột vào sẽ hiện ra 10 tin đầu tiên theo thời gian, bên dưới cùng là hiển thị thêm.
-      //     // với mục contact thì hiển thị ra banj mới tham gia.
-      //     // các mục đều hiển thị 10 mục đầu tiên.
-      //     //các mục này không có sẵn mà khi nhập vào thì mới load trên server về.
-      //   // đồng thời gán cái name cho cái socket đó là tên người dùng.
-      //
-      //     con.query("SELECT * FROM `"+full_number+"mes_main` WHERE `send_receive` LIKE 'R'", function(err, a1s)
-      //       {
-      //       if ( err ){console.log(err);}
-      //       else
-      //         {
-      //           con.query("SELECT * FROM `"+full_number+"mes_main` WHERE `send_receive` LIKE 'S'", function(err2, a2s)
-      //               {
-      //               if ( err2 ){console.log(err2);}
-      //               else
-      //                 {
-      //                   con.query("SELECT * FROM `"+full_number+"mes_main` WHERE `send_receive` LIKE 'O'", function(err3, a3s)
-      //                       {
-      //                       if ( err3){console.log(err3);}
-      //                       else
-      //                         {
-      //                           con.query("SELECT * FROM `"+full_number+"contact` WHERE `fr` LIKE 'Y'", function(err4, a4s)
-      //                               {
-      //                               if ( err4 ){console.log(err4);}
-      //                               else{
-      //                                   res.render('home2', {inbox:a1s, send:a2s, online:a3s,contact:a4s, number:full_number, name:rows[0].user, pass:req.body.pass });
-      //                                   console.log('Da render xong' +a4s.length);
-      //                               }
-      //                             });
-      //                         }
-      //                     });
-      //                 }
-      //             });
-      //         }
-      //       });
-      //     }
-      //   });
-      //     }
-      // })
+
 function strencode( data ) {
     return unescape( encodeURIComponent( data ) );
   }
@@ -167,13 +113,14 @@ io.on('connection',  (socket)=>
                 else {
                   if(rows4.length >0){socket.emit('regis1_quasolan_number');}
                   else {
-                    cb.phoneInformation('+84982025401', (error, response) => {
+                    var date = Math.floor(Date.now() / 1000);
+                    var string = Math.floor(Math.random() * (89998)) + 10001;
+                    cb.sendMessage({to:'+84982025401', text:'Messeage from ePos:'+string}, (error, response) => {
                         if(error){console.log(error); socket.emit('sodienthoaikhongdung');}
                         else {
                           console.log(response);
                           socket.emit('send_string_ok');// để Client chuyển sang giao diện chờ nhập chuỗi
-                          var date = Math.floor(Date.now() / 1000);
-                          var string = Math.floor(Math.random() * (89998)) + 10001;
+
                           //kiểm tra xem bảng xác thực đã có số điện thoại đó chưa, nếu có rồi thì update, nếu chưa có thì thêm mới
                           con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err6, rows6){
                             if(err6){console.log(err6);}
@@ -322,26 +269,24 @@ io.on('connection',  (socket)=>
   socket.on('C_yeucau_chuoi_forgotpass',function(idphone, num){
     console.log('nguoi dung yeu cau chuoi');
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"'", function(err, rows){
-        // nếu tài khoản đã có người đăng ký rồi thì:
       if(err){console.log(err);}
       else {
         if (rows.length == 0 )	{
              socket.emit('taikhoankhongco');
-             console.log("forgotpass: không có tài khoản này");
-          }
+             }
           else {
               con.query("SELECT * FROM `danhsachkhoa` WHERE `number` LIKE '"+ num +"' OR `phoneid` LIKE '"+idphone+"' LIMIT 1", function(err4, rows4){
                 if(err4){console.log(err4);}
                 else {
-                  if(rows4.length >0){socket.emit('C_yeucauchuoi_quasolan');console.log('yeu cau chuoi qua so lan');}
+                  if(rows4.length >0){socket.emit('C_yeucauchuoi_quasolan');}
                   else {
-                    cb.phoneInformation('+84982025401', (error, response) => {
+                    var date = Math.floor(Date.now() / 1000);
+                    var string = Math.floor(Math.random() * (89998)) + 10001;
+                    cb.sendMessage({to:'84982025401', text:'Mesage from ePos'}, (error, response) => {
                         if(error){console.log(error); socket.emit('sodienthoaikhongtontai');}
                         else {
                           console.log(response);
                           socket.emit('S_guichuoi_xacnhan_forget');// để Client chuyển sang giao diện chờ nhập chuỗi
-                          var date = Math.floor(Date.now() / 1000);
-                          var string = Math.floor(Math.random() * (89998)) + 10001;
                           //kiểm tra xem bảng xác thực đã có số điện thoại đó chưa, nếu có rồi thì update, nếu chưa có thì thêm mới
                           con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err6, rows6){
                             if(err6){console.log(err6);}
@@ -354,16 +299,7 @@ io.on('connection',  (socket)=>
                                 con.query(sql, [values], function(err, result){
                                   if(err){console.log(err);}
                                   else {
-                                  // con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err9, rows9){
-                                  //   console.log('ket qua:'+rows9);
-                                  //   if(rows9.length >=3){
-                                  //     console.log('da khoa number');
-                                  //     var sql = "INSERT INTO `danhsachkhoa` (number,date) VALUES ?";
-                                  //     var values = [[num, date]];
-                                  //     con.query(sql, [values], function(err, result){ if(err)console.log(err);});
-                                  //   }
-                                  // });
-                                  con.query("SELECT * FROM `xacthuc` WHERE `phoneid` LIKE '"+ idphone +"'", function(err9, rows9){
+                                    con.query("SELECT * FROM `xacthuc` WHERE `phoneid` LIKE '"+ idphone +"'", function(err9, rows9){
 
                                     if(rows9.length >=3){
                                       console.log('da insert khoa idphone');
@@ -1061,58 +997,7 @@ io.on('connection',  (socket)=>
       });
     }
   });
-  // socket.on('C_reques_point_inbox',(idc)=>{
-  //   if(socket.number){
-  //     con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
-  //        {
-  //          if ( err || ( a1s.length == 0) ){console.log(err);}
-  //          else
-  //            {
-  //              con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
-  //                       if(err3){console.log(err3);}
-  //                       else {
-  //                         let position=[];
-  //                         a3s.forEach(function(a3,key){
-  //                           position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
-  //                           if(key===(a3s.length-1)){
-  //                             socket.emit('S_send_point_inbox',{pos:position});
-  //                             console.log('Server đã gửi inbox point:'+position);
-  //                           }
-  //
-  //                         });
-  //
-  //                       }
-  //               });
-  //
-  //            }
-  //       });
-  //
-  //   }
-  // });
-  // socket.on('C_reques_point_send',(idc)=>{
-  //   if(socket.number){
-  //     con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
-  //        {
-  //          if ( err || ( a1s.length == 0) ){console.log(err);}
-  //          else
-  //            {
-  //              con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
-  //                       if(err3){console.log(err3);}
-  //                       else {
-  //                         let position=[];
-  //                         a3s.forEach(function(a3,key){
-  //                           position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
-  //                           if(key===(a3s.length-1)){socket.emit('S_send_point_send',{pos:position});}
-  //                         });
-  //                       }
-  //               });
-  //
-  //            }
-  //       });
-  //
-  //   }
-  //
-  // });
+
   socket.on('C_reques_point',(idc)=>{
     if(socket.number){
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
