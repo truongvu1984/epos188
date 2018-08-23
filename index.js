@@ -997,7 +997,6 @@ io.on('connection',  (socket)=>
       });
     }
   });
-
   socket.on('C_reques_point',(idc)=>{
     if(socket.number){
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
@@ -1022,16 +1021,13 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_reques_point_import',(list)=>{
     if(socket.number){
-      console.log('Da nhan yeu cau point hi hi hi');
-      console.log('so luong la:'+list.length);
-      list.forEach((list1,key1)=>{
+        list.forEach((list1,key1)=>{
         let position=[];
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+list1.id+"' LIMIT 1", function(err, a1s)
            {
              if ( err || ( a1s.length == 0) ){console.log('ha ha ha:'+err);}
              else
                {
-                 console.log('Ket qua 1 la:'+a1s[0].subject);
                  con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
                           if(err3 || (a3s.length==0)){console.log('ko co:'+err3);}
                           else {
