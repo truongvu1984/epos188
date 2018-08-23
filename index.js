@@ -860,6 +860,7 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_del_send',(mes)=>{
     if(socket.number){
+      console.log('Da nhan yeu cau xoa:'+mes.length);
       mes.forEach((mes1,key)=>{
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'S' LIMIT 1", function(err, res)
           {
