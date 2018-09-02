@@ -1350,27 +1350,31 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_check_contact', function (string){
       if (socket.number){
-    console.log("Chuoi nhan duoc la:"+string);
+    
     con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
       if ( err){console.log(err);}
       else
       {
         let s=true;;
-        a1.forEach(function (row1)
+        a1.forEach(function (row1,key)
           {
-            if (string.charAt(0)=='0'){
-              string = string.substr(1);
-              console.log(string);
-            }
+            // if (string.charAt(0)=='0'){
+            //   string = string.substr(1);
+            //   console.log(string);
+            // }
             if (row1.number.indexOf(string) !== -1 || row1.user.indexOf(string) !== -1)
             {
               socket.emit('S_kq_check_contact',{user:strencode(row1.user), number: row1.number});
             //  socket.emit('S_kq_check_contact',{user:row1.user, number: row1.number});
-              console.log("Da tim thay:"+row1.user);
+
               s=false;
+                if(key === (a1.length-1)){
+                    if (s){socket.emit('S_kq_check_contact_zero');}
+
+                }
             }
           });
-        if (s){socket.emit('S_kq_check_contact_zero');}
+
       }
     });
     }
