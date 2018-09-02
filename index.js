@@ -613,7 +613,7 @@ io.on('connection',  (socket)=>
             else {
               if(b1s.length>0){
                 // lấy bảng save
-                con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H'`", function(err, a1s)
+                con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H'", function(err, a1s)
                   {
                       if ( err || ( a1s.length == 0) ){console.log(err);}
                            else
