@@ -1780,6 +1780,7 @@ io.on('connection',  (socket)=>
     let i=0;
     let check = false;
     let code="";
+    console.log('yeu cau 1');
     rows.forEach((row,key)=>{
       if(row.code ==nhom1[(nhom1.length-1)].code){i++;}
       else { check = true; code = row.code;}
