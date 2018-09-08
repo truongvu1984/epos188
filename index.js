@@ -1787,6 +1787,7 @@ io.on('connection',  (socket)=>
         kq.push({country:nhom1[(nhom1.length-1)].code, soluong:i});
         if(check){nhom1.push({name:code}); kiemtra();}
         else {
+          console.log('da gui manager đi');
           socket.emit('S_send_manager',{ketqua: kq});
         }
       }
@@ -1794,6 +1795,7 @@ io.on('connection',  (socket)=>
   }
   socket.on('C_get_manager',()=>{
     if(socket.admin ==='admin'){
+      console.log('C yeu cau manager');
       con.query("SELECT `code` FROM `account` ", function(err, rows){
         let nhom1 = [];
         let kq = [];
