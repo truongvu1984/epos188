@@ -1782,9 +1782,11 @@ io.on('connection',  (socket)=>
     let code="";
     console.log('yeu cau 1');
     rows.forEach((row,key)=>{
+      console.log(row);
       if(row.code ==nhom1[(nhom1.length-1)].code){i++;}
       else { check = true; code = row.code;}
       if(key=== rows.length){
+        console.log('yeu cau 2');
         kq.push({country:nhom1[(nhom1.length-1)].code, soluong:i});
         if(check){nhom1.push({name:code}); kiemtra();}
         else {
