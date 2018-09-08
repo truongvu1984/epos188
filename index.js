@@ -1793,7 +1793,7 @@ io.on('connection',  (socket)=>
     });
   }
   socket.on('C_get_manager',()=>{
-    if(socket.number ==='+84983025401'){
+    if(socket.admin ==='admin'){
       con.query("SELECT `code` FROM `account` ", function(err, rows){
         let nhom1 = [];
         let kq = [];
@@ -1802,6 +1802,21 @@ io.on('connection',  (socket)=>
       });
 
     }
+  });
+  socket.on('manager_login', (name, pass)=>{
+    if(name ==='admin' && pass === '1234'){
+      socket.admin = 'admin';
+      console.log('Admin login');
+      socket.emit('login_ok');
+    }
+    else {
+      socket.emit('login_wrong');
+    }
+
+  });
+  socket.on('log_off', ()=>{
+    socket.admin=null;
+    console.log('Da log off');
   });
 
 });
