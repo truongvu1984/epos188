@@ -24,15 +24,7 @@ var con = mysql.createConnection({
 });
 
 var passwordHash = require('password-hash');
-// var ketqua = passwordHash.verify('vuyeuvan', pass);
 let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
-// cb.phoneInformation('+84982025401', (error, response) => {
-//       if(error){console.error();}
-//       else {
-//         console.log(response);
-//       }
-// });
-
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
   con.connect(function(err) {
@@ -1350,7 +1342,7 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_check_contact', function (string){
       if (socket.number){
-    
+
     con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
       if ( err){console.log(err);}
       else
@@ -1782,6 +1774,33 @@ io.on('connection',  (socket)=>
       con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y', `time` = '"+time+"' WHERE `idc` LIKE '"+room_fullname+"'",function(err){
       if ( err){console.log(err);}
     });
+    }
+  });
+  function kiemtra(rows, nhom1, kq) {
+    let i=0;
+    let check = false;
+    let code="";
+    rows.forEach((row,key)=>{
+      if(row.code ==nhom1[(nhom1.length-1)].code){i++;}
+      else { check = true; code = row.code;}
+      if(key=== rows.length){
+        kq.push({country:nhom1[(nhom1.length-1)].code, soluong:i});
+        if(check){nhom1.push({name:code}); kiemtra();}
+        else {
+          socket.emit('S_send_manager',{ketqua: kq});
+        }
+      }
+    });
+  }
+  socket.on('C_get_manager',()=>{
+    if(socket.number ==='+84983025401'){
+      con.query("SELECT `code` FROM `account` ", function(err, rows){
+        let nhom1 = [];
+        let kq = [];
+        nhom1.push({name:rows[0].code});
+        kiemtra(rows, nhom1, kq);
+      });
+
     }
   });
 
