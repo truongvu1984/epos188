@@ -31,6 +31,70 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
     if (err) { console.log(" da co loi:" + err); }
     else {
       console.log("Da co ket noi ok ha ha ha");
+      app.set('view engine', 'ejs');
+           app.set('views', './views');
+           app.use(express.static('public'));
+           app.get('/', (req, res) => res.render('dangnhap'));
+             app.post('/', urlencodedParser, function (req, res) {
+             if (!req.body) return res.sendStatus(400)
+             else {
+             var full_number = "+"+req.body.code + req.body.number.replace('0','');
+             console.log(full_number);
+             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' AND `pass` LIKE '"+req.body.pass+"' LIMIT 1", function(err, rows){
+               if (err || rows.length ==0){
+                 res.send("Dang nhap khong dung");
+                 console.log("Dang nhap first khong dung"+req.body.number);
+                 }
+               else{
+                 // vào CSDL lấy dữ liệu của username này ra
+                 // một là mục inbox: hiển thị số tin mới chưa chuyển đến điện thoại,nội dung của inbox
+                 // khi nhấp chuột vào sẽ hiện ra 10 tin đầu tiên theo thời gian, bên dưới cùng là hiển thị thêm.
+               // với mục contact thì hiển thị ra banj mới tham gia.
+               // các mục đều hiển thị 10 mục đầu tiên.
+               //các mục này không có sẵn mà khi nhập vào thì mới load trên server về.
+             // đồng thời gán cái name cho cái socket đó là tên người dùng.
+              con.query("SELECT * FROM `"+full_number+"mes_main` WHERE `send_receive` LIKE 'R'", function(err, a1s)
+                 {
+                 if ( err ){console.log(err);}
+                 else
+                   {
+                     con.query("SELECT * FROM `"+full_number+"mes_main` WHERE `send_receive` LIKE 'S'", function(err2, a2s)
+                         {
+                         if ( err2 ){console.log(err2);}
+                         else
+                           {
+                             con.query("SELECT * FROM `"+full_number+"mes_main` WHERE `send_receive` LIKE 'O'", function(err3, a3s)
+                                 {
+                                 if ( err3){console.log(err3);}
+                                 else
+                                   {
+                                     con.query("SELECT * FROM `"+full_number+"contact` WHERE `fr` LIKE 'Y'", function(err4, a4s)
+                                         {
+                                         if ( err4 ){console.log(err4);}
+                                         else{
+                                             res.render('home2', {inbox:a1s, send:a2s, online:a3s,contact:a4s, number:full_number, name:rows[0].user, pass:req.body.pass });
+                                             console.log('Da render xong' +a4s.length);
+                                         }
+                                       });
+                                   }
+                               });
+                           }
+                       });
+                   }
+              });
+
+            }//âdf
+             });
+         }
+     })
+
+
+
+
+
+
+
+
 
 function strencode( data ) {
     return unescape( encodeURIComponent( data ) );
