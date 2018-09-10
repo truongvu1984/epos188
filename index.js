@@ -1803,6 +1803,7 @@ io.on('connection',  (socket)=>
             });
           }
         });
+      }
   });
   socket.on('manager_login', (name, pass)=>{
     if(name ==='admin' && pass === '1234'){
