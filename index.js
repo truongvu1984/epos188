@@ -91,7 +91,7 @@ io.on('connection',  (socket)=>
   socket.on('disconnect', function(){ console.log('user da disconnect:'+socket.user_name)});
   socket.on('regis1', function(idphone,num){
     console.log('so dien thoai:'+num);
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"'", function(err, rows){
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err, rows){
         // nếu tài khoản đã có người đăng ký rồi thì:
       if(err){console.log(err);}
       else {
@@ -114,7 +114,7 @@ io.on('connection',  (socket)=>
                           socket.emit('send_string_ok');// để Client chuyển sang giao diện chờ nhập chuỗi
 
                           //kiểm tra xem bảng xác thực đã có số điện thoại đó chưa, nếu có rồi thì update, nếu chưa có thì thêm mới
-                          con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err6, rows6){
+                          con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err6, rows6){
                             if(err6){console.log(err6);}
                             else {
                                 // cho phép đăng ký liên tục 3 lần, nếu là lần đầu
@@ -186,7 +186,7 @@ io.on('connection',  (socket)=>
   socket.on('regis', function (user_info){
 		    console.log("User want to regis with account: "+ user_info.number);
         // Tìn tronbg db danh sách các tài khoản có number như number đăng ký không
-		      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user_info.number +"'", function(err, rows){
+		      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user_info.number +"' LIMIT 1", function(err, rows){
               // nếu tài khoản đã có người đăng ký rồi thì:
             if(err){console.log(err);}
             else {
@@ -197,7 +197,7 @@ io.on('connection',  (socket)=>
 
               else {
                 // Tìm xem liệu số điện thoại đó có đúng là của người đó không
-                con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ user_info.number +"' AND `chuoi`LIKE '"+user_info.string+"' AND `status` LIKE 'Y'", function(err1, row1s) {
+                con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ user_info.number +"' AND `chuoi`LIKE '"+user_info.string+"' AND `status` LIKE 'Y' LIMIT 1", function(err1, row1s) {
 					     		  if((err1)|| (row1s.length==0)) {
                       socket.emit('chuoi_ko_dung');
                     }
@@ -214,7 +214,7 @@ io.on('connection',  (socket)=>
                       //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
                       con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"mes_sender` (`id` INT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NULL,`send_receive` VARCHAR(5), `stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`fr` VARCHAR(5) NULL,`code` VARCHAR(10) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
-                      con.query("SELECT number FROM `account` ", function(err, row3s)
+                      con.query("SELECT `number` FROM `account` ", function(err, row3s)
                         {
                           if (err) {console.log('select loi '+ err);}
                           else if ( row3s.length >0)
@@ -250,8 +250,23 @@ io.on('connection',  (socket)=>
                       var values = [[user_info.number,user_info.user, matkhau, user_info.code]];
                       con.query(sql, [values], function (err, result) {if ( err){console.log(err);}});
                       // xóa bản tin trong bảng active đi, coi như quá trình active hoàn tất
-                      console.log('dang ky thanh cong:'+user_info.number);
                       socket.emit('dangky_thanhcong');
+                      con.query("SELECT * FROM `manager` WHERE `code` LIKE '"+ user_info.code +"' LIMIT 1'", function(err1, row1s) {
+                          if(err1){console.log(err1);}
+                          else {
+                            if(row1s.length==0){
+                              var sql_add = "INSERT INTO `manager` (code, number ) VALUES ?";
+                              var valu = [[user_info.code, 1]];
+                              con.query(sql_add, [valu], function (err2) {if ( err2){console.log(err2);}});
+                            }
+                            else {
+                              var soluong = row1s[0].number +1;
+                              var sql_add = "INSERT INTO `manager` (code, number ) VALUES ?";
+                              var valu = [[user_info.code, soluong]];
+                              con.query(sql_add, [valu], function (err2) {if ( err2){console.log(err2);}});
+                            }
+                          }
+                      });
                     					          }//end else 2
 				       });//end db.acive account
         	    } //end else 1
@@ -1776,37 +1791,18 @@ io.on('connection',  (socket)=>
     });
     }
   });
-  function kiemtra(rows, nhom1, kq) {
-    let i=0;
-    let check = false;
-    let code="";
-    console.log('yeu cau 1');
-    rows.forEach((row,key)=>{
-      console.log(row);
-      if(row.code ==nhom1[(nhom1.length-1)].code){i++;}
-      else { check = true; code = row.code;}
-      if(key=== rows.length){
-        console.log('yeu cau 2');
-        kq.push({country:nhom1[(nhom1.length-1)].code, soluong:i});
-        if(check){nhom1.push({name:code}); kiemtra();}
-        else {
-          console.log('da gui manager đi');
-          socket.emit('S_send_manager',{ketqua: kq});
-        }
-      }
-    });
-  }
   socket.on('C_get_manager',()=>{
     if(socket.admin ==='admin'){
-      console.log('C yeu cau manager');
-      con.query("SELECT `code` FROM `account` ", function(err, rows){
-        let nhom1 = [];
-        let kq = [];
-        nhom1.push({name:rows[0].code});
-        kiemtra(rows, nhom1, kq);
-      });
-
-    }
+      con.query("SELECT * FROM `manager` ", function(err1, row1s) {
+          if(err1 || row1s.length==0){console.log(err1);}
+          else {
+            var tinnhan_final = [];
+            row1s.forEach((row, key)=>{
+              tinnhan_final.push({code:row.code, number:row.number});
+              if(key===row1s.length){socket.emit('S_send_manager',tinnhan_final);}
+            });
+          }
+        });
   });
   socket.on('manager_login', (name, pass)=>{
     if(name ==='admin' && pass === '1234'){
