@@ -1791,8 +1791,10 @@ io.on('connection',  (socket)=>
     });
     }
   });
-  socket.on('C_get_manager',()=>{
+  socket.on('C_get_manager',()=>
+  console.log('hi hi hi');
     if(socket.admin ==='admin'){
+      console.log('C_yeu cau');
       con.query("SELECT * FROM `manager` ", function(err1, row1s) {
           if(err1 || row1s.length==0){console.log(err1);}
           else {
