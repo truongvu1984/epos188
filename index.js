@@ -1792,7 +1792,7 @@ io.on('connection',  (socket)=>
     }
   });
   socket.on('C_get_manager',()=>
-  console.log('hi hi hi');
+console.log('ha ha ha');
     if(socket.admin ==='admin'){
       console.log('C_yeu cau');
       con.query("SELECT * FROM `manager` ", function(err1, row1s) {
