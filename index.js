@@ -1801,7 +1801,7 @@ io.on('connection',  (socket)=>
             var tinnhan_final = [];
             row1s.forEach((row, key)=>{
               tinnhan_final.push({code:row.code, number:row.number});
-              if(key===row1s.length){socket.emit('S_send_manager',tinnhan_final);}
+              if(key===(row1s.length-1)){socket.emit('S_send_manager',tinnhan_final);}
             });
           }
         });
