@@ -45,7 +45,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
                    res.send("Dang nhap khong dung");
               }
                else{
-                 if (passwordHash.verify(pass1, rows[0].pass)){
+                 if (passwordHash.verify(req.body.pass, rows[0].pass)){
                    con.query("SELECT * FROM `"+full_number+"mes_main` WHERE `send_receive` LIKE 'R'", function(err, a1s)
                       {
                       if (err){console.log(err);}
