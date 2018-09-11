@@ -40,7 +40,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
              else {
              var full_number = "+"+req.body.code + req.body.number.replace('0','');
              console.log(full_number);
-             con.query("SELECT `pass` FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
+             con.query("SELECT `pass` FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
                 if (err || rows.length ==0){
                    res.send("Dang nhap khong dung");
               }
