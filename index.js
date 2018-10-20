@@ -211,7 +211,7 @@ io.on('connection',  (socket)=>
         });
   });
   function get_time(gio){
-    let year1 = gio.getYear();
+    let year1 = gio.getFullYear();
     let month1 = gio.getMonth();
     let day1 = gio.getDate();
     let hr1 = gio.getHours();
