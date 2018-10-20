@@ -758,10 +758,9 @@ io.on('connection',  (socket)=>
                  if(err2){console.log(err2);}
                  else {
                    tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,
-                     thoigian:a1.time});
+                     time:get_time(a1.time)});
                      if(key===(a1s.length-1)){
-                       console.log('Da inbox ha ha ha:'+tinfull.length);
-                       socket.emit('S_send_inbox',{tin:tinfull});
+                       socket.emit('S_send_inbox',tinfull);
                      }
                  }
                });
@@ -783,8 +782,8 @@ io.on('connection',  (socket)=>
                         a2s.forEach(function(a2,key2){
                           nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),trangthai:a2.stt});
                           if(key2 === (a2s.length-1)){
-                            tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time, nguoinhan:nhomnguoinhan, trangthai:a1.stt});
-                            if(key === (a1s.length-1)){  socket.emit('S_send_send',{tin:tinfull2});console.log('Server đã gửi send');}
+                            tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, trangthai:a1.stt});
+                            if(key === (a1s.length-1)){  socket.emit('S_send_send',tinfull2);console.log('Server đã gửi send');}
                           }
                         });
                       }
@@ -800,8 +799,8 @@ io.on('connection',  (socket)=>
                    {
                      let tinfull = [];
                      a1s.forEach(function(a1,key){
-                       tinfull.push({subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time});
-                       if(key=== (a1s.length-1)){socket.emit('S_send_save',{tin:tinfull});console.log('Server đã gửi save');}
+                       tinfull.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)});
+                       if(key=== (a1s.length-1)){socket.emit('S_send_save',tinfull);console.log('Server đã gửi save');}
                      });
                    }
               });
@@ -859,8 +858,8 @@ io.on('connection',  (socket)=>
                               else
                                 {
                                   if(a5s.length>0){
-                                    tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:a4.time});
-                                    if(key===(a4s.length-1)){socket.emit('S_send_room_full',{tin:tinfull});console.log('Server đã gửi room:');}
+                                    tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a4.time)});
+                                    if(key===(a4s.length-1)){socket.emit('S_send_room_full',tinfull);console.log('Server đã gửi room:');}
                                   }
                                   else {
                                     console.log('id là:'+ a4.id);
@@ -1230,11 +1229,11 @@ io.on('connection',  (socket)=>
       console.log('da update account xong');
     });
   });
-  socket.on('danhantinnhan', function (nguoigui, idc, thoigian)
+  socket.on('danhantinnhan', function (nguoigui, idc)
    	{
       if (socket.number){
 	    //chuyển trạng thái trong db của người nhận thành đã nhận tin nhắn, lần sau login 2 không phải gửi về nữa
-    con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y',`time` = '"+thoigian+"' WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"'",function()
+    con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"'",function()
       {
       console.log('ma san pham la '+idc);
     });
@@ -1638,14 +1637,14 @@ io.on('connection',  (socket)=>
   socket.on('C_make_room', function (info)
    	{
     if (socket.number){
+      let thoigian = new Date();
       socket.emit('S_get_room');
       // bắt đầu xử lý cái room
       var room_id = passwordHash.generate(info.room_name);
-
-      // gửi lại cho admin cái room đầy đủ để lưu hành trên hệ thống
+      // Server tạo ra cái room đầy đủ để lưu hành trên hệ thống
       console.log('Da nhan room la:'+info);
       var sql = "INSERT INTO `"+socket.number+"mes_main` (idc, subject, send_receive, stt,time ) VALUES ?";
-      var val = [[ room_id, info.room_name,'O', 'N','N']];
+      var val = [[ room_id, info.room_name,'O', 'N',thoigian]];
       con.query(sql, [val], function (err, res)
       {
         if ( err){console.log(err);}
@@ -1660,7 +1659,7 @@ io.on('connection',  (socket)=>
               val2 = [[ res.insertId, member.name,member.number,'B']];
               con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
               });
-              socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:'N'});
+              socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian)});
               }
             });
           }
@@ -1676,7 +1675,7 @@ io.on('connection',  (socket)=>
               if(err3 || (kq.length ==0)){console.log(err3);}
               else {
                       var sql5 = "INSERT INTO `"+row.number+"mes_main` (idc, subject, send_receive, stt, time ) VALUES ?";
-                      var val5 = [[ room_id, info.room_name,'O', 'N','N']];
+                      var val5 = [[ room_id, info.room_name,'O', 'N',thoigian]];
                       con.query(sql5, [val5], function (err5, res5)
                             {
                               if ( err5){console.log(err5);}
@@ -1690,13 +1689,12 @@ io.on('connection',  (socket)=>
                                 else
                                 {
                                   var val7;
-
                                   info.member_list.forEach((mem)=>{
                                     val7 = [[ res5.insertId,mem.number, mem.name,'B']];
                                     con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
                                   });
-                                  io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:'N'});
-                                  console.log('Da gui room di lan:');
+                                  io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian)});
+
                                 }
                               });
                             }
@@ -1821,10 +1819,10 @@ io.on('connection',  (socket)=>
     });
       }
     });
-  socket.on('C_get_room', function(room_fullname,time){
+  socket.on('C_get_room', function(room_fullname){
       if (socket.number){
         console.log(socket.username+' da nhan room roi:' + room_fullname);
-      con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y', `time` = '"+time+"' WHERE `idc` LIKE '"+room_fullname+"'",function(err){
+      con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+room_fullname+"'",function(err){
       if ( err){console.log(err);}
     });
     }
