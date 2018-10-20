@@ -1661,7 +1661,13 @@ io.on('connection',  (socket)=>
               });
               socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian)});
               }
-                  // gửi room cho các thành viên
+            });
+          }
+
+
+      });
+
+      // gửi room cho các thành viên
         info.member_list.forEach(function(row){
           // kiểm tra xem thành viên này có tài khoản chưa
           con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row.number +"' LIMIT 1", function(err3, kq)
@@ -1697,7 +1703,6 @@ io.on('connection',  (socket)=>
             });
 
         });
-
     }
    	});
   socket.on('C_change_pass', function(oldpass,newpass){
