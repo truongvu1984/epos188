@@ -1073,8 +1073,8 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_reques_point_import',(list)=>{
     if(socket.number){
+      let position=[];
         list.forEach((list1,key1)=>{
-        let position=[];
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+list1.id+"' LIMIT 1", function(err, a1s)
            {
              if ( err || ( a1s.length == 0) ){console.log('ha ha ha:'+err);}
