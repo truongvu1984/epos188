@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>ePos</title>
+    <meta http-equiv="Content-Type" content="text/html;application/json; charset=UTF-8" />
+     <link rel="stylesheet" type="text/css" href="style.css" />
+    <title><%= sodienthoai %></title>
     <script src="jquery-3.1.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-  //  var socket = io("https://epos188.herokuapp.com/");
-
-var socket = io("http://10.0.10.138:3000");
+var socket = io("http://192.168.5.12:3000");
+socket.connect();
 var map;
 var mangmarker = [];
 var marker1 = {};
@@ -19,46 +19,151 @@ var list_nguoinhan = [];
 var list_diem_gui_di = [];
 var id_posname=1;
 var mang_infowindow = [];
+var mang_infowindow_main = [];
 var ten="";
 var mang_kq_contact_search = [];
 var id_mang_kq_contact_search=0;
 var mang_contact_ok = [];
 var id_mang_contact_ok=0;
 var check_del = true;
-// đưa contact vào mảng để tiện sử dụng
-if (<%= contact.length %> > 0){
-  <%  for (  var i=0; i< contact.length ; i++ )
-   {
-  %>
-     var line = {id: <%= contact[i].id %>, number: '<%= contact[i].number %>', name: '<%= contact[i].name %>'};
-     mang_contact_ok.push(line);
-    <% }
-    %>
- }
-socket.on('S_W_kq_check_contact',function(data){
-   var number = data.number;
-   var user1 = data.user;
-   id_mang_kq_contact_search = id_mang_kq_contact_search +1;
-   mang_kq_contact_search.push({id:id_mang_kq_contact_search,number:data.number, user:data.user});
-   if (ten.length ==94){
-     ten="<div><div class='line_contact1_wrap'><a href='#' onclick='them_contact2("+id_mang_kq_contact_search+")' class='line_contact1'>"+data.user+"</a></div>"+
-     "<div class='line_contact2_wrap'><a href='#' onclick='add_friend("+id_mang_kq_contact_search+")'> Add friend </a></div></div></br>";
-   }
-   else {
-     ten = ten+ "<div><div class='line_contact1_wrap'><a href='#' onclick='them_contact2("+id_mang_kq_contact_search+")' class='line_contact1'>"+data.user+"</a></div>"+
-   "<div class='line_contact2_wrap'><a href='#'> Add friend </a></div></div></br>";
-   }
-   $("#my_list_contact").html( ten);var dropdowns = document.getElementsByClassName("list_contact_1");
-   var dropdowns = document.getElementsByClassName("list_contact_1");
-   var k;
-   for (k = 0; k < dropdowns.length; k++) {
-   var openDropdown = dropdowns[k];
-   if (!(openDropdown.classList.contains('show1'))) {
-    document.getElementById("my_list_contact").classList.toggle("show1");
-   }
-   }
+var number_del_inbox = 0; // biến này để đếm số lượng đã chọn trong các mục để xóa
+function strdecode( data ) {
+  return decodeURIComponent(escape( data ));
+}
+var id_inbox_pos=0;
+var mang_inbox = [];
+var list_del = [];
+socket.on('check_pass',()=>{
+   socket.emit('login2','<%= sodienthoai %>', '<%= pass %>');
 
- });
+});
+socket.on('login2_dung',()=>{
+     socket.emit('C_yeucau_data_full');
+   });
+socket.on('S_W_kq_check_contact',function(data){
+      // var number = data.number;
+      // var user1 = data.user;
+      // id_mang_kq_contact_search = id_mang_kq_contact_search +1;
+      // mang_kq_contact_search.push({id:id_mang_kq_contact_search,number:data.number, user:data.user});
+      // if (ten.length ==94){
+      //   ten="<div><div class='line_contact1_wrap'><a href='#' onclick='them_contact2("+id_mang_kq_contact_search+")' class='line_contact1'>"+data.user+"</a></div>"+
+      //   "<div class='line_contact2_wrap'><a href='#' onclick='add_friend("+id_mang_kq_contact_search+")'>Add friend</a></div></div></br>";
+      // }
+      // else {
+      //   ten = ten+ "<div><div class='line_contact1_wrap'><a href='#' onclick='them_contact2("+id_mang_kq_contact_search+")' class='line_contact1'>"+data.user+"</a></div>"+
+      // "<div class='line_contact2_wrap'><a href='#'>Add friend</a></div></div></br>";
+      // }
+      // // $("#my_list_contact").html( ten);
+      // $("#my_list_contact").html( ten);
+      var dropdowns = document.getElementsByClassName("list_contact_1");
+      var k;
+      for (k = 0; k < dropdowns.length; k++) {
+      var openDropdown = dropdowns[k];
+      if (!(openDropdown.classList.contains('show1'))) {
+       document.getElementById("my_list_contact").classList.toggle("show1");
+      }
+      }
+
+    });
+socket.on('S_pos_online', function(data){
+              if (mangmarker.length == 0){
+          var  marker2 = new google.maps.Marker({
+                      position: { lat: data.lat, lng: data.lon },
+                      label: data.name,
+                      map: map,
+                    });
+                    marker1 = {marker:marker2, name:data.name, number:data.number};
+                    mangmarker.push(marker1);
+                  }
+            else {
+               var test = true;
+              mangmarker.forEach(function(mar){
+                 if (mar.number == data.number){
+                 //  // nếu đã có điểm rồi thì chỉ cập nhật điểm đó thôi
+                 var latlng = new google.maps.LatLng(data.lat, data.lon);
+                   mar.marker.setPosition(latlng);
+                 //  test= false;
+                 //  break;
+                  }
+              });
+
+             }
+          });
+socket.on('S_send_room_member', function(data){
+                    var ten ="";
+
+                    data.forEach(function(member){
+                      ten = ten+ "<a href='#' onclick='show_vitri_thanhvien("+member.number+");'>"+member.name + "</a>";
+                      });
+
+                      $("#myDropdown6").html( ten);
+                  });
+socket.on('ketqua',(gio)=>{
+  $("#btn_send_tinnhan").html(gio.thoigian);
+});
+socket.on('S_send_inbox', (data)=>{
+     //S gửi toàn bộ bản tin inbox về client
+     var trangthai="";
+      // var muigio = new Date().getTimezoneOffset();
+       data.tin.forEach((row,key)=>{
+         var thoigian="";
+         if(row.stt === "N"){
+           thoigian1= getDateTime();
+           socket.emit("danhantinnhan",row.number_nguoigui,row.id_tinnha_client,thoigian1);
+         }
+         else {
+           thoigian1= row.thoigian;
+         }
+         id_inbox_pos++;
+         var tin = {id_pos:id_inbox_pos, name_nguoigui:strdecode(row.name_nguoigui),number_nguoigui:row.number_nguoigui, subject:strdecode(row.subject), id_tinnha_client:row.id_tinnha_client,trangthai:row.trangthai, stt: row.stt, thoigian: thoigian1};
+         mang_inbox.push(tin);
+         if(row.trangthai==="N"){trangthai="Not read";}
+         var line  ="<div class='line_inbox' id='full"+id_inbox_pos+"'><input type='checkbox' id='"+id_inbox_pos+"' onclick='checkbox_inbox_click("+id_inbox_pos+");' style='position:absolute' class='checkbox_inbox'><div style='position:absolute;left:25px;width:150px;'>"+ strdecode(row.subject) +"</div><div style='position:absolute; right:5px'>"+row.thoigian+"</div></br>"+
+         "<div style='position:absolute; left:25px'>From:"+strdecode(row.name_nguoigui)+"</div><div style='position:absolute;right:5px'>"+trangthai+"</div></div>";
+         $("#id_dropdown_menu_inbox").append(line);
+
+       });
+     socket.emit('C_nhan_inbox');
+});
+socket.on('S_W_add_friend_ok',function(data){
+              var new_contact = "<a href=''>"+data.name+"</a></br>";
+             $("#myDropdown_contact").append(new_contact);
+             var stt = mang_contact_ok.length;
+             mang_contact_ok.push({id:data.id,number:data.number, name:data.name});
+
+
+
+          });
+socket.on('S_del_inbox', ()=>{
+    // xóa row trong list_inbox
+    document.getElementById("del_inbox").style.marginTop = "-25px";
+    $("#item_inbox_chose").html("");
+    list_del.forEach((row, key)=>{
+      for(var i=0; i< mang_inbox.length; i++){
+        if(mang_inbox[i].id_tinnha_client===row.idc){
+          document.getElementById("full"+mang_inbox[i].id_pos).remove();
+          mang_inbox.splice(i,1);
+          if(key===list_del.length){list_del= [];}
+          return false;
+        }
+      }
+    });
+    // bỏ cái hàng với cái id kia
+    // document.getElementById(id1).remove();
+    alert('Tin nhắn đã được xóa thành công');
+});
+  // nhận tin nhắn, lưu tin vào ( id tin nhắn, subject, tên người gửi, number người gửi, id_pos hiện tại)
+  // gửi tin báo nhận cho người gửi
+socket.on('S_guitinnhan', (data)=>{
+  var id_inbox_pos = mang_inbox[mang_inbox.length-1].id_pos +1;
+  var thoigian1 = getDateTime();
+  var tin = {id_pos:id_inbox_pos, name_nguoigui:strdecode(data.name_nguoigui),number_nguoigui:data.number_nguoigui, subject:strdecode(data.subject), id_tinnha_client:row.id_tinnha_client,trangthai:"N", thoigian:thoigian1};
+  mang_inbox.push(tin);
+  var line  ="<div class='line_inbox' id='full"+id_inbox_pos+"'><input type='checkbox' id='"+id_inbox_pos+"' onclick='checkbox_inbox_click("+id_inbox_pos+");' style='position:absolute' class='checkbox_inbox'><div style='position:absolute;left:25px;width:150px;'>"+ strdecode(data.subject) +"</div><div style='position:absolute; right:5px'>"+thoigian1+"</div></br>"+
+  "<div style='position:absolute; left:25px'>From:"+strdecode(data.name_nguoigui)+"</div><div style='position:absolute;right:5px'>"+"Not read"+"</div></div>";
+  $("#id_dropdown_menu_inbox").append(line);
+  socket.emit("danhantinnhan", data.number_nguoigui, row.id_tinnha_client, thoigian);
+});
 function myMap() {
       var mapOptions = {
       center: new google.maps.LatLng(41.5, -0.12),
@@ -73,8 +178,8 @@ function myMap() {
       mapTypeControl:  true,
       rotateControl: true,
       mapTypeControlOptions: {
-              style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-              position: google.maps.ControlPosition.TOP_LEFT,
+              style: google.maps.MapTypeControlStyle.VER_BAR,
+              position: google.maps.ControlPosition.BOTT_LEFT,
 
           },
 
@@ -85,34 +190,8 @@ function myMap() {
           google.maps.event.addListener(map, "rightclick", function(event) {
             showmarker(event.latLng.lat(),event.latLng.lng());
           });
-         });
-    }
-socket.on('S_pos_online', function(data){
-          if (mangmarker.length == 0){
-      var  marker2 = new google.maps.Marker({
-                  position: { lat: data.lat, lng: data.lon },
-                  label: data.name,
-                  map: map,
-                });
-                marker1 = {marker:marker2, name:data.name, number:data.number};
-                mangmarker.push(marker1);
-              }
-        else {
-           var test = true;
-          mangmarker.forEach(function(mar){
-             if (mar.number == data.number){
-             //  // nếu đã có điểm rồi thì chỉ cập nhật điểm đó thôi
-             var latlng = new google.maps.LatLng(data.lat, data.lon);
-               mar.marker.setPosition(latlng);
-             //  test= false;
-             //  break;
-              }
-          });
 
-         }
-      });
-function quay(){
-        map.setTilt(45);
+         });
 }
 function show_vitri_thanhvien(number){
 
@@ -131,81 +210,10 @@ function show_vitri_thanhvien(number){
   }
 
   }
-socket.on('S_send_room_member', function(data){
-          var ten ="";
-
-          data.forEach(function(member){
-            ten = ten+ "<a href='#' onclick='show_vitri_thanhvien("+member.number+");'>"+member.name + "</a>";
-            });
-
-            $("#myDropdown6").html( ten);
-        });
-socket.on('S_send_inbox', function(data){
-  $("#view").html( "Inbox: "+data.subject + "</br>"+"From:"+data.nguoigui);
-  if (data.point.length==1){
-                // var thongtin = "vu yeu van";
-                // var marker3 = new google.maps.Marker({
-                //   position: { lat: data.point[0].lat, lng: data.point[0].lon },
-                //   label:{
-                //     text:data.point[0].name,
-                //     color:'white'
-                //   },
-                // map: map
-                // });
-  var string = "<div class='name_pos_123'>"+data.point[0].name+"</div>";
-    // data.point[0].name
-  var infowindow = new google.maps.InfoWindow({
-            content: string,
-            position: { lat: data.point[0].lat, lng: data.point[0].lon },
-          });
-          // marker3.addListener('click', function() {
-          //   infowindow.open(map, marker3);
-          // });
-         infowindow.open(map);
-        map.panTo(new google.maps.LatLng(data.point[0].lat, data.point[0].lon));
-        map.setZoom(14);
-      }
-       else {
-         var bounds = new google.maps.LatLngBounds();
-        data.point.forEach(function(p){
-              // var thongtin = ""+p.name;
-         // var marker4 = new google.maps.Marker({
-         //     position: { lat: p.lat, lng: p.lon },
-         //       label:{
-         //       text:p.name,
-         //       color:'white'
-         //     },
-         //     map: map
-         //   });
-           var infowindow = new google.maps.InfoWindow({
-             content: p.name,
-             position: { lat: p.lat, lng: p.lon },
-           });
-           infowindow.open(map);
-           // marker4.addListener('click', function() {
-           //   infowindow.open(map, marker4);
-           // });
-           bounds.extend(new google.maps.LatLng(p.lat, p.lon));
-
-       });
-      // map.panToBounds(bounds);
-     map.fitBounds(bounds);
-   }
-
-  });
-socket.on('S_W_add_friend_ok',function(data){
-    var new_contact = "<a href=''>"+data.name+"</a></br>";
-   $("#myDropdown_contact").append(new_contact);
-   var stt = mang_contact_ok.length;
-   mang_contact_ok.push({id:data.id,number:data.number, name:data.name});
-
-
-
-});
 function add_friend(id1){
   for(var i=0; i<mang_kq_contact_search.length; i++){
     if (mang_kq_contact_search[i].id===id1){
-      var data = {number:mang_kq_contact_search[i].number, user: mang_kq_contact_search[i].user, admin:'<%= number %>',admin_name:'<%= name %>' , password:'<%= pass %>'};
+      var data = {number:mang_kq_contact_search[i].number, user: mang_kq_contact_search[i].user, admin:'<%= sodienthoai %>',admin_name:'<%= name %>' , password:'<%= pass %>'};
       socket.emit('W_add_friend',data);
       return false;
     }
@@ -223,10 +231,6 @@ function them_contact2(id){
   }
 
 }
-function myFunction5() {
-  document.getElementById("myDropdown5").classList.toggle("show1");
-
-}
 function myFunction6(subject) {
   document.getElementById("id_dropdown6").style.display = "block";
   $("#view").html( "Online: "+subject);
@@ -234,9 +238,8 @@ function myFunction6(subject) {
 }
 function searchContacts(){
   ten="";
-  var chuoi = document.getElementById("login_number_2").value;
+  var chuoi = document.getElementById("login_number_2").value.trim();
   var div_show_contact = document.getElementById("my_list_contact");
-  chuoi = chuoi.trim();
   if (chuoi.charAt(0)=='0'){
     chuoi = chuoi.substr(1);
   }
@@ -321,9 +324,6 @@ function them_contact(id1){
         }
       }
   }
-
-
-
   }
 function xoa_contact(id1){
   if(check_del){
@@ -340,47 +340,92 @@ function xoa_contact(id1){
   }
 }
 function showmarker( lat1, lon1){
-  var name = document.getElementById("login_number_2").value;
-  id_posname= id_posname+1;
-
+  // var id_pos = ""+Math.floor(Math.random()*(90000)+10000);
+  id_posname = id_posname+1;
   var infowindow = new google.maps.InfoWindow({
       position:{ lat:lat1, lng: lon1}
     });
-
-    var noidung = "<div class='wrap_posname'><div>Input name of this place </br> <input type='text' id='"+id_posname+"' class='info_pos_name'></input><div></br>"+
+    var noidung = "<div class='wrap_posname'><div>Input name of this place </br> <input type='text' id='input_123' class='info_pos_name'></input><div></br>"+
     "<div><div class='posname_2'><button onclick='cancle_luudiem("+id_posname+")'>CANCLE</button></div><div>"+
     " <button onclick='luudiem("+lat1+","+lon1+","+id_posname+")' class='posname_2'>OK</button> </div>  </div></div>";
-
-    infowindow. setContent(noidung);
+    infowindow.setContent(noidung);
     infowindow.open(map);
     var win = {id:id_posname, wind: infowindow};
     mang_infowindow.push(win);
-
+}
+function openNav() {
+      document.getElementById("id_list_pos_wrap").style.right = "0px";
 
   }
 function luudiem(lat1, lon1, id1){
-  var name1 = document.getElementById(id1).value;
+  var name1 = document.getElementById("input_123").value;
   for (var i=0; i<mang_infowindow.length; i++){
     if(mang_infowindow[i].id ==id1){
       mang_infowindow[i].wind.setContent(name1);
       var id2 = Math.floor(Math.random()*(90000)+10000);
-      var diem = {name:name1, lat:lat1, lon:lon1, id:id2}
-      list_diem_gui_di.push(diem);
-
-      // diem.put("lat", listpoint.get(i).lat);
-      //          diem.put("lon", listpoint.get(i).lon);
-      //          diem.put("name", listpoint.get(i).name);
-      //          idpos = "" + new Date().getTime();
-        //          diem.put("id", idpos);
-        return false;
+      var diem = {name:name1, lat:lat1, lon:lon1, id:id2};
+      var diem2 = {name:name1, lat:lat1, lon:lon1, id:id1};
+      mang_infowindow_main.push(diem2);
+      var new_pos = "<div id='"+id1+"' class='line_list_pos'><div onclick='pos_click("+id1+")' style='position:absolute; left:0px,color:#4d4dff; cursor:pointer;overflow:hidden;max-width:150px'>"+name1+"</div><div style='position:absolute; right:0px'><input id='input"+id1+"' type='checkbox' onchange='handleChange(this,"+id1+")'><span style='font-size: 20px;'>Hide</span></div></br></div>";
+      $("#id_list_pos").append(new_pos);
+      openNav();
+      google.maps.event.addListener(mang_infowindow[i].wind, 'closeclick', function() {$("#"+id1).html("");});
+      return false;
       }
     }
   }
+  function pos_click(id1){
+    mang_infowindow_main.forEach(function(mar){
+    if(mar.id == id1){
+      // map.panTo(new google.maps.LatLng(mar.lat, mar.lon));
+      //  map.setZoom(18);
+      view.animate({
+        center: london,
+        duration: 2000
+      });
+       return false;
+    }
+    // function onClick() {
+    //   var view = new View({
+    //           center: istanbul,
+    //           zoom: 6
+    //         });
+    //     view.animate({
+    //       center: london,
+    //       duration: 2000
+    //     });
+    //   }
+
+  });
+  }
+function handleChange(checkbox,id1) {
+    if(checkbox.checked == true){
+      cancle_luudiem(id1);
+    }else{
+
+      for (var i=0; i<mang_infowindow_main.length; i++){
+        if(mang_infowindow_main[i].id ==id1){
+          var lat1 = mang_infowindow_main[i].lat;
+          var lon1 = mang_infowindow_main[i].lon;
+          var name1 = mang_infowindow_main[i].name;
+          var infowindow = new google.maps.InfoWindow({
+              position:{ lat:lat1, lng:lon1}
+            });
+            infowindow.setContent(name1);
+            infowindow.open(map);
+            var win = {id:id1, wind: infowindow};
+            mang_infowindow.push(win);
+            google.maps.event.addListener(infowindow, 'closeclick', function() {$("#"+id1).html("");});
+        return false;
+          }
+        }
+   }
+}
 function cancle_luudiem(id) {
   for (var i=0; i<mang_infowindow.length; i++){
     if(mang_infowindow[i].id ==id){
     mang_infowindow[i].wind.close();
-      mang_infowindow.splice(i, 1);
+    mang_infowindow.splice(i, 1);
     return false;
       }
     }
@@ -404,7 +449,7 @@ function guitinnhan(){
         var ma2 =Math.floor(Math.random()*(9000)+1000);
         var mafull = ""+ma1+ma2;
         var ten = "<%= name %>";
-        var sodienthoai = "<%= number %>";
+        var sodienthoai = "<%= sodienthoai %>";
         var tinnhanfull = {nguoigui_name: ten, nguoigui_number:sodienthoai ,subject: sub  ,nguoinhan:list_nguoinhan, pos:list_diem_gui_di, id:mafull};
         socket.emit('C_gui_tinnhan',tinnhanfull);
       }
@@ -414,295 +459,102 @@ function guitinnhan(){
 
 
   }
+function closeNav() {
+    // document.getElementById("id_list_pos").style.width = "0";
+    document.getElementById("id_list_pos_wrap").style.right = "-500px";
+}
+function open_close(){
+  if(document.getElementById("id_list_pos_wrap").style.right === "0px"){
+    closeNav();
+      $("#id_close_open").html("List");
+  }
+  else {
+      openNav();
+      $("#id_close_open").html("Close");
+  }
+}
+function them_member(){
+  openNav();
+  // mở sidebar bên phải, thêm một cột nữa tên là Recipients
+}
+function checkbox_inbox_click(idc) {
+  // $("#"+idc+"").change(function(){
+  //   if($(this).is(':checked')) {
+  //       // Checkbox is checked..
+  //
+  //   } else {
+  //       // Checkbox is not checked
+  //
+  //     // if(number_del_inbox >0){document.getElementById("del_inbox").style.marginTop = "0px";}
+  //     // else {
+  //     //   document.getElementById("del_inbox").style.marginTop = "-25px";
+  //     // }
+  //
+  //
+  //   }
+  // });
+    var stt=0;
+    var list_checkbox = document.getElementsByClassName("checkbox_inbox");
+    for (var i = 0; i < list_checkbox.length; i++) {
+      if(list_checkbox[i].checked){stt++;}
+    }
+    if(stt >0){
+      document.getElementById("del_inbox").style.marginTop = "0px";
+      if(stt>1) {$("#item_inbox_chose").html(stt+" items were chosen");}
+      else {$("#item_inbox_chose").html(stt+" item was chosen");}
+  }
+    else {document.getElementById("del_inbox").style.marginTop = "-25px";}
+}
+function xoadiem_inbox() {
+  // document.getElementById("id_dialog").style.display = "block";
+  // $("#btn_send_tinnhan").html("vu"+mang_inbox[4].id_pos);
+  list_del = [];
+  var list_checkbox = document.getElementsByClassName("checkbox_inbox");
+  for (var i = 0; i < list_checkbox.length; i++) {
+    if(list_checkbox[i].checked){
+      mang_inbox.forEach((row1, key)=>{
+        // nếu hàng đó có chọn thì sẽ lấy cái id của hàng đó, rồi tìm trong mảng, lấy cái id tin nhắn ra
+        // đưa vào danh sách gửi đi.
+        if(row1.id_pos==list_checkbox[i].id){
+          list_del.push({idc:row1.id_tinnha_client});
+          return false;
+        }
+        })
+    }
+    }
+    if(list_del.length>0){
+      var item="";
+    if (list_del.length>1){item = "items";}
+    else{item="item";}
+    var r = confirm(list_del.length+" "+item+" will be deleted");
+    if (r == true) {socket.emit("C_del_inbox",list_del);}
+    }
+
+
+}
+function getDateTime() {
+    var date = new Date();
+    var hour = date.getHours();
+    hour = (hour < 10 ? "0" : "") + hour;
+    var min  = date.getMinutes();
+    min = (min < 10 ? "0" : "") + min;
+    var sec  = date.getSeconds();
+    sec = (sec < 10 ? "0" : "") + sec;
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+    return hour + ":" + min + ":" + sec + " "+ month+"/"+day+"/"+year;
+}
+function test(){
+  document.getElementById("del_inbox").style.marginTop = "0px";
+}
 </script>
-
-<style>
-html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-.class_map{
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  right: 0px;
-  white-space: nowrap;
-  overflow-x: auto;
-
-  }
-.name_pos_123{
-  color: red;
-  }
-.posname_2{
-  position: relative;
-  float: right;
-  margin-left: 5px;
-  }
-.dropbtn, .dropbtn2, .dropbtn3, .dropbtn4, .dropbtn5, .dropbtn_contact {
-   background-color: #4CAF50;
-   color: white;
-   padding: 10px;
-   font-size: 13px;
-    border: none;
-   cursor: pointer;
- }
-.dropbtn6 {
-   background-color: #4CAF50;
-   color: white;
-   padding: 10px;
-   font-size: 13px;
-   border: none;
-   cursor: pointer;
- }
-.txt {
-  background-color: white;
-  padding: 5px;
-  font-size: 13px;
-  border: none;
-  cursor: pointer;
-  }
-.dropbtn:hover, .dropbtn:focus,.dropbtn_contact:hover, .dropbtn_contact:focus,.dropbtn2:hover, .dropbtn2:focus,.dropbtn3:hover, .dropbtn3:focus,.dropbtn4:hover, .dropbtn4:focus,.dropbtn5:hover, .dropbtn5:focus,  {
-   background-color: #4CAF50;
- }
-.dropdown1, .dropdown2,.dropdown_contact, .dropdown3, .dropdown4, .dropdown5,.txt, .my_login_number, .my_submit, .my_edit_pos{
-   position: relative;
-   display: inline-block;
-   float:right;
-   margin-right:10px;
- }
-.my_login_number{
-  background-color: #4CAF50;
-  }
-.dropdown6{
-   position: absolute;
-   display: none;
-   top: 60px;
-   right: 10px;
-   z-index: 1;
-
- }
-.dropdown-content,.dropdown-content_contact, .dropdown-content2,.dropdown-content3,.dropdown-content4,.dropdown-content5{
-   display: none;
-   position: absolute;
-   background-color: #f9f9f9;
-   min-width: 160px;
-   max-height: 500px;
-   min-height: 100px;
-   overflow: auto;
-   right: 0px;
-   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-   z-index: 1;
- }
-.dropdown-content6  {
-   display: none;
-   position: absolute;
-   background-color: #f9f9f9;
-   min-width: 160px;
-   height: 200px;
-   max-height: 500px;
-   overflow: auto;
-   right: 0px;
-   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-   z-index: 1;
- }
-.list_contact_1  {
-   display: none;
-   position: absolute;
-   background-color: #f9f9f9;
-   width:300px;
-   height: 200px;
-   max-height: 500px;
-   overflow-x:hidden;
-   overflow-y: auto;
-   left: 0px;
-   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-   z-index: 1;
- }
-.dropdown-content a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
- }
-.dropdown-content_contact a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
- }
-.dropdown-content2 a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
- }
-.dropdown-content3 a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
- }
-.dropdown-content4 a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
- }
-.dropdown-content5 a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
- }
-.dropdown-content6 a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
- }
-.banner {
-  z-index: 3;
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  height: auto;
-  width: 100%;
-  /* background:  #f1f1f1; */
-  }
-.wrapper {
-  z-index: 3;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  white-space: nowrap;
-  overflow: auto;
-
-  /* background:  #f1f1f1; */
-  }
-.wrap2{
-  z-index: 3;
-  position: absolute;
-  display: inline-block;
-  top:5px;
-  left: 60%;
-  height:50px;
-  width: 450px;
-  /* background:  #96B76A; */
-
-  }
-.wrap2_1{
-  width: 100%;
-  position: absolute;
-  bottom: 0px;
-  /* background: #4CAF50 */
-  }
-.wrap3_main{
-  z-index: 3;
-  position: absolute;
-  top: 5px;
-  left:110px;
-  display: inline-block;
-
-  }
-.wrap3{
-  z-index: 3;
-  width: 450px;
-  height: 50px;
-  background: #4CAD50
-
-  }
-.class_list_nguoinhan, .class_list_nguoinhan1 {
-  position: relative;
-  float: left;
-}
-.wrap_line_nguoinhan{
-  width: 100%;
-  /* background: #4CAD50; */
-}
-.list_nguoinhan{
-  position: absolute;
-  top: 60px;
-  left: 5px;
-  z-index: 3;
-  width:200px;
-  overflow-x: hidden;
-  max-height: 300px;
-  background: #96B76A;
-  white-space: nowrap;
-  overflow-y: auto;
-
-}
-.my_edit_pos{
-  position: relative;
-  display: inline-block;
-  float: left;
-  margin-left: 10px
-
-}
-.my_login_subject{
-  position: relative;
-  display: inline-block;
-  float: left;
-
-
-}
-
-.my_btn_send_tinnhan{
-  position: relative;
-  display: inline-block;
-  float: right;
-  height: 60%;
-  margin-top: 3%;
-  margin-right: 3%;
-
-}
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #f1f1f1}
-.dropdown-content2 a:hover {background-color: #f1f1f1}
-.dropdown-content3 a:hover {background-color: #f1f1f1}
-.dropdown-content4 a:hover {background-color: #f1f1f1}
-.dropdown-content5 a:hover {background-color: #f1f1f1}
-.dropdown-content6 a:hover {background-color: #f1f1f1}
-.wrap_line_nguoinhan a:hover {background-color: #f1f1f1}
-.list_contact_1 a:hover {background-color: #96B76A}
-.line_contact1_wrap{
-  position: absolute;
-  left:0px;
-  overflow-x: hidden;
-  width: 200px
-}
-.line_contact2_wrap{
-  position: absolute;
-  right:0px;
-  width: 70px
-}
-/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show1 {display:block;}
-</style>
 <script>
-function myFunction() {
-  document.getElementById("myDropdown").classList.toggle("show1");
-  }
-function myFunction2() {
-  document.getElementById("myDropdown2").classList.toggle("show1");
-  }
-function myFunction3() {
-  document.getElementById("myDropdown3").classList.toggle("show1");
-  }
-function myFunction4() {
-  document.getElementById("myDropdown4").classList.toggle("show1");
-  }
-function myFunction_contact() {
-  document.getElementById("myDropdown_contact").classList.toggle("show1");
-  }
-function myFunction8() {
-  document.getElementById("id_dropdown6").style.display = "none";
-  }
-function myFunction9() {
-  document.getElementById("myDropdown6").classList.toggle("show1");
-  }
+function show_dropdown_menu(id_dropdow){
+    document.getElementById(id_dropdow).classList.toggle("show1");
+}
 function myFunction7() {
   var dropdowns = document.getElementsByClassName("my_btn_member");
   var i;
@@ -719,7 +571,6 @@ window.onclick = function(event) {
       var dropdowns = document.getElementsByClassName("list_contact_1");
       ten ="";
       var i;
-
       for (i = 0; i < dropdowns.length; i++) {
       var openDropdown = dropdowns[i];
       if (openDropdown.classList.contains('show1')) {
@@ -729,18 +580,8 @@ window.onclick = function(event) {
       }
       }
       }
-  if (!event.target.matches('.dropbtn_contact')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content_contact");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-    var openDropdown = dropdowns[i];
-    if (openDropdown.classList.contains('show1')) {
-     openDropdown.classList.remove('show1');
-    }
-    }
-    }
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
+  if (!(event.target.matches('.drop_btn_inbox') || event.target.matches('.checkbox_inbox')||event.target.matches('.del_button_inbox'))) {
+    var dropdowns = document.getElementsByClassName("dropdown_content_inbox");
     var i;
     for (i = 0; i < dropdowns.length; i++) {
     var openDropdown = dropdowns[i];
@@ -759,8 +600,8 @@ window.onclick = function(event) {
     }
     }
     }
-  if (!event.target.matches('.dropbtn2')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content2");
+  if (!event.target.matches('.drop_btn_send')) {
+    var dropdowns = document.getElementsByClassName("dropdown_content_send");
     var i;
     for (i = 0; i < dropdowns.length; i++) {
     var openDropdown = dropdowns[i];
@@ -769,8 +610,8 @@ window.onclick = function(event) {
     }
     }
     }
-  if (!event.target.matches('.dropbtn3')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content3");
+  if (!event.target.matches('.drop_btn_save')) {
+    var dropdowns = document.getElementsByClassName("dropdown_content_save");
     var i;
     for (i = 0; i < dropdowns.length; i++) {
     var openDropdown = dropdowns[i];
@@ -779,8 +620,8 @@ window.onclick = function(event) {
     }
     }
     }
-  if (!event.target.matches('.dropbtn4')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content4");
+  if (!event.target.matches('.drop_btn_online')) {
+    var dropdowns = document.getElementsByClassName("dropdown_content_online");
     var i;
     for (i = 0; i < dropdowns.length; i++) {
     var openDropdown = dropdowns[i];
@@ -789,8 +630,8 @@ window.onclick = function(event) {
     }
     }
     }
-  if (!event.target.matches('.dropbtn5')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content5");
+  if (!event.target.matches('.drop_btn_account')) {
+    var dropdowns = document.getElementsByClassName("dropdown_content_account");
     var i;
     for (i = 0; i < dropdowns.length; i++) {
     var openDropdown = dropdowns[i];
@@ -808,138 +649,65 @@ window.onclick = function(event) {
           <div class="wrap2">
             <div class="wrap2_1">
               <div class="dropdown5">
-                <button onclick="myFunction5(); myFunction7;" class="dropbtn5"><%= name %></button>
-                <div id="myDropdown5" class="dropdown-content5">
+                <button onclick="show_dropdown_menu('id_dropdown_menu_account')" class="drop_btn_account"><%= name %></button>
+                <div id="id_dropdown_menu_account" class="dropdown_content_account">
                   <a href="#">Link 1</a>
                   <a href="#">Link 2</a>
                   <a href="#">Link 3</a>
                 </div>
               </div>
-              <div class="dropdown_contact">
-                <button onclick="myFunction_contact()" class="dropbtn_contact">FRIEND</button>
-                <div id="myDropdown_contact" class="dropdown-content_contact">
-                   <%
-                   if (contact.length>0){
-                    for ( var i=0; i<contact.length; i++)
-                      {
-                        var abc3=''+contact[i].id;
-                      %>
-                        <a href="#" id="<%= abc3 %>" onclick=""> <%= contact[i].name %></a>
-                        <%
-                      }
-                    }
-                    else{
-                      %>
-                    There is no friend in your list.
-                    <%
-                    }
-                    %>
-                </div>
-              </div>
               <div class="dropdown4">
-                <button onclick="myFunction4()" class="dropbtn4">ONLINE</button>
-                <div id="myDropdown4" class="dropdown-content4">
-                       <%
-                       if (online.length > 0){
-                        for ( var i=0; i<online.length; i++)
-                     {
-                       var abc3=''+online[i].id;
-                        %>
-                        <a href="#" id="<%= abc3 %>" onclick=" myFunction6('<%= online[i].subject %>'); myFunction5(); socket.emit('W_join_room','<%= online[i].idc %>','<%= number %>' );"> <%= online[i].subject %></a>
-                        <%
-                      }
-                    }
-                    else{
-                      %>
-                        There is no item.
-                      <%
-                    }
-                    %>
-                </div>
+                <button onclick="show_dropdown_menu('id_dropdown_menu_online')" class="drop_btn_online">ONLINE</button>
+                <div id="id_dropdown_menu_online" class="dropdown_content_online"></div>
               </div>
               <div class="dropdown3">
-                <button onclick="myFunction3(); " class="dropbtn3">SAVE</button>
-                <div id="myDropdown3" class="dropdown-content3">
-         	        <a href="#" onclick=" myFunction8()">Link 2</a>
-                  <a href="#">Link 3</a>
-                </div>
+                <button onclick="show_dropdown_menu('id_dropdown_menu_save'); " class="drop_btn_save">SAVE</button>
+                <div id="id_dropdown_menu_save" class="dropdown_content_save"></div>
               </div>
               <div class="dropdown2">
-                <button onclick="myFunction2()" class="dropbtn2">SEND</button>
-                <div id="myDropdown2" class="dropdown-content2">
-                      <%
-                      if (send.length > 0){
-                       for ( var i=0; i<send.length; i++)
-                    {
-                       %>
-                       <a href="#" onclick=" myFunction8()"> <%= send[i].subject %></a>
-                       <%
-                     }
-                   }
-                   else{
-                     %>
-                       There is no item.
-                     <%
-                   }
-                   %>
-
-                 </div>
+                <button onclick="show_dropdown_menu('id_dropdown_menu_send')" class="drop_btn_send">SEND</button>
+                <div id="id_dropdown_menu_send" class="dropdown_content_send"></div>
                </div>
                <div class="dropdown1">
-                 <button onclick="myFunction()" id="btn_inbox" class="dropbtn">INBOX</button>
-                 <div id="myDropdown" class="dropdown-content" >
-                     <%
-                     if ( inbox.length > 0){
-                      for ( var i=0; i<inbox.length; i++)
-                   {
-                     var abc=''+inbox[i].id;
-              				%>
-              				<a href="#" id="<%= abc %>" onclick=" myFunction8();socket.emit('w_get_inbox','<%= inbox[i].idc %>','<%= number %>' );"> <%= inbox[i].subject %></a>
-              				<%
-              			}
-                  }
-                  else{
-                    %>
-                      There is no item.
-                    <%
-                  }
-              		%>
-                </div>
+                 <button onclick="show_dropdown_menu('id_dropdown_menu_inbox')" id="id_dro" class="drop_btn_inbox">INBOX</button>
+                 <div id="id_dropdown_menu_inbox" class="dropdown_content_inbox">
+                   <div id="del_inbox" style="margin-top:-20px"><a id='item_inbox_chose' style="margin-left: 5px;"></a><button class="del_button_inbox"style="position:absolute;right:5px;" onclick="xoadiem_inbox()">Delete</button></div>
+                 </div>
               </div>
             </div>
           </div>
-
           <div class="wrap3_main">
             <div class="wrap3">
-              <button id="btn_send_tinnhan" class="my_btn_send_tinnhan" onclick="guitinnhan()">GỬI TIN NHẮN</button>
-                <div id="login_subject" class="my_login_subject">
-                  <div id="login_number_1">Nhập subejct</div>
-                  <input type="text" class="my_login_subject" value="" id="login_subject_2" autocomplete="off"></input>
-                </div>
+              <button id="btn_send_tinnhan" class="my_btn_send_tinnhan" onclick="test()">GỬI TIN NHẮN</button>
               <div id="login_number" class="my_edit_pos">
                 <div id="login_number_1">Nhập số điện thoại</div>
                 <input type="text" oninput="searchContacts()" name="number" class="my_login_number_2" value="" id="login_number_2" autocomplete="off"></input>
-                <div id="my_list_contact" class="list_contact_1">
+                <div id="my_list_contact" class="list_contact_1"><div id="item1" onclick="them_member()" style="">Vũ yêu Ngân</div>
                 </div>
               </div>
+              <div id="login_subject" class="my_login_subject">
+                <div id="login_number_1">Nhập subejct</div>
+                <input type="text" class="my_login_subject" value="" id="login_subject_2" autocomplete="off"></input>
+              </div>
+            </div>
+          </div>
+          <div id="id_list_pos_wrap" class="list_pos_wrap">
+              <div id="id_close_open" style="position:absolute; width:50px;background-color:#f1f1f1;cursor: pointer;" onclick="open_close();">List</div>
+              <div id="id_list_pos" class="list_pos">
+                <div style="position: absolute;top: 0px;font-size: 25px;margin-left: 50px;">Location list</div>
+              </div>
+            <div id="id_list_recipent" class="list_recipent">
+              <div style="position: absolute;top: 0px;font-size: 25px;margin-left: 50px;">Recipent list</div>
             </div>
 
           </div>
-          <div id="my_list_nguoinhan" class="list_nguoinhan">Receiver</div>
-          <div class="txt" id="view"> </div>
-
         </div>
         <div id="map" class="class_map">
         </div>
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript">
       </script>
-      <div class="dropdown6" id="id_dropdown6">
-       <button onclick="myFunction9()" id="btn_inbox6" class="dropbtn6">MEMBER</button>
-       <div id="myDropdown6" class="dropdown-content6" >
-       </div>
-     </div>
-   </div>
 
+    </div>
 
   </body>
 </html>
