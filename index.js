@@ -592,7 +592,7 @@ io.on('connection',  (socket)=>
                           {
                             a5s.forEach(function(a5)
                               {
-                                socket.emit('C_danhantinnhan',{nguoinhan:a5.number, idc:a1.idc});
+                                socket.emit('C_danhantinnhan',{nguoinhan:a5.number, tennguoinhan:strencode(a5.name),idc:a1.idc});
                                 console.log('Da gui sự kiện C_gui tin nhan di cho cac so:'+a5.number +' ma la '+ a1.idc);
                               });
 
