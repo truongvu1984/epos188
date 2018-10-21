@@ -800,7 +800,7 @@ io.on('connection',  (socket)=>
                      let tinfull = [];
                      a1s.forEach(function(a1,key){
                        tinfull.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)});
-                       if(key=== (a1s.length-1)){socket.emit('S_send_save',tinfull);console.log('Server đã gửi save');}
+                       if(key=== (a1s.length-1)){socket.emit('S_send_save',tinfull);console.log('Server đã gửi save'+tinfull.length);}
                      });
                    }
               });
