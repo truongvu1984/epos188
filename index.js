@@ -559,7 +559,7 @@ io.on('connection',  (socket)=>
                            let tinfull2=[];
                            a1s.forEach(function(a1,key){
                              let nhomnguoinhan =[];
-                              con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
+                              con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"'", function(err2, a2s){
                                 if(err2){console.log(err2);}
                                 else {
                                   a2s.forEach(function(a2,key2){
@@ -774,7 +774,7 @@ io.on('connection',  (socket)=>
                  let tinfull2=[];
                  a1s.forEach(function(a1,key){
                    let nhomnguoinhan =[];
-                    con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
+                    con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"'", function(err2, a2s){
                       if(err2){console.log(err2);}
                       else {
                         a2s.forEach(function(a2,key2){
@@ -1045,6 +1045,29 @@ io.on('connection',  (socket)=>
               if (err3){console.log(err3);}
         });
       });
+    }
+  });
+  socket.on('C_reques_point_inbox',(idc)=>{
+    if(socket.number){
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
+         {
+           if ( err || ( a1s.length == 0) ){console.log(err);}
+           else
+             {
+               if(a1s[0].read_1 ==="N"){socket.emit('read_ok',idc);}
+               con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
+                        if(err3){console.log(err3);}
+                        else {
+                          let position=[];
+                          a3s.forEach(function(a3,key){
+                            position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
+                            if(key===(a3s.length-1)){socket.emit('S_send_point',{pos:position});}
+                          });
+                        }
+                });
+
+             }
+        });
     }
   });
   socket.on('C_reques_point',(idc)=>{
