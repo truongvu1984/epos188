@@ -832,7 +832,7 @@ io.on('connection',  (socket)=>
                        mangcontact.push({name:strencode(a2.name), number:a2.number});
                        if(key2===(a2s.length-1)){
                          tinfull.push({idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact});
-                         if(key===(a1s.length-1)){socket.emit('S_send_group',{group:tinfull});}
+                         if(key===(a1s.length-1)){socket.emit('S_send_group',tinfull);}
                        }
                      });
 
@@ -1228,32 +1228,32 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_nhan_inbox',()=>{
     con.query("UPDATE `account` SET `inbox` = 'B' WHERE `number` LIKE '"+socket.number+"'",function(){
-      console.log('da update account xong');
+      console.log('da update inbox xong');
     });
   });
   socket.on('C_nhan_send',()=>{
     con.query("UPDATE `account` SET `send` = 'B' WHERE `number` LIKE '"+socket.number+"'",function(){
-      console.log('da update account xong');
+      console.log('da update send xong');
     });
   });
   socket.on('C_nhan_save',()=>{
     con.query("UPDATE `account` SET `save` = 'B' WHERE `number` LIKE '"+socket.number+"'",function(){
-      console.log('da update account xong');
+      console.log('da update save xong');
     });
   });
   socket.on('C_nhan_room',()=>{
     con.query("UPDATE `account` SET `room` = 'B' WHERE `number` LIKE '"+socket.number+"'",function(){
-      console.log('da update account xong');
+      console.log('da update room xong');
     });
   });
   socket.on('C_nhan_contact',()=>{
     con.query("UPDATE `account` SET `contact` = 'B' WHERE `number` LIKE '"+socket.number+"'",function(){
-      console.log('da update account xong');
+      console.log('da update contact xong');
     });
   });
   socket.on('C_nhan_group',()=>{
     con.query("UPDATE `account` SET `group` = 'B' WHERE `number` LIKE '"+socket.number+"'",function(){
-      console.log('da update account xong');
+      console.log('da update group xong');
     });
   });
   socket.on('danhantinnhan', function (nguoigui, idc)
