@@ -1086,7 +1086,7 @@ io.on('connection',  (socket)=>
                             a3s.forEach(function(a3,key){
                               position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
                               if(key1===(list.length-1) && key===(a3s.length-1)){
-                                socket.emit('S_send_point_import',{listpoint:position});console.log('Da gui tin import đi');
+                                socket.emit('S_send_point_import',position);console.log('Da gui tin import đi');
                               }
                             });
                           }
@@ -1181,9 +1181,10 @@ io.on('connection',  (socket)=>
     }); // end socket.on('sendmess', function(test)
   socket.on('C_save_pos', (mess)=>{
     if(socket.number){
-      socket.emit('S_get_save_pos');
+      let thoigian = new Date();
+      socket.emit('S_get_save_pos',get_time(thoigian));
       var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
-      var val = [[mess.maso, mess.subject,'H',mess.thoigian]];
+      var val = [[mess.maso, mess.subject,'H',thoigian]];
       con.query(sql, [val], function (err, res)
         {
           if(err){socket.emit('S_save_pos_err');}
