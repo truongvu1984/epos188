@@ -484,10 +484,10 @@ io.on('connection',  (socket)=>
                            if(err2){console.log(err2);}
                            else {
                              tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,
-                               thoigian:a1.time});
+                               thoigian:get_time(a1.time)});
                                if(key===(a1s.length-1)){
                                  console.log('Da inbox:'+tinfull.length);
-                                 socket.emit('S_send_inbox',{tin:tinfull});
+                                 socket.emit('S_send_inbox',tinfull);
                                }
                            }
                          });
@@ -534,9 +534,7 @@ io.on('connection',  (socket)=>
                                     });
                                     console.log(' Tin nhan gui di:');
                                   socket.emit('S_guitinnhan',{ name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number,
-                                     subject: strencode(a1.subject), pos: pos3, id_tinnha_client:a1.idc});
-
-
+                                     subject: strencode(a1.subject), pos: pos3, id_tinnha_client:a1.idc, thoigian:get_time(a1.time)});
                                 }
                               });
                             }
@@ -567,8 +565,8 @@ io.on('connection',  (socket)=>
                                   a2s.forEach(function(a2,key2){
                                     nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),trangthai:a2.stt});
                                     if(key2 === (a2s.length-1)){
-                                      tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time, nguoinhan:nhomnguoinhan, trangthai:a1.stt});
-                                      if(key === (a1s.length-1)){  socket.emit('S_send_send',{tin:tinfull2});console.log('Server đã gửi send');}
+                                      tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,thoigian:get_time(a1.time), nguoinhan:nhomnguoinhan, trangthai:a1.stt});
+                                      if(key === (a1s.length-1)){  socket.emit('S_send_send',tinfull2);console.log('Server đã gửi send');}
                                     }
                                   });
                                 }
@@ -628,8 +626,8 @@ io.on('connection',  (socket)=>
                                         else
                                           {
                                               if(a5s.length>0){
-                                              tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:a4.time});
-                                              if(key===(a4s.length-1)){socket.emit('S_send_room_full',{tin:tinfull});console.log('Server đã gửi room:');}
+                                              tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a4.time)});
+                                              if(key===(a4s.length-1)){socket.emit('S_send_room_full',tinfull);console.log('Server đã gửi room:');}
                                               }
                                           }
                                 });
@@ -677,8 +675,8 @@ io.on('connection',  (socket)=>
                              {
                                let tinfull = [];
                                a1s.forEach(function(a1,key){
-                                 tinfull.push({subject:strencode(a1.subject), idc:a1.idc,thoigian:a1.time});
-                                 if(key=== (a1s.length-1)){socket.emit('S_send_save',{tin:tinfull});console.log('Server đã gửi save');}
+                                 tinfull.push({subject:strencode(a1.subject), idc:a1.idc,thoigian:get_time(a1.time)});
+                                 if(key=== (a1s.length-1)){socket.emit('S_send_save',tinfull);console.log('Server đã gửi save');}
                                });
                              }
                         });
