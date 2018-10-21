@@ -1054,7 +1054,12 @@ io.on('connection',  (socket)=>
            if ( err || ( a1s.length == 0) ){console.log(err);}
            else
              {
-               if(a1s[0].read_1 ==="N"){socket.emit('read_ok',idc);}
+               if(a1s[0].read_1 ==="N"){
+                 con.query("UPDATE `"+socket.number+"mes_main` SET `read_1` = 'Y' WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1",function(error){
+                   if(error){console.log(error);}
+                 });
+
+               }
                con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
                         if(err3){console.log(err3);}
                         else {
