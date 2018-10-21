@@ -724,7 +724,7 @@ io.on('connection',  (socket)=>
                                  mangcontact.push({name:strencode(a2.name), number:a2.number});
                                  if(key2===(a2s.length-1)){
                                    tinfull.push({idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact});
-                                   if(key===(a1s.length-1)){socket.emit('S_send_group',{group:tinfull});}
+                                   if(key===(a1s.length-1)){socket.emit('S_send_group',tinfull);}
                                  }
                                });
 
