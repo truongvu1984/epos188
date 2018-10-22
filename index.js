@@ -856,7 +856,7 @@ io.on('connection',  (socket)=>
                               else
                                 {
                                   if(a5s.length>0){
-                                    tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a4.time)});
+                                    tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a4.time), stt:a4.stt});
                                     if(key===(a4s.length-1)){socket.emit('S_send_room_full',tinfull);console.log('Server đã gửi room:');}
                                   }
                                   else {
@@ -1686,14 +1686,11 @@ io.on('connection',  (socket)=>
               val2 = [[ res.insertId, member.name,member.number,'B']];
               con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
               });
-              socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian)});
+              socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian, stt:"N")});
               }
             });
           }
-
-
       });
-
       // gửi room cho các thành viên
         info.member_list.forEach(function(row){
           // kiểm tra xem thành viên này có tài khoản chưa
