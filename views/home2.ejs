@@ -105,20 +105,16 @@ socket.on('S_send_inbox', (data)=>{
      //S gửi toàn bộ bản tin inbox về client
      var trangthai="";
       // var muigio = new Date().getTimezoneOffset();
-       data.tin.forEach((row,key)=>{
+       data.forEach((row,key)=>{
+         console.log(show_time(row.time));
          var thoigian="";
-         if(row.stt === "N"){
-           thoigian1= getDateTime();
-           socket.emit("danhantinnhan",row.number_nguoigui,row.id_tinnha_client,thoigian1);
-         }
-         else {
-           thoigian1= row.thoigian;
-         }
+         if(row.stt === "N"){socket.emit("danhantinnhan",row.number_nguoigui,row.id_tinnha_client);}
          id_inbox_pos++;
-         var tin = {id_pos:id_inbox_pos, name_nguoigui:strdecode(row.name_nguoigui),number_nguoigui:row.number_nguoigui, subject:strdecode(row.subject), id_tinnha_client:row.id_tinnha_client,trangthai:row.trangthai, stt: row.stt, thoigian: thoigian1};
+         var tin = {id_pos:id_inbox_pos, name_nguoigui:strdecode(row.name_nguoigui),number_nguoigui:row.number_nguoigui, subject:strdecode(row.subject), id_tinnha_client:row.id_tinnha_client,trangthai:row.trangthai, stt: row.stt, thoigian:show_time(row.time) };
          mang_inbox.push(tin);
          if(row.trangthai==="N"){trangthai="Not read";}
-         var line  ="<div class='line_inbox' id='full"+id_inbox_pos+"'><input type='checkbox' id='"+id_inbox_pos+"' onclick='checkbox_inbox_click("+id_inbox_pos+");' style='position:absolute' class='checkbox_inbox'><div style='position:absolute;left:25px;width:150px;'>"+ strdecode(row.subject) +"</div><div style='position:absolute; right:5px'>"+row.thoigian+"</div></br>"+
+         else {trangthai="";}
+         var line  ="<div class='line_inbox' id='full"+id_inbox_pos+"' onclick='inbox_click("+id_inbox_pos+")' ><input type='checkbox' id='"+id_inbox_pos+"' onclick='checkbox_inbox_click("+id_inbox_pos+");' style='position:absolute' class='checkbox_inbox'><div style='position:absolute;left:25px;width:150px;'>"+ strdecode(row.subject) +"</div><div style='position:absolute; right:5px'>"+show_time(row.time)+"</div></br>"+
          "<div style='position:absolute; left:25px'>From:"+strdecode(row.name_nguoigui)+"</div><div style='position:absolute;right:5px'>"+trangthai+"</div></div>";
          $("#id_dropdown_menu_inbox").append(line);
 
@@ -192,6 +188,28 @@ function myMap() {
           });
 
          });
+}
+function show_time(time) {
+  let year = time.year;
+  let month=time.month;
+  let day = time.day;
+  let hr = time.hr;
+  let min = time.min;
+  let sec = time.sec;
+  let zone = time.time_zone;
+  let day1 = new Date(year, month, day, hr, min, sec);
+  let C_zone  = new Date().getTimezoneOffset();
+  day1.setMinutes(day1.getMinutes()+zone - C_zone);
+  return day1.getFullYear()+" "+day1.getMonth()+"/"+day1.getDate()+" "+day1.getHours()+":"+day1.getMinutes()+":"+day1.getSeconds();
+
+}
+function inbox_click(id){
+  mang_inbox.forEach((tin)=>{
+    if(tin.id_pos === id){
+      socket.emit('C_reques_point_inbox',tin.id_tinnha_client);
+      return false;
+    }
+  });
 }
 function show_vitri_thanhvien(number){
 

@@ -65,7 +65,6 @@ con.connect(function(err) {
 
          }
      })
-
 function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
@@ -83,6 +82,7 @@ io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
   socket.emit('check_pass');
+  socket.emit('check_time', get_time(new Date()));
   socket.on('w_get_inbox', function(data, number){
      console.log("Da nhan number");
     con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+data+"' LIMIT 1", function(err, a1s)
@@ -1058,7 +1058,6 @@ io.on('connection',  (socket)=>
                  con.query("UPDATE `"+socket.number+"mes_main` SET `read_1` = 'Y' WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1",function(error){
                    if(error){console.log(error);}
                  });
-
                }
                con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
                         if(err3){console.log(err3);}
@@ -1066,7 +1065,7 @@ io.on('connection',  (socket)=>
                           let position=[];
                           a3s.forEach(function(a3,key){
                             position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
-                            if(key===(a3s.length-1)){socket.emit('S_send_point',{pos:position});}
+                            if(key===(a3s.length-1)){socket.emit('S_send_point',position);}
                           });
                         }
                 });
