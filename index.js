@@ -1048,6 +1048,7 @@ io.on('connection',  (socket)=>
     }
   });
   socket.on('C_reques_point_inbox',(idc)=>{
+    console.log('Vu yeu Thi');
     if(socket.number){
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
          {
@@ -1075,6 +1076,7 @@ io.on('connection',  (socket)=>
     }
   });
   socket.on('C_reques_point',(idc)=>{
+    console.log('Vu yeu Ngan');
     if(socket.number){
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
          {
@@ -1087,7 +1089,7 @@ io.on('connection',  (socket)=>
                           let position=[];
                           a3s.forEach(function(a3,key){
                             position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
-                            if(key===(a3s.length-1)){socket.emit('S_send_point',{pos:position});}
+                            if(key===(a3s.length-1)){socket.emit('S_send_point',position);}
                           });
                         }
                 });

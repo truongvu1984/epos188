@@ -235,26 +235,28 @@ body {
   cursor: pointer;
 }
 .show1 {display:block;}
-.list_pos_wrap{
+.side_panel{
   height: 100%; /* 100% Full-height */
   width: 550px; /* 0 width - change this with JavaScript */
   position: fixed; /* Stay in place */
   z-index: 1; /* Stay on top */
   top: 100px; /* Stay at the top */
   right: -500px;
-  overflow-y: scroll;
-  transition: 1s; /* 0.5 second transition effect to slide in the list_pos */
+  transition: 1s; /* 0.5 second transition effect to slide in the  */
 }
 .list_pos {
-    height: 100%; /* 100% Full-height */
-    width: 250px; /* 0 width - change this with JavaScript */
-    position: absolute; /* Stay in place */
-    z-index: 1;
-    left: 50px;
-    background-color: #b2e1e6;
-    transition: 1s; /* 0.5 second transition effect to slide in the list_pos */ */
+
+
 }
-.list_recipent {
+.list_pos_main{
+  height: 100%; /* 100% Full-height */
+  width: 250px; /* 0 width - change this with JavaScript */
+  position: absolute; /* Stay in place */
+  z-index: 1;
+  left: 50px;
+  background-color: red;
+}
+.list_recipent_main {
     height: 100%; /* 100% Full-height */
     width: 250px; /* 0 width - change this with JavaScript */
     position: absolute; /* Stay in place */

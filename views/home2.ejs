@@ -104,9 +104,8 @@ socket.on('ketqua',(gio)=>{
 socket.on('S_send_inbox', (data)=>{
      //S gửi toàn bộ bản tin inbox về client
      var trangthai="";
-      // var muigio = new Date().getTimezoneOffset();
+
        data.forEach((row,key)=>{
-         console.log(show_time(row.time));
          var thoigian="";
          if(row.stt === "N"){socket.emit("danhantinnhan",row.number_nguoigui,row.id_tinnha_client);}
          id_inbox_pos++;
@@ -147,6 +146,24 @@ socket.on('S_del_inbox', ()=>{
     // bỏ cái hàng với cái id kia
     // document.getElementById(id1).remove();
     alert('Tin nhắn đã được xóa thành công');
+});
+// t('S_send_point',position);}
+socket.on('S_send_point',(data)=>{
+  if(mang_infowindow.length > 0){
+  mang_infowindow.forEach((win,key)=>{
+    win.wind.close();
+    if(key === (mang_infowindow.length-1)){
+      data.forEach((tin)=>{
+        show_pos(tin.lat, tin.lon, strdecode(tin.name));
+      });
+    }
+  });
+}
+else {
+  data.forEach((tin)=>{
+    show_pos(tin.lat, tin.lon, strdecode(tin.name));
+  });
+}
 });
   // nhận tin nhắn, lưu tin vào ( id tin nhắn, subject, tên người gửi, number người gửi, id_pos hiện tại)
   // gửi tin báo nhận cho người gửi
@@ -357,6 +374,15 @@ function xoa_contact(id1){
     }
   }
 }
+function show_pos(lat,lon, name){
+  var infowindow = new google.maps.InfoWindow({
+      position:{ lat:lat, lng: lon}
+    });
+    infowindow.setContent(name);
+    var win = {id:id_posname, wind: infowindow};
+    mang_infowindow.push(win);
+    infowindow.open(map);
+}
 function showmarker( lat1, lon1){
   // var id_pos = ""+Math.floor(Math.random()*(90000)+10000);
   id_posname = id_posname+1;
@@ -372,7 +398,7 @@ function showmarker( lat1, lon1){
     mang_infowindow.push(win);
 }
 function openNav() {
-      document.getElementById("id_list_pos_wrap").style.right = "0px";
+      document.getElementById("id_side_panel").style.right = "0px";
 
   }
 function luudiem(lat1, lon1, id1){
@@ -403,18 +429,7 @@ function luudiem(lat1, lon1, id1){
       });
        return false;
     }
-    // function onClick() {
-    //   var view = new View({
-    //           center: istanbul,
-    //           zoom: 6
-    //         });
-    //     view.animate({
-    //       center: london,
-    //       duration: 2000
-    //     });
-    //   }
-
-  });
+    });
   }
 function handleChange(checkbox,id1) {
     if(checkbox.checked == true){
@@ -479,10 +494,10 @@ function guitinnhan(){
   }
 function closeNav() {
     // document.getElementById("id_list_pos").style.width = "0";
-    document.getElementById("id_list_pos_wrap").style.right = "-500px";
+    document.getElementById("id_side_panel").style.right = "-500px";
 }
 function open_close(){
-  if(document.getElementById("id_list_pos_wrap").style.right === "0px"){
+  if(document.getElementById("id_side_panel").style.right === "0px"){
     closeNav();
       $("#id_close_open").html("List");
   }
@@ -566,7 +581,10 @@ function getDateTime() {
     return hour + ":" + min + ":" + sec + " "+ month+"/"+day+"/"+year;
 }
 function test(){
-  document.getElementById("del_inbox").style.marginTop = "0px";
+  // document.getElementById("del_inbox").style.marginTop = "0px";
+  mang_infowindow.forEach((item)=>{
+    item.wind.close();
+  });
 }
 </script>
 <script>
@@ -709,13 +727,17 @@ window.onclick = function(event) {
               </div>
             </div>
           </div>
-          <div id="id_list_pos_wrap" class="list_pos_wrap">
+          <!-- <div id="id_list_pos_wrap" class="list_pos_wrap"> -->
+          <div id="id_side_panel" class="side_panel">
               <div id="id_close_open" style="position:absolute; width:50px;background-color:#f1f1f1;cursor: pointer;" onclick="open_close();">List</div>
-              <div id="id_list_pos" class="list_pos">
-                <div style="position: absolute;top: 0px;font-size: 25px;margin-left: 50px;">Location list</div>
+              <div id="id_list_pos_main" class="list_pos_main">
+                <div align="center" style="font-size: 20px;">Location list</div>
+                <div id="id_list_pos" class="list_pos"></div>
               </div>
-            <div id="id_list_recipent" class="list_recipent">
-              <div style="position: absolute;top: 0px;font-size: 25px;margin-left: 50px;">Recipent list</div>
+            <!-- <div id="id_list_recipent" class="list_recipent"> -->
+            <div id="id_list_recipent_main" class="list_recipent_main">
+              <div align="center" style="font-size: 20px;">Recipent list</div>
+              <div id="id_list_list_recipent" class="list_list_recipent"></div>
             </div>
 
           </div>
