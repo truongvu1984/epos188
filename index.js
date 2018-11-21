@@ -4,14 +4,6 @@ var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start")});
 let CheckMobi = require('omrs-checkmobi');
-// var nodemailer = require('nodemailer');
-// var transporter = nodemailer.createTransport({
-//         service: 'Gmail',
-//         auth: {
-//             user: 'vu2551984@gmail.com',
-//             pass: '123'
-//         }
-//     });
 var mysql = require('mysql');
 var con = mysql.createConnection({
   host: "us-cdbr-iron-east-05.cleardb.net",
@@ -745,7 +737,7 @@ io.on('connection',  (socket)=>
     console.log('C yeu cau full data');
     if(socket.number){
       // lấy bảng inbox
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R'", function(err, a1s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC", function(err, a1s)
        {
         if ( err ){console.log(err);}
         else
@@ -766,11 +758,13 @@ io.on('connection',  (socket)=>
           }
         });
       // lấy bảng send
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S'", function(err, a1s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` DESC", function(err, a1s)
         {
              if ( err ){console.log(err);}
              else
                {
+                 console.log('kết quả 1 là:'+a1s[a1s.length-1].id);
+                 console.log('kết quả 2 là:'+a1s[0].id);
                  let tinfull2=[];
                  a1s.forEach(function(a1,key){
                    let nhomnguoinhan =[];
@@ -781,7 +775,9 @@ io.on('connection',  (socket)=>
                           nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),trangthai:a2.stt});
                           if(key2 === (a2s.length-1)){
                             tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, trangthai:a1.stt});
-                            if(key === (a1s.length-1)){  socket.emit('S_send_send',tinfull2);console.log('Server đã gửi send');}
+                            if(key === (a1s.length-1)){  socket.emit('S_send_send',tinfull2);console.log('Server đã gửi send');
+                            console.log('VU YEU VAN:'+nhomnguoinhan);
+                          }
                           }
                         });
                       }
@@ -790,7 +786,7 @@ io.on('connection',  (socket)=>
                }
       });
       // lấy bảng save
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H'", function(err, a1s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' ORDER BY `id` DESC", function(err, a1s)
         {
             if ( err ){console.log(err);}
                  else
@@ -811,7 +807,7 @@ io.on('connection',  (socket)=>
                    let mangcontact = [];
                    a1s.forEach(function(a1,key){
                      mangcontact.push({name:strencode(a1.name), number:a1.number});
-                     if(key===(a1s.length-1)){socket.emit('S_send_contact',{tin:mangcontact});console.log('Server đã gửi contact');}
+                     if(key===(a1s.length-1)){socket.emit('S_send_contact',mangcontact);console.log('Server đã gửi contact');}
                    });
                  }
 
@@ -842,7 +838,7 @@ io.on('connection',  (socket)=>
           }
         });
       // Lấy danh sách room
-      con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O'", function(err4, a4s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC", function(err4, a4s)
              {
                if ( err4){console.log('Da co loi room full:'+err4);}
                else
@@ -1048,7 +1044,6 @@ io.on('connection',  (socket)=>
     }
   });
   socket.on('C_reques_point_inbox',(idc)=>{
-    console.log('Vu yeu Thi');
     if(socket.number){
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
          {
@@ -1076,8 +1071,7 @@ io.on('connection',  (socket)=>
     }
   });
   socket.on('C_reques_point',(idc)=>{
-    console.log('Vu yeu Ngan');
-    if(socket.number){
+      if(socket.number){
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
          {
            if ( err || ( a1s.length == 0) ){console.log(err);}
@@ -1882,6 +1876,7 @@ io.on('connection',  (socket)=>
     socket.admin=null;
     console.log('Da log off');
   });
+
 
 });
 }});

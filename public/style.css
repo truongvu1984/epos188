@@ -1,291 +1,257 @@
 body {
     width: 100%;
     height: 100%;
-    }
+    margin: 0px;
+
+}
+.wrapper{
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  overflow: scroll;
+}
 .class_map{
   position: absolute;
+  width: 100%;
   height: 100%;
-  width:100%;
-  }
-.name_pos_123{
-  color: red;
-  }
-.posname_2{
+  overflow-x: scroll;
+}
+.content{
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+}
+.top_right{
+  position: absolute;
+  right: 10px;
+  top:10px;
+}
+.top_right_item {
   position: relative;
   float: right;
   margin-left: 5px;
-  }
-.drop_btn_inbox, .drop_btn_send, .drop_btn_save, .drop_btn_online, .drop_btn_account {
-   background-color: #4CAF50;
-   color: white;
-   padding: 10px;
-   font-size: 13px;
-    border: none;
-   cursor: pointer;
- }
-/* .drop_btn_inbox6 {
-   background-color: #4CAF50;
-   color: white;
-   padding: 10px;
-   font-size: 13px;
-   border: none;
-   cursor: pointer;
- } */
-.drop_btn_inbox:hover, .drop_btn_inbox:focus, .drop_btn_send:hover, .drop_btn_send:focus,.drop_btn_save:hover, .drop_btn_save:focus,.drop_btn_online:hover, .drop_btn_online:focus,.drop_btn_account:hover, .drop_btn_account:focus,  {
-   background-color: #4CAF50;
- }
-.dropdown1, .dropdown2,.dropdown_contact, .dropdown3, .dropdown4, .dropdown5, .my_login_number, .my_submit, .my_edit_pos{
-   position: relative;
-   display: inline-block;
-   float:right;
-   margin-right:10px;
- }
-.my_login_number{
-  background-color: #4CAF50;
-  }
-.dropdown6{
-   position: absolute;
-   display: none;
-   top: 60px;
-   right: 10px;
-   z-index: 1;
-
- }
-.dropdown_content_send,.dropdown_content_save,.dropdown_content_online,.dropdown_content_account{
-   display: none;
-   position: absolute;
-   background-color: #f9f9f9;
-   width: 300px;
-   max-height: 100%;
-   min-height: 100px;
-   overflow-y: : scroll;
-   right: 0px;
-   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-   z-index: 1;
- }
-.dropdown_content_inbox  {
-   display: none;
-   position: absolute;
-   background-color: #f9f9f9;
-   width: 300px;
-   max-height: 700px;
-   overflow: scroll;
-   right: 0px;
-   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-   z-index: 1;
-
- }
-.list_contact_1  {
-   display: none;
-   position: absolute;
-   background-color: #f9f9f9;
-   width:300px;
-   height: 200px;
-   max-height: 500px;
-   overflow-x:hidden;
-   overflow-y: auto;
-   left: 0px;
-   top: 10px;
-   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-   z-index: 1;
- }
-.dropdown_content_inbox_contact a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
- }
-.dropdown_content_send a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
- }
-.dropdown_content_save a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
- }
-.dropdown_content_online a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
- }
-.dropdown_content_account a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
- }
-.banner {
-  z-index: 3;
+}
+.content_account, .content_online,.content_save,.content_send,.content_inbox{
   position: absolute;
-  width: 100%;
+  background-color: yellow;
+  width: 320px;
+  height: 400px;
+  right:0px;
+  display: none;
+  overflow-y: scroll;
 
-  /* background:  #f1f1f1; */
-  }
-.wrapper {
-  z-index: 3;
+}
+.top_left{
   position: absolute;
-  height: 100%;
-  width: 100%;
-  }
-.wrap2{
-  z-index: 3;
-  position: absolute;
-  display: inline-block;
+  background-color: white;
+  width: 400px;
+  height: 100px;
+  left: 10px;
   top:10px;
-  left: 600px;
-  height:50px;
-  width: 450px;
-
-  }
-.wrap2_1{
-  width: 100%;
-  position: absolute;
-  bottom: 0px;
-  /* background: #4CAF50 */
-  }
-.wrap3_main{
-  z-index: 3;
-  position: absolute;
-  top: 5px;
-  left:5px;
-  display: inline-block;
-
-  }
-.wrap3{
-  z-index: 3;
-  width: 450px;
-  height: 50px;
-  background: #4CAD50
-
-  }
-.class_list_nguoinhan, .class_list_nguoinhan1 {
-  position: relative;
-  float: left;
 }
-.wrap_line_nguoinhan{
-  width: 100%;
-  /* background: #4CAD50; */
-}
-.list_nguoinhan{
+.input_sub{
   position: absolute;
-  top: 60px;
-  left: 5px;
-  z-index: 3;
-  width:200px;
+  width: 150px;
+  right:150px;
+  top:5px
+}
+.input_contact{
+  position: absolute;
+  width: 150px;
+  right:150px;
+  bottom: 50px
+}
+.list_contact{
+  position: absolute;
+  width: 250px;
+  height: 400px;
+  background-color: yellow;
+  top:100px;
+  right:150px;
+  display: none;
+  overflow-y: scroll;
+}
+.line_inbox{
+  width: 300px;
+  height:40px;
+  background-color: green;
+  margin-top: 5px;
+
+}
+.line_inbox_main, .line_send_main, .line_save_main{
+  position: absolute;
+  width: 300px;
+  height:40px;
+  cursor: pointer;
+  }
+.line_inbox_chk, .line_send_chk, .line_save_chk{
+  position: absolute;
+  z-index: 3
+}
+.line_inbox_sub, .line_send_sub,.line_save_sub{
+  position:absolute;
+  left:30px;
+  width: 130px;
+  height:20px;
+   background-color: red;
+   overflow-x: hidden;
+}
+.line_inbox_time, .line_send_time, .line_save_time{
+  position:absolute;
+  right:5px;
+}
+.line_inbox_from, .line_send_from{
+  position:absolute;
+  left:30px;
+  margin-top: 20px;
+  width:250px;
+  height: 20px;
   overflow-x: hidden;
-  max-height: 300px;
-  background: #96B76A;
+}
+.line_inbox_read, .line_send_read{
+  position:absolute;
+  right:5px;
+  margin-top: 20px
+}
+.content_del{
+  width: 300px;
+  height:30px;
+  background-color: pink;
+  display: none;
+  margin-top: 5px;
+}
+.content_inbox_del_btn{
+  position:absolute;
+  right:5px;
+}
+.content_inbox_del_item{
+  position:absolute;
+  left:5px;
+}
+.list_contact_main_line{
+  width:231px;
+  height:40px;
+  background-color:green;
+  margin-top:5px
+}
+.list_contact_line_btn{
+  position:absolute;
+  right:5px;
+  margin-top:5px
+}
+.list_contact_line_number{
+  position:absolute;
+  margin-top:20px
+}
+.list_contact_ok{
+  position:absolute;
+  bottom: 5px;
+  width: 380px;
+  height: 40px;
+  left:5px;
+  overflow-x: scroll;
   white-space: nowrap;
-  overflow-y: auto;
+}
+.list_contact_ok_item{
+  display: inline-block;
+  background-color: pink;
+  margin-left: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.a111{
+  display: inline-block;
+  white-space: nowrap;
+}
+.a222{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+  padding: 0px
+}
+.right_bar{
+  position: fixed;
+  width: 250px;
+  height: 400px;
+  right:-250px;
+  top:50px;
+  transition: 0.5s
+}
+.btn_list{
+  position: absolute;
+  width: 50px;
+  left:-50px
+}
+.location_list{
+  position: absolute;
+  width: 250px;
+  height: 400px;
+  background-color: yellow;
+  overflow-y: scroll;
+}
+.list_line{
+  width: 230px;
+  height: 35px;
+  margin-top: 5px;
+  background-color: green;
 
 }
-.my_edit_pos{
+.list_line_checkbox{
+  position: absolute;
+  right:5px
+}
+.lo_list_sub{
+  position: absolute;
+  width: 190px;
+  height: 30px;
+  margin-top: 5px;
+  cursor: pointer;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; 
+}
+.lo_list_show{
+  position: absolute;
+  margin-top:15px;
+  right: 5px;
+}
+.info_wrap{
+  width: 200px;
+  height: 80px;
+  text-align:center;
+
+}
+.info_input{
+  width: 190px;
+
+}
+.posname_2{
+  width: 200px;
+  height: 20px;
+  margin-top: 10px
+
+}
+.info_cancle{
   position: relative;
-  display: inline-block;
+  float: right;
+  margin-right: 10px
+}
+.info_ok{
+  position: relative;
   float: left;
   margin-left: 10px
 
 }
-.my_login_subject{
-  position: relative;
-  display: inline-block;
-  float: left;
 
 
-}
-.my_btn_send_tinnhan{
-  position: relative;
-  /* display: inline-block; */
-  float: right;
-  height: 60%;
-  margin-top: 3%;
-  margin-right: 3%;
-
-}
-/* Change color of dropdown links on hover */
-.dropdown_content_inbox a:hover {background-color: #f1f1f1}
-.dropdown_content_send a:hover {background-color: #f1f1f1}
-.dropdown_content_save a:hover {background-color: #f1f1f1}
-.dropdown_content_online a:hover {background-color: #f1f1f1}
-.dropdown_content_account a:hover {background-color: #f1f1f1}
-
-.wrap_line_nguoinhan a:hover {background-color: #f1f1f1}
-.list_contact_1 a:hover {background-color: #96B76A}
-.line_contact1_wrap{
-  position: absolute;
-  left:0px;
-  overflow-x: hidden;
-  width: 200px
-}
-.line_contact2_wrap{
-  position: absolute;
-  right:0px;
-  width: 70px
-}
-.line_inbox {
-  width: 100%;
-  height: 40px;
-  margin-top: 5px;
-  background-color: #96B76A;
-  cursor: pointer;
-}
-.show1 {display:block;}
-.side_panel{
-  height: 100%; /* 100% Full-height */
-  width: 550px; /* 0 width - change this with JavaScript */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Stay on top */
-  top: 100px; /* Stay at the top */
-  right: -500px;
-  transition: 1s; /* 0.5 second transition effect to slide in the  */
-}
-.list_pos {
 
 
-}
-.list_pos_main{
-  height: 100%; /* 100% Full-height */
-  width: 250px; /* 0 width - change this with JavaScript */
-  position: absolute; /* Stay in place */
-  z-index: 1;
-  left: 50px;
-  background-color: red;
-}
-.list_recipent_main {
-    height: 100%; /* 100% Full-height */
-    width: 250px; /* 0 width - change this with JavaScript */
-    position: absolute; /* Stay in place */
-    z-index: 1;
-    left: 300px;
-    background-color: #b2e1e6;
-    transition: 1s; /* 0.5 second transition effect to slide in the list_pos */ */
-}
-
-/* The navigation menu links */
-.line_list_pos {
-    position:relative;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
 
 
-}
-/* When you mouse over the navigation links, change their color */
-.line_list_pos:hover {
-    color: #f1f1f1;
-}
 
-
-/* On smaller screens, where height is less than 450px, change the style of the list_pos (less padding and a smaller font size) */
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
-    .list_pos {padding-top: 15px;}
-    .list_pos a {font-size: 18px;}
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
 }
-</style>

@@ -7,14 +7,11 @@
     <script src="jquery-3.1.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-var socket = io("http://192.168.5.13:3000");
+var socket = io("http://192.168.5.37:3000");
 socket.connect();
 var map;
 var mangmarker = [];
 var marker1 = {};
-var rectangle;
-var fourdiem = [];
-var string_list_nguoinhan="";
 var list_nguoinhan = [];
 var list_diem_gui_di = [];
 var id_posname=1;
@@ -31,8 +28,14 @@ function strdecode( data ) {
   return decodeURIComponent(escape( data ));
 }
 var id_inbox_pos=0;
+var id_contact = 0;
 var mang_inbox = [];
+var mang_send = [];
+var mang_save = [];
+var mang_contact = [];
+var mang_contact_ok = [];
 var list_del = [];
+
 socket.on('check_pass',()=>{
    socket.emit('login2','<%= sodienthoai %>', '<%= pass %>');
 
@@ -98,27 +101,69 @@ socket.on('S_send_room_member', function(data){
 
                       $("#myDropdown6").html( ten);
                   });
-socket.on('ketqua',(gio)=>{
-  $("#btn_send_tinnhan").html(gio.thoigian);
-});
 socket.on('S_send_inbox', (data)=>{
      //S gửi toàn bộ bản tin inbox về client
      var trangthai="";
-
        data.forEach((row,key)=>{
          var thoigian="";
          if(row.stt === "N"){socket.emit("danhantinnhan",row.number_nguoigui,row.id_tinnha_client);}
          id_inbox_pos++;
-         var tin = {id_pos:id_inbox_pos, name_nguoigui:strdecode(row.name_nguoigui),number_nguoigui:row.number_nguoigui, subject:strdecode(row.subject), id_tinnha_client:row.id_tinnha_client,trangthai:row.trangthai, stt: row.stt, thoigian:show_time(row.time) };
+         var idc = "4"+id_inbox_pos;
+         var tin = {id_pos:idc, name_nguoigui:strdecode(row.name_nguoigui),number_nguoigui:row.number_nguoigui, subject:strdecode(row.subject), id_tinnha_client:row.id_tinnha_client,trangthai:row.trangthai, stt: row.stt, thoigian:show_time(row.time) };
          mang_inbox.push(tin);
          if(row.trangthai==="N"){trangthai="Not read";}
          else {trangthai="";}
-         var line  ="<div class='line_inbox' id='full"+id_inbox_pos+"' onclick='inbox_click("+id_inbox_pos+")' ><input type='checkbox' id='"+id_inbox_pos+"' onclick='checkbox_inbox_click("+id_inbox_pos+");' style='position:absolute' class='checkbox_inbox'><div style='position:absolute;left:25px;width:150px;'>"+ strdecode(row.subject) +"</div><div style='position:absolute; right:5px'>"+show_time(row.time)+"</div></br>"+
-         "<div style='position:absolute; left:25px'>From:"+strdecode(row.name_nguoigui)+"</div><div style='position:absolute;right:5px'>"+trangthai+"</div></div>";
-         $("#id_dropdown_menu_inbox").append(line);
+         var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_inbox_chk' onclick='checkbox_inbox_click("+idc+");'><div class='line_inbox_main' onclick='inbox_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(row.subject)+"</div><div class='line_inbox_time'>"+show_time(row.time)+"</div><div class='line_inbox_from'>From:"+strdecode(row.name_nguoigui)+"</div><div class='line_inbox_read'>"+trangthai+"</div></div></div>";
+        $("#k_inbox").before(line);
 
        });
      socket.emit('C_nhan_inbox');
+});
+socket.on('S_send_send', (data)=>{
+     //S gửi toàn bộ bản tin send về client
+       data.forEach((row)=>{
+         var thoigian="";
+         var ab = "";
+         var space = "";
+         id_inbox_pos++;
+         var idc = "3"+id_inbox_pos;
+         var tin = {id_pos:idc, nhom_nguoinhan:row.nguoinhan, subject:strdecode(row.subject), id_tinnha_client:row.idc, thoigian:show_time(row.time) };
+         mang_send.push(tin);
+         row.nguoinhan.forEach((row1,key)=>{
+            if(key===(row.nguoinhan.length-1)){space="";}
+            else {space = ";"; }
+            if(row1.trangthai ==="N"){ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;}
+            else {ab=ab+strdecode(row1.name)+space;}
+          });
+         var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(row.subject)+"</div><div class='line_send_time'>"+show_time(row.time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'>abc</div></div></div>";
+          // $("#id_content_send").before(line);
+           $("#k_send").before(line);
+       });
+      socket.emit('C_nhan_send');
+});
+socket.on('S_send_save', (data)=>{
+     //S gửi toàn bộ bản tin inbox về client
+
+       data.forEach((row,key)=>{
+         var thoigian="";
+         id_inbox_pos++;
+         var idc = "2"+id_inbox_pos;
+         var tin = {id_pos:idc, subject:strdecode(row.subject), id_tinnha_client:row.idc, thoigian:show_time(row.time) };
+         mang_save.push(tin);
+        var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_save_chk' onclick='checkbox_save_click("+idc+");'><div class='line_save_main' onclick='save_click("+idc+")'><div class='line_save_sub'>"+strdecode(row.subject)+"</div><div class='line_inbox_time'>"+show_time(row.time)+"</div></div></div>";
+          $("#k_save").before(line);
+
+       });
+     socket.emit('C_nhan_save');
+});
+socket.on('S_send_contact',(data)=>{
+  data.forEach((tin)=>{
+    id_contact ++;
+    var idc = "1"+id_contact;
+    mang_contact.push({id: idc, name: tin.name, number:tin.number});
+    var line = "<div class='list_contact_main_line'><div style='position:absolute;' id='list_contact_name'>"+strdecode(tin.name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+tin.number+"</div><button class='list_contact_line_btn' id='btn"+idc+"' onclick='add_contact_click("+idc+")'>Add</button></div>";
+      $("#id_list_contact").append(line);
+  });
 });
 socket.on('S_W_add_friend_ok',function(data){
               var new_contact = "<a href=''>"+data.name+"</a></br>";
@@ -147,26 +192,30 @@ socket.on('S_del_inbox', ()=>{
     // document.getElementById(id1).remove();
     alert('Tin nhắn đã được xóa thành công');
 });
-// t('S_send_point',position);}
 socket.on('S_send_point',(data)=>{
+  $("#id_location_list").html("");
   if(mang_infowindow.length > 0){
-  mang_infowindow.forEach((win,key)=>{
+    mang_infowindow.forEach((win,key)=>{
     win.wind.close();
     if(key === (mang_infowindow.length-1)){
+      mang_infowindow = [];
+      mang_infowindow_main=[];
       data.forEach((tin)=>{
-        show_pos(tin.lat, tin.lon, strdecode(tin.name));
+        show_pos(tin.lat, tin.lon, strdecode(tin.name), tin.id);
+        var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
+        $("#id_location_list").append(line);
       });
     }
   });
-}
-else {
-  data.forEach((tin)=>{
-    show_pos(tin.lat, tin.lon, strdecode(tin.name));
+  }
+  else {data.forEach((tin)=>{
+    show_pos(tin.lat, tin.lon, strdecode(tin.name),tin.id);
+    var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
+    $("#id_location_list").append(line);
+
   });
-}
+  }
 });
-  // nhận tin nhắn, lưu tin vào ( id tin nhắn, subject, tên người gửi, number người gửi, id_pos hiện tại)
-  // gửi tin báo nhận cho người gửi
 socket.on('S_guitinnhan', (data)=>{
   var id_inbox_pos = mang_inbox[mang_inbox.length-1].id_pos +1;
   var thoigian1 = getDateTime();
@@ -177,6 +226,149 @@ socket.on('S_guitinnhan', (data)=>{
   $("#id_dropdown_menu_inbox").append(line);
   socket.emit("danhantinnhan", data.number_nguoigui, row.id_tinnha_client, thoigian);
 });
+function hide_show_pos(id){
+  if(document.getElementById("chk"+id).checked == true){cancle_luudiem(id);}
+  else {
+    for (var i=0; i<mang_infowindow_main.length; i++){
+      if(mang_infowindow_main[i].id ==id){
+        var lat1 = mang_infowindow_main[i].lat;
+        var lon1 = mang_infowindow_main[i].lon;
+        var name1 = mang_infowindow_main[i].name;
+        var infowindow = new google.maps.InfoWindow({
+            position:{ lat:lat1, lng:lon1},
+            content:name1
+        });
+          // infowindow.setContent(name1);
+          infowindow.open(map);
+          var win = {id:id, wind: infowindow};
+          mang_infowindow.push(win);
+          google.maps.event.addListener(infowindow, 'closeclick', function() {
+            document.getElementById("li_lo"+id).remove();
+            for(var i=0; i<mang_infowindow.length; i++){
+              if(mang_infowindow[i].id == id){
+                mang_infowindow.splice(i,1);
+                break;
+              }
+            }
+            for(var i=0; i<mang_infowindow_main.length; i++){
+              if(mang_infowindow_main[i].id == id){
+                mang_infowindow_main.splice(i,1);
+                break;
+              }
+            }
+
+          });
+      break;
+        }
+      }
+  }
+}
+function show_pos(lat,lon, name, id1){
+  var infow = new google.maps.InfoWindow({
+      position:{ lat:lat, lng: lon},
+      content:name
+    });
+    // infow.setContent(name);
+    // var win = {id:id1, wind: infow};
+    mang_infowindow_main.push({name:name,lat:lat,lon:lon,id:id1});
+    mang_infowindow.push({id:id1, wind: infow});
+    infow.open(map);
+    google.maps.event.addListener(infow,'closeclick',function(){
+      document.getElementById("li_lo"+id1).remove();
+      for (var i=0; i<mang_infowindow.length; i++){
+        if(mang_infowindow[i].id == id1){
+          mang_infowindow.splice(i,1);
+          break;
+        }
+      }
+      for (var k=0; k<mang_infowindow_main.length; k++){
+        if(mang_infowindow_main[k].id == id1){
+          mang_infowindow_main.splice(k,1);
+          break;
+        }
+      }
+  });
+
+}
+function fly_to(id){
+  mang_infowindow.forEach((tin)=>{
+    if(tin.id == id){
+      var center = new google.maps.LatLng(tin.wind.getPosition().lat(),tin.wind.getPosition().lng());
+       map.panTo(center);
+       map.setZoom(15);
+      return false;
+    }
+  });
+}
+function handleChange(checkbox,id1) {
+    if(checkbox.checked == true){
+      cancle_luudiem(id1);
+    }else{
+      for (var i=0; i<mang_infowindow_main.length; i++){
+        if(mang_infowindow_main[i].id ==id1){
+          var lat1 = mang_infowindow_main[i].lat;
+          var lon1 = mang_infowindow_main[i].lon;
+          var name1 = mang_infowindow_main[i].name;
+          var infowindow = new google.maps.InfoWindow({
+              position:{ lat:lat1, lng:lon1}
+          });
+            infowindow.setContent(name1);
+            infowindow.open(map);
+            var win = {id:id1, wind: infowindow};
+            mang_infowindow.push(win);
+            google.maps.event.addListener(infowindow, 'closeclick', function() {$("#"+id1).html("");});
+        return false;
+          }
+        }
+   }
+}
+function guitinnhan(){
+  var sub = document.getElementById("id_input_subject").value.trim();
+  if ( sub === ""){
+    alert('There is no subjet.');
+  }
+  else {
+    if (mang_contact_ok.length ==0){
+      alert('There is no receiver.');
+    }
+    else {
+      if (mang_infowindow_main.length == 0){
+        alert('There is no position in map to send.');
+      }
+      else {
+        var ma1 = Math.floor(Math.random()*(9000)+1000);
+        var ma2 =Math.floor(Math.random()*(9000)+1000);
+        var mafull = ""+ma1+ma2;
+        var ten = "<%= name %>";
+        var sodienthoai = "<%= sodienthoai %>";
+        var tinnhanfull = {nguoigui_name: ten, nguoigui_number:sodienthoai ,subject: sub  ,nguoinhan:mang_contact_ok, pos:mang_infowindow_main, id:mafull};
+        socket.emit('C_gui_tinnhan',tinnhanfull);
+      }
+    }
+
+  }
+n   }
+function test(){
+  // document.getElementById("del_inbox").style.marginTop = "0px";
+    // $("#id_list_pos").append(new_pos);
+  // mang_infowindow.forEach((item)=>{
+  //   item.wind.close();
+  // });
+  alert(mang_infowindow_main.length);
+}
+function test2(){
+    alert(mang_infowindow.length);
+}
+function open_close_list(){
+  if(document.getElementById("id_btn_list").textContent === "List"){
+    document.getElementById("id_right_bar").style.right = "0px";
+      $("#id_btn_list").html("Hide");
+  }
+  else {
+    document.getElementById("id_right_bar").style.right = "-250px";
+      $("#id_btn_list").html("List");
+  }
+}
 function myMap() {
       var mapOptions = {
       center: new google.maps.LatLng(41.5, -0.12),
@@ -190,22 +382,70 @@ function myMap() {
       fullscreenControl: false,
       mapTypeControl:  true,
       rotateControl: true,
-      mapTypeControlOptions: {
-              style: google.maps.MapTypeControlStyle.VER_BAR,
-              position: google.maps.ControlPosition.BOTT_LEFT,
-
-          },
-
-        }
+      mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.VER_BAR,position: google.maps.ControlPosition.BOTT_LEFT,},}
       $(document).ready(function(){
           map = new google.maps.Map(document.getElementById("map"), mapOptions);
           map.setTilt(45);
           google.maps.event.addListener(map, "rightclick", function(event) {
-            showmarker(event.latLng.lat(),event.latLng.lng());
+            map_rightclick(event.latLng.lat(),event.latLng.lng());
           });
 
          });
 }
+function map_rightclick( lat1, lon1){
+  var id =  new Date().getTime();
+  var infowindow = new google.maps.InfoWindow({
+      position:{ lat:lat1, lng: lon1}
+    });
+    var noidung=  "<div class='info_wrap'><div>Input name of this place</div><input type='text' id='input_123' class='info_input'></input>"+
+    "<div class='posname_2'><button onclick='cancle_luudiem("+id+")' class='info_cancle'>CANCLE</button>"+
+    "<button onclick='luudiem("+lat1+","+lon1+","+id+")' class='info_ok'>OK</button></div></div>";
+    infowindow.setContent(noidung);
+    infowindow.open(map);
+    var win = {id:id, wind: infowindow};
+    mang_infowindow.push(win);
+}
+function luudiem(lat1, lon1, id1){
+  var name1 = document.getElementById("input_123").value;
+  for (var i=0; i<mang_infowindow.length; i++){
+    if(mang_infowindow[i].id ==id1){
+      mang_infowindow[i].wind.setContent(name1);
+      var diem2 = {name:name1, lat:lat1, lon:lon1, id:id1};
+      mang_infowindow_main.push(diem2);
+      var line = "<div class='list_line' id='li_lo"+id1+"'><div class='lo_list_sub' onclick='fly_to("+id1+")'>"+name1+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+id1+"' onchange='hide_show_pos("+id1+")'><div class='lo_list_show'>Hide</div></div>";
+      $("#id_location_list").append(line);
+      // var new_pos = "<div id='"+id1+"' class='line_list_pos'><div onclick='fly_to("+id1+")' style='position:absolute; left:0px,color:#4d4dff; cursor:pointer;overflow:hidden;max-width:150px'>"+name1+"</div><div style='position:absolute; right:0px'><input id='input"+id1+"' type='checkbox' onchange='handleChange(this,"+id1+")'><span style='font-size: 20px;'>Hide</span></div></br></div>";
+      // $("#id_list_pos").append(new_pos);
+
+      google.maps.event.addListener(mang_infowindow[i].wind,'closeclick',function(){
+        document.getElementById("li_lo"+id1).remove();
+        for (var i=0; i<mang_infowindow.length; i++){
+          if(mang_infowindow[i].id == id1){
+            mang_infowindow.splice(i,1);
+            break;
+          }
+        }
+        for (var k=0; k<mang_infowindow_main.length; k++){
+          if(mang_infowindow_main[k].id == id1){
+            mang_infowindow_main.splice(k,1);
+            break;
+          }
+        }
+    });
+      return false;
+      }
+    }
+}
+function cancle_luudiem(id) {
+  for (var i=0; i<mang_infowindow.length; i++){
+    if(mang_infowindow[i].id ==id){
+    mang_infowindow[i].wind.close();
+    mang_infowindow.splice(i, 1);
+    return false;
+      }
+    }
+
+  }
 function show_time(time) {
   let year = time.year;
   let month=time.month;
@@ -222,327 +462,109 @@ function show_time(time) {
 }
 function inbox_click(id){
   mang_inbox.forEach((tin)=>{
-    if(tin.id_pos === id){
+    if(tin.id_pos == id){
       socket.emit('C_reques_point_inbox',tin.id_tinnha_client);
       return false;
     }
   });
 }
-function show_vitri_thanhvien(number){
-
-    if ( mangmarker.length>0){
-    mangmarker.forEach(function(mar){
-    if(mar.number == number){
-      var lat = mar.marker.getPosition().lat();
-      var lng = mar.marker.getPosition().lng();
-      // map.panTo(new google.maps.LatLng(lat, lon));
-       map.panTo(new google.maps.LatLng(mar.marker.getPosition().lat(), mar.marker.getPosition().lng()));
-       map.setZoom(18);
-      // break;
+function save_click(id){
+  mang_save.forEach((tin)=>{
+    if(tin.id_pos == id){
+      socket.emit('C_reques_point',tin.id_tinnha_client);
+      return false;
     }
-
   });
-  }
-
-  }
-function add_friend(id1){
-  for(var i=0; i<mang_kq_contact_search.length; i++){
-    if (mang_kq_contact_search[i].id===id1){
-      var data = {number:mang_kq_contact_search[i].number, user: mang_kq_contact_search[i].user, admin:'<%= sodienthoai %>',admin_name:'<%= name %>' , password:'<%= pass %>'};
-      socket.emit('W_add_friend',data);
+}
+function send_click(id){
+  mang_send.forEach((tin)=>{
+    if(tin.id_pos == id){
+      socket.emit('C_reques_point',tin.id_tinnha_client);
       return false;
     }
-  }
+  });
 }
-function them_contact2(id){
-  for(var i=0; i<mang_kq_contact_search.length; i++){
-    if (mang_kq_contact_search[i].id===id){
-      string_list_nguoinhan = string_list_nguoinhan + "<div class='wrap_line_nguoinhan'>  <a href='#' class='class_list_nguoinhan1'>Del  </a>&nbsp; "+mang_kq_contact_search[i].user + "</div>";
-       $("#my_list_nguoinhan").html( string_list_nguoinhan);
-       var nguoinhan = {name: mang_kq_contact_search[i].user , number:mang_kq_contact_search[i].number};
-       list_nguoinhan.push(nguoinhan);
-      return false;
-    }
-  }
-
-}
-function myFunction6(subject) {
-  document.getElementById("id_dropdown6").style.display = "block";
-  $("#view").html( "Online: "+subject);
-
-}
-function searchContacts(){
-  ten="";
-  var chuoi = document.getElementById("login_number_2").value.trim();
-  var div_show_contact = document.getElementById("my_list_contact");
-  if (chuoi.charAt(0)=='0'){
-    chuoi = chuoi.substr(1);
-  }
+function search_contact(){
+  document.getElementById("id_list_contact").style.display = "none";
+  $("#id_list_contact_search").html("");
+  var chuoi = document.getElementById("id_input_contact").value.trim();
+  if (chuoi.charAt(0)=='0'){chuoi = chuoi.substr(1);}
   if (chuoi.length>0){
-    var kiemtra = false;
-   for (var i=0; i<mang_contact_ok.length; i++){
-    if  ( mang_contact_ok[i].name.toLowerCase().indexOf(chuoi.toLowerCase()) !== -1 || mang_contact_ok[i].number.toLowerCase().indexOf(chuoi.toLowerCase()) !== -1){
-          ten = ten+ "<div><div class='line_contact1_wrap'><a href='#' onclick='them_contact("+mang_contact_ok[i].id+")' class='line_contact1'>"+mang_contact_ok[i].name+"</a></div>"+
-          "<div class='line_contact2_wrap'></div></div></br>";
-          kiemtra = true;
+    document.getElementById("id_list_contact_search").style.display = "block";
+    var kiemtra = true;
+    for (var i=0; i<mang_contact.length; i++){
+      if  ( strdecode(mang_contact[i].name).toLowerCase().indexOf(chuoi.toLowerCase()) !== -1 || mang_contact[i].number.toLowerCase().indexOf(chuoi.toLowerCase()) !== -1){
+        var line = "<div class='list_contact_main_line'><div style='position:absolute;' id='list_contact_name'>"+strdecode(mang_contact[i].name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+mang_contact[i].number+"</div><button class='list_contact_line_btn' id='bt"+mang_contact[i].id+"' onclick='add_contact__search_click("+mang_contact[i].id+")'>"+document.getElementById("btn"+mang_contact[i].id).textContent+"</button></div>";
+          $("#id_list_contact_search").append(line);
+          kiemtra = false;
         }
-
-    }
-    var dropdowns = document.getElementsByClassName("list_contact_1");
-    var k;
-    for (k = 0; k < dropdowns.length; k++) {
-    var openDropdown = dropdowns[k];
-    if (!(openDropdown.classList.contains('show1'))) {
-     document.getElementById("my_list_contact").classList.toggle("show1");
-    }
     }
       if (kiemtra){
-        $("#my_list_contact").html( ten);
-
+          $("#id_list_contact_search").html("");
+        // nếu không tìm thấy trong list contact hiện hữu thì sẽ tìm trên server
+        // ten = "There is no item found in your listcontact. </br>Please input more letter to search in Global.";
+        // $("#my_list_contact").html( ten);
+        // var abc = ""+ten.length;
+        // if (chuoi.trim().length >5){
+        // socket.emit('W_check_contact',chuoi);
+        // }
       }
-      else {
-        // nếu khôn$("#my_list_contact").html( ten);g tìm thấy trong list contact hiện hữu thì sẽ tìm trên server
-        ten = "There is no item found in your listcontact. </br>Please input more letter to search in Global.";
-        $("#my_list_contact").html( ten);
-        var abc = ""+ten.length;
-        if (chuoi.trim().length >5){
-        socket.emit('W_check_contact',chuoi);
-        }
-      }
-
   }
-  else {
-      var dropdowns = document.getElementsByClassName("list_contact_1");
-    var k;
-    for (k = 0; k < dropdowns.length; k++) {
-    var openDropdown = dropdowns[k];
-       openDropdown.classList.remove('show1');
-
-    }
-
-  }
-
+  else { document.getElementById("id_list_contact_search").style.display = "none";}
 }
-function them_contact(id1){
-  var chk= true;
-  if(list_nguoinhan.length > 0){
-    for(var k=0; k<list_nguoinhan.length; k++){
-      if (id1===list_nguoinhan[k].id){
-        chk = false;
-
-      }
-
-    }
-  if(chk){
-      for (var i=0; i<mang_contact_ok.length; i++){
-          var id2 = mang_contact_ok[i].id;
-          if (id2===id1) {
-            var string = "<div class='wrap_line_nguoinhan' id='"+id2+"'>  <a href='#' onclick='xoa_contact("+id2+")' class='class_list_nguoinhan1'>Del  </a>&nbsp; "+mang_contact_ok[i].name + "</div>";
-            $("#my_list_nguoinhan").append( string);
-            var nguoinhan = {id:id2, name: mang_contact_ok[i].name , number:mang_contact_ok[i].number};
-            list_nguoinhan.push(nguoinhan);
-            return false;
-          }
-        }
-      }
-      else {alert('This contact has been added.');}
-  }
-  else{
-    for (var i=0; i<mang_contact_ok.length; i++){
-        var id2 = mang_contact_ok[i].id;
-        if (id2===id1) {
-          var string = "<div class='wrap_line_nguoinhan' id='"+id2+"'>  <a href='#' onclick='xoa_contact("+id2+")' class='class_list_nguoinhan1'>Del  </a>&nbsp; "+mang_contact_ok[i].name + "</div>";
-          $("#my_list_nguoinhan").append( string);
-          var nguoinhan = {id:id2, name: mang_contact_ok[i].name , number:mang_contact_ok[i].number};
-          list_nguoinhan.push(nguoinhan);
-          return false;
-        }
-      }
-  }
-  }
-function xoa_contact(id1){
-  if(check_del){
-    document.getElementById(id1).remove();
-    document.getElementById(id1).remove();
-    check_del = false;
-  }
-  document.getElementById(id1).remove();
-  for(var i=list_nguoinhan.length-1; i >=0 ; i--){
-    if(list_nguoinhan[i].id === id1){
-      list_nguoinhan.splice(i, 1);
-      return false;
-    }
-  }
-}
-function show_pos(lat,lon, name){
-  var infowindow = new google.maps.InfoWindow({
-      position:{ lat:lat, lng: lon}
-    });
-    infowindow.setContent(name);
-    var win = {id:id_posname, wind: infowindow};
-    mang_infowindow.push(win);
-    infowindow.open(map);
-}
-function showmarker( lat1, lon1){
-  // var id_pos = ""+Math.floor(Math.random()*(90000)+10000);
-  id_posname = id_posname+1;
-  var infowindow = new google.maps.InfoWindow({
-      position:{ lat:lat1, lng: lon1}
-    });
-    var noidung = "<div class='wrap_posname'><div>Input name of this place </br> <input type='text' id='input_123' class='info_pos_name'></input><div></br>"+
-    "<div><div class='posname_2'><button onclick='cancle_luudiem("+id_posname+")'>CANCLE</button></div><div>"+
-    " <button onclick='luudiem("+lat1+","+lon1+","+id_posname+")' class='posname_2'>OK</button> </div>  </div></div>";
-    infowindow.setContent(noidung);
-    infowindow.open(map);
-    var win = {id:id_posname, wind: infowindow};
-    mang_infowindow.push(win);
-}
-function openNav() {
-      document.getElementById("id_side_panel").style.right = "0px";
-
-  }
-function luudiem(lat1, lon1, id1){
-  var name1 = document.getElementById("input_123").value;
-  for (var i=0; i<mang_infowindow.length; i++){
-    if(mang_infowindow[i].id ==id1){
-      mang_infowindow[i].wind.setContent(name1);
-      var id2 = Math.floor(Math.random()*(90000)+10000);
-      var diem = {name:name1, lat:lat1, lon:lon1, id:id2};
-      var diem2 = {name:name1, lat:lat1, lon:lon1, id:id1};
-      mang_infowindow_main.push(diem2);
-      var new_pos = "<div id='"+id1+"' class='line_list_pos'><div onclick='pos_click("+id1+")' style='position:absolute; left:0px,color:#4d4dff; cursor:pointer;overflow:hidden;max-width:150px'>"+name1+"</div><div style='position:absolute; right:0px'><input id='input"+id1+"' type='checkbox' onchange='handleChange(this,"+id1+")'><span style='font-size: 20px;'>Hide</span></div></br></div>";
-      $("#id_list_pos").append(new_pos);
-      openNav();
-      google.maps.event.addListener(mang_infowindow[i].wind, 'closeclick', function() {$("#"+id1).html("");});
-      return false;
-      }
-    }
-  }
-  function pos_click(id1){
-    mang_infowindow_main.forEach(function(mar){
-    if(mar.id == id1){
-      // map.panTo(new google.maps.LatLng(mar.lat, mar.lon));
-      //  map.setZoom(18);
-      view.animate({
-        center: london,
-        duration: 2000
-      });
-       return false;
-    }
-    });
-  }
-function handleChange(checkbox,id1) {
-    if(checkbox.checked == true){
-      cancle_luudiem(id1);
-    }else{
-
-      for (var i=0; i<mang_infowindow_main.length; i++){
-        if(mang_infowindow_main[i].id ==id1){
-          var lat1 = mang_infowindow_main[i].lat;
-          var lon1 = mang_infowindow_main[i].lon;
-          var name1 = mang_infowindow_main[i].name;
-          var infowindow = new google.maps.InfoWindow({
-              position:{ lat:lat1, lng:lon1}
-            });
-            infowindow.setContent(name1);
-            infowindow.open(map);
-            var win = {id:id1, wind: infowindow};
-            mang_infowindow.push(win);
-            google.maps.event.addListener(infowindow, 'closeclick', function() {$("#"+id1).html("");});
+function add_contact__search_click(id){
+  var x = document.getElementById("bt"+id).textContent;
+  if(x === "Add"){
+    mang_contact.forEach((row,key)=>{
+      if(row.id == id){
+        mang_contact_ok.push({id:id, name:row.name, number:row.number});
+        var line = "<div class='list_contact_ok_item' id='"+id+"'><div class='a111'>"+strdecode(row.name)+"</div><button class='a222' onclick='del_contact_ok("+id+")'>X</button></div>";
+        $("#id_list_contact_ok").append(line);
         return false;
-          }
-        }
+      }
+    });
+    $("#btn"+id).html("Move");
+    $("#bt"+id).html("Move");
+  }
+  else {
+    del_contact_ok(id);
+    $("#btn"+id).html("Add");
+    $("#bt"+id).html("Add");
+  }
+}
+function add_contact_click(id){
+  var x = document.getElementById("btn"+id).textContent;
+  if(x === "Add"){
+    mang_contact.forEach((row,key)=>{
+      if(row.id == id){
+        mang_contact_ok.push({id:id, name:row.name, number:row.number});
+        var line = "<div class='list_contact_ok_item' id='"+id+"'><div class='a111'>"+strdecode(row.name)+"</div><button class='a222' onclick='del_contact_ok("+id+")'>X</button></div>";
+        $("#id_list_contact_ok").append(line);
+        return false;
+      }
+    });
+    $("#btn"+id).html("Move");
+  }
+  else {
+    del_contact_ok(id);
+    $("#btn"+id).html("Add");
+  }
+}
+function del_contact_ok(id){
+  document.getElementById(id).remove();
+  $("#btn"+id).html("Add");
+   for(var i=mang_contact_ok.length-1; i >=0 ; i--){
+     if(mang_contact_ok[i].id == id){
+       mang_contact_ok.splice(i, 1);
+       return false;
+     }
    }
-}
-function cancle_luudiem(id) {
-  for (var i=0; i<mang_infowindow.length; i++){
-    if(mang_infowindow[i].id ==id){
-    mang_infowindow[i].wind.close();
-    mang_infowindow.splice(i, 1);
-    return false;
-      }
-    }
 
-  }
-function guitinnhan(){
-  var sub = document.getElementById("login_subject_2").value.trim();
-  if ( sub === ""){
-    alert('There is no subjet.');
-  }
-  else {
-    if (list_nguoinhan.length ==0){
-      alert('There is no receiver.');
-    }
-    else {
-      if (list_diem_gui_di.length == 0){
-        alert('There is no position in map to send.');
-      }
-      else {
-        var ma1 = Math.floor(Math.random()*(9000)+1000);
-        var ma2 =Math.floor(Math.random()*(9000)+1000);
-        var mafull = ""+ma1+ma2;
-        var ten = "<%= name %>";
-        var sodienthoai = "<%= sodienthoai %>";
-        var tinnhanfull = {nguoigui_name: ten, nguoigui_number:sodienthoai ,subject: sub  ,nguoinhan:list_nguoinhan, pos:list_diem_gui_di, id:mafull};
-        socket.emit('C_gui_tinnhan',tinnhanfull);
-      }
-    }
-
-  }
-
-
-  }
-function closeNav() {
-    // document.getElementById("id_list_pos").style.width = "0";
-    document.getElementById("id_side_panel").style.right = "-500px";
 }
-function open_close(){
-  if(document.getElementById("id_side_panel").style.right === "0px"){
-    closeNav();
-      $("#id_close_open").html("List");
-  }
-  else {
-      openNav();
-      $("#id_close_open").html("Close");
-  }
-}
-function them_member(){
-  openNav();
-  // mở sidebar bên phải, thêm một cột nữa tên là Recipients
-}
-function checkbox_inbox_click(idc) {
-  // $("#"+idc+"").change(function(){
-  //   if($(this).is(':checked')) {
-  //       // Checkbox is checked..
-  //
-  //   } else {
-  //       // Checkbox is not checked
-  //
-  //     // if(number_del_inbox >0){document.getElementById("del_inbox").style.marginTop = "0px";}
-  //     // else {
-  //     //   document.getElementById("del_inbox").style.marginTop = "-25px";
-  //     // }
-  //
-  //
-  //   }
-  // });
-    var stt=0;
-    var list_checkbox = document.getElementsByClassName("checkbox_inbox");
-    for (var i = 0; i < list_checkbox.length; i++) {
-      if(list_checkbox[i].checked){stt++;}
-    }
-    if(stt >0){
-      document.getElementById("del_inbox").style.marginTop = "0px";
-      if(stt>1) {$("#item_inbox_chose").html(stt+" items were chosen");}
-      else {$("#item_inbox_chose").html(stt+" item was chosen");}
-  }
-    else {document.getElementById("del_inbox").style.marginTop = "-25px";}
-}
-function xoadiem_inbox() {
-  // document.getElementById("id_dialog").style.display = "block";
-  // $("#btn_send_tinnhan").html("vu"+mang_inbox[4].id_pos);
+function xoadiem_inbox(){
   list_del = [];
-  var list_checkbox = document.getElementsByClassName("checkbox_inbox");
+  var list_checkbox = document.getElementsByClassName("line_inbox_chk");
+    // $("#id_btn_send").html(list_checkbox[2].id);
   for (var i = 0; i < list_checkbox.length; i++) {
     if(list_checkbox[i].checked){
       mang_inbox.forEach((row1, key)=>{
@@ -557,197 +579,156 @@ function xoadiem_inbox() {
     }
     if(list_del.length>0){
       var item="";
-    if (list_del.length>1){item = "items";}
-    else{item="item";}
-    var r = confirm(list_del.length+" "+item+" will be deleted");
-    if (r == true) {socket.emit("C_del_inbox",list_del);}
+      if (list_del.length>1){item = "items";}else{item="item";}
+      var r = confirm(list_del.length+" "+item+" will be deleted");
+      if (r == true) {
+        // socket.emit("C_del_inbox",list_del);
+      }
     }
+}
+function checkbox_inbox_click(idc){
+    var stt=0;
+    var list_checkbox = document.getElementsByClassName("line_inbox_chk");
+    for (var i = 0; i < list_checkbox.length; i++) {
+      if(list_checkbox[i].checked){stt++;}
+    }
+    if(stt >0){
+      document.getElementById("id_content_inbox_del").style.display = "block";
+      if(stt>1) {$("#id_content_inbox_del_item").html(stt+" items were chosen");}
+      else {$("#id_content_inbox_del_item").html(stt+" item was chosen");}
+  }
+    else {document.getElementById("id_content_inbox_del").style.display = "none";}
+
+}
+function checkbox_send_click(idc){
+    var stt=0;
+    var list_checkbox = document.getElementsByClassName("line_send_chk");
+    for (var i = 0; i < list_checkbox.length; i++) {
+      if(list_checkbox[i].checked){stt++;}
+    }
+    if(stt >0){
+      document.getElementById("id_content_send_del").style.display = "block";
+      if(stt>1) {$("#id_content_send_del_item").html(stt+" items were chosen");}
+      else {$("#id_content_send_del_item").html(stt+" item was chosen");}
+  }
+    else {document.getElementById("id_content_send_del").style.display = "none";}
+
+}
+function checkbox_save_click(idc){
+    var stt=0;
+    var list_checkbox = document.getElementsByClassName("line_save_chk");
+    for (var i = 0; i < list_checkbox.length; i++) {
+      if(list_checkbox[i].checked){stt++;}
+    }
+    if(stt >0){
+      document.getElementById("id_content_save_del").style.display = "block";
+      if(stt>1) {$("#id_content_save_del_item").html(stt+" items were chosen");}
+      else {$("#id_content_save_del_item").html(stt+" item was chosen");}
+  }
+    else {document.getElementById("id_content_save_del").style.display = "none";}
+
+}
+function show_contact_list(){
+  if(document.getElementById("id_list_contact").style.display == "block"){
+  document.getElementById("id_list_contact").style.display = "none";
+  }
+  else {
+    // nếu mục chính contact không hiện, thì có 2 trường hợp: 1 là nó ẩn, và 2 là mục tìm kiếm đang hiện
+      if(document.getElementById("id_list_contact_search").style.display == "block"){
+        document.getElementById("id_list_contact_search").style.display = "none";
+      }
+      else {
+        document.getElementById("id_list_contact").style.display = "block";
+      }
 
 
-}
-function getDateTime() {
-    var date = new Date();
-    var hour = date.getHours();
-    hour = (hour < 10 ? "0" : "") + hour;
-    var min  = date.getMinutes();
-    min = (min < 10 ? "0" : "") + min;
-    var sec  = date.getSeconds();
-    sec = (sec < 10 ? "0" : "") + sec;
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    month = (month < 10 ? "0" : "") + month;
-    var day  = date.getDate();
-    day = (day < 10 ? "0" : "") + day;
-    return hour + ":" + min + ":" + sec + " "+ month+"/"+day+"/"+year;
-}
-function test(){
-  // document.getElementById("del_inbox").style.marginTop = "0px";
-  mang_infowindow.forEach((item)=>{
-    item.wind.close();
-  });
-}
-</script>
-<script>
-function show_dropdown_menu(id_dropdow){
-    document.getElementById(id_dropdow).classList.toggle("show1");
-}
-function myFunction7() {
-  var dropdowns = document.getElementsByClassName("my_btn_member");
-  var i;
-  for (i = 0; i < dropdowns.length; i++) {
-  var openDropdown = dropdowns[i];
-  if (openDropdown.classList.contains('show1')) {
-   openDropdown.classList.remove('show1');
   }
+  // mang_contact.forEach((tin)=>{
+  //   var chuoi  ="<div class='line_inbox' ><div style='position:absolute;left:5px;width:150px;'>"+ strdecode(tin.name) +"</div></br>"+
+  //   "<div style='position:absolute; left:5px'>"+strdecode(tin.number)+"</div></div>";
+  //    $("#my_list_contact").append( chuoi);
+  // });
   }
+function show_content_top_right(id){
+  document.getElementById(id).style.display = "block";
 }
-// Close the dropdown menu if the user clicks outside of it
 window.onclick = function(event) {
-  if (!(event.target.matches('.line_contact1') || event.target.matches('.my_login_number_2'))) {
-      var dropdowns = document.getElementsByClassName("list_contact_1");
-      ten ="";
-      var i;
-      for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show1')) {
-       openDropdown.classList.remove('show1');
-       document.getElementById("login_number_2").value = "";
-
-      }
-      }
-      }
-  if (!(event.target.matches('.drop_btn_inbox') || event.target.matches('.checkbox_inbox')||event.target.matches('.del_button_inbox'))) {
-    var dropdowns = document.getElementsByClassName("dropdown_content_inbox");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-    var openDropdown = dropdowns[i];
-    if (openDropdown.classList.contains('show1')) {
-     openDropdown.classList.remove('show1');
-    }
-    }
-    }
-  if (!event.target.matches('.my_login_number_2')) {
-    var dropdowns = document.getElementsByClassName("list_contact");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-    var openDropdown = dropdowns[i];
-    if (openDropdown.classList.contains('show1')) {
-     openDropdown.classList.remove('show1');
-    }
-    }
-    }
-  if (!event.target.matches('.drop_btn_send')) {
-    var dropdowns = document.getElementsByClassName("dropdown_content_send");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-    var openDropdown = dropdowns[i];
-    if (openDropdown.classList.contains('show1')) {
-     openDropdown.classList.remove('show1');
-    }
-    }
-    }
-  if (!event.target.matches('.drop_btn_save')) {
-    var dropdowns = document.getElementsByClassName("dropdown_content_save");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-    var openDropdown = dropdowns[i];
-    if (openDropdown.classList.contains('show1')) {
-     openDropdown.classList.remove('show1');
-    }
-    }
-    }
-  if (!event.target.matches('.drop_btn_online')) {
-    var dropdowns = document.getElementsByClassName("dropdown_content_online");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-    var openDropdown = dropdowns[i];
-    if (openDropdown.classList.contains('show1')) {
-     openDropdown.classList.remove('show1');
-    }
-    }
-    }
-  if (!event.target.matches('.drop_btn_account')) {
-    var dropdowns = document.getElementsByClassName("dropdown_content_account");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-    var openDropdown = dropdowns[i];
-    if (openDropdown.classList.contains('show1')) {
-     openDropdown.classList.remove('show1');
-    }
-    }
-    }
+  if (!event.target.matches('.btn_account')) {
+    document.getElementById("id_content_account").style.display = "none";
   }
+  if (!event.target.matches('.btn_online')) {
+    document.getElementById("id_content_online").style.display = "none";
+  }
+
+  if (!(event.target.matches('.btn_save')||(event.target.matches('.line_save_chk')  )  )  ) {
+    document.getElementById("id_content_save").style.display = "none";
+  }
+
+  if (!(event.target.matches('.btn_send')||(event.target.matches('.line_send_chk')  )  )  ) {
+    document.getElementById("id_content_send").style.display = "none";
+  }
+  if (!(event.target.matches('.btn_inbox')||(event.target.matches('.line_inbox_chk')  )  )  ) {
+    document.getElementById("id_content_inbox").style.display = "none";
+  }
+
+}
 </script>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="banner">
-          <div class="wrap2">
-            <div class="wrap2_1">
-              <div class="dropdown5">
-                <button onclick="show_dropdown_menu('id_dropdown_menu_account')" class="drop_btn_account"><%= name %></button>
-                <div id="id_dropdown_menu_account" class="dropdown_content_account">
-                  <a href="#">Link 1</a>
-                  <a href="#">Link 2</a>
-                  <a href="#">Link 3</a>
-                </div>
-              </div>
-              <div class="dropdown4">
-                <button onclick="show_dropdown_menu('id_dropdown_menu_online')" class="drop_btn_online">ONLINE</button>
-                <div id="id_dropdown_menu_online" class="dropdown_content_online"></div>
-              </div>
-              <div class="dropdown3">
-                <button onclick="show_dropdown_menu('id_dropdown_menu_save'); " class="drop_btn_save">SAVE</button>
-                <div id="id_dropdown_menu_save" class="dropdown_content_save"></div>
-              </div>
-              <div class="dropdown2">
-                <button onclick="show_dropdown_menu('id_dropdown_menu_send')" class="drop_btn_send">SEND</button>
-                <div id="id_dropdown_menu_send" class="dropdown_content_send"></div>
-               </div>
-               <div class="dropdown1">
-                 <button onclick="show_dropdown_menu('id_dropdown_menu_inbox')" id="id_dro" class="drop_btn_inbox">INBOX</button>
-                 <div id="id_dropdown_menu_inbox" class="dropdown_content_inbox">
-                   <div id="del_inbox" style="margin-top:-20px"><a id='item_inbox_chose' style="margin-left: 5px;"></a><button class="del_button_inbox"style="position:absolute;right:5px;" onclick="xoadiem_inbox()">Delete</button></div>
-                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="wrap3_main">
-            <div class="wrap3">
-              <button id="btn_send_tinnhan" class="my_btn_send_tinnhan" onclick="test()">GỬI TIN NHẮN</button>
-              <div id="login_number" class="my_edit_pos">
-                <div id="login_number_1">Nhập số điện thoại</div>
-                <input type="text" oninput="searchContacts()" name="number" class="my_login_number_2" value="" id="login_number_2" autocomplete="off"></input>
-                <div id="my_list_contact" class="list_contact_1"><div id="item1" onclick="them_member()" style="">Vũ yêu Ngân</div>
-                </div>
-              </div>
-              <div id="login_subject" class="my_login_subject">
-                <div id="login_number_1">Nhập subejct</div>
-                <input type="text" class="my_login_subject" value="" id="login_subject_2" autocomplete="off"></input>
-              </div>
-            </div>
-          </div>
-          <!-- <div id="id_list_pos_wrap" class="list_pos_wrap"> -->
-          <div id="id_side_panel" class="side_panel">
-              <div id="id_close_open" style="position:absolute; width:50px;background-color:#f1f1f1;cursor: pointer;" onclick="open_close();">List</div>
-              <div id="id_list_pos_main" class="list_pos_main">
-                <div align="center" style="font-size: 20px;">Location list</div>
-                <div id="id_list_pos" class="list_pos"></div>
-              </div>
-            <!-- <div id="id_list_recipent" class="list_recipent"> -->
-            <div id="id_list_recipent_main" class="list_recipent_main">
-              <div align="center" style="font-size: 20px;">Recipent list</div>
-              <div id="id_list_list_recipent" class="list_list_recipent"></div>
-            </div>
+  <div class="wrapper">
+    <div class="content">
+      <div class="top_right">
+        <div class="top_right_item">
+          <button class="btn_account" onclick="show_content_top_right('id_content_account')">ACCOUNT</button>
+          <div class="content_account" id="id_content_account"></div>
+        </div>
+        <div class="top_right_item">
+          <button class="btn_online" onclick="show_content_top_right('id_content_online')">ONLINE</button>
+          <div class="content_online" id="id_content_online">
 
           </div>
         </div>
-        <div id="map" class="class_map">
+        <div class="top_right_item">
+          <button class="btn_save" onclick="show_content_top_right('id_content_save')">SAVE</button>
+          <div class="content_save" id="id_content_save">
+            <div class="content_del" id="id_content_save_del"><div class="content_inbox_del_item" id="id_content_save_del_item"></div><button class="content_inbox_del_btn" onclick="xoadiem_save()">Del</button></div>
+            <div style="height:1px; width:100px;" id="k_save"></div>
+          </div>
         </div>
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript">
-      </script>
-
+        <div class="top_right_item">
+          <button class="btn_send" onclick="show_content_top_right('id_content_send')">SEND</button>
+          <div class="content_send" id="id_content_send">
+            <div class="content_del" id="id_content_send_del"><div class="content_inbox_del_item" id="id_content_send_del_item"></div><button class="content_inbox_del_btn" onclick="xoadiem_send()">Del</button></div>
+            <div style="height:1px; width:100px;" id="k_send"></div>
+          </div>
+        </div>
+        <div class="top_right_item">
+          <button class="btn_inbox" onclick="show_content_top_right('id_content_inbox')">INBOX</button>
+          <div class="content_inbox" id="id_content_inbox">
+            <div class="content_del" id="id_content_inbox_del"><div class="content_inbox_del_item" id="id_content_inbox_del_item"></div><button class="content_inbox_del_btn" onclick="xoadiem_inbox()">Del</button></div>
+            <div style="height:1px; width:100px;" id="k_inbox"></div>
+          </div>
+        </div>
+      </div>
+      <div class="top_left">
+        <div style="position:absolute; left:10px;top:5px">Subject</div>
+        <input type="text" class="input_sub" autocomplete="off" id="id_input_subject"></input>
+        <button style="position:absolute;left:5px;bottom:50px" onclick="show_contact_list()">Contact</button>
+        <input type="text" class="input_contact" id="id_input_contact" oninput="search_contact()" autocomplete="off"></input>
+        <button style="position:absolute;height:30px;left:270px;bottom:50px" id="id_btn_save" onclick="test()">SAVE</button>
+        <button style="position:absolute;height:30px;left:330px;bottom:50px" id="id_btn_send" onclick="guitinnhan()">SEND</button>
+        <div class="list_contact_ok" id="id_list_contact_ok"></div>
+        <div class="list_contact" id="id_list_contact"></div>
+        <div class="list_contact" id="id_list_contact_search"></div>
+      </div>
+      <div class="right_bar" id="id_right_bar">
+        <button class="btn_list" onclick="open_close_list()" id="id_btn_list">List</button>
+        <div class="location_list" id="id_location_list"></div>
+      </div>
     </div>
+    <div id="map" class="class_map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript"></script>
+  </div>
 
   </body>
 </html>
