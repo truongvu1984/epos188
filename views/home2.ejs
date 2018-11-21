@@ -218,14 +218,13 @@ socket.on('S_send_point',(data)=>{
   }
 });
 socket.on('S_guitinnhan', (data)=>{
-  var id_inbox_pos = mang_inbox[mang_inbox.length-1].id_pos +1;
-  var thoigian1 = getDateTime();
-  var tin = {id_pos:id_inbox_pos, name_nguoigui:strdecode(data.name_nguoigui),number_nguoigui:data.number_nguoigui, subject:strdecode(data.subject), id_tinnha_client:row.id_tinnha_client,trangthai:"N", thoigian:thoigian1};
+  id_inbox_pos++;
+  var idc = "4"+id_inbox_pos;
+  var tin = {id_pos:idc, name_nguoigui:strdecode(data.name_nguoigui),number_nguoigui:data.number_nguoigui, subject:strdecode(data.subject), id_tinnha_client:data.id_tinnha_client,"N", stt: data.stt, thoigian:show_time(data.time) };
   mang_inbox.push(tin);
-  var line  ="<div class='line_inbox' id='full"+id_inbox_pos+"'><input type='checkbox' id='"+id_inbox_pos+"' onclick='checkbox_inbox_click("+id_inbox_pos+");' style='position:absolute' class='checkbox_inbox'><div style='position:absolute;left:25px;width:150px;'>"+ strdecode(data.subject) +"</div><div style='position:absolute; right:5px'>"+thoigian1+"</div></br>"+
-  "<div style='position:absolute; left:25px'>From:"+strdecode(data.name_nguoigui)+"</div><div style='position:absolute;right:5px'>"+"Not read"+"</div></div>";
-  $("#id_dropdown_menu_inbox").append(line);
-  socket.emit("danhantinnhan", data.number_nguoigui, row.id_tinnha_client, thoigian);
+  var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_inbox_chk' onclick='checkbox_inbox_click("+idc+");'><div class='line_inbox_main' onclick='inbox_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.subject)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.name_nguoigui)+"</div><div class='line_inbox_read'>"+"Not read"+"</div></div></div>";
+ $("#k_inbox").before(line);
+  socket.emit("danhantinnhan", data.number_nguoigui, data.id_tinnha_client);
 });
 function hide_show_pos(id){
   if(document.getElementById("chk"+id).checked == true){cancle_luudiem(id);}
