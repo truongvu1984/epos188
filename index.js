@@ -1120,6 +1120,7 @@ io.on('connection',  (socket)=>
     }
   });
   socket.on('C_gui_tinnhan', function(mess){
+    console.log('vuyeuva'+mess);
     if (socket.number){
       let thoigian = new Date();
       socket.emit('S_get_tinnhan',get_time(thoigian));
