@@ -763,8 +763,6 @@ io.on('connection',  (socket)=>
              if ( err ){console.log(err);}
              else
                {
-                 console.log('kết quả 1 là:'+a1s[a1s.length-1].id);
-                 console.log('kết quả 2 là:'+a1s[0].id);
                  let tinfull2=[];
                  a1s.forEach(function(a1,key){
                    let nhomnguoinhan =[];
@@ -776,7 +774,7 @@ io.on('connection',  (socket)=>
                           if(key2 === (a2s.length-1)){
                             tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, trangthai:a1.stt});
                             if(key === (a1s.length-1)){  socket.emit('S_send_send',tinfull2);console.log('Server đã gửi send');
-                            console.log('VU YEU VAN:'+nhomnguoinhan);
+
                           }
                           }
                         });
