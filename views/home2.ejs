@@ -515,7 +515,7 @@ function add_contact__search_click(id){
   if(x === "Add"){
     mang_contact.forEach((row,key)=>{
       if(row.id == id){
-        mang_contact_ok.push({id:id, name:row.name, number:row.number});
+        mang_contact_ok.push({id:id, name:strdecode(row.name), number:row.number});
         var line = "<div class='list_contact_ok_item' id='"+id+"'><div class='a111'>"+strdecode(row.name)+"</div><button class='a222' onclick='del_contact_ok("+id+")'>X</button></div>";
         $("#id_list_contact_ok").append(line);
         return false;
@@ -535,7 +535,7 @@ function add_contact_click(id){
   if(x === "Add"){
     mang_contact.forEach((row,key)=>{
       if(row.id == id){
-        mang_contact_ok.push({id:id, name:row.name, number:row.number});
+        mang_contact_ok.push({id:id, name:strdecode(row.name), number:row.number});
         var line = "<div class='list_contact_ok_item' id='"+id+"'><div class='a111'>"+strdecode(row.name)+"</div><button class='a222' onclick='del_contact_ok("+id+")'>X</button></div>";
         $("#id_list_contact_ok").append(line);
         return false;
