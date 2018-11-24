@@ -774,7 +774,6 @@ io.on('connection',  (socket)=>
                           if(key2 === (a2s.length-1)){
                             tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, trangthai:a1.stt});
                             if(key === (a1s.length-1)){  socket.emit('S_send_send',tinfull2);console.log('Server đã gửi send');
-
                           }
                           }
                         });
@@ -1118,12 +1117,10 @@ io.on('connection',  (socket)=>
     }
   });
   socket.on('C_gui_tinnhan', function(mess){
-    console.log('vuyeuva'+mess);
     if (socket.number){
       let thoigian = new Date();
-      socket.emit('S_get_tinnhan',get_time(thoigian));
+      io.sockets.in(socket.number).emit('S_get_tinnhan',get_time(thoigian),mess);
     // lưu vào bảng chính của người gửi
-
     var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
     var values2 = [[mess.id, mess.subject,'S',thoigian]];
     con.query(sql2, [values2], function (err, res)
