@@ -107,7 +107,7 @@ socket.on('S_send_inbox', (data)=>{
      //S gửi toàn bộ bản tin inbox về client
      trangthai_yeucau_data = "new";
      var trangthai="";
-       data.forEach((row,key)=>{
+       data.forEach((row)=>{
          var thoigian="";
          if(row.stt === "N"){socket.emit("danhantinnhan",row.number_nguoigui,row.id_tinnha_client);}
          id_inbox_pos++;
@@ -238,6 +238,7 @@ socket.on('S_guitinnhan', (data)=>{
 });
 socket.on('S_get_tinnhan',(time, data, idc1)=>{
   id_inbox_pos++;
+  socket.emit('S_get_tinnhan_ok','web',idc1);
   var ab = "";
   var space = "";
   var idc = "3"+id_inbox_pos;

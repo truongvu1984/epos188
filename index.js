@@ -491,8 +491,8 @@ io.on('connection',  (socket)=>
                 // xem có ai gửi tin cho mình trong thời gian offline không
                 // trường hợp này là khi Client đã nhận đủ inbox rồi, nhưng tự nhiên bị ngắt mạng, rồi đăng nhập ngang vào
                 // lúc này các dữ liệu cơ bản đã chuyển về C hết, trừ các tin mới gửi trong lúc offline.
-                con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `stt` LIKE 'N'", function(err1, a1s)
-                    {
+                con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `"+abc+"` LIKE 'N'", function(err1, a1s)
+                  {
                     if ( err1 || ( a1s.length == 0) ){console.log(err1);}
                     else
                       {
@@ -631,7 +631,7 @@ io.on('connection',  (socket)=>
               }
               else {
                 // kiểm tra xem có room nào gửi không
-                con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'O' AND `stt` LIKE 'N'", function(err2, a5s)
+                con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'O' AND `"+abc+"` LIKE 'N'", function(err2, a5s)
                   {
                     if ( err2){console.log(err2);}
                     else if ( a5s.length>0)
@@ -675,6 +675,7 @@ io.on('connection',  (socket)=>
                              }
                         });
               }
+
             }
           });
           con.query("SELECT `contact` FROM `account` WHERE `number` LIKE '"+socket.number+"' AND `contact` LIKE 'A' LIMIT 1", function(err1, a1s){
@@ -774,7 +775,7 @@ io.on('connection',  (socket)=>
                         a2s.forEach(function(a2,key2){
                           nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),trangthai:a2.stt});
                           if(key2 === (a2s.length-1)){
-                            tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, trangthai:a1.stt});
+                            tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, stt:a1.stt});
                             if(key === (a1s.length-1)){  socket.emit('S_send_send',tinfull2);console.log('Server đã gửi send');
                           }
                           }
@@ -1132,8 +1133,8 @@ io.on('connection',  (socket)=>
         if(key7===(mess.nguoinhan.length-1)){
           io.sockets.in(socket.number).emit('S_get_tinnhan',get_time(thoigian),{subject:strencode(mess.subject),nguoinhan:nguoinhans},mess.id);
           // lưu vào bảng chính của người gửi
-          var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
-          var values2 = [[mess.id, mess.subject,'S',thoigian]];
+          var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time,web,app) VALUES ?";
+          var values2 = [[mess.id, mess.subject,'S',thoigian,"N","N"]];
           con.query(sql2, [values2], function (err, res)
             {
               if ( err){console.log(err);}
@@ -1158,8 +1159,8 @@ io.on('connection',  (socket)=>
                                 {
                                     // lưu vào bảng chính của người nhận
                                     // var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read,time) VALUES ?";
-                                    var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read_1, time ) VALUES ?";
-                                    var val5 = [[mess.id, mess.subject,'R','N','N',thoigian]];
+                                    var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read_1, time,web, app ) VALUES ?";
+                                    var val5 = [[mess.id, mess.subject,'R','N','N',thoigian,"N","N"]];
                                     con.query(sql5, [val5], function (err5, res5)
                                     {
                                       if ( err5){console.log(err5);}
@@ -1182,8 +1183,7 @@ io.on('connection',  (socket)=>
                                               }
                                             });
                                             });
-
-          io.sockets.in(row5.number).emit('S_guitinnhan',{name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
+                                            io.sockets.in(row5.number).emit('S_guitinnhan',{name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
                                                 subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian)});
                                             console.log('Da gui tin nhan di xong');
 
@@ -1206,7 +1206,15 @@ io.on('connection',  (socket)=>
         }
       });
     }
-    }); // end socket.on('sendmess', function(test)
+  }); // end socket.on('sendmess', function(test)
+  socket.on('S_get_tinnhan_ok',(abc,idc)=>{
+    if(socket.number){
+      con.query("UPDATE `"+socket.number+"mes_main` SET `"+abc+"` = 'Y' WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+idc+"'",function()
+        {
+        console.log('ma san pham la '+idc);
+      });
+    }
+  });
   socket.on('C_save_pos', (mess)=>{
     if(socket.number){
       let thoigian = new Date();
