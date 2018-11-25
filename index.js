@@ -1126,80 +1126,84 @@ io.on('connection',  (socket)=>
   socket.on('C_gui_tinnhan', function(mess){
     if (socket.number){
       let thoigian = new Date();
-      io.sockets.in(socket.number).emit('S_get_tinnhan',get_time(thoigian),mess);
-    // lưu vào bảng chính của người gửi
-    var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
-    var values2 = [[mess.id, mess.subject,'S',thoigian]];
-    con.query(sql2, [values2], function (err, res)
-      {
-        if ( err){console.log(err);}
-        else {
-                // lưu vào bảng vị trí của người gửi
-                var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
-                mess.pos.forEach(function(row)
-                  {
-                    var val = [[res.insertId, row.id, row.name, row.lat, row.lon]];
-                    con.query(sql3, [val], function (err2, res2) {if ( err2){console.log(err2);}});
-                  });
-                  // lưu danh sách người nhận vào bảng của người gửi
-                var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
-                mess.nguoinhan.forEach(function(row5)
-                  {
-                    var val4 = [[res.insertId, row5.number, row5.name, 'S', 'N']];
-                    con.query(sql4, [val4], function (err3, res3) {if ( err3){console.log(err3);}});
-                    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row5.number +"' LIMIT 1", function(err4, res4)
-                      {
-                        if ( err4 ){console.log(err4);}
-                        else if ( res4.length >0)
-                          {
-                              // lưu vào bảng chính của người nhận
-                              // var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read,time) VALUES ?";
-                              var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read_1, time ) VALUES ?";
-                              var val5 = [[mess.id, mess.subject,'R','N','N',thoigian]];
-                              con.query(sql5, [val5], function (err5, res5)
-                              {
-                                if ( err5){console.log(err5);}
-                                else
+      let nguoinhans = [];
+      mess.forEach((nguoi, key7)=>{
+        nguoinhans.push({number:nguoi.number, name:strencode(nguoi.name)});
+        if(key7===(mess.length-1)){
+          io.sockets.in(socket.number).emit('S_get_tinnhan',get_time(thoigian),{subject:strencode(mess.subject),nguoinhan:nguoinhans, id:mess.id});
+          // lưu vào bảng chính của người gửi
+          var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
+          var values2 = [[mess.id, mess.subject,'S',thoigian]];
+          con.query(sql2, [values2], function (err, res)
+            {
+              if ( err){console.log(err);}
+              else {
+                      // lưu vào bảng vị trí của người gửi
+                      var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
+                      mess.pos.forEach(function(row)
+                        {
+                          var val = [[res.insertId, row.id, row.name, row.lat, row.lon]];
+                          con.query(sql3, [val], function (err2, res2) {if ( err2){console.log(err2);}});
+                        });
+                        // lưu danh sách người nhận vào bảng của người gửi
+                      var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
+                      mess.nguoinhan.forEach(function(row5)
+                        {
+                          var val4 = [[res.insertId, row5.number, row5.name, 'S', 'N']];
+                          con.query(sql4, [val4], function (err3, res3) {if ( err3){console.log(err3);}});
+                          con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row5.number +"' LIMIT 1", function(err4, res4)
+                            {
+                              if ( err4 ){console.log(err4);}
+                              else if ( res4.length >0)
                                 {
-                                  //lưu vào bảng người gửi của người nhận
-                                  var sql6 = "INSERT INTO `"+row5.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
-                                  var val6 = [[ res5.insertId, socket.number,socket.username,'R']];
-                                  con.query(sql6, [val6], function (err6, res6) {
-                                    if ( err6){console.log(err6);}
-                                  else {
-                                    var array_tinnhan = [];
-                                    var tin = {lat:0.1, lon:0.0, name:"", id:""};
-                                    mess.pos.forEach(function(row3){
-                                        // lưu vào bảng vị trí của người nhan
-                                        var sql7 = "INSERT INTO `"+row5.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
-                                        var val7 = [[res5.insertId, row3.id, row3.name, row3.lat, row3.lon]];
-                                        con.query(sql7, [val7], function (err7, result) {
-                                          if ( err7){console.log(err7);}
+                                    // lưu vào bảng chính của người nhận
+                                    // var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read,time) VALUES ?";
+                                    var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read_1, time ) VALUES ?";
+                                    var val5 = [[mess.id, mess.subject,'R','N','N',thoigian]];
+                                    con.query(sql5, [val5], function (err5, res5)
+                                    {
+                                      if ( err5){console.log(err5);}
+                                      else
+                                      {
+                                        //lưu vào bảng người gửi của người nhận
+                                        var sql6 = "INSERT INTO `"+row5.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
+                                        var val6 = [[ res5.insertId, socket.number,socket.username,'R']];
+                                        con.query(sql6, [val6], function (err6, res6) {
+                                          if ( err6){console.log(err6);}
                                         else {
-                                          console.log("Da insert vao mess detail "+ result.insertId);
-                                        }
+                                            mess.pos.forEach(function(row3){
+                                              // lưu vào bảng vị trí của người nhan
+                                            var sql7 = "INSERT INTO `"+row5.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
+                                            var val7 = [[res5.insertId, row3.id, row3.name, row3.lat, row3.lon]];
+                                            con.query(sql7, [val7], function (err7, result) {
+                                              if ( err7){console.log(err7);}
+                                              else {
+                                                console.log("Da insert vao mess detail "+ result.insertId);
+                                              }
+                                            });
+                                            });
+
+          io.sockets.in(row5.number).emit('S_guitinnhan',{name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
+                                                subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian)});
+                                            console.log('Da gui tin nhan di xong');
+
+                                        } //het else
                                       });
-                                      });
 
-    io.sockets.in(row5.number).emit('S_guitinnhan',{name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
-                                          subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian)});
-                                      console.log('Da gui tin nhan di xong');
-
-                                  } //het else
-                                });
-
+                                      }
+                                    });
+                                    // gửi tin nhắn đến máy điện thoại người nhận
+                                  }
+                                  // nếu tìm trong bảng acccount mà không có tên người nhận thì báo lại là không có ai nhận
+                                else {
+                                  socket.emit('S_send_mess_no_contact',mess.id, 'khong co contact');
+                                  console.log('contact khong ton tai');
                                 }
                               });
-                              // gửi tin nhắn đến máy điện thoại người nhận
-                            }
-                            // nếu tìm trong bảng acccount mà không có tên người nhận thì báo lại là không có ai nhận
-                          else {
-                            socket.emit('S_send_mess_no_contact',mess.id, 'khong co contact');
-                            console.log('contact khong ton tai');
-                          }
-                        });
-                    });
-          }
+                          });
+                }
+            });
+        }
       });
     }
     }); // end socket.on('sendmess', function(test)
