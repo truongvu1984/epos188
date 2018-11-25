@@ -141,7 +141,7 @@ socket.on('S_send_send', (data)=>{
           });
          var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(row.subject)+"</div><div class='line_send_time'>"+show_time(row.time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'></div></div></div>";
           // $("#id_content_send").before(line);
-           $("#k_send").before(line);
+           $("#k_send").append(line);
        });
       socket.emit('C_nhan_send');
 });
@@ -244,7 +244,7 @@ socket.on('S_get_tinnhan',(time, data, idc1)=>{
      ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;
 
    });
-  var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(data.subject)+"</div><div class='line_send_time'>"+show_time(time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'></div></div></div>";
+  var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(data.subject)+"</div><div class='line_send_time'>"+show_time(time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'>ha ha ha</div></div></div>";
    $("#k_send").before(line);
 });
 function hide_show_pos(id){
