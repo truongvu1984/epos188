@@ -690,7 +690,7 @@ io.on('connection',  (socket)=>
                              let mangcontact = [];
                              a3s.forEach(function(a1,key){
                                mangcontact.push({name:strencode(a1.name), number:a1.number});
-                               if(key===(a1s.length-1)){socket.emit('S_send_contact',{tin:mangcontact});console.log('Server đã gửi contact');}
+                               if(key===(a1s.length-1)){socket.emit('S_send_contact',mangcontact);console.log('Server đã gửi contact');}
                              });
                            }
 
