@@ -1127,10 +1127,10 @@ io.on('connection',  (socket)=>
     if (socket.number){
       let thoigian = new Date();
       let nguoinhans = [];
-      mess.forEach((nguoi, key7)=>{
+      mess.nguoinhan.forEach((nguoi, key7)=>{
         nguoinhans.push({number:nguoi.number, name:strencode(nguoi.name)});
         if(key7===(mess.length-1)){
-          io.sockets.in(socket.number).emit('S_get_tinnhan',get_time(thoigian),{subject:strencode(mess.subject),nguoinhan:nguoinhans, id:mess.id});
+          io.sockets.in(socket.number).emit('S_get_tinnhan',get_time(thoigian),{subject:strencode(mess.subject),nguoinhan:nguoinhans},mess.id);
           // lưu vào bảng chính của người gửi
           var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
           var values2 = [[mess.id, mess.subject,'S',thoigian]];
