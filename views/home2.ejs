@@ -35,14 +35,16 @@ var mang_save = [];
 var mang_contact = [];
 var mang_contact_ok = [];
 var list_del = [];
+var trangthai_yeucau_data = "full";
 
 socket.on('check_pass',()=>{
    socket.emit('login2','<%= sodienthoai %>', '<%= pass %>');
 
 });
 socket.on('login2_dung',()=>{
-     socket.emit('C_yeucau_data_full');
-   });
+  if(trangthai_yeucau_data === "full"){socket.emit('C_yeucau_data_full');}
+  else {socket.emit('C_yeucau_data_new','web');}
+});
 socket.on('S_W_kq_check_contact',function(data){
       // var number = data.number;
       // var user1 = data.user;
@@ -103,6 +105,7 @@ socket.on('S_send_room_member', function(data){
                   });
 socket.on('S_send_inbox', (data)=>{
      //S gửi toàn bộ bản tin inbox về client
+     trangthai_yeucau_data = "new";
      var trangthai="";
        data.forEach((row,key)=>{
          var thoigian="";
@@ -121,6 +124,7 @@ socket.on('S_send_inbox', (data)=>{
 });
 socket.on('S_send_send', (data)=>{
      //S gửi toàn bộ bản tin send về client
+     trangthai_yeucau_data = "new";
        data.forEach((row)=>{
          var thoigian="";
          var ab = "";
@@ -143,7 +147,7 @@ socket.on('S_send_send', (data)=>{
 });
 socket.on('S_send_save', (data)=>{
      //S gửi toàn bộ bản tin inbox về client
-
+     trangthai_yeucau_data = "new";
        data.forEach((row,key)=>{
          var thoigian="";
          id_inbox_pos++;
@@ -157,6 +161,7 @@ socket.on('S_send_save', (data)=>{
      socket.emit('C_nhan_save');
 });
 socket.on('S_send_contact',(data)=>{
+  trangthai_yeucau_data = "new";
   data.forEach((tin)=>{
     id_contact ++;
     var idc = "1"+id_contact;
@@ -339,11 +344,11 @@ function handleChange(checkbox,id1) {
    }
 }
 function guitinnhan(){
-  var sub = document.getElementById("id_input_subject").value.trim();
-  if ( sub === ""){
+    var sub = document.getElementById("id_input_subject").value.trim();
+    if ( sub === ""){
     alert('There is no subjet.');
   }
-  else {
+    else {
     if (mang_contact_ok.length ==0){
       alert('There is no receiver.');
     }
