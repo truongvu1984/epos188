@@ -776,7 +776,7 @@ io.on('connection',  (socket)=>
                           nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),trangthai:a2.stt});
                           if(key2 === (a2s.length-1)){
                             tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, stt:a1.stt});
-                            if(key === (a1s.length-1)){  socket.emit('S_send_send',tinfull2);console.log('Server đã gửi send');
+                            if(key === (a1s.length-1)){  socket.emit('S_send_send',tinfull2,"full");console.log('Server đã gửi send');
                           }
                           }
                         });
