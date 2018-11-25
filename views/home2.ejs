@@ -230,13 +230,13 @@ socket.on('S_guitinnhan', (data)=>{
  $("#k_inbox").before(line);
   socket.emit("danhantinnhan", data.number_nguoigui, data.id_tinnha_client);
 });
-socket.on('S_get_tinnhan',(time, data)=>{
+socket.on('S_get_tinnhan',(time, data, idc1)=>{
   console.log(data.subject);
   id_inbox_pos++;
   var ab = "";
   var space = "";
   var idc = "3"+id_inbox_pos;
-  var tin = {id_pos:idc, nhom_nguoinhan:data.nguoinhan, subject:strdecode(data.subject), id_tinnha_client:data.idc, thoigian:show_time(time) };
+  var tin = {id_pos:idc, nhom_nguoinhan:data.nguoinhan, subject:strdecode(data.subject), id_tinnha_client:idc1, thoigian:show_time(time) };
   mang_send.push(tin);
   data.nguoinhan.forEach((row1,key)=>{
      if(key===(data.nguoinhan.length-1)){space="";}
@@ -245,7 +245,7 @@ socket.on('S_get_tinnhan',(time, data)=>{
 
    });
   var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(data.subject)+"</div><div class='line_send_time'>"+show_time(time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'></div></div></div>";
-   $("#k_send").before(line);
+   $("#k_send").append(line);
 });
 function hide_show_pos(id){
   if(document.getElementById("chk"+id).checked == true){cancle_luudiem(id);}
