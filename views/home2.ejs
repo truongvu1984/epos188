@@ -127,7 +127,7 @@ socket.on('S_send_send', (data)=>{
      trangthai_yeucau_data = "new";
        data.forEach((row)=>{
          console.log(row.subject);
-         break;
+
          var thoigian="";
          var ab = "";
          var space = "";
@@ -142,6 +142,7 @@ socket.on('S_send_send', (data)=>{
               else {ab=ab+strdecode(row1.name)+space;}
               var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(row.subject)+"</div><div class='line_send_time'>"+show_time(row.time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'>ha ha</div></div></div>";
               $("#k_send").append(line);
+              break;
             }
             else {
               space = ";";
