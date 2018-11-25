@@ -147,7 +147,7 @@ socket.on('S_send_send', (data)=>{
               else {ab=ab+strdecode(row1.name)+space;}
             }
           });
-
+          break;
        });
       socket.emit('C_nhan_send');
 });
