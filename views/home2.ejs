@@ -239,7 +239,7 @@ socket.on('S_get_tinnhan',(time, data)=>{
   var tin = {id_pos:idc, nhom_nguoinhan:data.nguoinhan, subject:strdecode(data.subject), id_tinnha_client:data.idc, thoigian:show_time(time) };
   mang_send.push(tin);
   data.nguoinhan.forEach((row1,key)=>{
-     if(key===(row.nguoinhan.length-1)){space="";}
+     if(key===(row1.nguoinhan.length-1)){space="";}
      else {space = ";"; }
      ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;
 
