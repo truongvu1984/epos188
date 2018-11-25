@@ -139,9 +139,8 @@ socket.on('S_send_send', (data)=>{
             if(row1.trangthai ==="N"){ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;}
             else {ab=ab+strdecode(row1.name)+space;}
           });
-         var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(row.subject)+"</div><div class='line_send_time'>"+show_time(row.time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'></div></div></div>";
-          // $("#id_content_send").before(line);
-           $("#k_send").append(line);
+         var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(row.subject)+"</div><div class='line_send_time'>"+show_time(row.time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'>hi hi</div></div></div>";
+          $("#k_send").append(line);
        });
       socket.emit('C_nhan_send');
 });
