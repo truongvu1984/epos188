@@ -126,6 +126,8 @@ socket.on('S_send_send', (data)=>{
      //S gửi toàn bộ bản tin send về client
      trangthai_yeucau_data = "new";
        data.forEach((row)=>{
+         console.log(row.subject);
+         break;
          var thoigian="";
          var ab = "";
          var space = "";
@@ -147,7 +149,7 @@ socket.on('S_send_send', (data)=>{
               else {ab=ab+strdecode(row1.name)+space;}
             }
           });
-          break;
+
        });
       socket.emit('C_nhan_send');
 });
