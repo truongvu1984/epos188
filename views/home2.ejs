@@ -134,13 +134,20 @@ socket.on('S_send_send', (data)=>{
          var tin = {id_pos:idc, nhom_nguoinhan:row.nguoinhan, subject:strdecode(row.subject), id_tinnha_client:row.idc, thoigian:show_time(row.time) };
          mang_send.push(tin);
          row.nguoinhan.forEach((row1,key)=>{
-            if(key===(row.nguoinhan.length-1)){space="";}
-            else {space = ";"; }
-            if(row1.trangthai ==="N"){ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;}
-            else {ab=ab+strdecode(row1.name)+space;}
+            if(key===(row.nguoinhan.length-1)){
+              space="";
+              if(row1.trangthai ==="N"){ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;}
+              else {ab=ab+strdecode(row1.name)+space;}
+              var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(row.subject)+"</div><div class='line_send_time'>"+show_time(row.time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'>ha ha</div></div></div>";
+              $("#k_send").append(line);
+            }
+            else {
+              space = ";";
+              if(row1.trangthai ==="N"){ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;}
+              else {ab=ab+strdecode(row1.name)+space;}
+            }
           });
-         var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(row.subject)+"</div><div class='line_send_time'>"+show_time(row.time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'>hi hi</div></div></div>";
-          $("#k_send").append(line);
+
        });
       socket.emit('C_nhan_send');
 });
