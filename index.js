@@ -464,6 +464,7 @@ io.on('connection',  (socket)=>
             if(err){console.log(err);}
             else {
               if(b1s.length>0){
+                console.log('B1');
                 // lấy bảng inbox
                 con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R'", function(err, a1s)
                  {
@@ -496,7 +497,7 @@ io.on('connection',  (socket)=>
                     if ( err1 || ( a1s.length == 0) ){console.log(err1);}
                     else
                       {
-                        console.log(a1s);
+                        console.log('B2');
                         a1s.forEach(function(a1)
                         {
                         //lấy tên người gửi
@@ -521,6 +522,7 @@ io.on('connection',  (socket)=>
             else {
               if(b1s.length>0){
                 // lấy bảng send
+                console.log('K1');
                 con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S'", function(err, a1s)
                   {
                        if ( err || ( a1s.length == 0) ){console.log(err);}
@@ -578,6 +580,7 @@ io.on('connection',  (socket)=>
                   if(err1){console.log(err1);}
                   else {
                     if(a1s>0){
+                      console.log('K2');
                       let tinfull2=[];
                       a1s.forEach(function(a1,key){
                         let nhomnguoinhan =[];
