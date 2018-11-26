@@ -42,7 +42,7 @@ socket.on('check_pass',()=>{
 
 });
 socket.on('login2_dung',()=>{
-  if(trangthai_yeucau_data === "full"){socket.emit('C_yeucau_data_full');}
+  if(trangthai_yeucau_data === "full"){socket.emit('C_yeucau_data_full','web');}
   else {socket.emit('C_yeucau_data_new','web');}
 });
 socket.on('S_W_kq_check_contact',function(data){

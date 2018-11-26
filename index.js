@@ -738,7 +738,7 @@ io.on('connection',  (socket)=>
     }
 
 	});
-  socket.on('C_yeucau_data_full',()=>{
+  socket.on('C_yeucau_data_full',(abc)=>{
     if(socket.number){
       // lấy bảng inbox
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` ASC", function(err, a1s)
@@ -751,11 +751,11 @@ io.on('connection',  (socket)=>
                con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                  if(err2){console.log(err2);}
                  else {
-                   tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,
-                     time:get_time(a1.time)});
-                     if(key===(a1s.length-1)){
-                       socket.emit('S_send_inbox',tinfull);
-                     }
+                   if(abc ==="app"){tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.app,
+                     time:get_time(a1.time)});}
+                     else {tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.web,
+                       time:get_time(a1.time)});}
+                     if(key===(a1s.length-1)){socket.emit('S_send_inbox',tinfull);}
                  }
                });
             });
@@ -776,8 +776,9 @@ io.on('connection',  (socket)=>
                         a2s.forEach(function(a2,key2){
                           nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
                           if(key2 === (a2s.length-1)){
-                            tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, stt:a1.stt});
-                            if(key === (a1s.length-1)){  socket.emit('S_send_send',tinfull2,"full");console.log('Server đã gửi send');
+                            if(abc==="app"){tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, stt:a1.app});}
+                            else {tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, stt:a1.app});}
+                            if(key === (a1s.length-1)){ socket.emit('S_send_send',tinfull2,"full");console.log('Server đã gửi send');
                           }
                           }
                         });
