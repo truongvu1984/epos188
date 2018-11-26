@@ -507,7 +507,7 @@ io.on('connection',  (socket)=>
                             else
                             {
                               socket.emit('S_guitinnhan',{ name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number,
-                                 subject: strencode(a1.subject),id_tinnha_client:a1.idc, thoigian:get_time(a1.time)});
+                                 subject: strencode(a1.subject),id_tinnha_client:a1.idc, time:get_time(a1.time)});
                             }
                           });
                         });
