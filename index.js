@@ -533,7 +533,7 @@ io.on('connection',  (socket)=>
                                 if(err2){console.log(err2);}
                                 else {
                                   a2s.forEach(function(a2,key2){
-                                    nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),trangthai:a2.stt});
+                                    nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
                                     if(key2 === (a2s.length-1)){
                                       tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, stt:a1.stt});
                                       if(key === (a1s.length-1)){ socket.emit('S_send_send',tinfull2,"full");console.log('Server đã gửi send');}
@@ -733,11 +733,10 @@ io.on('connection',  (socket)=>
 
             }
           });
-        }
+    }
 
 	});
   socket.on('C_yeucau_data_full',()=>{
-    console.log('C yeu cau full data');
     if(socket.number){
       // lấy bảng inbox
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` ASC", function(err, a1s)
@@ -773,7 +772,7 @@ io.on('connection',  (socket)=>
                       if(err2){console.log(err2);}
                       else {
                         a2s.forEach(function(a2,key2){
-                          nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),trangthai:a2.stt});
+                          nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
                           if(key2 === (a2s.length-1)){
                             tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, stt:a1.stt});
                             if(key === (a1s.length-1)){  socket.emit('S_send_send',tinfull2,"full");console.log('Server đã gửi send');
