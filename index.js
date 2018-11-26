@@ -740,7 +740,7 @@ io.on('connection',  (socket)=>
     console.log('C yeu cau full data');
     if(socket.number){
       // lấy bảng inbox
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC", function(err, a1s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` ASC", function(err, a1s)
        {
         if ( err ){console.log(err);}
         else
@@ -761,7 +761,7 @@ io.on('connection',  (socket)=>
           }
         });
       // lấy bảng send
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` DESC", function(err, a1s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' ORDER BY `id` ASC", function(err, a1s)
         {
              if ( err ){console.log(err);}
              else
@@ -786,7 +786,7 @@ io.on('connection',  (socket)=>
                }
       });
       // lấy bảng save
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' ORDER BY `id` DESC", function(err, a1s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' ORDER BY `id` ASC", function(err, a1s)
         {
             if ( err ){console.log(err);}
                  else
@@ -838,7 +838,7 @@ io.on('connection',  (socket)=>
           }
         });
       // Lấy danh sách room
-      con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC", function(err4, a4s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` ASC", function(err4, a4s)
              {
                if ( err4){console.log('Da co loi room full:'+err4);}
                else
