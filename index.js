@@ -752,8 +752,9 @@ io.on('connection',  (socket)=>
                  if(err2){console.log(err2);}
                  else {
                    if(abc ==="app"){tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.app,
-                     time:get_time(a1.time)});}
-                     else {tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.web,
+                     time:get_time(a1.time)});
+                   }
+                   else {tinfull.push({name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.web,
                        time:get_time(a1.time)});}
                      if(key===(a1s.length-1)){socket.emit('S_send_inbox',tinfull);}
                  }
