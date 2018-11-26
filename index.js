@@ -1270,6 +1270,7 @@ io.on('connection',  (socket)=>
   });
   socket.on('danhantinnhan', function (nguoigui, idc)
    	{
+      console.log('nguoigui la:'+nguoigui);
       if (socket.number){
 	    //chuyển trạng thái trong db của người nhận thành đã nhận tin nhắn, lần sau login 2 không phải gửi về nữa
     con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"'",function()
@@ -1380,7 +1381,7 @@ io.on('connection',  (socket)=>
               con.query("UPDATE `"+socket.number+"mes_sender` SET `stt` = 'OK' WHERE `ids` LIKE '"+a1s[0].id+"' AND `number` LIKE '"+nguoinhan+"'",function(err2){
                   if(err2){console.log(err2);}
                   else {
-                  console.log('nguoi gui:'+socket.user_name+' da biet '+nguoinhan+ ' da nhan tin nhan');
+                  console.log('nguoi gui:'+socket.username+' da biet '+nguoinhan+ ' da nhan tin nhan');
                   // kiểm tra xem có thằng nào chưa gửi thông báo không
                   con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1s[0].id+"' AND `send_receive` LIKE 'S' AND `stt` LIKE 'G' LIMIT 1", function(err3, a3s){
                     if ( err3 ) {console.log(err3);}
@@ -1390,9 +1391,7 @@ io.on('connection',  (socket)=>
                         console.log('Da tim thay ma dung 3');
                       con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'OK' WHERE `idc` LIKE '"+id+"' AND `stt` LIKE 'G'",function(err4){
                         if(err4){console.log(err4);}
-                        else {
-                          console.log('ma san pham final la '+id);
-                        }
+
 
                   });
                 }
