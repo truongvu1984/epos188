@@ -237,11 +237,31 @@ socket.on('S_get_tinnhan',(data, abc)=>{
   mang_send.push(tin);
   data.nguoinhan.forEach((row1,key)=>{
      if(key===(data.nguoinhan.length-1)){space="";}
-     else {space = ";"; }
+     else {space = ";";}
      ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;
    });
-  var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(data.subject)+"</div><div class='line_send_time'>"+show_time(data.time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'></div></div></div>";
+  var line = "<div class='line_inbox' id='send"+idc+"'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(data.subject)+"</div><div class='line_send_time'>"+show_time(data.time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'></div></div></div>";
    $("#k_send").prepend(line);
+});
+// io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,tennguoinhan:strencode(socket.username), idc:idc});
+socket.on('C_danhantinnhan',(data, idc)=>{
+  mang_send.forEach((tin)=>{
+    if(tin.id_tinnha_client ===idc){
+      let ab = "";
+      let space="";
+      tin.nhom_nguoinhan.forEach((row,key)=>{
+         if(key===(tin.nhom_nguoinhan.length-1)){space="";}else {space = "; ";}
+         if(row.number === data.nguoinhan){ab=ab+strdecode(row1.name)+space;}
+         else {ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;}
+      });
+      var line = "<div class='line_inbox' id='send"+tin.id_pos+"'><input type='checkbox' id='"+tin.id_pos+"' class='line_send_chk' onclick='checkbox_send_click("+tin.id_pos+");'><div class='line_send_main' onclick='send_click("+tin.id_pos+")'><div class='line_send_sub'>"+strdecode(tin.subject)+"</div><div class='line_send_time'>"+tin.thoigian+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'></div></div></div>";
+      $("#send"+tin.id_pos).html(line);
+      socket.emit("tinnhan_final", "web",idc, data.nguoinhan);
+      return false;
+    }
+  });
+  // chuyển đổi màu sắc sang đỏ đối với người
+
 });
 function hide_show_pos(id){
   if(document.getElementById("chk"+id).checked == true){cancle_luudiem(id);}
