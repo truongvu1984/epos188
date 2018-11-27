@@ -227,20 +227,20 @@ socket.on('S_guitinnhan', (data)=>{
  $("#k_inbox").prepend(line);
   socket.emit("danhantinnhan", "web",data.number_nguoigui, data.id_tinnha_client);
 });
-socket.on('S_get_tinnhan',(time, data, idc1)=>{
+socket.on('S_get_tinnhan',(data, abc)=>{
   id_inbox_pos++;
-  socket.emit('S_get_tinnhan_ok','web',idc1);
+  socket.emit('S_get_tinnhan_ok','web',data.idc);
   var ab = "";
   var space = "";
   var idc = "3"+id_inbox_pos;
-  var tin = {id_pos:idc, nhom_nguoinhan:data.nguoinhan, subject:strdecode(data.subject), id_tinnha_client:idc1, thoigian:show_time(time) };
+  var tin = {id_pos:idc, nhom_nguoinhan:data.nguoinhan, subject:strdecode(data.subject), id_tinnha_client:data.idc, thoigian:show_time(data.time) };
   mang_send.push(tin);
   data.nguoinhan.forEach((row1,key)=>{
      if(key===(data.nguoinhan.length-1)){space="";}
      else {space = ";"; }
      ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;
    });
-  var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(data.subject)+"</div><div class='line_send_time'>"+show_time(time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'>ha ha ha</div></div></div>";
+  var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(data.subject)+"</div><div class='line_send_time'>"+show_time(time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'></div></div></div>";
    $("#k_send").prepend(line);
 });
 function hide_show_pos(id){

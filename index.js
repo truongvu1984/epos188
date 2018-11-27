@@ -1381,8 +1381,6 @@ io.on('connection',  (socket)=>
                       if(a3s.length == 0){
                         con.query("UPDATE `"+socket.number+"mes_main` SET `"+abc+"` = 'OK' WHERE `idc` LIKE '"+id+"' AND `send_receive` LIKE 'S'",function(err4){
                         if(err4){console.log(err4);}
-
-
                   });
                 }
               }
