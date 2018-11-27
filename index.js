@@ -554,7 +554,7 @@ io.on('connection',  (socket)=>
                     {
                       a1s.forEach(function(a1)
                         {
-                        con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"' AND `stt` LIKE 'G'", function(err5, a5s)
+                        con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"' AND `"+abc+"` LIKE 'G'", function(err5, a5s)
                         {
 
                         if ( err5 || (a5s.length==0)){console.log(err5);}
@@ -775,10 +775,11 @@ io.on('connection',  (socket)=>
                       if(err2){console.log(err2);}
                       else {
                         a2s.forEach(function(a2,key2){
-                          nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
+                          if(abc==="app"){nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.app});}
+                          else {nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.web});}
                           if(key2 === (a2s.length-1)){
                             if(abc==="app"){tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, stt:a1.app});}
-                            else {tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, stt:a1.app});}
+                            else {tinfull2.push({subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan, stt:a1.web});}
                             if(key === (a1s.length-1)){ socket.emit('S_send_send',tinfull2,"full");console.log('Server đã gửi send');
                           }
                           }
