@@ -1280,7 +1280,7 @@ io.on('connection',  (socket)=>
             con.query("UPDATE `"+nguoigui+"mes_main` SET `"+abc+"` = 'G' WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+idc+"'",function(err2,res2){
               if(err2){console.log(err2);}
               else {
-              con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'G' WHERE `ids` LIKE '"+res11[0].id+"' AND `number` LIKE '"+socket.number+"'",function(err3,res3)
+              con.query("UPDATE `"+nguoigui+"mes_sender` SET `"+abc+"` = 'G' WHERE `ids` LIKE '"+res11[0].id+"' AND `number` LIKE '"+socket.number+"'",function(err3,res3)
                 {
                   if(err3){console.log(err3);}
                   else {
@@ -1370,11 +1370,11 @@ io.on('connection',  (socket)=>
 		     con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+id+"' AND `send_receive` LIKE 'S' LIMIT 1", function(err, a1s){
             if ( err || ( a1s.length==0)) {console.log(err);}
             else {
-              con.query("UPDATE `"+socket.number+"mes_sender` SET `stt` = 'OK' WHERE `ids` LIKE '"+a1s[0].id+"' AND `number` LIKE '"+nguoinhan+"'",function(err2){
+              con.query("UPDATE `"+socket.number+"mes_sender` SET `"+abc+"` = 'OK' WHERE `ids` LIKE '"+a1s[0].id+"' AND `number` LIKE '"+nguoinhan+"'",function(err2){
                 if(err2){console.log(err2);}
                 else {
                   // kiểm tra xem có thằng nào chưa gửi thông báo không
-                  con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1s[0].id+"' AND `send_receive` LIKE 'S' AND `stt` LIKE 'G' LIMIT 1", function(err3, a3s){
+                  con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1s[0].id+"' AND `send_receive` LIKE 'S' AND `"+abc+"` LIKE 'G' LIMIT 1", function(err3, a3s){
                     if ( err3 ) {console.log(err3);}
                     else {
                       if(a3s.length == 0){
