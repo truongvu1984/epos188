@@ -1127,14 +1127,14 @@ io.on('connection',  (socket)=>
       });
     }
   });
-  socket.on('C_gui_tinnhan', function(mess){
+  socket.on('C_gui_tinnhan', function(abc,mess){
     if (socket.number){
       let thoigian = new Date();
       let nguoinhans = [];
       mess.nguoinhan.forEach((nguoi, key7)=>{
         nguoinhans.push({number:nguoi.number, name:strencode(nguoi.name)});
         if(key7===(mess.nguoinhan.length-1)){
-          io.sockets.in(socket.number).emit('S_get_tinnhan',get_time(thoigian),{subject:strencode(mess.subject),nguoinhan:nguoinhans},mess.id);
+          io.sockets.in(socket.number).emit('S_get_tinnhan',{subject:strencode(mess.subject),nguoinhan:nguoinhans,idc:mess.id,time:get_time(thoigian)},abc);
           // lưu vào bảng chính của người gửi
           var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time,web,app) VALUES ?";
           var values2 = [[mess.id, mess.subject,'S',thoigian,"N","N"]];
@@ -1150,10 +1150,10 @@ io.on('connection',  (socket)=>
                           con.query(sql3, [val], function (err2, res2) {if ( err2){console.log(err2);}});
                         });
                         // lưu danh sách người nhận vào bảng của người gửi
-                      var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive, stt) VALUES ?";
+                      var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive, web,app) VALUES ?";
                       mess.nguoinhan.forEach(function(row5)
                         {
-                          var val4 = [[res.insertId, row5.number, row5.name, 'S', 'N']];
+                          var val4 = [[res.insertId, row5.number, row5.name, 'S', 'N','N']];
                           con.query(sql4, [val4], function (err3, res3) {if ( err3){console.log(err3);}});
                           con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row5.number +"' LIMIT 1", function(err4, res4)
                             {
@@ -1163,7 +1163,7 @@ io.on('connection',  (socket)=>
                                     // lưu vào bảng chính của người nhận
                                     // var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, stt, read,time) VALUES ?";
                                     var sql5= "INSERT INTO `"+row5.number+"mes_main` (idc,subject, send_receive, read_1, time,web, app ) VALUES ?";
-                                    var val5 = [[mess.id, mess.subject,'R','N',thoigian,"N","N"]];
+                                    var val5 = [[mess.id, mess.subject,'R','N',thoigian,'N','N']];
                                     con.query(sql5, [val5], function (err5, res5)
                                     {
                                       if ( err5){console.log(err5);}

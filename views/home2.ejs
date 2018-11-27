@@ -359,7 +359,7 @@ function guitinnhan(){
         var ten = "<%= name %>";
         var sodienthoai = "<%= sodienthoai %>";
         var tinnhanfull = {nguoigui_name: ten, nguoigui_number:sodienthoai ,subject: sub  ,nguoinhan:mang_contact_ok, pos:mang_infowindow_main, id:mafull};
-        socket.emit('C_gui_tinnhan',tinnhanfull);
+        socket.emit('C_gui_tinnhan','web',tinnhanfull);
       }
     }
   }
