@@ -1133,7 +1133,7 @@ io.on('connection',  (socket)=>
       let thoigian = new Date();
       let nguoinhans = [];
       mess.nguoinhan.forEach((nguoi, key7)=>{
-        nguoinhans.push({number:nguoi.number, name:strencode(nguoi.name)});
+        nguoinhans.push({number:nguoi.number, name:strencode(nguoi.name), stt:'N'});
         if(key7===(mess.nguoinhan.length-1)){
           io.sockets.in(socket.number).emit('S_get_tinnhan',{subject:strencode(mess.subject),nguoinhan:nguoinhans,idc:mess.id,time:get_time(thoigian)},abc);
           // lưu vào bảng chính của người gửi

@@ -245,16 +245,18 @@ socket.on('S_get_tinnhan',(data, abc)=>{
 });
 // io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,tennguoinhan:strencode(socket.username), idc:idc});
 socket.on('C_danhantinnhan',(data)=>{
-  console.log('Vu yeu Ngan');
   mang_send.forEach((tin)=>{
     if(tin.id_tinnha_client ===data.idc){
-      console.log('C_danhantinnhan');
       let ab = "";
       let space="";
       tin.nhom_nguoinhan.forEach((row,key)=>{
          if(key===(tin.nhom_nguoinhan.length-1)){space="";}else {space = "; ";}
-         if(row.number === data.nguoinhan){ab=ab+strdecode(row.name)+space;}
-         else {ab=ab+"<font color='red'>"+strdecode(row.name)+"</font>" +space;}
+         if(row.number === data.nguoinhan){ab=ab+strdecode(row.name)+space;row.stt='Y';}
+         else {
+           if(row.stt ==='N'){ab=ab+"<font color='red'>"+strdecode(row.name)+"</font>" +space;}
+           else {ab=ab+strdecode(row.name)+space;}
+
+         }
       });
       var line = "<div class='line_inbox' id='send"+tin.id_pos+"'><input type='checkbox' id='"+tin.id_pos+"' class='line_send_chk' onclick='checkbox_send_click("+tin.id_pos+");'><div class='line_send_main' onclick='send_click("+tin.id_pos+")'><div class='line_send_sub'>"+strdecode(tin.subject)+"</div><div class='line_send_time'>"+tin.thoigian+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'></div></div></div>";
       $("#send"+tin.id_pos).html(line);
