@@ -247,6 +247,7 @@ socket.on('S_get_tinnhan',(data, abc)=>{
 socket.on('C_danhantinnhan',(data, idc)=>{
   mang_send.forEach((tin)=>{
     if(tin.id_tinnha_client ===idc){
+      console.log('C_danhantinnhan');
       let ab = "";
       let space="";
       tin.nhom_nguoinhan.forEach((row,key)=>{
