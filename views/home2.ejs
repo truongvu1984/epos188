@@ -244,10 +244,10 @@ socket.on('S_get_tinnhan',(data, abc)=>{
    $("#k_send").prepend(line);
 });
 // io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,tennguoinhan:strencode(socket.username), idc:idc});
-socket.on('C_danhantinnhan',(data, idc)=>{
+socket.on('C_danhantinnhan',(data)=>{
   console.log('Vu yeu Ngan');
   mang_send.forEach((tin)=>{
-    if(tin.id_tinnha_client ===idc){
+    if(tin.id_tinnha_client ===data.idc){
       console.log('C_danhantinnhan');
       let ab = "";
       let space="";
