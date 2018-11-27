@@ -253,8 +253,8 @@ socket.on('C_danhantinnhan',(data)=>{
       let space="";
       tin.nhom_nguoinhan.forEach((row,key)=>{
          if(key===(tin.nhom_nguoinhan.length-1)){space="";}else {space = "; ";}
-         if(row.number === data.nguoinhan){ab=ab+strdecode(row1.name)+space;}
-         else {ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;}
+         if(row.number === data.nguoinhan){ab=ab+strdecode(row.name)+space;}
+         else {ab=ab+"<font color='red'>"+strdecode(row.name)+"</font>" +space;}
       });
       var line = "<div class='line_inbox' id='send"+tin.id_pos+"'><input type='checkbox' id='"+tin.id_pos+"' class='line_send_chk' onclick='checkbox_send_click("+tin.id_pos+");'><div class='line_send_main' onclick='send_click("+tin.id_pos+")'><div class='line_send_sub'>"+strdecode(tin.subject)+"</div><div class='line_send_time'>"+tin.thoigian+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'></div></div></div>";
       $("#send"+tin.id_pos).html(line);
