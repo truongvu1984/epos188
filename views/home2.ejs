@@ -650,6 +650,20 @@ function checkbox_inbox_click(idc){
     else {document.getElementById("id_content_inbox_del").style.display = "none";}
 
 }
+function checkbox_online_click(idc){
+    var stt=0;
+    var list_checkbox = document.getElementsByClassName("line_online_chk");
+    for (var i = 0; i < list_checkbox.length; i++) {
+      if(list_checkbox[i].checked){stt++;}
+    }
+    if(stt >0){
+      document.getElementById("id_content_online_del").style.display = "block";
+      if(stt>1) {$("#id_content_online_del_item").html(stt+" items were chosen");}
+      else {$("#id_content_onlinex_del_item").html(stt+" item was chosen");}
+  }
+    else {document.getElementById("id_content_online_del").style.display = "none";}
+
+}
 function checkbox_send_click(idc){
     var stt=0;
     var list_checkbox = document.getElementsByClassName("line_send_chk");
@@ -678,6 +692,7 @@ function checkbox_save_click(idc){
     else {document.getElementById("id_content_save_del").style.display = "none";}
 
 }
+
 function show_contact_list(){
   if(document.getElementById("id_list_contact").style.display == "block"){
   document.getElementById("id_list_contact").style.display = "none";
