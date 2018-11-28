@@ -84,7 +84,7 @@ body {
   height:40px;
   cursor: pointer;
   }
-.line_inbox_chk, .line_send_chk, .line_save_chk{
+.line_inbox_chk, .line_send_chk, .line_save_chk, .line_online_chk{
   position: absolute;
   z-index: 3
 }
@@ -209,7 +209,7 @@ body {
   cursor: pointer;
   overflow-x: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
 }
 .lo_list_show{
   position: absolute;
