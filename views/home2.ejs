@@ -668,6 +668,7 @@ function checkbox_online_click(idc){
     for (var i = 0; i < list_checkbox.length; i++) {
       if(list_checkbox[i].checked){stt++;}
     }
+    console.log('so luong la:'+stt);
     if(stt >0){
       document.getElementById("id_content_online_del").style.display = "block";
       if(stt>1) {$("#id_content_online_del_item").html(stt+" items were chosen");}
