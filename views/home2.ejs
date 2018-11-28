@@ -665,14 +665,11 @@ function checkbox_inbox_click(idc){
 function checkbox_online_click(idc){
     var stt=0;
     var list_checkbox = document.getElementsByClassName("line_online_chk");
-    for (var i = 0; i < list_checkbox.length; i++) {
-      if(list_checkbox[i].checked){stt++;}
-    }
-    console.log('so luong la:'+stt);
+    for (var i = 0; i < list_checkbox.length; i++) {if(list_checkbox[i].checked){stt++;}}
     if(stt >0){
       document.getElementById("id_content_online_del").style.display = "block";
       if(stt>1) {$("#id_content_online_del_item").html(stt+" items were chosen");}
-      else {$("#id_content_onlinex_del_item").html(stt+" item was chosen");}
+      else {$("#id_content_online_del_item").html(stt+" item was chosen");}
   }
     else {document.getElementById("id_content_online_del").style.display = "none";}
 
