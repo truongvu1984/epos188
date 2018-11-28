@@ -35,7 +35,10 @@ var mang_save = [];
 var mang_contact = [];
 var mang_contact_ok = [];
 var mang_room = [];
-var list_del = [];
+var list_del_inbox = [];
+var list_del_send = [];
+var list_del_save = [];
+var list_del_online = [];
 var trangthai_yeucau_data = "full";
 
 socket.on('check_pass',()=>{
@@ -117,7 +120,7 @@ socket.on('S_send_inbox', (data)=>{
          mang_inbox.push(tin);
          if(row.trangthai==="N"){trangthai="Not read";}
          else {trangthai="";}
-         var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_inbox_chk' onclick='checkbox_inbox_click("+idc+");'><div class='line_inbox_main' onclick='inbox_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(row.subject)+"</div><div class='line_inbox_time'>"+show_time(row.time)+"</div><div class='line_inbox_from'>From:"+strdecode(row.name_nguoigui)+"</div><div class='line_inbox_read'>"+trangthai+"</div></div></div>";
+         var line = "<div class='line_inbox' id='inbox"+idc+"'><input type='checkbox' id='"+idc+"' class='line_inbox_chk' onclick='checkbox_inbox_click("+idc+");'><div class='line_inbox_main' onclick='inbox_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(row.subject)+"</div><div class='line_inbox_time'>"+show_time(row.time)+"</div><div class='line_inbox_from'>From:"+strdecode(row.name_nguoigui)+"</div><div class='line_inbox_read'>"+trangthai+"</div></div></div>";
         $("#k_inbox").prepend(line);
 
        });
@@ -199,15 +202,31 @@ socket.on('S_W_add_friend_ok',function(data){
 
           });
 socket.on('S_del_inbox', ()=>{
+    document.getElementById("id_content_inbox_del").style.display = "none";
+    list_del_inbox.forEach((row, key)=>{
+      for(var i=0; i< mang_inbox.length; i++){
+        if(mang_inbox[i].id_tinnha_client===row.idc){
+          document.getElementById("inbox"+mang_inbox[i].id_pos).remove();
+          mang_inbox.splice(i,1);
+          if(key===list_del_inbox.length){list_del_inbox= [];}
+          return false;
+        }
+      }
+    });
+    // bỏ cái hàng với cái id kia
+    // document.getElementById(id1).remove();
+    alert('Tin nhắn đã được xóa thành công');
+});
+socket.on('S_del_online', ()=>{
     // xóa row trong list_inbox
     document.getElementById("del_inbox").style.marginTop = "-25px";
     $("#item_inbox_chose").html("");
-    list_del.forEach((row, key)=>{
+    list_del_inbox.forEach((row, key)=>{
       for(var i=0; i< mang_inbox.length; i++){
         if(mang_inbox[i].id_tinnha_client===row.idc){
           document.getElementById("full"+mang_inbox[i].id_pos).remove();
           mang_inbox.splice(i,1);
-          if(key===list_del.length){list_del= [];}
+          if(key===list_del_inbox.length){list_del_inbox= [];}
           return false;
         }
       }
@@ -624,7 +643,7 @@ function del_contact_ok(id){
 
 }
 function xoadiem_inbox(){
-  list_del = [];
+  list_del_inbox = [];
   var list_checkbox = document.getElementsByClassName("line_inbox_chk");
     // $("#id_btn_send").html(list_checkbox[2].id);
   for (var i = 0; i < list_checkbox.length; i++) {
@@ -633,19 +652,38 @@ function xoadiem_inbox(){
         // nếu hàng đó có chọn thì sẽ lấy cái id của hàng đó, rồi tìm trong mảng, lấy cái id tin nhắn ra
         // đưa vào danh sách gửi đi.
         if(row1.id_pos==list_checkbox[i].id){
-          list_del.push({idc:row1.id_tinnha_client});
+          list_del_inbox.push({idc:row1.id_tinnha_client});
           return false;
         }
         })
     }
     }
-    if(list_del.length>0){
+    if(list_del_inbox.length>0){
       var item="";
-      if (list_del.length>1){item = "items";}else{item="item";}
-      var r = confirm(list_del.length+" "+item+" will be deleted");
-      if (r == true) {
-        // socket.emit("C_del_inbox",list_del);
-      }
+      if (list_del_inbox.length>1){item = "items";}else{item="item";}
+      var r = confirm(list_del_inbox.length+" "+item+" will be deleted");
+      if (r == true) {socket.emit("C_del_inbox",list_del_inbox); }
+    }
+}
+function xoadiem_online(){
+  list_del_online = [];
+  var list_checkbox = document.getElementsByClassName("line_online_chk");
+    // $("#id_btn_send").html(list_checkbox[2].id);
+  for (var i = 0; i < list_checkbox.length; i++) {
+    if(list_checkbox[i].checked){
+      mang_room.forEach((row1, key)=>{
+        if(row1.id_pos==list_checkbox[i].id){
+          list_del_online.push({idc:row1.room_id});
+          return false;
+        }
+        })
+    }
+    }
+    if(list_del_online.length>0){
+      var item="";
+      if (list_del_online.length>1){item = "items";}else{item="item";}
+      var r = confirm(list_del_online.length+" "+item+" will be deleted");
+      if (r == true) {socket.emit("C_del_online",list_del_online);}
     }
 }
 function checkbox_inbox_click(idc){

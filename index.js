@@ -983,7 +983,6 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_del_online',(mes)=>{
     if(socket.number){
-      console.log(mes);
       socket.emit('S_del_online');
       mes.forEach((mes1,key)=>{
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err, res)
@@ -991,7 +990,6 @@ io.on('connection',  (socket)=>
             if ( err|| (res.length ==0) ){console.log('1:'+err);}
             else
               {
-                console.log('Da nhan 1');
                 con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` = "+res[0].id + " AND `number` NOT LIKE '"+socket.number+"'", function(err1, res1)
                   {
                     if ( err1|| (res1.length ==0) ){console.log('2:'+err1);}
@@ -1010,16 +1008,8 @@ io.on('connection',  (socket)=>
                                         else {
                                           console.log('Da xoa tai khoan:'+member1.name);
                                           if(key1===(res1.length-1)){
-                                          con.query("DELETE FROM `"+socket.number+"mes_main` WHERE `id` = "+res[0].id, function(err9)
-                                            {
-                                                if (err9){console.log(err9);}
-                                                else {console.log('Da xoa main');}
-                                          });
-                                          con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` = "+res[0].id , function(err8)
-                                              {
-                                                  if (err8){console.log(err8);}
-                                                  else {console.log('Da xoa member');}
-                                          });
+                                          con.query("DELETE FROM `"+socket.number+"mes_main` WHERE `id` = "+res[0].id, function(err9){if (err9){console.log(err9);}});
+                                          con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` = "+res[0].id , function(err8){if (err8){console.log(err8);}});
                                         }
                                         }
 
