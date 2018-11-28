@@ -1660,17 +1660,15 @@ io.on('connection',  (socket)=>
 
     }
   });
-  socket.on('C_make_room', function (info)
-   	{
+  socket.on('C_make_room', function (info){
     if (socket.number){
       let thoigian = new Date();
       socket.emit('S_get_room');
       // bắt đầu xử lý cái room
       var room_id = passwordHash.generate(info.room_name);
       // Server tạo ra cái room đầy đủ để lưu hành trên hệ thống
-      console.log('Da nhan room la:'+info);
-      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc, subject, send_receive, stt,time ) VALUES ?";
-      var val = [[ room_id, info.room_name,'O', 'N',thoigian]];
+      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc, subject, send_receive, web,app,time ) VALUES ?";
+      var val = [[ room_id, info.room_name,'O', 'N','N',thoigian]];
       con.query(sql, [val], function (err, res)
       {
         if ( err){console.log(err);}
@@ -1685,7 +1683,7 @@ io.on('connection',  (socket)=>
               val2 = [[ res.insertId, member.name,member.number,'B']];
               con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
               });
-              socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian), stt:"N"});
+              socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian)});
               }
             });
           }
@@ -1697,8 +1695,8 @@ io.on('connection',  (socket)=>
             {
               if(err3 || (kq.length ==0)){console.log(err3);}
               else {
-                      var sql5 = "INSERT INTO `"+row.number+"mes_main` (idc, subject, send_receive, stt, time ) VALUES ?";
-                      var val5 = [[ room_id, info.room_name,'O', 'N',thoigian]];
+                      var sql5 = "INSERT INTO `"+row.number+"mes_main` (idc, subject, send_receive, web,app, time ) VALUES ?";
+                      var val5 = [[ room_id, info.room_name,'O', 'N','N',thoigian]];
                       con.query(sql5, [val5], function (err5, res5)
                             {
                               if ( err5){console.log(err5);}
@@ -1841,13 +1839,12 @@ io.on('connection',  (socket)=>
     });
       }
     });
-  socket.on('C_get_room', function(room_fullname){
+  socket.on('C_get_room', function(abc,room_fullname){
       if (socket.number){
-        console.log(socket.username+' da nhan room roi:' + room_fullname);
-      con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+room_fullname+"'",function(err){
-      if ( err){console.log(err);}
-    });
-    }
+        con.query("UPDATE `"+socket.number+"mes_main` SET `"+abc+"` = 'OK' WHERE `idc` LIKE '"+room_fullname+"' AND `send_receive` LIKE 'O'",function(err){
+          if ( err){console.log(err);}
+        });
+      }
   });
   socket.on('C_get_manager',()=>{
       console.log('ha ha ha');

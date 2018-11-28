@@ -34,6 +34,7 @@ var mang_send = [];
 var mang_save = [];
 var mang_contact = [];
 var mang_contact_ok = [];
+var mang_room = [];
 var list_del = [];
 var trangthai_yeucau_data = "full";
 
@@ -166,6 +167,15 @@ socket.on('S_send_contact',(data)=>{
     var line = "<div class='list_contact_main_line'><div style='position:absolute;' id='list_contact_name'>"+strdecode(tin.name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+tin.number+"</div><button class='list_contact_line_btn' id='btn"+idc+"' onclick='add_contact_click("+idc+")'>Add</button></div>";
       $("#id_list_contact").append(line);
   });
+});
+socket.on('S_send_room',(data)=>{
+  id_inbox_pos++;
+  var idc = "5"+id_inbox_pos;
+  var tin = {id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
+  mang_room.push(tin);
+  var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_inbox_chk' onclick='checkbox_room_click("+idc+");'><div class='line_inbox_main' onclick='room_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
+  $("#k_online").prepend(line);
+  socket.emit('C_get_room','web',data.room_id_server);
 });
 socket.on('S_W_add_friend_ok',function(data){
               var new_contact = "<a href=''>"+data.name+"</a></br>";
@@ -725,7 +735,8 @@ window.onclick = function(event) {
         <div class="top_right_item">
           <button class="btn_online" onclick="show_content_top_right('id_content_online')">ONLINE</button>
           <div class="content_online" id="id_content_online">
-
+            <div class="content_del" id="id_content_online_del"><div class="content_inbox_del_item" id="id_content_online_del_item"></div><button class="content_inbox_del_btn" onclick="xoadiem_room()">Del</button></div>
+            <div style="height:1px; width:100px;" id="k_online"></div>
           </div>
         </div>
         <div class="top_right_item">
