@@ -842,26 +842,23 @@ io.on('connection',  (socket)=>
           }
         });
       // Lấy danh sách room
-      con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` ASC", function(err4, a4s)
-             {
-               if ( err4){console.log('Da co loi room full:'+err4);}
-               else
-                 {
-                   console.log('Online là:'+a4s);
-                   let tinfull = [];
-                   a4s.forEach(function(a4,key){
+      con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` ASC", function(err4, a4s){
+          if ( err4){console.log('Da co loi room full:'+err4);}
+          else
+            {
+               let tinfull = [];
+               a4s.forEach(function(a4,key){
                       con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a4.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
                         {
                               if ( err5 ){console.log(err5);}
                               else
                                 {
                                   if(a5s.length>0){
-                                    tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a4.time), stt:a4.stt});
-                                    if(key===(a4s.length-1)){socket.emit('S_send_room_full',tinfull);console.log('Server đã gửi room:');}
+                                    if(abc ==="app"){tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a4.time), stt:a4.app});}
+                                    else {tinfull.push({room_name:strencode(a4.subject), room_id_server:a4.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a4.time), stt:a4.web});}
+                                    if(key===(a4s.length-1)){socket.emit('S_send_room_full',tinfull);}
                                   }
-                                  else {
-                                    console.log('id là:'+ a4.id);
-                                  }
+
                                 }
                       });
                    });
@@ -1641,7 +1638,7 @@ io.on('connection',  (socket)=>
 
 
       }
-  });//check_contact
+  });// check_contact
   socket.on('C_got_friend', function (number){
       if (socket.number){
     console.log('Người dùng đã lưu friend la:'+number);
