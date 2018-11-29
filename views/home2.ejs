@@ -141,7 +141,7 @@ socket.on('S_send_send', (data)=>{
               if(key===(row.nguoinhan.length-1)){space="";}else {space=" ,";}
               if(row1.stt ==="N"){ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;}else {ab=ab+strdecode(row1.name)+space;}
           });
-          var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(row.subject)+"</div><div class='line_send_time'>"+show_time(row.time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'>ha ha</div></div></div>";
+          var line = "<div class='line_inbox' id='send"+idc+"'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(row.subject)+"</div><div class='line_send_time'>"+show_time(row.time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'>ha ha</div></div></div>";
           $("#k_send").prepend(line);
        });
       socket.emit('C_nhan_send');
@@ -187,7 +187,7 @@ socket.on('S_send_room_full',(datas)=>{
     var idc = "5"+id_inbox_pos;
     var tin = {id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
     mang_room.push(tin);
-    var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='room_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
+    var line = "<div class='line_inbox' id='room"+idc+"'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='room_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
     $("#k_online").prepend(line);
   });
   socket.emit('C_nhan_room');
@@ -232,6 +232,21 @@ socket.on('S_del_online', ()=>{
   });
   // bỏ cái hàng với cái id kia
   // document.getElementById(id1).remove();
+  alert('Tin nhắn đã được xóa thành công');
+});
+socket.on('S_del_send', ()=>{
+  document.getElementById("id_content_send_del").style.display = "none";
+  list_del_send.forEach((row, key)=>{
+    for(var i=0; i< mang_send.length; i++){
+      if(mang_send[i].id_tinnha_client===row.idc){
+        document.getElementById("send"+mang_send[i].id_pos).remove();
+        mang_send.splice(i,1);
+        if(key===list_del_send.length){list_del_send= [];}
+        return false;
+      }
+    }
+  });
+
   alert('Tin nhắn đã được xóa thành công');
 });
 socket.on('S_send_point',(data)=>{
@@ -683,6 +698,29 @@ function xoadiem_room(){
       if (list_del_online.length>1){item = "items";}else{item="item";}
       var r = confirm(list_del_online.length+" "+item+" will be deleted");
       if (r == true) {socket.emit("C_del_online",list_del_online);}
+    }
+}
+function xoadiem_send(){
+  list_del_send = [];
+  var list_checkbox = document.getElementsByClassName("line_send_chk");
+    // $("#id_btn_send").html(list_checkbox[2].id);
+  for (var i = 0; i < list_checkbox.length; i++) {
+    if(list_checkbox[i].checked){
+      mang_send.forEach((row1, key)=>{
+        // nếu hàng đó có chọn thì sẽ lấy cái id của hàng đó, rồi tìm trong mảng, lấy cái id tin nhắn ra
+        // đưa vào danh sách gửi đi.
+        if(row1.id_pos==list_checkbox[i].id){
+          list_del_send.push({idc:row1.id_tinnha_client});
+          return false;
+        }
+        })
+    }
+    }
+    if(list_del_send.length>0){
+      var item="";
+      if (list_del_send.length>1){item = "items";}else{item="item";}
+      var r = confirm(list_del_send.length+" "+item+" will be deleted");
+      if (r == true) {socket.emit("C_del_send",list_del_send);}
     }
 }
 function checkbox_inbox_click(idc){
