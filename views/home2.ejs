@@ -176,7 +176,7 @@ socket.on('S_send_room',(data)=>{
   var idc = "5"+id_inbox_pos;
   var tin = {id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
   mang_room.push(tin);
-  var line = "<div class='line_inbox' id='online"+idc+"'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='online_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
+  var line = "<div class='line_inbox' id='room"+idc+"'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='online_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
   $("#k_online").prepend(line);
   socket.emit('C_get_room','web',data.room_id_server);
 });
@@ -223,7 +223,7 @@ socket.on('S_del_online', ()=>{
     for(var i=0; i< mang_room.length; i++){
       if(mang_room[i].room_id===row.idc){
         console.log("online"+mang_room[i].id_pos);
-        document.getElementById("online"+mang_room[i].id_pos).remove();
+        document.getElementById("room"+mang_room[i].id_pos).remove();
         mang_room.splice(i,1);
         if(key===list_del_online.length){list_del_online= [];}
         return false;
