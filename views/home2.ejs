@@ -222,6 +222,7 @@ socket.on('S_del_online', ()=>{
   list_del_online.forEach((row, key)=>{
     for(var i=0; i< mang_room.length; i++){
       if(mang_room[i].room_id===row.idc){
+        console.log("online"+mang_room[i].id_pos);
         document.getElementById("online"+mang_room[i].id_pos).remove();
         mang_room.splice(i,1);
         if(key===list_del_online.length){list_del_online= [];}
