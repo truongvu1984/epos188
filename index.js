@@ -1207,7 +1207,7 @@ io.on('connection',  (socket)=>
     if(socket.number){
       let thoigian = new Date();
       var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, web,app,time) VALUES ?";
-      var val = [[mess.maso, mess.subject,'H','N','N',thoigian]];
+      var val = [[mess.idc, mess.subject,'H','N','N',thoigian]];
       con.query(sql, [val], function (err, res)
         {
           if(err){console.log(err);}
