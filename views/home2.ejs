@@ -282,6 +282,16 @@ socket.on('S_guitinnhan', (data)=>{
  $("#k_inbox").prepend(line);
   socket.emit("danhantinnhan", "web",data.number_nguoigui, data.id_tinnha_client);
 });
+socket.on('S_get_save_pos', (abc,data)=>{
+  // abc,{time:get_time(thoigian),subject:strencode(mess.subject),idc:mess.idc}
+  id_inbox_pos++;
+  var idc = "2"+id_inbox_pos;
+  var tin = {id_pos:idc, subject:strdecode(data.subject), id_tinnha_client:data.idc, time:show_time(data.time) };
+  mang_save.push(tin);
+  var line = "<div class='line_inbox' id='save"+idc+"' ><input type='checkbox' id='"+idc+"' class='line_inbox_chk' onclick='checkbox_save_click("+idc+");'><div class='line_inbox_main' onclick='save_click("+idc+")'><div class='line_save_sub'>"+strdecode(data.subject)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div></div></div>";
+ $("#k_save").prepend(line);
+  socket.emit("C_get_save_mes", "web",data.idc);
+});
 socket.on('S_get_tinnhan',(data, abc)=>{
   id_inbox_pos++;
   socket.emit('S_get_tinnhan_ok','web',data.idc);
@@ -298,7 +308,6 @@ socket.on('S_get_tinnhan',(data, abc)=>{
   var line = "<div class='line_inbox' id='send"+idc+"'><input type='checkbox' id='"+idc+"' class='line_send_chk' onclick='checkbox_send_click("+idc+");'><div class='line_send_main' onclick='send_click("+idc+")'><div class='line_send_sub'>"+strdecode(data.subject)+"</div><div class='line_send_time'>"+show_time(data.time)+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'></div></div></div>";
    $("#k_send").prepend(line);
 });
-// io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,tennguoinhan:strencode(socket.username), idc:idc});
 socket.on('C_danhantinnhan',(data)=>{
   mang_send.forEach((tin)=>{
     if(tin.id_tinnha_client ===data.idc){
@@ -443,16 +452,24 @@ function guitinnhan(){
     }
   }
 }
-function test(){
-  // document.getElementById("del_inbox").style.marginTop = "0px";
-    // $("#id_list_pos").append(new_pos);
-  // mang_infowindow.forEach((item)=>{
-  //   item.wind.close();
-  // });
-  alert(mang_infowindow_main.length);
-}
-function test2(){
-    alert(mang_infowindow.length);
+function lưu_tinnhan(){
+    var sub = document.getElementById("id_input_subject").value.trim();
+    if ( sub === ""){
+    alert('There is no subjet.');
+  }
+    else {
+      if (mang_infowindow_main.length == 0){
+        alert('There is no position in map to save.');
+      }
+      else {
+        var ma1 = Math.floor(Math.random()*(9000)+1000);
+        var ma2 =Math.floor(Math.random()*(9000)+1000);
+        var mafull = "22"+ma1+ma2;
+        var tinnhanfull = {subject: sub  ,vitri:mang_infowindow_main, idc:mafull};
+        socket.emit('C_save_pos','web',tinnhanfull);
+      }
+
+  }
 }
 function open_close_list(){
   if(document.getElementById("id_btn_list").textContent === "List"){
@@ -865,7 +882,7 @@ window.onclick = function(event) {
         <input type="text" class="input_sub" autocomplete="off" id="id_input_subject"></input>
         <button style="position:absolute;left:5px;bottom:50px" onclick="show_contact_list()">Contact</button>
         <input type="text" class="input_contact" id="id_input_contact" oninput="search_contact()" autocomplete="off"></input>
-        <button style="position:absolute;height:30px;left:270px;bottom:50px" id="id_btn_save" onclick="test()">SAVE</button>
+        <button style="position:absolute;height:30px;left:270px;bottom:50px" id="id_btn_save" onclick="lưu_tinnhan()">SAVE</button>
         <button style="position:absolute;height:30px;left:330px;bottom:50px" id="id_btn_send" onclick="guitinnhan()">SEND</button>
         <div class="list_contact_ok" id="id_list_contact_ok"></div>
         <div class="list_contact" id="id_list_contact"></div>

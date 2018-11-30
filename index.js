@@ -930,7 +930,6 @@ io.on('connection',  (socket)=>
                               {
                                 if (err3){console.log(err3);}
                                 else {
-                                  console.log('Da xoa ban tin');
                                   if(key===(mes.length-1)){socket.emit('S_del_send');}
 
                                 }
@@ -1204,25 +1203,35 @@ io.on('connection',  (socket)=>
       });
     }
   });
-  socket.on('C_save_pos', (mess)=>{
+  socket.on('C_save_pos', (abc,mess)=>{
     if(socket.number){
       let thoigian = new Date();
-      socket.emit('S_get_save_pos',get_time(thoigian));
-      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
-      var val = [[mess.maso, mess.subject,'H',thoigian]];
+      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send _receive, web,app,time) VALUES ?";
+      var val = [[mess.maso, mess.subject,'H','N','N',thoigian]];
       con.query(sql, [val], function (err, res)
         {
-          if(err){socket.emit('S_save_pos_err');}
+          if(err){console.log(err);}
           else {
+            io.sockets.in(socket.number).emit('S_get_save_pos',abc,{time:get_time(thoigian),subject:strencode(mess.subject),idc:mess.idc});
             var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
-            mess.vitri.forEach(function(row)
-              {
+            var list_pos = [];
+            var pos;
+            mess.vitri.forEach((row,key)=>{
                 var val3 = [[res.insertId, row.id, row.name, row.lat, row.lon]];
                 con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
+                list_pos.push({name:strencode(row.name), lat:row.lat,lon:row.lon, id:row.id});
+                if(key===(mess.vitri.length-1)){
+
+                }
               });
 
           }
       });
+    }
+  });
+  socket.on('C_get_save_mes',(abc,idc)=>{
+    if(socket.number){
+      con.query("UPDATE `"+socket.number+"mes_main` SET `"+abc+"` = 'Y' WHERE `send_receive` LIKE 'H' AND `idc` LIKE '"+idc+"'");
     }
   });
   socket.on('C_nhan_inbox',()=>{
