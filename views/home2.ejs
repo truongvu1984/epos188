@@ -505,6 +505,10 @@ function myMap() {
          });
 }
 function map_rightclick( lat1, lon1){
+  if(mang_infowindow[mang_infowindow.length-1].stt=='N'){
+    mang_infowindow[mang_infowindow.length-1].wind.close();
+    mang_infowindow.splice(mang_infowindow.length-1, 1);
+  }
   var id =  new Date().getTime();
   var infowindow = new google.maps.InfoWindow({
       position:{ lat:lat1, lng: lon1}
@@ -514,7 +518,7 @@ function map_rightclick( lat1, lon1){
     "<button onclick='luudiem("+lat1+","+lon1+","+id+")' class='info_ok'>OK</button></div></div>";
     infowindow.setContent(noidung);
     infowindow.open(map);
-    var win = {id:id, wind: infowindow};
+    var win = {id:id, wind: infowindow, stt:'N'};
     mang_infowindow.push(win);
 }
 function luudiem(lat1, lon1, id1){
@@ -522,6 +526,7 @@ function luudiem(lat1, lon1, id1){
   for (var i=0; i<mang_infowindow.length; i++){
     if(mang_infowindow[i].id ==id1){
       mang_infowindow[i].wind.setContent(name1);
+      mang_infowindow[i].stt = 'Y';
       var diem2 = {name:name1, lat:lat1, lon:lon1, id:id1};
       mang_infowindow_main.push(diem2);
       var line = "<div class='list_line' id='li_lo"+id1+"'><div class='lo_list_sub' onclick='fly_to("+id1+")'>"+name1+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+id1+"' onchange='hide_show_pos("+id1+")'><div class='lo_list_show'>Hide</div></div>";
