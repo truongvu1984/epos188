@@ -505,10 +505,12 @@ function myMap() {
          });
 }
 function map_rightclick( lat1, lon1){
-  if(mang_infowindow[mang_infowindow.length-1].stt=='N'){
-    mang_infowindow[mang_infowindow.length-1].wind.close();
-    mang_infowindow.splice(mang_infowindow.length-1, 1);
-  }
+  if(mang_infowindow.length>0){
+    if(mang_infowindow[mang_infowindow.length-1].stt=='N'){
+      mang_infowindow[mang_infowindow.length-1].wind.close();
+      mang_infowindow.splice(mang_infowindow.length-1, 1);
+    }
+  } 
   var id =  new Date().getTime();
   var infowindow = new google.maps.InfoWindow({
       position:{ lat:lat1, lng: lon1}
