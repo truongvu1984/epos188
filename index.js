@@ -1206,7 +1206,7 @@ io.on('connection',  (socket)=>
   socket.on('C_save_pos', (abc,mess)=>{
     if(socket.number){
       let thoigian = new Date();
-      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send _receive, web,app,time) VALUES ?";
+      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, web,app,time) VALUES ?";
       var val = [[mess.maso, mess.subject,'H','N','N',thoigian]];
       con.query(sql, [val], function (err, res)
         {
