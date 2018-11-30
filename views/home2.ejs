@@ -563,7 +563,6 @@ function cancle_luudiem(id) {
     return false;
       }
     }
-
   }
 function show_time(time) {
   let year = time.year;
@@ -826,16 +825,6 @@ function show_content_top_right(id){
   document.getElementById(id).style.display = "block";
 }
 window.onclick = function(event) {
-  if (!event.target.matches('.class_map')) {
-    if(mang_infowindow.length>0){
-      alert('abc');
-      // if(mang_infowindow[mang_infowindow.length-1].stt=='N'){
-      //   mang_infowindow[mang_infowindow.length-1].wind.close();
-      //   mang_infowindow.splice(mang_infowindow.length-1, 1);
-      // }
-    }
-  }
-
 
   if (!event.target.matches('.btn_account')) {
     document.getElementById("id_content_account").style.display = "none";
