@@ -73,7 +73,6 @@ kiemtra_taikhoan();
 io.on('connection',  (socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
-  socket.emit('check_pass');
   socket.emit('check_time', get_time(new Date()));
   socket.on('w_get_inbox', function(data, number){
      console.log("Da nhan number");
