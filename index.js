@@ -464,7 +464,7 @@ io.on('connection',  (socket)=>
           con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `id` > "+data.send+" ORDER BY `id` ASC", function(err1, a1s)
             {
                  if (err1){console.log(err1);}
-                 else if(a1s.length >)
+                 else if(a1s.length >0)
                    {
                      let tinfull2=[];
                      a1s.forEach(function(a1,key){
