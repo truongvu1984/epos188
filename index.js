@@ -438,7 +438,7 @@ io.on('connection',  (socket)=>
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
 	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
       else{
-        if (passwordHash.verify(pass1, rows[0].pass)){
+        if (passwordHash.verify(data.right_pass, rows[0].pass)){
           socket.number = data.rightuser;
           socket.username = rows[0].user;
           socket.join(data.rightuser);
