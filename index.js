@@ -890,6 +890,7 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',{ids:res.insertId, subject:str
       let list=[];
       let list_full=[];
       data.forEach((tin,key)=>{
+        console.log('idc la:'+tin.idc);
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+tin.idc+"' LIMIT 1", function(err1, a1s){
           if(err1){console.log(err1);}
           else {
@@ -912,15 +913,6 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',{ids:res.insertId, subject:str
       });
     }
   });
-  // socket.on('S_get_tinnhan_ok',(abc,idc)=>{
-  //   if(socket.number){
-  //     // cập nhật bảng send để báo là app hoặc ứng dụng đã nhận tin idc
-  //     con.query("UPDATE `"+socket.number+"mes_main` SET `"+abc+"` = 'Y' WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+idc+"'",function()
-  //       {
-  //       console.log('ma san pham la '+idc);
-  //     });
-  //   }
-  // });
   socket.on('C_save_pos', (mess)=>{
     if(socket.number){
       let thoigian = new Date();
