@@ -811,12 +811,12 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_gui_tinnhan', function(mess){
     if (socket.number){
+      console.log('C da gui tin nhan');
       let thoigian = new Date();
       let nguoinhans = [];
       mess.nguoinhan.forEach((nguoi, key7)=>{
         nguoinhans.push({number:nguoi.number, name:strencode(nguoi.name), stt:'N'});
         if(key7===(mess.nguoinhan.length-1)){
-
           // lưu vào bảng chính của người gửi
           var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
           var values2 = [[mess.id, mess.subject,'S',thoigian]];
