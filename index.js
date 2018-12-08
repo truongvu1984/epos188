@@ -811,7 +811,7 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_gui_tinnhan', function(mess){
     if (socket.number){
-      console.log('C da gui tin nhan');
+      console.log('C da gui tin nhan'+mess.id);
       let thoigian = new Date();
       let nguoinhans = [];
       mess.nguoinhan.forEach((nguoi, key7)=>{
