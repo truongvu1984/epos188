@@ -811,7 +811,7 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_gui_tinnhan', function(mess){
     if (socket.number){
-      console.log('C da gui tin nhan'+mess.id);
+      console.log('C da gui tin nhan'+mess.imei);
       let thoigian = new Date();
       let nguoinhans = [];
       mess.nguoinhan.forEach((nguoi, key7)=>{
@@ -824,7 +824,7 @@ io.on('connection',  (socket)=>
             {
               if ( err){console.log(err);}
               else {
-io.sockets.in(socket.number).emit('S_get_tinnhan',{ids:res.insertId, subject:strencode(mess.subject),nguoinhan:nguoinhans,idc:mess.id,time:get_time(thoigian)});
+io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, subject:strencode(mess.subject),nguoinhan:nguoinhans,idc:mess.id,time:get_time(thoigian)});
                       // lưu vào bảng vị trí của người gửi
                       var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
                       mess.pos.forEach(function(row)
