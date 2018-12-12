@@ -130,7 +130,6 @@ socket.on('S_send_inbox', (data)=>{
 });
 socket.on('S_send_send', (data)=>{
      //S gửi toàn bộ bản tin send về client
-
        data.forEach((row)=>{
          var thoigian="";
          var ab = "";
@@ -150,7 +149,6 @@ socket.on('S_send_send', (data)=>{
 });
 socket.on('S_send_save', (data)=>{
      //S gửi toàn bộ bản tin inbox về client
-
        data.forEach((row,key)=>{
          var thoigian="";
          id_inbox_pos++;
@@ -167,7 +165,7 @@ socket.on('S_send_contact',(data)=>{
   data.forEach((tin)=>{
     id_contact ++;
     var idc = "1"+id_contact;
-    mang_contact.push({ids: row.ids,id: idc, name: tin.name, number:tin.number});
+    mang_contact.push({ids: tin.ids,id: idc, name: tin.name, number:tin.number});
     var line = "<div class='list_contact_main_line'><div style='position:absolute;' id='list_contact_name'>"+strdecode(tin.name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+tin.number+"</div><button class='list_contact_line_btn' id='btn"+idc+"' onclick='add_contact_click("+idc+")'>Add</button></div>";
       $("#id_list_contact").append(line);
   });
@@ -175,7 +173,7 @@ socket.on('S_send_contact',(data)=>{
 socket.on('S_send_room',(data)=>{
   id_inbox_pos++;
   var idc = "5"+id_inbox_pos;
-  var tin = {ids: row.ids,id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
+  var tin = {ids: data.ids,id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
   mang_room.push(tin);
   var line = "<div class='line_inbox' id='room"+idc+"'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='online_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
   $("#k_online").prepend(line);
@@ -186,12 +184,12 @@ socket.on('S_send_room_full',(datas)=>{
   datas.forEach((data,key)=>{
     id_inbox_pos++;
     var idc = "5"+id_inbox_pos;
-    var tin = {ids: row.ids,id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
+    var tin = {ids: data.ids,id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
     mang_room.push(tin);
     var line = "<div class='line_inbox' id='room"+idc+"'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='room_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
     $("#k_online").prepend(line);
   });
-  socket.emit('C_nhan_room');
+
 });
 socket.on('S_W_add_friend_ok',function(data){
               var new_contact = "<a href=''>"+data.name+"</a></br>";
