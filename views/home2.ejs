@@ -297,7 +297,7 @@ socket.on('S_get_save_pos', (abc,data)=>{
 });
 socket.on('S_get_tinnhan',(C_mei, data)=>{
   if(C_mei===mafull){
-    document.getElementById("id_input_subject").html="";
+    document.getElementById("id_input_subject").value="";
     mang_contact_ok=[];
     $("#id_list_contact_ok").html("");
     alert('Sending location successfully');
