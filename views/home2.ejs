@@ -40,7 +40,7 @@ var list_del_send = [];
 var list_del_save = [];
 var list_del_online = [];
 var trangthai_yeucau_data = "full";
-
+let mafull="";
 socket.on('check_pass',()=>{
    socket.emit('login2','<%= sodienthoai %>', '<%= pass %>');
 
@@ -292,9 +292,15 @@ socket.on('S_get_save_pos', (abc,data)=>{
  $("#k_save").prepend(line);
   socket.emit("C_get_save_mes", "web",data.idc);
 });
-socket.on('S_get_tinnhan',(data, abc)=>{
+socket.on('S_get_tinnhan',(C_mei, data)=>{
+  if(C_mei===mafull){
+    document.getElementById("id_input_subject").html="";
+    mang_contact_ok=[];
+    $("#id_list_contact_ok").html("");
+    alert('Sending location successfully');
+  }
+  // {ids:res.insertId, subject:strencode(mess.subject),nguoinhan:nguoinhans,idc:mess.id,time:get_time(thoigian)});
   id_inbox_pos++;
-  socket.emit('S_get_tinnhan_ok','web',data.idc);
   var ab = "";
   var space = "";
   var idc = "3"+id_inbox_pos;
