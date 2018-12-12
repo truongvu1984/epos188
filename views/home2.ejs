@@ -41,7 +41,12 @@ var list_del_save = [];
 var list_del_online = [];
 var trangthai_yeucau_data = "full";
 let mafull="";
-let cru_online,cru_inbox,cru_send,cru_save,cru_contact,cru_group = 0;
+let cru_online=0;
+let cru_inbox = 0;
+let cru_send = 0;
+let cru_save=0;
+let cru_contact = 0;
+let cru_group = 0;
 socket.on('check_pass',()=>{
   let ab = {rightuser:'<%= sodienthoai %>',right_pass:'<%= pass %>',online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
   socket.emit('login2',ab);
