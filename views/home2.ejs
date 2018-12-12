@@ -41,9 +41,10 @@ var list_del_save = [];
 var list_del_online = [];
 var trangthai_yeucau_data = "full";
 let mafull="";
+let cru_online,cru_inbox,cru_send,cru_save,cru_contact,cru_group = 0;
 socket.on('check_pass',()=>{
-   socket.emit('login2','<%= sodienthoai %>', '<%= pass %>');
-
+  let ab = {rightuser:'<%= sodienthoai %>',right_pass:'<%= pass %>',online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
+  socket.emit('login2',ab);
 });
 socket.on('login2_dung',()=>{
   if(trangthai_yeucau_data === "full"){socket.emit('C_yeucau_data_full','web');}
@@ -108,34 +109,30 @@ socket.on('S_send_room_member', function(data){
                       $("#myDropdown6").html( ten);
                   });
 socket.on('S_send_inbox', (data)=>{
-     //S gửi toàn bộ bản tin inbox về client
-     trangthai_yeucau_data = "new";
-     var trangthai="";
-       data.forEach((row)=>{
-         var thoigian="";
-         if(row.stt === "N"){socket.emit("danhantinnhan","web",row.number_nguoigui,row.id_tinnha_client);}
-         id_inbox_pos++;
-         var idc = "4"+id_inbox_pos;
-         var tin = {id_pos:idc, name_nguoigui:strdecode(row.name_nguoigui),number_nguoigui:row.number_nguoigui, subject:strdecode(row.subject), id_tinnha_client:row.id_tinnha_client,trangthai:row.trangthai, stt: row.stt, thoigian:show_time(row.time) };
-         mang_inbox.push(tin);
-         if(row.trangthai==="N"){trangthai="Not read";}
-         else {trangthai="";}
-         var line = "<div class='line_inbox' id='inbox"+idc+"'><input type='checkbox' id='"+idc+"' class='line_inbox_chk' onclick='checkbox_inbox_click("+idc+");'><div class='line_inbox_main' onclick='inbox_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(row.subject)+"</div><div class='line_inbox_time'>"+show_time(row.time)+"</div><div class='line_inbox_from'>From:"+strdecode(row.name_nguoigui)+"</div><div class='line_inbox_read'>"+trangthai+"</div></div></div>";
-        $("#k_inbox").prepend(line);
-
-       });
-     socket.emit('C_nhan_inbox');
+   var trangthai="";
+   data.forEach((row)=>{
+      var thoigian="";
+      if(row.stt === "N"){socket.emit("danhantinnhan","web",row.number_nguoigui,row.id_tinnha_client);}
+      id_inbox_pos++;
+      var idc = "4"+id_inbox_pos;
+      var tin = {ids: row.ids,id_pos:idc, name_nguoigui:strdecode(row.name_nguoigui),number_nguoigui:row.number_nguoigui, subject:strdecode(row.subject), id_tinnha_client:row.id_tinnha_client,trangthai:row.trangthai, stt: row.stt, thoigian:show_time(row.time) };
+      mang_inbox.push(tin);
+      if(row.trangthai==="N"){trangthai="Not read";}
+      else {trangthai="";}
+      var line = "<div class='line_inbox' id='inbox"+idc+"'><input type='checkbox' id='"+idc+"' class='line_inbox_chk' onclick='checkbox_inbox_click("+idc+");'><div class='line_inbox_main' onclick='inbox_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(row.subject)+"</div><div class='line_inbox_time'>"+show_time(row.time)+"</div><div class='line_inbox_from'>From:"+strdecode(row.name_nguoigui)+"</div><div class='line_inbox_read'>"+trangthai+"</div></div></div>";
+      $("#k_inbox").prepend(line);
+   });
 });
 socket.on('S_send_send', (data)=>{
      //S gửi toàn bộ bản tin send về client
-     trangthai_yeucau_data = "new";
+
        data.forEach((row)=>{
          var thoigian="";
          var ab = "";
          var space = "";
          id_inbox_pos++;
          var idc = "3"+id_inbox_pos;
-         var tin = {id_pos:idc, nhom_nguoinhan:row.nguoinhan, subject:strdecode(row.subject), id_tinnha_client:row.idc, thoigian:show_time(row.time) };
+         var tin = {ids: row.ids,id_pos:idc, nhom_nguoinhan:row.nguoinhan, subject:strdecode(row.subject), id_tinnha_client:row.idc, thoigian:show_time(row.time) };
          mang_send.push(tin);
          row.nguoinhan.forEach((row1,key)=>{
               if(key===(row.nguoinhan.length-1)){space="";}else {space=" ,";}
@@ -148,12 +145,12 @@ socket.on('S_send_send', (data)=>{
 });
 socket.on('S_send_save', (data)=>{
      //S gửi toàn bộ bản tin inbox về client
-     trangthai_yeucau_data = "new";
+
        data.forEach((row,key)=>{
          var thoigian="";
          id_inbox_pos++;
          var idc = "2"+id_inbox_pos;
-         var tin = {id_pos:idc, subject:strdecode(row.subject), id_tinnha_client:row.idc, time:show_time(row.time) };
+         var tin = {ids: row.ids,id_pos:idc, subject:strdecode(row.subject), id_tinnha_client:row.idc, time:show_time(row.time) };
          mang_save.push(tin);
         var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_save_chk' onclick='checkbox_save_click("+idc+");'><div class='line_save_main' onclick='save_click("+idc+")'><div class='line_save_sub'>"+strdecode(row.subject)+"</div><div class='line_inbox_time'>"+show_time(row.time)+"</div></div></div>";
           $("#k_save").before(line);
@@ -162,11 +159,10 @@ socket.on('S_send_save', (data)=>{
      socket.emit('C_nhan_save');
 });
 socket.on('S_send_contact',(data)=>{
-  trangthai_yeucau_data = "new";
   data.forEach((tin)=>{
     id_contact ++;
     var idc = "1"+id_contact;
-    mang_contact.push({id: idc, name: tin.name, number:tin.number});
+    mang_contact.push({ids: row.ids,id: idc, name: tin.name, number:tin.number});
     var line = "<div class='list_contact_main_line'><div style='position:absolute;' id='list_contact_name'>"+strdecode(tin.name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+tin.number+"</div><button class='list_contact_line_btn' id='btn"+idc+"' onclick='add_contact_click("+idc+")'>Add</button></div>";
       $("#id_list_contact").append(line);
   });
@@ -174,7 +170,7 @@ socket.on('S_send_contact',(data)=>{
 socket.on('S_send_room',(data)=>{
   id_inbox_pos++;
   var idc = "5"+id_inbox_pos;
-  var tin = {id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
+  var tin = {ids: row.ids,id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
   mang_room.push(tin);
   var line = "<div class='line_inbox' id='room"+idc+"'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='online_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
   $("#k_online").prepend(line);
@@ -185,7 +181,7 @@ socket.on('S_send_room_full',(datas)=>{
   datas.forEach((data,key)=>{
     id_inbox_pos++;
     var idc = "5"+id_inbox_pos;
-    var tin = {id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
+    var tin = {ids: row.ids,id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
     mang_room.push(tin);
     var line = "<div class='line_inbox' id='room"+idc+"'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='room_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
     $("#k_online").prepend(line);
