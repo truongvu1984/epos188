@@ -175,6 +175,7 @@ socket.on('S_send_contact',(data)=>{
 });
 socket.on('S_send_room',(data)=>{
   id_inbox_pos++;
+  cru_online = data.ids;
   var idc = "5"+id_inbox_pos;
   var tin = {ids: data.ids,id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
   mang_room.push(tin);
@@ -295,7 +296,6 @@ socket.on('S_get_save_pos', (abc,data)=>{
   socket.emit("C_get_save_mes", "web",data.idc);
 });
 socket.on('S_get_tinnhan',(C_mei, data)=>{
-  console.log(C_mei);
   if(C_mei===mafull){
     document.getElementById("id_input_subject").html="";
     mang_contact_ok=[];
@@ -453,10 +453,8 @@ function guitinnhan(){
         var ma1 = Math.floor(Math.random()*(9000)+1000);
         var ma2 =Math.floor(Math.random()*(9000)+1000);
         var mafull = ""+ma1+ma2;
-        var ten = "<%= name %>";
-        var sodienthoai = "<%= sodienthoai %>";
-        var tinnhanfull = {nguoigui_name: ten, nguoigui_number:sodienthoai ,subject: sub  ,nguoinhan:mang_contact_ok, pos:mang_infowindow_main, id:mafull};
-        socket.emit('C_gui_tinnhan','web',tinnhanfull);
+        var tinnhanfull = {subject:sub,nguoinhan:mang_contact_ok, pos:mang_infowindow_main, id:mafull,imei:mafull};
+        socket.emit('C_gui_tinnhan',tinnhanfull);
       }
     }
   }
