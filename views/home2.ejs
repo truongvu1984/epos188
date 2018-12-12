@@ -293,6 +293,7 @@ socket.on('S_get_save_pos', (abc,data)=>{
   socket.emit("C_get_save_mes", "web",data.idc);
 });
 socket.on('S_get_tinnhan',(C_mei, data)=>{
+  console.log(C_mei);
   if(C_mei===mafull){
     document.getElementById("id_input_subject").html="";
     mang_contact_ok=[];
