@@ -950,8 +950,8 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, s
 	     // báo cho người gửi biết là thằng socket.number đã nhận tin nhắn
        con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'S' LIMIT 1", function(err11, res11)
         {
-          if ( err11 || (res11.length ==0) ){console.log(err11);}
-          else
+          if (err11){console.log(err11);}
+          else if(res11.length > 0)
           {
             con.query("UPDATE `"+nguoigui+"mes_sender` SET `app` = 'Y' WHERE `ids` LIKE '"+res11[0].id+"' AND `number` LIKE '"+socket.number+"'",function(err3,res3)
                 {
@@ -963,9 +963,7 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, s
             }
 
         });
-
-    //trạng thái G cho biết, có một ai đó trong danh sách nhận đã nhận tin nhắn, nhưng người gửi chưa biết
-    }
+      }
   });
   socket.on('C_read_mes',(idc)=>{
     if(socket.number){
@@ -1030,39 +1028,6 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, s
       });
 
 
-    }
-  });
-  // khi người gửi biết rằng khách đã nhận được tin, chuyển màu sắc người nhận trong mục send sang đỏ và báo lại
-  // server, kết thúc phần gửi tin cho khách hàng đó
-  socket.on('tinnhan_final', function ( id, nguoinhan){
-      if (socket.number){
-		     con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+id+"' AND `send_receive` LIKE 'S' LIMIT 1", function(err, a1s){
-            if ( err || ( a1s.length==0)) {console.log(err);}
-            else {
-              con.query("UPDATE `"+socket.number+"mes_sender` SET `"+abc+"` = 'OK' WHERE `ids` LIKE '"+a1s[0].id+"' AND `number` LIKE '"+nguoinhan+"'",function(err2){
-                if(err2){console.log(err2);}
-                else {
-                  // kiểm tra xem có thằng nào chưa gửi thông báo không
-                  con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1s[0].id+"' AND `send_receive` LIKE 'S' AND `"+abc+"` LIKE 'G' LIMIT 1", function(err3, a3s){
-                    if ( err3 ) {console.log(err3);}
-                    else {
-                      if(a3s.length == 0){
-                        con.query("UPDATE `"+socket.number+"mes_main` SET `"+abc+"` = 'OK' WHERE `idc` LIKE '"+id+"' AND `send_receive` LIKE 'S'",function(err4){
-                        if(err4){console.log(err4);}
-                  });
-                }
-              }
-                });
-
-              }
-
-            });
-
-      		//	kết thúc quá trình gửi tin nhắn
-
-        }
-
-      });
     }
   });
   socket.on('search_contact', function (string){

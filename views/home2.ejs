@@ -333,7 +333,6 @@ socket.on('C_danhantinnhan',(data)=>{
       });
       var line = "<div class='line_inbox' id='send"+tin.id_pos+"'><input type='checkbox' id='"+tin.id_pos+"' class='line_send_chk' onclick='checkbox_send_click("+tin.id_pos+");'><div class='line_send_main' onclick='send_click("+tin.id_pos+")'><div class='line_send_sub'>"+strdecode(tin.subject)+"</div><div class='line_send_time'>"+tin.thoigian+"</div><div class='line_send_from'>To:"+ab+"</div><div class='line_send_read'></div></div></div>";
       $("#send"+tin.id_pos).html(line);
-      socket.emit("tinnhan_final", "web",data.idc, data.nguoinhan);
       return false;
     }
   });
@@ -452,7 +451,7 @@ function guitinnhan(){
       else {
         var ma1 = Math.floor(Math.random()*(9000)+1000);
         var ma2 =Math.floor(Math.random()*(9000)+1000);
-        var mafull = ""+ma1+ma2;
+        mafull = ""+ma1+ma2;
         var tinnhanfull = {subject:sub,nguoinhan:mang_contact_ok, pos:mang_infowindow_main, id:mafull,imei:mafull};
         socket.emit('C_gui_tinnhan',tinnhanfull);
       }
