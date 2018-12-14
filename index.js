@@ -410,7 +410,7 @@ io.on('connection',  (socket)=>
 
   });
   socket.on('login1',(user1, pass1)=>{
-    console.log('Dang login1 voi tai khoan:'+user1);
+    console.log('Dang login voi tai khoan:'+user1);
     console.log('Mat khau la:'+pass1);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
 	     if (err || rows.length ==0){
@@ -418,8 +418,10 @@ io.on('connection',  (socket)=>
           console.log("Login 1 khong co tai khoan "+user1);
         }
 			else{
-          socket.emit('login1_dung', {name:strencode(rows[0].user)});
-          console.log('login 1 đung:');
+        if (passwordHash.verify(pass1, rows[0].pass)){
+            socket.emit('login1_dung', {name:strencode(rows[0].user)});
+            console.log('login 1 đung:');
+      
         }
         else {
           socket.emit('login1_sai', {name:strencode(rows[0].user)});
