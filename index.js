@@ -418,11 +418,8 @@ io.on('connection',  (socket)=>
           console.log("Login 1 khong co tai khoan "+user1);
         }
 			else{
-        if (passwordHash.verify(pass1, rows[0].pass)){
-            socket.emit('login1_dung', {name:strencode(rows[0].user)});
-            console.log('login 1 đung:');
-          });
-
+          socket.emit('login1_dung', {name:strencode(rows[0].user)});
+          console.log('login 1 đung:');
         }
         else {
           socket.emit('login1_sai', {name:strencode(rows[0].user)});
