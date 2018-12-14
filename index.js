@@ -410,7 +410,7 @@ io.on('connection',  (socket)=>
 
   });
   socket.on('login1',(user1, pass1)=>{
-    console.log('Dang login2 voi tai khoan:'+user1);
+    console.log('Dang login1 voi tai khoan:'+user1);
     console.log('Mat khau la:'+pass1);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
 	     if (err || rows.length ==0){
@@ -419,8 +419,6 @@ io.on('connection',  (socket)=>
         }
 			else{
         if (passwordHash.verify(pass1, rows[0].pass)){
-            con.query("UPDATE `account` SET `inbox` = 'A',`send` = 'A',`save` = 'A',`room` = 'A',`contact` = 'A', `group`='A' WHERE `number` LIKE '"+user1+"'",function(){
-            console.log('da update account xong');
             socket.emit('login1_dung', {name:strencode(rows[0].user)});
             console.log('login 1 đung:');
           });
@@ -914,35 +912,24 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, s
       });
     }
   });
-  socket.on('C_save_pos', (mess)=>{
+  socket.on('C_save_pos',(mess)=>{
     if(socket.number){
       let thoigian = new Date();
-      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, web,app,time) VALUES ?";
-      var val = [[mess.idc, mess.subject,'H','N','N',thoigian]];
+      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
+      var val = [[mess.idc, mess.subject,'H',thoigian]];
       con.query(sql, [val], function (err, res)
         {
           if(err){console.log(err);}
           else {
-            io.sockets.in(socket.number).emit('S_get_save_pos',abc,{time:get_time(thoigian),subject:strencode(mess.subject),idc:mess.idc});
+            io.sockets.in(socket.number).emit('S_get_save_pos',mess.imei,{time:get_time(thoigian),subject:strencode(mess.subject),idc:mess.idc});
             var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
-            var list_pos = [];
-            var pos;
-            mess.vitri.forEach((row,key)=>{
+            mess.vitri.forEach((row)=>{
                 var val3 = [[res.insertId, row.id, row.name, row.lat, row.lon]];
                 con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
-                list_pos.push({name:strencode(row.name), lat:row.lat,lon:row.lon, id:row.id});
-                if(key===(mess.vitri.length-1)){
-
-                }
               });
 
           }
       });
-    }
-  });
-  socket.on('C_get_save_mes',(abc,idc)=>{
-    if(socket.number){
-      con.query("UPDATE `"+socket.number+"mes_main` SET `"+abc+"` = 'Y' WHERE `send_receive` LIKE 'H' AND `idc` LIKE '"+idc+"'");
     }
   });
   socket.on('danhantinnhan', function (nguoigui, idc){

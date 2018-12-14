@@ -342,6 +342,9 @@ socket.on('C_danhantinnhan',(data)=>{
   // chuyển đổi màu sắc sang đỏ đối với người
 
 });
+function room_click(idc){
+
+}
 function hide_show_pos(id){
   if(document.getElementById("chk"+id).checked == true){cancle_luudiem(id);}
   else {
@@ -463,19 +466,14 @@ function guitinnhan(){
 }
 function lưu_tinnhan(){
     var sub = document.getElementById("id_input_subject").value.trim();
-    if ( sub === ""){
-    alert('There is no subjet.');
-  }
-    else {
-      if (mang_infowindow_main.length == 0){
-        alert('There is no position in map to save.');
-      }
+    if ( sub === ""){alert('There is no subjet.');}
+    else {if (mang_infowindow_main.length == 0){alert('There is no position in map to save.');}
       else {
         var ma1 = Math.floor(Math.random()*(9000)+1000);
         var ma2 =Math.floor(Math.random()*(9000)+1000);
-        var mafull = "22"+ma1+ma2;
-        var tinnhanfull = {subject: sub  ,vitri:mang_infowindow_main, idc:mafull};
-        socket.emit('C_save_pos','web',tinnhanfull);
+        mafull = "22"+ma1+ma2;
+        var tinnhanfull = {subject:sub,vitri:mang_infowindow_main, idc:mafull, imei:mafull};
+        socket.emit('C_save_pos',tinnhanfull);
       }
 
   }
