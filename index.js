@@ -108,7 +108,7 @@ io.on('connection',  (socket)=>
            }
          });
    });
-  socket.on('disconnect', function(){ console.log('user da disconnect:'+socket.user_name)});
+  socket.on('disconnect', function(){ console.log('user da disconnect:'+socket.number)});
   socket.on('regis1', function(idphone,num){
     console.log('so dien thoai:'+num);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err, rows){
@@ -421,7 +421,7 @@ io.on('connection',  (socket)=>
         if (passwordHash.verify(pass1, rows[0].pass)){
             socket.emit('login1_dung', {name:strencode(rows[0].user)});
             console.log('login 1 đung:');
-      
+
         }
         else {
           socket.emit('login1_sai', {name:strencode(rows[0].user)});
@@ -1458,13 +1458,6 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, s
     });
       }
     });
-  socket.on('C_get_room', function(abc,room_fullname){
-      if (socket.number){
-        con.query("UPDATE `"+socket.number+"mes_main` SET `"+abc+"` = 'OK' WHERE `idc` LIKE '"+room_fullname+"' AND `send_receive` LIKE 'O'",function(err){
-          if ( err){console.log(err);}
-        });
-      }
-  });
   socket.on('C_get_manager',()=>{
       console.log('ha ha ha');
     if(socket.admin ==='admin'){
