@@ -108,7 +108,7 @@ io.on('connection',  (socket)=>
            }
          });
    });
-  socket.on('disconnect', function(){ console.log('user da disconnect:'+socket.number)});
+  socket.on('disconnect', function(){ console.log('user da disconnect:'+socket.id)});
   socket.on('regis1', function(idphone,num){
     console.log('so dien thoai:'+num);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err, rows){
