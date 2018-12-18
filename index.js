@@ -42,16 +42,10 @@ con.connect(function(err) {
               }
                else{
                  if (passwordHash.verify(req.body.pass, rows[0].pass)){
-                   con.query("UPDATE `account` SET `inbox` = 'A',`send` = 'A',`save` = 'A',`room` = 'A',`contact` = 'A', `group`='A' WHERE `number` LIKE '"+full_number+"'",function(){
-                     console.log('da update account xong');
-                     res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });
-                     console.log('Da render xong ha ha ha:'+ full_number);
-                    });
+                   res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });
+
                  }
-                 else {
-                   res.send("Dang nhap khong dung");
-                   console.log("Dang nhap first khong dung"+req.body.number);
-                 }
+                 else {res.send("Dang nhap khong dung");}
                }
              });
 
@@ -809,7 +803,6 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_gui_tinnhan', function(mess){
     if (socket.number){
-      console.log('C da gui tin nhan'+mess.imei);
       let thoigian = new Date();
       let nguoinhans = [];
       mess.nguoinhan.forEach((nguoi, key7)=>{
@@ -1212,7 +1205,6 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, s
   });
   socket.on('C_leave_off', function () {
       if (socket.number){
-
       socket.leave(socket.number);
       console.log('Da leave user khoi user'+socket.number);
       socket.number = undefined;
