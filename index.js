@@ -23,6 +23,12 @@ var passwordHash = require('password-hash');
 let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+// cb.phoneInformation('+84982025401', (error) => {
+//         if(error)console.log('có lỗi:');
+//         else {
+//           console.log('Số đùng');
+//         }
+// });
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err); }
     else {
@@ -103,8 +109,33 @@ io.on('connection',  (socket)=>
          });
    });
   socket.on('disconnect', function(){ console.log('user da disconnect:'+socket.id)});
+  socket.on('C_check_numberphone',(idphone,num)=>{
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err, rows){
+        // nếu tài khoản đã có người đăng ký rồi thì:
+      if(err){console.log(err);}
+      else {
+        if (rows.length >0 ){socket.emit('regis_already_account');}
+        else {
+          con.query("SELECT * FROM `danhsachkhoa` WHERE `number` LIKE '"+ num +"' OR `phoneid` LIKE '"+idphone+"' LIMIT 1", function(err1, rows1){
+            if(err1){console.log(err1);}
+            else {
+              if(rows1.length >0){socket.emit('regis1_quasolan_number');}
+              else {
+                // kiểm tra số điện thoại có đúng không
+                cb.phoneInformation(num, (error) => {
+                  if(error)socket.emit('sodienthoaikhongdung');
+                  else {
+                    socket.emit('number_phone_ok',num);
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
+    });
+  });
   socket.on('regis1', function(idphone,num){
-    console.log('so dien thoai:'+num);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err, rows){
         // nếu tài khoản đã có người đăng ký rồi thì:
       if(err){console.log(err);}
@@ -1278,15 +1309,14 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, s
       // bắt đầu xử lý cái room
       var room_id = passwordHash.generate(info.room_name);
       // Server tạo ra cái room đầy đủ để lưu hành trên hệ thống
-      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc, subject, send_receive, web,app,time ) VALUES ?";
-      var val = [[ room_id, info.room_name,'O', 'N','N',thoigian]];
+      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc, subject, send_receive, time ) VALUES ?";
+      var val = [[ room_id, info.room_name,'O', thoigian]];
       con.query(sql, [val], function (err, res)
       {
         if ( err){console.log(err);}
         else {
           // lưu thành viên vào bảng
           var sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, name, number, send_receive) VALUES ?";
-
           var abc = [[ res.insertId, socket.username,socket.number,'A']];
           con.query(sql2, [abc], function (err9, res9){if ( err9){console.log(err9);}
             else {
