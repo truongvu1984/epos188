@@ -110,6 +110,7 @@ io.on('connection',  (socket)=>
    });
   socket.on('disconnect', function(){ console.log('user da disconnect:'+socket.id)});
   socket.on('C_check_numberphone',(idphone,num)=>{
+    console.log('C muon check so:'+num);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err, rows){
         // nếu tài khoản đã có người đăng ký rồi thì:
       if(err){console.log(err);}
