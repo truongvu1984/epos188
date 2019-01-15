@@ -110,6 +110,7 @@ io.on('connection',  (socket)=>
    });
   socket.on('disconnect', function(){ console.log('user da disconnect:'+socket.id)});
   socket.on('C_check_numberphone',(idphone,num)=>{
+    console.log('C_check_numberphone:'+num);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err, rows){
         // nếu tài khoản đã có người đăng ký rồi thì:
       if(err){console.log(err);}
@@ -129,7 +130,7 @@ io.on('connection',  (socket)=>
                     socket.on('regis', function (user_info){
                       console.log('regis:');
                       console.log(user_info);
-                      socket.emit('dangky_thanhcong');
+                      // socket.emit('dangky_thanhcong');
                           // Tìn tronbg db danh sách các tài khoản có number như number đăng ký không
                            //  con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user_info.number +"' LIMIT 1", function(err, rows){
                            //    // nếu tài khoản đã có người đăng ký rồi thì:
