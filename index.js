@@ -108,7 +108,7 @@ io.on('connection',  (socket)=>
   socket.on('disconnect', function(){ console.log('user da disconnect:'+socket.id)});
   socket.on('C_check_numberphone',(idphone,num)=>{
     var date = Math.floor(Date.now() / 1000);
-    con.query("SELECT * FROM `dangky` WHERE `phoneid` LIKE '"+idphone+"'", function(err1, rows1){
+    con.query("SELECT * FROM `dangky` WHERE `phone_id` LIKE '"+idphone+"'", function(err1, rows1){
       if(err1){console.log(err1);}
       else {
         if(rows1.length >2){socket.emit('regis1_quasolan_number');}
