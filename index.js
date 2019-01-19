@@ -113,26 +113,34 @@ io.on('connection',  (socket)=>
       else {
         if(rows1.length >2){socket.emit('regis1_quasolan_number');}
         else {
-          con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err2, rows2){
-            if(err2){console.log(err2);}
+          var sql = "INSERT INTO `dangky`(phone_id,time1, time2) VALUES ?";
+          var values = [[idphone,date,date]];
+          con.query(sql, [values], function (err4, result) {
+            if (err4){console.log(err4);}
             else {
-              if (rows2.length >0 ){socket.emit('regis_already_account');}
-              else {
-                cb.phoneInformation(num,(error3) => {
-                  if(error3)socket.emit('sodienthoaikhongdung');
-                  else {
-                    socket.emit('number_phone_ok',num);
-                    var sql = "INSERT INTO `dangky`(phone_id,time1, time2) VALUES ?";
-                    var values = [[idphone,date,date]];
-                    con.query(sql, [values], function (err4, result) {
-                      if (err4){console.log(err4);}
-                      else {con.query("UPDATE `dangky` SET `time2` = '"+date+"' WHERE `phone_id` LIKE '"+idphone+"'",function(err5, ok){if (err5){console.log('update bị loi'+err5);}});}
-                    });
-                  }
-                });
-              }
+              con.query("UPDATE `dangky` SET `time2` = '"+date+"' WHERE `phone_id` LIKE '"+idphone+"'",function(err5, ok){
+                if (err5){console.log('update bị loi'+err5);}
+                else {
+                  con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err2, rows2){
+                    if(err2){console.log(err2);}
+                    else {
+                      if (rows2.length >0 ){socket.emit('regis_already_account');}
+                      else {
+                        cb.phoneInformation(num,(error3) => {
+                          if(error3)socket.emit('sodienthoaikhongdung');
+                          else {
+                            socket.emit('number_phone_ok',num);
+
+                          }
+                        });
+                      }
+                    }
+                  });
+                }
+              });
             }
           });
+
         }
       }
     });
