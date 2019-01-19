@@ -197,22 +197,6 @@ io.on('connection',  (socket)=>
                       con.query(sql, [values], function (err, result) {if ( err){console.log(err);}});
                       // xóa bản tin trong bảng active đi, coi như quá trình active hoàn tất
                       socket.emit('dangky_thanhcong');
-                      con.query("SELECT * FROM `manager` WHERE `code` LIKE '"+ user_info.code +"' LIMIT 1'", function(err1, row1s) {
-                          if(err1){console.log(err1);}
-                          else {
-                            if(row1s.length==0){
-                              var sql_add = "INSERT INTO `manager` (code, number ) VALUES ?";
-                              var valu = [[user_info.code, 1]];
-                              con.query(sql_add, [valu], function (err2) {if ( err2){console.log(err2);}});
-                            }
-                            else {
-                              var soluong = row1s[0].number +1;
-                              var sql_add = "INSERT INTO `manager` (code, number ) VALUES ?";
-                              var valu = [[user_info.code, soluong]];
-                              con.query(sql_add, [valu], function (err2) {if ( err2){console.log(err2);}});
-                            }
-                          }
-                      });
 
               } //end else 1
             }
