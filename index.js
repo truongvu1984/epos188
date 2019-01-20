@@ -60,7 +60,7 @@ con.connect(function(err) {
 function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
-    var date2 = Math.floor(Date.now() / 1000) - 120;
+    var date2 = Math.floor(Date.now() / 1000) - 600;
     // mở khóa cho số điện thoại hoặc phoneid bị khóa
     con.query(" DELETE FROM `dangky` WHERE `time2` < "+date2, function(err){if(err){console.log('co loi HA HA HA:'+err);}});
     kiemtra_taikhoan();
@@ -111,8 +111,6 @@ io.on('connection',  (socket)=>
     con.query("SELECT * FROM `dangky` WHERE `phone_id` LIKE '"+idphone+"'", function(err1, rows1){
       if(err1){console.log(err1);}
       else {
-        console.log("số lượng là:"+rows1.length);
-        console.log(idphone);
         if(rows1.length >2){socket.emit('regis1_quasolan_number');}
         else {
           var sql = "INSERT INTO `dangky`(phone_id,time1, time2) VALUES ?";
@@ -130,10 +128,7 @@ io.on('connection',  (socket)=>
                       else {
                         cb.phoneInformation(num,(error3) => {
                           if(error3)socket.emit('sodienthoaikhongdung');
-                          else {
-                            socket.emit('number_phone_ok',num);
-
-                          }
+                          else {socket.emit('number_phone_ok',num);}
                         });
                       }
                     }
