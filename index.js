@@ -112,6 +112,7 @@ io.on('connection',  (socket)=>
       if(err1){console.log(err1);}
       else {
         console.log("số lượng là:"+rows1.length);
+        console.log(idphone);
         if(rows1.length >2){socket.emit('regis1_quasolan_number');}
         else {
           var sql = "INSERT INTO `dangky`(phone_id,time1, time2) VALUES ?";
