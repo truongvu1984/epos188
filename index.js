@@ -159,7 +159,7 @@ io.on('connection',  (socket)=>
                       //active thành công, trả thông tin người dùng về lại cho khách hàng
                       // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
                       // 1. Bảng chính: lưu id của bản tin đó trên server, id của người dùng, tên tin nhắn, tin nhắn gửi đi hay tin nhắn nhận về, trạng thái gửi đi hay nhận về.
-                      con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read_1` CHAR(3), `time` DATETIME(6), `timezone` INT, PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                      con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //2. Bảng địa điểm: lưu id bản tin đó trên server, tên điểm, tọa độ điểm
                       con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"mes_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
@@ -344,7 +344,6 @@ io.on('connection',  (socket)=>
   });
   socket.on('login2',(data)=>{
     console.log(data);
-    //login 1 là login mà user đang ở mainactivity rồi, chi cần gửi dữ liệu mới về thôi.
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
 	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
       else{
@@ -358,13 +357,13 @@ io.on('connection',  (socket)=>
             if (err1){console.log(err1);}
             else if(a1s.length >0)
               {
-                let tinfull = [];
+                let tinfull;
                 a1s.forEach(function(a1,key){
                    con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                      if(err2){console.log(err2);}
                      else {
-                       tinfull.push({ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.app,time:get_time(a1.time)});
-                       if(key===(a1s.length-1)){socket.emit('S_send_inbox',tinfull);}
+                       tinfull= {ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,time:get_time(a1.time)};
+                       socket.emit('S_send_inbox',tinfull);
                      }
                    });
                 });
@@ -376,7 +375,7 @@ io.on('connection',  (socket)=>
                  if (err1){console.log(err1);}
                  else if(a1s.length >0)
                    {
-                     let tinfull2=[];
+                     let tinfull2;
                      a1s.forEach(function(a1,key){
                        let nhomnguoinhan =[];
                         con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"'", function(err2, a2s){
@@ -385,9 +384,8 @@ io.on('connection',  (socket)=>
                             a2s.forEach(function(a2,key2){
                               nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.app});
                               if(key2 === (a2s.length-1)){
-                                tinfull2.push({ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
-                                if(key === (a1s.length-1)){ socket.emit('S_send_send',tinfull2,"full");
-                              }
+                                tinfull2={ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan};
+                                socket.emit('S_send_send',tinfull2);
                               }
                             });
                           }
@@ -400,10 +398,10 @@ io.on('connection',  (socket)=>
             {
                 if (err1){console.log(err1);}
                 else if(a1s.length >0){
-                  let tinfull = [];
+                  let tinfull;
                   a1s.forEach(function(a1,key){
-                    tinfull.push({ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)});
-                    if(key=== (a1s.length-1)){socket.emit('S_send_save',tinfull);}
+                    tinfull={ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)};
+                    socket.emit('S_send_save',tinfull);
                   });
                 }
             });
@@ -413,13 +411,12 @@ io.on('connection',  (socket)=>
                    if (err1){console.log('Da co loi contact full:'+err1);}
                    else if(a1s.length > 0)
                      {
-                       let mangcontact = [];
+                       let mangcontact;
                        a1s.forEach(function(a1,key){
-                         mangcontact.push({ids:a1.id,name:strencode(a1.name), number:a1.number});
-                         if(key===(a1s.length-1)){socket.emit('S_send_contact',mangcontact);}
+                         mangcontact={ids:a1.id,name:strencode(a1.name), number:a1.number};
+                         socket.emit('S_send_contact',mangcontact);
                        });
-                     }
-
+                }
           });
           //lấy danh sách group
           con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' AND `id` > "+data.group+" ORDER BY `id` ASC", function(err1, a1s)
@@ -427,7 +424,7 @@ io.on('connection',  (socket)=>
             if ( err1){console.log(err1);}
             else if( a1s.length > 0)
               {
-                let tinfull = [];
+                let tinfull;
                 a1s.forEach(function(a1,key){
                     let mangcontact = [];
                     con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err2, a2s){
@@ -436,8 +433,8 @@ io.on('connection',  (socket)=>
                          a2s.forEach(function(a2,key2){
                            mangcontact.push({name:strencode(a2.name), number:a2.number});
                            if(key2===(a2s.length-1)){
-                             tinfull.push({ids:a1.id,idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact});
-                             if(key===(a1s.length-1)){socket.emit('S_send_group',tinfull);}
+                             tinfull={ids:a1.id,idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact};
+                             socket.emit('S_send_group',tinfull);
                            }
                          });
 
@@ -451,7 +448,7 @@ io.on('connection',  (socket)=>
               if (err1){console.log('Da co loi room full:'+err1);}
               else if(a1s.length>0)
                 {
-                   let tinfull = [];
+                   let tinfull;
                    a1s.forEach(function(a1,key){
                           con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
                             {
@@ -459,8 +456,8 @@ io.on('connection',  (socket)=>
                                   else
                                     {
                                       if(a5s.length>0){
-                                        tinfull.push({ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.app});
-                                        if(key===(a1s.length-1)){socket.emit('S_send_room_full',tinfull);}
+                                        tinfull={ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt};
+                                        socket.emit('S_send_room_full',tinfull);
                                       }
 
                                     }
@@ -727,13 +724,13 @@ io.on('connection',  (socket)=>
         nguoinhans.push({number:nguoi.number, name:strencode(nguoi.name), stt:'N'});
         if(key7===(mess.nguoinhan.length-1)){
           // lưu vào bảng chính của người gửi
-          var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
-          var values2 = [[mess.id, mess.subject,'S',thoigian]];
+          var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time,stt) VALUES ?";
+          var values2 = [[mess.id, mess.subject,'S',thoigian,'F']];
           con.query(sql2, [values2], function (err, res)
             {
               if ( err){console.log(err);}
               else {
-io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, subject:strencode(mess.subject),nguoinhan:nguoinhans,idc:mess.id,time:get_time(thoigian)});
+                io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, subject:strencode(mess.subject),nguoinhan:nguoinhans,idc:mess.id,time:get_time(thoigian),stt:'F'});
                       // lưu vào bảng vị trí của người gửi
                       var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
                       mess.pos.forEach(function(row)
@@ -929,8 +926,7 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, s
   });
   socket.on('search_contact', function (string){
     if (socket.number){
-    console.log("Chuoi nhan duoc la:"+string);
-    con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
+      con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
       if (!( err))
       {
         var s=true;;
@@ -954,23 +950,20 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, s
       if ( err){console.log(err);}
       else
       {
-        let s=true;;
+        let s=true;
+        let ketqua=[];
         a1.forEach(function (row1,key)
           {
-            // if (string.charAt(0)=='0'){
-            //   string = string.substr(1);
-            //   console.log(string);
-            // }
             if (row1.number.indexOf(string) !== -1 || row1.user.indexOf(string) !== -1)
             {
-              socket.emit('S_kq_check_contact',{user:strencode(row1.user), number: row1.number});
-            //  socket.emit('S_kq_check_contact',{user:row1.user, number: row1.number});
-
+              ketqua.push({user:row1.user, number: row1.number});
               s=false;
-                if(key === (a1.length-1)){
-                    if (s){socket.emit('S_kq_check_contact_zero');}
-
+              if(key === (a1.length-1)){
+                if (s){socket.emit('S_kq_check_contact_zero');}
+                else {
+                  socket.emit('S_kq_check_contact',ketqua);
                 }
+              }
             }
           });
 
@@ -1196,8 +1189,8 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, s
       // bắt đầu xử lý cái room
       var room_id = passwordHash.generate(info.room_name);
       // Server tạo ra cái room đầy đủ để lưu hành trên hệ thống
-      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc, subject, send_receive, time ) VALUES ?";
-      var val = [[ room_id, info.room_name,'O', thoigian]];
+      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc, subject, send_receive, time,stt ) VALUES ?";
+      var val = [[ room_id, info.room_name,'O', thoigian,'F']];
       con.query(sql, [val], function (err, res)
       {
         if ( err){console.log(err);}
@@ -1223,8 +1216,8 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, s
             {
               if(err3 || (kq.length ==0)){console.log(err3);}
               else {
-                      var sql5 = "INSERT INTO `"+row.number+"mes_main` (idc, subject, send_receive, web,app, time ) VALUES ?";
-                      var val5 = [[ room_id, info.room_name,'O', 'N','N',thoigian]];
+                      var sql5 = "INSERT INTO `"+row.number+"mes_main` (idc, subject, send_receive, time,stt ) VALUES ?";
+                      var val5 = [[ room_id, info.room_name,'O', thoigian,'F']];
                       con.query(sql5, [val5], function (err5, res5)
                             {
                               if ( err5){console.log(err5);}
@@ -1242,7 +1235,7 @@ io.sockets.in(socket.number).emit('S_get_tinnhan',mess.imei,{ids:res.insertId, s
                                     val7 = [[ res5.insertId,mem.number, mem.name,'B']];
                                     con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
                                   });
-                                  io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian)});
+                                  io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
 
                                 }
                               });
