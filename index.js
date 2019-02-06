@@ -385,6 +385,7 @@ io.on('connection',  (socket)=>
                               if(key2 === (a2s.length-1)){
                                 tinfull2={ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan};
                                 socket.emit('S_send_send',tinfull2);
+
                               }
                             });
                           }
