@@ -73,8 +73,7 @@ io.on('connection',  (socket)=>
   console.log('Da co ket noi moi '+socket.id);
   socket.emit('check_pass');
   socket.on('w_get_inbox', function(data, number){
-     console.log("Da nhan number");
-    con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+data+"' LIMIT 1", function(err, a1s)
+     con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+data+"' LIMIT 1", function(err, a1s)
          {
          if ( err || ( a1s.length == 0) ){console.log('5'+err);}
          else
@@ -97,7 +96,7 @@ io.on('connection',  (socket)=>
                                diems.push(diem);
                              });
                             socket.emit('S_send_inbox', {subject:a1s[0].subject, point:diems, nguoigui:a2s[0].name});
-                            console.log('nguoi gui là:'+a2s[0].name);
+
                            }
                          });
                    }
@@ -363,7 +362,7 @@ io.on('connection',  (socket)=>
                      if(err2){console.log(err2);}
                      else {
                        tinfull= {ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,time:get_time(a1.time)};
-                       socket.emit('S_send_inbox',tinfull);
+                       socket.emit('S_guitinnhan',tinfull);
                      }
                    });
                 });
@@ -771,7 +770,7 @@ io.on('connection',  (socket)=>
                                             con.query(sql7, [val7], function (err7, result) {if ( err7){console.log(err7);}});
                                             });
                                             io.sockets.in(row5.number).emit('S_guitinnhan',{ids:res5.insertId,name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
-                                                subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian)});
+                                                subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian),stt:'F'});
 
 
                                         } //het else
