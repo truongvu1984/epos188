@@ -23,14 +23,8 @@ var passwordHash = require('password-hash');
 let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
-// cb.phoneInformation('+84982025401', (error) => {
-//         if(error)console.log('có lỗi:');
-//         else {
-//           console.log('Số đùng');
-//         }
-// });
 con.connect(function(err) {
-    if (err) { console.log(" da co loi:" + err); }
+    if (err) { console.log(" da co loi:" + err);}
     else {
       console.log("Da co ket noi ok ha ha ha");
       app.set('view engine', 'ejs');
@@ -929,7 +923,7 @@ io.on('connection',  (socket)=>
       con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
       if (!( err))
       {
-        var s=true;;
+        var s=true;
         a1.forEach(function (row1)
           {
             if (row1.number.indexOf(string) !== -1 )
@@ -945,7 +939,6 @@ io.on('connection',  (socket)=>
   });
   socket.on('C_check_contact', function (string){
       if (socket.number){
-
     con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
       if ( err){console.log(err);}
       else
@@ -1087,7 +1080,7 @@ io.on('connection',  (socket)=>
                }
           });
       }
-      });
+  });
   socket.on('W_join_room', function (room, number)  {
       if (socket.number){
     socket.join(room);
@@ -1130,39 +1123,40 @@ io.on('connection',  (socket)=>
 
     }
   });
-  socket.on('check_contact_full', function (arr_contact){
-      if (socket.number){
-    //người dùng mới đăng nhập và sẽ gửi lên một đống cái contact, lúc này
-    //server không gửi trả về từng contact mà gửi chung cả cụm.
-    var mang_contact = [];
-    var contact = {name : "", number : "", code: ""};
-        console.log("Contact nhan duoc la:"+arr_contact.contact.length);
-            var sql = "INSERT INTO `"+socket.number+"contact` (number, name, fr, code) VALUES ?";
-            //từng contact một, cái nào đã có trong account rồi thì lưu dưới fr = Y và gửi thông báo cáo account đó biết
-            // chưa thì lưu = N
-            arr_contact.contact.forEach(function(row){
-              con.query("SELECT `number` FROM `account` WHERE `number` LIKE '"+ row.number +"'", function(err, row1s){
-                if ( err){console.log('select check_contact bị loi '+err);}
-                else {
-                  if (row1s.length >0){
-                    // nếu sđt đó có trong accout thì lưu là Y và đưa sđt đó vào JSON contact để gửi trả về báo cho người dùng
-                    // biết là số điện thoại đó đã tham gia.
-                    var val = [[ row.number, row.name,"Y",row.code]];
-                    con.query(sql, [val], function (err2, result) {if ( err2)console.log(err2);});
-                    contact = {name : strencode(row.name), number : row.number, code: row.code};
-                    mang_contact.push(contact);
-                  }
-                  else {
-                    var val = [[row.number, row.name,"N",row.code]];
-                    con.query(sql, [val], function (err2, result) {if ( err2)console.log(err2);});
-                  }
-                }
-              });
-              // socket.emit('first_contact_joined', mang_contact);
-            });//arr_contact.contact.forEach
+  //app send contact after regis
+  socket.on('C_send_contact_full', function (number, pass,arr_contact){
+      //người dùng mới đăng ký thành công và sẽ gửi lên một đống cái contact, lúc này
+    // server lưu các tin đó lên csdl, nếu contact đó đã có tài khoản thì lưu là Y
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+number+"' LIMIT 1", function(err, rows){
+      if (err){console.log("Login 1 khong co tai khoan "+user1);}
+      else if(rows.length>0){
+        if (passwordHash.verify(pass, rows[0].pass)){
+              console.log("Contact nhan duoc la:"+arr_contact.length);
+                      var sql = "INSERT INTO `"+number+"contact` (number, name, fr, code) VALUES ?";
+                      //từng contact một, cái nào đã có trong account rồi thì lưu dưới fr = Y và gửi thông báo cáo account đó biết
+                      // chưa thì lưu = N
+                      arr_contact.contact.forEach(function(row){
+                        con.query("SELECT `number` FROM `account` WHERE `number` LIKE '"+ row.number +"' LIMIT 1", function(err, row1s){
+                          if ( err){console.log('select check_contact bị loi '+err);}
+                          else {
+                            if (row1s.length >0){
+                              // nếu sđt đó có trong accout thì lưu là Y
+                              var val = [[ row.number, row.name,"Y",row.code]];
+                              con.query(sql, [val], function (err2, result) {if ( err2)console.log(err2);});
+
+                            }
+                            else {
+                              var val = [[row.number, row.name,"N",row.code]];
+                              con.query(sql, [val], function (err2, result) {if ( err2)console.log(err2);});
+                            }
+                          }
+                        });
+                      });//arr_contact.contact.forEach
 
 
+        }
       }
+    });
   });// check_contact
   socket.on('C_got_friend', function (number){
       if (socket.number){
