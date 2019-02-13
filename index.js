@@ -1125,6 +1125,7 @@ io.on('connection',  (socket)=>
   });
   //app send contact after regis
   socket.on('C_send_contact_full', function (number, pass,arr_contact){
+    socket.emit('ok_hahaha');
       //người dùng mới đăng ký thành công và sẽ gửi lên một đống cái contact, lúc này
     // server lưu các tin đó lên csdl, nếu contact đó đã có tài khoản thì lưu là Y
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+number+"' LIMIT 1", function(err, rows){
@@ -1135,7 +1136,7 @@ io.on('connection',  (socket)=>
                       var sql = "INSERT INTO `"+number+"contact` (number, name, fr, code) VALUES ?";
                       //từng contact một, cái nào đã có trong account rồi thì lưu dưới fr = Y và gửi thông báo cáo account đó biết
                       // chưa thì lưu = N
-                      arr_contact.contact.forEach(function(row){
+                      arr_contact.forEach(function(row){
                         con.query("SELECT `number` FROM `account` WHERE `number` LIKE '"+ row.number +"' LIMIT 1", function(err, row1s){
                           if ( err){console.log('select check_contact bị loi '+err);}
                           else {
