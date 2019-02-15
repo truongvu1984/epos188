@@ -943,6 +943,7 @@ io.on('connection',(socket)=>
       {
         let s=true;
         let ketqua=[];
+        console.log(a1);
         a1.forEach(function (row1,key)
           {
             if (row1.number.indexOf(string) !== -1 || row1.user.indexOf(string) !== -1)
