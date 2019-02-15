@@ -952,6 +952,7 @@ io.on('connection',(socket)=>
               console.log(row1.number);
               s=false;
               if(key === (a1.length-1)){
+                console.log('ket qua 2:'+ketqua.length);
                 if (s){socket.emit('S_kq_check_contact_zero');}
                 else {
                   socket.emit('S_kq_check_contact',ketqua);
