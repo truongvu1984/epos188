@@ -162,15 +162,14 @@ socket.on('S_send_save', (data)=>{
        });
      socket.emit('C_nhan_save');
 });
-socket.on('S_send_contact',(data)=>{
-  cru_contact = data[data.length-1].ids;
-  data.forEach((tin)=>{
+socket.on('S_send_contact',(tin)=>{
+  cru_contact = tin.ids;
     id_contact ++;
     var idc = "1"+id_contact;
     mang_contact.push({ids: tin.ids,id: idc, name: tin.name, number:tin.number});
     var line = "<div class='list_contact_main_line'><div style='position:absolute;' id='list_contact_name'>"+strdecode(tin.name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+tin.number+"</div><button class='list_contact_line_btn' id='btn"+idc+"' onclick='add_contact_click("+idc+")'>Add</button></div>";
       $("#id_list_contact").append(line);
-  });
+
 });
 socket.on('S_send_room',(data)=>{
   id_inbox_pos++;
@@ -278,11 +277,13 @@ socket.on('S_send_point',(data)=>{
 socket.on('S_guitinnhan', (data)=>{
   id_inbox_pos++;
   var idc = "4"+id_inbox_pos;
-  var tin = {id_pos:idc, name_nguoigui:strdecode(data.name_nguoigui),number_nguoigui:data.number_nguoigui, subject:strdecode(data.subject), id_tinnha_client:data.id_tinnha_client,trangthai:"N", stt: data.stt, thoigian:show_time(data.time) };
+  var tin = {id_pos:idc, name_nguoigui:strdecode(data.name_nguoigui),number_nguoigui:data.number_nguoigui, subject:strdecode(data.subject), id_tinnha_client:data.id_tinnha_client,trangthai:"N", thoigian:show_time(data.time) };
   mang_inbox.push(tin);
+  var stt = data.stt;
+  if(stt!= null && stt==("N")){socket.emit("danhantinnhan",data.number_nguoigui,data.id_tinnha_client);}
   var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_inbox_chk' onclick='checkbox_inbox_click("+idc+");'><div class='line_inbox_main' onclick='inbox_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.subject)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.name_nguoigui)+"</div><div class='line_inbox_read'>"+"Not read"+"</div></div></div>";
- $("#k_inbox").prepend(line);
-  socket.emit("danhantinnhan", data.number_nguoigui, data.id_tinnha_client);
+  $("#k_inbox").prepend(line);
+
 });
 socket.on('S_get_save_pos', (abc,data)=>{
   // abc,{time:get_time(thoigian),subject:strencode(mess.subject),idc:mess.idc}

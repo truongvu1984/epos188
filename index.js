@@ -59,7 +59,6 @@ function kiemtra_taikhoan(){
   }, 5000);
 }
 kiemtra_taikhoan();
-
 io.on('connection',(socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
