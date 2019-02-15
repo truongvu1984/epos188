@@ -781,8 +781,7 @@ io.on('connection',(socket)=>
             });
         }
       });
-    }
-  }); // end socket.on('sendmess', function(test)
+    }});
   socket.on('C_check_send',(data)=>{
     if(socket.number){
       let list=[];
