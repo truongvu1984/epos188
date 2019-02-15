@@ -353,7 +353,7 @@ io.on('connection',(socket)=>
                    con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                      if(err2){console.log(err2);}
                      else {
-                       tinfull= {ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,trangthai:a1.read_1, stt: a1.stt,time:get_time(a1.time)};
+                       tinfull= {ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)};
                        socket.emit('S_guitinnhan',tinfull);
                      }
                    });
@@ -373,7 +373,7 @@ io.on('connection',(socket)=>
                           if(err2){console.log(err2);}
                           else {
                             a2s.forEach(function(a2,key2){
-                              nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.app});
+                              nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
                               if(key2 === (a2s.length-1)){
                                 tinfull2={ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan};
                                 socket.emit('S_send_send',tinfull2);
