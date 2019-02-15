@@ -32,18 +32,16 @@ con.connect(function(err) {
       app.use(express.static('public'));
       app.get('/', (req, res) => res.render('dangnhap'));
       app.post('/', urlencodedParser, function (req, res){
-             if (!req.body) return res.sendStatus(400)
-             else {
-             var full_number = "+"+req.body.code + req.body.number.replace('0','');
-             console.log(full_number);
-             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
+        if (!req.body) return res.sendStatus(400)
+        else {
+          var full_number = "+"+req.body.code + req.body.number.replace('0','');
+          con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
                 if (err || rows.length ==0){
                    res.send("Dang nhap khong dung");
               }
                else{
                  if (passwordHash.verify(req.body.pass, rows[0].pass)){
                    res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });
-
                  }
                  else {res.send("Dang nhap khong dung");}
                }
@@ -62,7 +60,7 @@ function kiemtra_taikhoan(){
 }
 kiemtra_taikhoan();
 
-io.on('connection',  (socket)=>
+io.on('connection',(socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
   socket.emit('check_pass');
@@ -841,7 +839,7 @@ io.on('connection',  (socket)=>
           if (err11){console.log(err11);}
           else if(res11.length > 0)
           {
-            con.query("UPDATE `"+nguoigui+"mes_sender` SET `app` = 'Y' WHERE `ids` LIKE '"+res11[0].id+"' AND `number` LIKE '"+socket.number+"'",function(err3,res3)
+            con.query("UPDATE `"+nguoigui+"mes_sender` SET `stt` = 'Y' WHERE `ids` LIKE '"+res11[0].id+"' AND `number` LIKE '"+socket.number+"'",function(err3,res3)
                 {
                   if(err3){console.log(err3);}
                   else {
@@ -1123,42 +1121,6 @@ io.on('connection',  (socket)=>
 
     }
   });
-  //app send contact after regis
-  // socket.on('C_send_contact_full', function (number, pass,arr_contact){
-  //   socket.emit('ok_hahaha');
-  //     //người dùng mới đăng ký thành công và sẽ gửi lên một đống cái contact, lúc này
-  //   // server lưu các tin đó lên csdl, nếu contact đó đã có tài khoản thì lưu là Y
-  //   con.query("SELECT * FROM `account` WHERE `number` LIKE '"+number+"' LIMIT 1", function(err, rows){
-  //     if (err){console.log("Login 1 khong co tai khoan "+user1);}
-  //     else if(rows.length>0){
-  //       if (passwordHash.verify(pass, rows[0].pass)){
-  //             console.log("Contact nhan duoc la:"+arr_contact.length);
-  //                     var sql = "INSERT INTO `"+number+"contact` (number, name, fr, code) VALUES ?";
-  //                     //từng contact một, cái nào đã có trong account rồi thì lưu dưới fr = Y và gửi thông báo cáo account đó biết
-  //                     // chưa thì lưu = N
-  //                     arr_contact.forEach(function(row){
-  //                       con.query("SELECT `number` FROM `account` WHERE `number` LIKE '"+ row.number +"' LIMIT 1", function(err, row1s){
-  //                         if ( err){console.log('select check_contact bị loi '+err);}
-  //                         else {
-  //                           if (row1s.length >0){
-  //                             // nếu sđt đó có trong accout thì lưu là Y
-  //                             var val = [[ row.number, row.name,"Y",row.code]];
-  //                             con.query(sql, [val], function (err2, result) {if ( err2)console.log(err2);});
-  //
-  //                           }
-  //                           else {
-  //                             var val = [[row.number, row.name,"N",row.code]];
-  //                             con.query(sql, [val], function (err2, result) {if ( err2)console.log(err2);});
-  //                           }
-  //                         }
-  //                       });
-  //                     });//arr_contact.contact.forEach
-  //
-  //
-  //       }
-  //     }
-  //   });
-  // });// check_contact
   socket.on('C_got_friend', function (number){
       if (socket.number){
     console.log('Người dùng đã lưu friend la:'+number);
@@ -1386,7 +1348,5 @@ io.on('connection',  (socket)=>
     socket.admin=null;
     console.log('Da log off');
   });
-
-
 });
 }});
