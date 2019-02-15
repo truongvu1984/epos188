@@ -936,6 +936,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_check_contact', function (string){
       if (socket.number){
+        console.log(string);
     con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
       if ( err){console.log(err);}
       else
@@ -946,12 +947,13 @@ io.on('connection',(socket)=>
           {
             if (row1.number.indexOf(string) !== -1 || row1.user.indexOf(string) !== -1)
             {
-              ketqua.push({user:row1.user, number: row1.number});
+              ketqua.push({user:strencode(row1.user), number: row1.number});
               s=false;
               if(key === (a1.length-1)){
                 if (s){socket.emit('S_kq_check_contact_zero');}
                 else {
                   socket.emit('S_kq_check_contact',ketqua);
+                  console.log('ket qua:'+ketqua.length);
                 }
               }
             }
