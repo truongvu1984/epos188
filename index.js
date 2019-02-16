@@ -117,9 +117,10 @@ io.on('connection',(socket)=>
                     else {
                       if (rows2.length >0 ){socket.emit('regis_already_account');}
                       else {
-                        cb.phoneInformation(num,(error3) => {
-                          if(error3){socket.emit('sodienthoaikhongdung');console.log('so dt khong dung:'+error3);}
-                          else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');console.log('so dien thoai dung');}
+                        cb.phoneInformation(num,(error3,ketqua) => {
+                          if(error3){socket.emit('sodienthoaikhongdung');}
+                          else if (!ketqua.is_mobile){socket.emit('sodienthoaikhongdung');}
+                          else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');}
                         });
                       }
                     }
