@@ -118,7 +118,7 @@ io.on('connection',(socket)=>
                       else {
                         cb.phoneInformation(num,(error3) => {
                           if(error3)socket.emit('sodienthoaikhongdung');
-                          else {socket.emit('number_phone_ok',num);}
+                          else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');}
                         });
                       }
                     }
