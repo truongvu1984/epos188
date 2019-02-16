@@ -97,6 +97,7 @@ io.on('connection',(socket)=>
    });
   socket.on('disconnect', function(){ console.log('user da disconnect:'+socket.id)});
   socket.on('C_check_numberphone',(idphone,num)=>{
+    console.log('xac minh:'+num);
     var date = Math.floor(Date.now() / 1000);
     con.query("SELECT * FROM `dangky` WHERE `phone_id` LIKE '"+idphone+"'", function(err1, rows1){
       if(err1){console.log(err1);}
@@ -117,8 +118,8 @@ io.on('connection',(socket)=>
                       if (rows2.length >0 ){socket.emit('regis_already_account');}
                       else {
                         cb.phoneInformation(num,(error3) => {
-                          if(error3)socket.emit('sodienthoaikhongdung');
-                          else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');}
+                          if(error3){socket.emit('sodienthoaikhongdung');console.log('so dt khong dung:'+error3);}
+                          else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');console.log('so dien thoai dung');}
                         });
                       }
                     }
@@ -127,7 +128,6 @@ io.on('connection',(socket)=>
               });
             }
           });
-
         }
       }
     });
