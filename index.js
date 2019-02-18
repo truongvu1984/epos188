@@ -146,9 +146,7 @@ io.on('connection',(socket)=>
                 // Tìm xem liệu số điện thoại đó có đúng là của người đó không
 
                       // nếu số điện thoại và mã xác nhận khớp nhau
-                      console.log('Đăng ký thành công');
-                      //active thành công, trả thông tin người dùng về lại cho khách hàng
-                      // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
+                    // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
                       // 1. Bảng chính: lưu id của bản tin đó trên server, id của người dùng, tên tin nhắn, tin nhắn gửi đi hay tin nhắn nhận về, trạng thái gửi đi hay nhận về.
                       con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //2. Bảng địa điểm: lưu id bản tin đó trên server, tên điểm, tọa độ điểm
@@ -165,20 +163,15 @@ io.on('connection',(socket)=>
                                 {
                                   con.query("SELECT * FROM `"+row3.number+"contact` WHERE `number` LIKE '"+user_info.number+"'", function(err, row4s)
                                     {
-                                      console.log('bang '+row3.number + ' so dien thoai la:'+user_info.number);
+
                                       if ( err) {console.log('có loi select');}
                                       else if (row4s.length >0)
                                         {
-                                          console.log('da select '+row3.number+' '+user_info.number);
                                           con.query("UPDATE `"+row3.number+"contact` SET `fr` = 'Y' WHERE `number` LIKE '"+user_info.number+"'",function(err3, ok)
                                           {
                                             //gửi thông báo cho ngươi kia biết là ông này đã tham gia ePos
                                             if ( err3 ){console.log('update bị loi'+err3);}
-                                            else
-                                              {
-                                                console.log('updat thanh cong' + ok);
-                                                io.sockets.in(row3.number).emit('contact_joined', {number:user_info.number,name:user_info.user, code:user_info.code});
-                                              }
+                                            else{io.sockets.in(row3.number).emit('contact_joined', {number:user_info.number,name:user_info.user, code:user_info.code});}
                                           });
                                         }
                                     });
@@ -398,7 +391,7 @@ io.on('connection',(socket)=>
                 }
             });
           // lấy bảng contact
-          con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name`", function(err1, a1s)
+          con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `name` ASC", function(err1, a1s)
                  {
                    if (err1){console.log('Da co loi contact full:'+err1);}
                    else if(a1s.length > 0)
