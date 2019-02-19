@@ -1160,7 +1160,7 @@ io.on('connection',(socket)=>
               val2 = [[ res.insertId, member.name,member.number,'B']];
               con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
               });
-              socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian)});
+              socket.emit('S_send_room',{ids:res.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian)});
               }
             });
           }
@@ -1191,7 +1191,7 @@ io.on('connection',(socket)=>
                                     val7 = [[ res5.insertId,mem.number, mem.name,'B']];
                                     con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
                                   });
-                                  io.sockets.in(row.number).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
+                                  io.sockets.in(row.number).emit('S_send_room',{ids:res5.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
 
                                 }
                               });
@@ -1257,7 +1257,6 @@ io.on('connection',(socket)=>
   });
   socket.on('C_bosung_member', function(info){
    if (socket.roomabc){
-    console.log(info);
     socket.emit ('S_get_bosung_member');
     // lưu thành viên mới vào cơ sở dữ liệu của các thành viên cũ
     con.query("SELECT * FROM `" + socket.number+"mes_main` WHERE `idc` LIKE '"+socket.roomabc+"' LIMIT 1", function(err1, rows){
@@ -1275,7 +1274,6 @@ io.on('connection',(socket)=>
                     let values = [[row3s[0].id, mem.number, mem.name, 'B']];
                     con.query(sql2, [values], function (err4){if (err4){console.log('co loi 3 '+err4);}});
                     io.sockets.in(socket.roomabc).emit('S_send_member',{ name:strencode(mem.name), number:mem.number});
-                    socket.emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:rows[0].idc, admin_name:strencode(socket.username), admin_number:socket.number, time:'N'});
                     var sql3 = "INSERT INTO `"+mem.number+"mes_main` (idc, subject, send_receive, stt,time ) VALUES ?";
                     var val3 = [[ rows[0].idc, rows[0].subject,'O', 'N','N']];
                     con.query(sql3, [val3], function (err3, res3)
@@ -1297,6 +1295,9 @@ io.on('connection',(socket)=>
                           con.query(sql5, [ab5], function (err5)
                           {
                             if ( err5){console.log('loi 6:'+err5);}
+                            else {
+                              io.sockets.in(socket.roomabc).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:rows[0].idc, admin_name:strencode(socket.username), admin_number:socket.number, time:'N'});
+                            }
                           });
                           });
 
