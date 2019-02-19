@@ -433,20 +433,12 @@ io.on('connection',(socket)=>
               if (err1){console.log('Da co loi room full:'+err1);}
               else if(a1s.length>0)
                 {
-                   let tinfull;
                    a1s.forEach(function(a1,key){
-                          con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
-                            {
-                                  if ( err5 ){console.log(err5);}
-                                  else
-                                    {
-                                      if(a5s.length>0){
-                                        tinfull={ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt};
-                                        socket.emit('S_send_room_full',tinfull);
-                                      }
-
-                                    }
-                          });
+                    con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
+                      {
+                        if ( err5 ){console.log(err5);}
+                        else  {if(a5s.length>0){socket.emit('S_send_room',{room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt});}}
+                        });
                        });
                      }
           });
@@ -1149,8 +1141,8 @@ io.on('connection',(socket)=>
       var val = [[ room_id, info.room_name,'O', thoigian,'F']];
       con.query(sql, [val], function (err, res)
       {
-        if ( err){console.log(err);}
-        else {
+        if (err){console.log(err);}
+        else{
           // lưu thành viên vào bảng
           var sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, name, number, send_receive) VALUES ?";
           var abc = [[ res.insertId, socket.username,socket.number,'A']];
@@ -1161,9 +1153,9 @@ io.on('connection',(socket)=>
               con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
               });
               socket.emit('S_send_room',{ids:res.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian)});
-              }
-            });
-          }
+            }
+          });
+        }
       });
       // gửi room cho các thành viên
         info.member_list.forEach(function(row){
@@ -1191,7 +1183,7 @@ io.on('connection',(socket)=>
                                     val7 = [[ res5.insertId,mem.number, mem.name,'B']];
                                     con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
                                   });
-                                  io.sockets.in(row.number).emit('S_send_room',{ids:res5.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
+                                  io.sockets.in(row.number).emit('S_send_room',{ids:res5.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'N'});
 
                                 }
                               });
