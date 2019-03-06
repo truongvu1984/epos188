@@ -748,7 +748,7 @@ io.on('connection',(socket)=>
                                             con.query(sql7, [val7], function (err7, result) {if ( err7){console.log(err7);}});
                                             });
                                             io.sockets.in(row5.number).emit('S_guitinnhan',{ids:res5.insertId,name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
-                                                subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian),stt:'F'});
+                                                subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian),read_1:'N', stt:'F'});
 
 
                                         } //het else
@@ -1248,6 +1248,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_bosung_member', function(info){
+    //nếu socket này đang tham gia room thì mới chấp nhận các thao tác tiếp theo
    if (socket.roomabc){
     socket.emit ('S_get_bosung_member');
     // lưu thành viên mới vào cơ sở dữ liệu của các thành viên cũ
