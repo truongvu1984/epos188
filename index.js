@@ -817,6 +817,11 @@ io.on('connection',(socket)=>
   });
   socket.on('danhantinnhan', function (nguoigui, idc){
    	if (socket.number){
+
+      con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'R'",function(err5,res5)
+          {if(err5){console.log(err5);}
+
+      });
 	     // báo cho người gửi biết là thằng socket.number đã nhận tin nhắn
        con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'S' LIMIT 1", function(err11, res11)
         {
@@ -830,7 +835,7 @@ io.on('connection',(socket)=>
                       io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,tennguoinhan:strencode(socket.username), idc:idc});
                   }
                 });
-            }
+          }
 
         });
       }
@@ -1195,6 +1200,14 @@ io.on('connection',(socket)=>
         });
     }
    	});
+  socket.on('danhan_room',(idc)=>{
+    if(socket.number){
+      con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'O'",function(err5,res5)
+          {if(err5){console.log(err5);}
+
+      });
+    }
+  });
   socket.on('C_change_pass', function(oldpass,newpass){
    if (socket.number){
      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
