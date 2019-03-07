@@ -56,20 +56,6 @@ socket.on('login2_dung',()=>{
   else {socket.emit('C_yeucau_data_new','web');}
 });
 socket.on('S_W_kq_check_contact',function(data){
-      // var number = data.number;
-      // var user1 = data.user;
-      // id_mang_kq_contact_search = id_mang_kq_contact_search +1;
-      // mang_kq_contact_search.push({id:id_mang_kq_contact_search,number:data.number, user:data.user});
-      // if (ten.length ==94){
-      //   ten="<div><div class='line_contact1_wrap'><a href='#' onclick='them_contact2("+id_mang_kq_contact_search+")' class='line_contact1'>"+data.user+"</a></div>"+
-      //   "<div class='line_contact2_wrap'><a href='#' onclick='add_friend("+id_mang_kq_contact_search+")'>Add friend</a></div></div></br>";
-      // }
-      // else {
-      //   ten = ten+ "<div><div class='line_contact1_wrap'><a href='#' onclick='them_contact2("+id_mang_kq_contact_search+")' class='line_contact1'>"+data.user+"</a></div>"+
-      // "<div class='line_contact2_wrap'><a href='#'>Add friend</a></div></div></br>";
-      // }
-      // // $("#my_list_contact").html( ten);
-      // $("#my_list_contact").html( ten);
       var dropdowns = document.getElementsByClassName("list_contact_1");
       var k;
       for (k = 0; k < dropdowns.length; k++) {
@@ -499,15 +485,14 @@ function myMap() {
       fullscreenControl: false,
       mapTypeControl:  true,
       rotateControl: true,
-      mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.VER_BAR,position: google.maps.ControlPosition.BOTT_LEFT,},}
+      mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.VER_BAR,position: google.maps.ControlPosition.BOTT_LEFT,}
+    }
       $(document).ready(function(){
           map = new google.maps.Map(document.getElementById("map"), mapOptions);
           map.setTilt(45);
-          google.maps.event.addListener(map, "rightclick", function(event) {
-            map_rightclick(event.latLng.lat(),event.latLng.lng());
-          });
+          google.maps.event.addListener(map, "rightclick", function(event) {map_rightclick(event.latLng.lat(),event.latLng.lng()); });
 
-         });
+      });
 }
 function map_rightclick( lat1, lon1){
   if(mang_infowindow.length>0){
