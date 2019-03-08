@@ -52,6 +52,8 @@ body {
   position: absolute;
   right: 500px;
   bottom: 200px;
+  width:250px;
+  height: 20px;
 }
 
 .input_sub{
