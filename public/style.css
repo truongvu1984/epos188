@@ -52,7 +52,7 @@ body {
   position: absolute;
   width: 100px;
   height: 100px;
-  top:100px;
+  bottom: 0px;
   background-color: white
 }
 
