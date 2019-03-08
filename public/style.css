@@ -50,9 +50,11 @@ body {
 }
 .bottom_right{
   position: absolute;
+  width: 200px;
+  height: 100px;
   right: 100px;
-  bottom: 100px;
-  background-color: white;
+  top: 500px;
+  background-color: white
 }
 
 .input_sub{
