@@ -326,6 +326,10 @@ socket.on('C_danhantinnhan',(data)=>{
   // chuyển đổi màu sắc sang đỏ đối với người
 
 });
+function kiemtra(){
+  map.setMapTypeId(google.maps.MapTypeId.SATELLITE); 
+
+}
 function room_click(idc){
 
 }
@@ -843,7 +847,9 @@ window.onclick = function(event) {
     <div class="content">
       <div class="top_right">
         <div class="top_right_item">
-          <button class="btn_account" onclick="show_content_top_right('id_content_account')">ACCOUNT</button>
+          <button class="btn_account" onclick="kiemtra()">ACCOUNT</button>
+          <!-- <button class="btn_account" onclick="show_content_top_right('id_content_account')">ACCOUNT</button> -->
+
           <div class="content_account" id="id_content_account"></div>
         </div>
         <div class="top_right_item">
