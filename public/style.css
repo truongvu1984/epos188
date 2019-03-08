@@ -50,8 +50,8 @@ body {
 }
 .bottom_right{
   position: absolute;
-  right: 100px;
-  bottom: 10px;
+  right: 500px;
+  bottom: 200px;
 }
 
 .input_sub{
