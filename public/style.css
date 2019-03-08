@@ -52,8 +52,8 @@ body {
   position: absolute;
   width: 200px;
   height: 100px;
-  right: 100px;
-  bottom: 5px;
+  margin-right: 100px;
+  margin-bottom: 10px;
   background-color: white
 }
 
