@@ -531,7 +531,8 @@ function luudiem(lat1, lon1, id1){
   var name1 = document.getElementById("input_123").value;
   for (var i=0; i<mang_infowindow.length; i++){
     if(mang_infowindow[i].id ==id1){
-      mang_infowindow[i].wind.setContent(name1);
+      let chuoi = "<div class='icon'>"+name1+"</div>";
+      mang_infowindow[i].wind.setContent(chuoi);
       mang_infowindow[i].stt = 'Y';
       var diem2 = {name:name1, lat:lat1, lon:lon1, id:id1};
       mang_infowindow_main.push(diem2);
