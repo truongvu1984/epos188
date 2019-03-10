@@ -54,8 +54,8 @@ body {
 }
 .bottom_right{
   position: absolute;
-  width: 100px;
-  height: 50px;
+  width: 60px;
+  height: 30px;
   bottom: 20px;
   right: 80px;
   z-index:2;
