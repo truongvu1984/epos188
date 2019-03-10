@@ -54,13 +54,13 @@ body {
 }
 .bottom_right{
   position: absolute;
-  width: 100px;
-  height: 100px;
-  bottom: 100px;
+  width: 50px;
+  height: 50px;
+  bottom: 10px;
+  left: 100px;
   background-color: white;
   z-index:2;
 }
-
 .input_sub{
   position: absolute;
   width: 150px;
@@ -188,7 +188,8 @@ body {
   height: 400px;
   right:-250px;
   top:50px;
-  transition: 0.5s
+  transition: 0.5s;
+  z-index: 2
 }
 .btn_list{
   position: absolute;
@@ -255,13 +256,6 @@ body {
   margin-left: 10px
 
 }
-
-
-
-
-
-
-
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
