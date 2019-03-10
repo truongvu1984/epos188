@@ -327,6 +327,8 @@ socket.on('C_danhantinnhan',(data)=>{
 
 });
 function kiemtra(){
+  var msg = new SpeechSynthesisUtterance('Hello World');
+  window.speechSynthesis.speak(msg);
   if(document.getElementById("btn_sw_map").innerHTML =="Map"){
     document.getElementById("btn_sw_map").innerHTML = "Satelite";
     map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
