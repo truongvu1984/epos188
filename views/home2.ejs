@@ -6,6 +6,7 @@
     <title><%= sodienthoai %></title>
     <script src="jquery-3.1.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
     <script>
 var socket = io("https://epos188.herokuapp.com/");
 socket.connect();
@@ -327,8 +328,10 @@ socket.on('C_danhantinnhan',(data)=>{
 
 });
 function kiemtra(){
-  var msg = new SpeechSynthesisUtterance('Chào bạn Hiếu');
-  window.speechSynthesis.speak(msg);
+  var url = "http://translate.google.com/translate_tts?ie=utf-8&tl=en&q="+" vũ yêu vân";
+  $(audio).attr('src', url).get(0).play();
+  // var msg = new SpeechSynthesisUtterance('Chào bạn Hiếu');
+  // window.speechSynthesis.speak(msg);
   if(document.getElementById("btn_sw_map").innerHTML =="Map"){
     document.getElementById("btn_sw_map").innerHTML = "Satelite";
     map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
@@ -908,6 +911,7 @@ window.onclick = function(event) {
       </div>
       <button class="bottom_right" onclick="kiemtra()" id="btn_sw_map">Satelite</button>
       <div id="map" class="class_map"></div>
+      <audio src="" hidden></audio>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript"></script>
   </div>
 
