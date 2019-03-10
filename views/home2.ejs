@@ -328,9 +328,8 @@ socket.on('C_danhantinnhan',(data)=>{
 
 });
 function kiemtra(){
-
   let hihi = encodeURIComponent("i love you");
-  var url = "http://translate.google.com/translate_tts?ie=utf-8&q="+hihi+"&tl=en";
+  var url = "https://translate.google.com/translate_tts?ie=utf-8&q="+hihi+"&tl=en";
   $('audio').attr('src', url).get(0).play();
   // var msg = new SpeechSynthesisUtterance('Chào bạn Hiếu');
   // window.speechSynthesis.speak(msg);
