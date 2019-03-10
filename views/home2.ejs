@@ -327,7 +327,15 @@ socket.on('C_danhantinnhan',(data)=>{
 
 });
 function kiemtra(){
-  map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+  if(document.getElementById("p1").innerHTML =="Map"){
+    document.getElementById("p1").innerHTML = "Satelite";
+    map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+  }
+  else {
+    document.getElementById("p1").innerHTML = "Map";
+    map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+  }
+
 
 }
 function room_click(idc){
@@ -895,7 +903,7 @@ window.onclick = function(event) {
         <button class="btn_list" onclick="open_close_list()" id="id_btn_list">List</button>
         <div class="location_list" id="id_location_list"></div>
       </div>
-      <button class="bottom_right" onclick="kiemtra()">ha ha</button>
+      <button class="bottom_right" onclick="kiemtra()">Satelite</button>
       <div id="map" class="class_map"></div>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript"></script>
   </div>
