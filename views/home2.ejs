@@ -379,9 +379,10 @@ function hide_show_pos(id){
   }
 }
 function show_pos(lat,lon, name, id1){
+  let chuoi = "<div class='icon'>"+name+"</div>";
   var infow = new google.maps.InfoWindow({
       position:{ lat:lat, lng: lon},
-      content:name
+      content:chuoi
     });
     // infow.setContent(name);
     // var win = {id:id1, wind: infow};
@@ -856,7 +857,6 @@ window.onclick = function(event) {
         <div class="top_right_item">
           <button class="btn_account" onclick="kiemtra()">ACCOUNT</button>
           <!-- <button class="btn_account" onclick="show_content_top_right('id_content_account')">ACCOUNT</button> -->
-
           <div class="content_account" id="id_content_account"></div>
         </div>
         <div class="top_right_item">

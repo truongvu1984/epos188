@@ -43,6 +43,9 @@ body {
   overflow-y: scroll;
 
 }
+.icon{
+  background-color: red;
+}
 .top_left{
   position: absolute;
   background-color: white;
