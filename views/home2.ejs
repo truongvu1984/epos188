@@ -329,7 +329,7 @@ socket.on('C_danhantinnhan',(data)=>{
 });
 function kiemtra(){
   var url = "http://translate.google.com/translate_tts?ie=utf-8&tl=en&q="+" vũ yêu vân";
-  $(audio).attr('src', url).get(0).play();
+  $('audio').attr('src', url).get(0).play();
   // var msg = new SpeechSynthesisUtterance('Chào bạn Hiếu');
   // window.speechSynthesis.speak(msg);
   if(document.getElementById("btn_sw_map").innerHTML =="Map"){
