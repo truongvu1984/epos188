@@ -73,7 +73,8 @@ body {
   position: absolute;
   width: 150px;
   right:150px;
-  left:270px
+  left:270px;
+  display: none
 }
 .input_contact{
   position: absolute;
