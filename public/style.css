@@ -69,6 +69,12 @@ body {
   right:150px;
   top:5px
 }
+.online_text{
+  position: absolute;
+  width: 150px;
+  right:150px;
+  left:270px
+}
 .input_contact{
   position: absolute;
   width: 150px;

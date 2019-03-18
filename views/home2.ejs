@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;application/json; charset=UTF-8" />
-     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <title><%= sodienthoai %></title>
     <script src="jquery-3.1.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -327,12 +327,13 @@ socket.on('C_danhantinnhan',(data)=>{
   // chuyển đổi màu sắc sang đỏ đối với người
 
 });
+function speak_loud(noi_dung){
+  var msg = new SpeechSynthesisUtterance(noi_dung);
+  window.speechSynthesis.speak(msg);
+}
 function kiemtra(){
-  let hihi = encodeURIComponent("i love you");
   // var url = "https://translate.google.com/translate_tts?ie=utf-8&q="+hihi+"&tl=en";
   // $("audio").attr('src', url).get(0).play();
-  var msg = new SpeechSynthesisUtterance(hihi);
-  window.speechSynthesis.speak(msg);
   if(document.getElementById("btn_sw_map").innerHTML =="Map"){
     document.getElementById("btn_sw_map").innerHTML = "Satelite";
     map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
@@ -897,6 +898,7 @@ window.onclick = function(event) {
       </div>
       <div class="top_left">
         <div style="position:absolute; left:10px;top:5px">Subject</div>
+        <div  class="online_text"><i>online</i></div>
         <input type="text" class="input_sub" autocomplete="off" id="id_input_subject"></input>
         <button style="position:absolute;left:5px;bottom:50px" onclick="show_contact_list()">Contact</button>
         <input type="text" class="input_contact" id="id_input_contact" oninput="search_contact()" autocomplete="off"></input>
@@ -912,7 +914,7 @@ window.onclick = function(event) {
       </div>
       <button class="bottom_right" onclick="kiemtra()" id="btn_sw_map">Satelite</button>
       <div id="map" class="class_map"></div>
-      <audio src="" hidden></audio>
+      <!-- <audio src="" hidden></audio> -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript"></script>
   </div>
 
