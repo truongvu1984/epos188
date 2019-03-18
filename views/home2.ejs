@@ -164,7 +164,17 @@ socket.on('S_send_room',(data)=>{
   mang_room.push(tin);
   var line = "<div class='line_inbox' id='room"+idc+"'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='online_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
   $("#k_online").prepend(line);
-  socket.emit('C_get_room','web',data.room_id_server);
+  if(data.stt=="F"){socket.emit('danhan_room',data.room_id_server);}
+});
+socket.on("S_get_join",()=>{
+  document.getElementById("id_online_text").style.display = "block";
+});
+socket.on("S_send_member",(tin)=>{
+  // socket.emit('S_send_member',{name:strencode(member.name), number:member.number, admin:member.send_receive});
+  mang_infowindow.push({id:id1, wind:null});
+  var line = "<div class='list_line_member' id='li_lo"+tin.number+"'><div class='lo_list_sub' onclick='fly_to("+tin.number+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.number+"' onchange='hide_show_pos("+tin.number+")'><div class='lo_list_show'>Hide</div></div>";
+  $("#id_location_list").append(line);
+
 });
 socket.on('S_send_room_full',(datas)=>{
   cru_online = datas[datas.length-1].ids;
@@ -251,7 +261,8 @@ socket.on('S_send_point',(data)=>{
     }
   });
   }
-  else {data.forEach((tin)=>{
+  else {
+    data.forEach((tin)=>{
     show_pos(tin.lat, tin.lon, strdecode(tin.name),tin.id);
     var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
     $("#id_location_list").append(line);
@@ -342,8 +353,6 @@ function kiemtra(){
     document.getElementById("btn_sw_map").innerHTML = "Map";
     map.setMapTypeId(google.maps.MapTypeId.HYBRID);
   }
-
-
 }
 function room_click(idc){
 
@@ -411,15 +420,16 @@ function show_pos(lat,lon, name, id1){
         }
       }
   });
-
 }
 function fly_to(id){
   mang_infowindow.forEach((tin)=>{
     if(tin.id == id){
+      if(tin.wind != null){
       var center = new google.maps.LatLng(tin.wind.getPosition().lat(),tin.wind.getPosition().lng());
        map.panTo(center);
        map.setZoom(15);
-      return false;
+       return false;
+     }
     }
   });
 }
@@ -898,7 +908,7 @@ window.onclick = function(event) {
       </div>
       <div class="top_left">
         <div style="position:absolute; left:10px;top:5px">Subject</div>
-        <div  class="online_text"><i><mark>online</mark></i></div>
+        <div  class="online_text" id="id_online_text"><i><mark>online</mark></i></div>
         <input type="text" class="input_sub" autocomplete="off" id="id_input_subject"></input>
         <button style="position:absolute;left:5px;bottom:50px" onclick="show_contact_list()">Contact</button>
         <input type="text" class="input_contact" id="id_input_contact" oninput="search_contact()" autocomplete="off"></input>

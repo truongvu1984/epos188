@@ -217,7 +217,12 @@ body {
   height: 35px;
   margin-top: 5px;
   background-color: green;
-
+}
+.list_line_member{
+  width: 230px;
+  height: 35px;
+  margin-top: 5px;
+  background-color: orange;
 }
 .list_line_checkbox{
   position: absolute;

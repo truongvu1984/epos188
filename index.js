@@ -1022,14 +1022,13 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_join_room', function (room)  {
-      if (socket.number){
+    if (socket.number){
         socket.emit('S_get_join');
         if(socket.roomabc){socket.leave(socket.roomabc);}
         socket.join(room);
         socket.roomabc = room;
-
-    // cái này cho app chuyển sang giao diên map
-    // gửi danh sách thành viên cho app
+        // cái này cho app chuyển sang giao diên map
+        // gửi danh sách thành viên cho app
     con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+room+"' LIMIT 1", function(err, a1s)
        {
          if ( err || ( a1s.length == 0) ){console.log(err);}
