@@ -1027,6 +1027,7 @@ io.on('connection',(socket)=>
         if(socket.roomabc){socket.leave(socket.roomabc);}
         socket.join(room);
         socket.roomabc = room;
+        console.log('c muon join:'+room);
         // cái này cho app chuyển sang giao diên map
         // gửi danh sách thành viên cho app
     con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+room+"' LIMIT 1", function(err, a1s)

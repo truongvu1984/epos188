@@ -339,7 +339,7 @@ socket.on('C_danhantinnhan',(data)=>{
 
 });
 function online_click(room){
-  socket.emit("C_join_room",room);
+  socket.emit('C_join_room',room);
 }
 function speak_loud(noi_dung){
   var msg = new SpeechSynthesisUtterance(noi_dung);
