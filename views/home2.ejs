@@ -338,8 +338,8 @@ socket.on('C_danhantinnhan',(data)=>{
   // chuyển đổi màu sắc sang đỏ đối với người
 
 });
-function online_clk(hihi){
-  // socket.emit('C_join_room',"room");
+function online_clk(room){
+  socket.emit('C_join_room',room);
 }
 function speak_loud(noi_dung){
   var msg = new SpeechSynthesisUtterance(noi_dung);
