@@ -28,6 +28,9 @@ var number_del_inbox = 0; // biến này để đếm số lượng đã chọn 
 function strdecode( data ) {
   return decodeURIComponent(escape( data ));
 }
+function strencode( data ){
+    return unescape( encodeURIComponent(data));
+  }
 var id_inbox_pos=0;
 var id_contact = 0;
 var mang_inbox = [];
