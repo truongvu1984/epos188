@@ -170,10 +170,16 @@ socket.on("S_get_join",()=>{
   document.getElementById("id_online_text").style.display = "block";
 });
 socket.on("S_send_member",(tin)=>{
+  mang_infowindow.forEach((row,key)=>{
+    if(!(wind)){document.getElementById("li_lo"+row.id).remove();}
+    if(key===(mang_infowindow.length-1){
+      mang_infowindow.push({id:tin.number, wind:null});
+      var line = "<div class='list_line_member' id='li_lo"+tin.number+"'><div class='lo_list_sub' onclick='fly_to("+tin.number+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.number+"' onchange='hide_show_pos("+tin.number+")'><div class='lo_list_show'>Hide</div></div>";
+      $("#id_location_list").append(line);
+    }
+  });
   // socket.emit('S_send_member',{name:strencode(member.name), number:member.number, admin:member.send_receive});
-  mang_infowindow.push({id:tin.number, wind:null});
-  var line = "<div class='list_line_member' id='li_lo"+tin.number+"'><div class='lo_list_sub' onclick='fly_to("+tin.number+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.number+"' onchange='hide_show_pos("+tin.number+")'><div class='lo_list_show'>Hide</div></div>";
-  $("#id_location_list").append(line);
+
 
 });
 socket.on('S_send_room_full',(datas)=>{
