@@ -40,7 +40,6 @@ var list_del_inbox = [];
 var list_del_send = [];
 var list_del_save = [];
 var list_del_online = [];
-var trangthai_yeucau_data = "full";
 let mafull="";
 let cru_online=0;
 let cru_inbox = 0;
@@ -51,10 +50,6 @@ let cru_group = 0;
 socket.on('check_pass',()=>{
   let ab = {rightuser:'<%= sodienthoai %>',right_pass:'<%= pass %>',online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
   socket.emit('login2',ab);
-});
-socket.on('login2_dung',()=>{
-  if(trangthai_yeucau_data === "full"){socket.emit('C_yeucau_data_full','web');}
-  else {socket.emit('C_yeucau_data_new','web');}
 });
 socket.on('S_W_kq_check_contact',function(data){
       var dropdowns = document.getElementsByClassName("list_contact_1");
@@ -163,7 +158,7 @@ socket.on('S_send_room',(data)=>{
   var haha = "vuyeuvan1";
   var tin = {ids: data.ids,id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
   mang_room.push(tin);
-  var line = "<div class='line_inbox' id='room"+idc+"'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='online_click("+haha+")'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
+  var line = "<div class='line_inbox' id='room"+idc+"'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='online_clk("+haha+")'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
   $("#k_online").prepend(line);
   if(data.stt=="F"){socket.emit('danhan_room',data.room_id_server);}
 });
@@ -339,8 +334,8 @@ socket.on('C_danhantinnhan',(data)=>{
   // chuyển đổi màu sắc sang đỏ đối với người
 
 });
-function online_click(room){
-  socket.emit('C_join_room',"room");
+function online_clk(hihi){
+  // socket.emit('C_join_room',"room");
 }
 function speak_loud(noi_dung){
   var msg = new SpeechSynthesisUtterance(noi_dung);
@@ -357,9 +352,6 @@ function kiemtra(){
     document.getElementById("btn_sw_map").innerHTML = "Map";
     map.setMapTypeId(google.maps.MapTypeId.HYBRID);
   }
-}
-function room_click(idc){
-
 }
 function hide_show_pos(id){
   if(document.getElementById("chk"+id).checked == true){cancle_luudiem(id);}
