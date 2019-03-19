@@ -158,7 +158,7 @@ socket.on('S_send_room',(data)=>{
   var haha = "vuyeuvan1";
   var tin = {ids: data.ids,id_pos:idc, name_nguoigui:strdecode(data.admin_name),number_nguoigui:data.admin_number, subject:strdecode(data.room_name), room_id:data.room_id_server, thoigian:show_time(data.time)};
   mang_room.push(tin);
-  var line = "<div class='line_inbox' id='room"+idc+"'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='online_clk(haha)'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
+  var line = "<div class='line_inbox' id='room"+idc+"'><input type='checkbox' id='"+idc+"' class='line_online_chk' onclick='checkbox_online_click("+idc+");'><div class='line_inbox_main' onclick='online_clk(123)'><div class='line_inbox_sub'>"+strdecode(data.room_name)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.admin_name)+"</div><div class='line_inbox_read'></div></div></div>";
   $("#k_online").prepend(line);
   if(data.stt=="F"){socket.emit('danhan_room',data.room_id_server);}
 });
