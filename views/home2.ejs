@@ -486,7 +486,7 @@ function guitinnhan(){
 }
 function lưu_tinnhan(){
 
-  mang_infowindow_main.push({name:strdecode(hihi.name),lat:null,lon:null,id:tin.number, online:'O'});
+  mang_infowindow_main.push({name:strdecode(hihi.name),lat:null,lon:null,id:hihi.number, online:'O'});
   var line = "<div class='list_line_member' id='li_lo"+hihi.number+"'><div class='lo_list_sub' onclick='fly_to("+hihi.number+")'>"+strdecode(hihi.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+hihi.number+"' onchange='hide_show_pos("+hihi.number+")'><div class='lo_list_show'>Hide</div></div>";
   $("#id_location_list").append(line);
 
