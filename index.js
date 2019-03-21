@@ -1040,8 +1040,11 @@ io.on('connection',(socket)=>
                   if ( err2 || ( a2s.length == 0) ){console.log(err2);}
                   else
                     {
-                      a2s.forEach((member)=>{
-                          socket.emit('S_send_member',{name:strencode(member.name), number:member.number, admin:member.send_receive});
+                      var tin=[];
+                      a2s.forEach((member,key)=>{
+                        tin.push({name:strencode(member.name), number:member.number, admin:member.send_receive});
+                        if(key===(a2s.length-1)){socket.emit('S_send_member',tin);}
+
                       });
 
                     }
