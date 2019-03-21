@@ -190,7 +190,7 @@ socket.on("S_send_member",(tins)=>{
         }
       }
     }
-    if(i===1){
+    if(i==1){
       console.log('ha ha'+tins.length);
       tins.forEach((tin,key)=>{
         mang_infowindow_main.push({name:strdecode(tin.name),lat:null,lon:null,id:tin.number, online:'O'});
