@@ -179,7 +179,7 @@ socket.on("S_get_join",()=>{
 socket.on("S_send_member",(tins)=>{
   console.log('hi hi'+tins.length);
   // socket.emit('S_send_member',{name:strencode(member.name), number:member.number, admin:member.send_receive});
-  for (var i=(mang_infowindow_main.length-1); i>0; i--){
+  for (var i=(mang_infowindow_main.length-1); i>=0; i--){
     if(mang_infowindow_main[i].online ==='O'){
       document.getElementById("li_lo"+mang_infowindow_main[i].id).remove();
       for (var k=(mang_infowindow.length-1); k>0; k--){
@@ -190,7 +190,7 @@ socket.on("S_send_member",(tins)=>{
         }
       }
     }
-    if(i===0){
+    if(i===0 ){
       console.log('ha ha'+tins.length);
       tins.forEach((tin,key)=>{
         mang_infowindow_main.push({name:strdecode(tin.name),lat:null,lon:null,id:tin.number, online:'O'});
