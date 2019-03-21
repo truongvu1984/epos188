@@ -196,6 +196,7 @@ socket.on("S_send_member",(tins)=>{
       console.log('ha ha'+tins.length);
       tins.forEach((tin,key)=>{
         mang_infowindow_main.push({name:strdecode(tin.name),lat:null,lon:null,id:tin.number, online:'O'});
+
         var line = '<div class="list_line_member" id="li_lo'+tin.number+'"><div class="lo_list_sub" onclick="fly_to('+tin.number+')">'+strdecode(tin.name)+'</div><input type="checkbox" class="list_line_checkbox" id="chk'+tin.number+'" onchange="hide_show_pos('+tin.number+')"><div class="lo_list_show">Hide</div></div>';
         $("#id_location_list").append(line);
       });
@@ -511,18 +512,11 @@ function guitinnhan(){
   }
 }
 function lưu_tinnhan(){
-  for (var i=(mang_infowindow_main.length-1); i>0; i--){
-    if(mang_infowindow_main[i].online ==='O'){
-      console.log('na:'+mang_infowindow_main[i].name);
+  mang_infowindow_main.forEach((tin)=>{
+    console.log('nung:'+tin.name);
+  });
 
-    }
-  }
-  for (var i=(mang_infowindow.length-1); i>0; i--){
-    if(mang_infowindow_main[i].online ==='O'){
-      console.log('no:'+mang_infowindow[i].name);
 
-    }
-  }
 
   //   var sub = document.getElementById("id_input_subject").value.trim();
   //   if ( sub === ""){alert('There is no subjet.');}
