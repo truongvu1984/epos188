@@ -177,8 +177,9 @@ socket.on("S_get_join",()=>{
 
 });
 socket.on("S_send_member",(tins)=>{
-  console.log('hi hi'+tins.length);
+  console.log('hi ho'+tins.length);
   // socket.emit('S_send_member',{name:strencode(member.name), number:member.number, admin:member.send_receive});
+  if(mang_infowindow_main.length >0){
   for (var i=(mang_infowindow_main.length-1); i>=0; i--){
     if(mang_infowindow_main[i].online ==='O'){
       document.getElementById("li_lo"+mang_infowindow_main[i].id).remove();
@@ -199,6 +200,15 @@ socket.on("S_send_member",(tins)=>{
       });
     }
   }
+}
+else {
+  console.log('ho ho'+tins.length);
+  tins.forEach((tin,key)=>{
+    mang_infowindow_main.push({name:strdecode(tin.name),lat:null,lon:null,id:tin.number, online:'O'});
+    var line = "<div class='list_line_member' id='li_lo"+tin.number+"'><div class='lo_list_sub' onclick='fly_to("+tin.number+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.number+"' onchange='hide_show_pos("+tin.number+")'><div class='lo_list_show'>Hide</div></div>";
+    $("#id_location_list").append(line);
+  });
+}
 });
 socket.on('S_send_room_full',(datas)=>{
   cru_online = datas[datas.length-1].ids;
