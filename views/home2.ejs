@@ -189,7 +189,7 @@ socket.on("S_send_member",(tins)=>{
         }
       }
     }
-    if(i===0){
+    if(i===1){
       tins.forEach((tin,key)=>{
         mang_infowindow_main.push({name:strdecode(tin.name),lat:null,lon:null,id:tin.number, online:'O'});
         var line = "<div class='list_line_member' id='li_lo"+tin.number+"'><div class='lo_list_sub' onclick='fly_to("+tin.number+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.number+"' onchange='hide_show_pos("+tin.number+")'><div class='lo_list_show'>Hide</div></div>";
@@ -197,9 +197,6 @@ socket.on("S_send_member",(tins)=>{
       });
     }
   }
-
-
-
 });
 socket.on('S_send_room_full',(datas)=>{
   cru_online = datas[datas.length-1].ids;
