@@ -1021,7 +1021,7 @@ io.on('connection',(socket)=>
     });
     }
   });
-  socket.on('C_join_room', function (room)  {
+  socket.on('C_join_room', function (room){
     if (socket.number){
         socket.emit('S_get_join');
         if(socket.roomabc){socket.leave(socket.roomabc);}
@@ -1057,7 +1057,7 @@ io.on('connection',(socket)=>
     }
 
   });
-  socket.on('C_send_contact', function (contact)  {
+  socket.on('C_send_contact', function (contact){
       if (socket.number){
         console.log('C gửi new contact'+contact.name);
         con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
@@ -1134,8 +1134,7 @@ io.on('connection',(socket)=>
           io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(socket.username), number:socket.number});
           console.log('da gui cho '+room.room_fullname + 'AAAAA' +info.stt+ "ten la:"+ socket.username );
         });
-    }
-
+      }
     }
   });
   socket.on('C_make_room', function (info){

@@ -65,29 +65,53 @@ socket.on('S_W_kq_check_contact',function(data){
 
     });
 socket.on('S_pos_online', function(data){
-              if (mangmarker.length == 0){
-          var  marker2 = new google.maps.Marker({
-                      position: { lat: data.lat, lng: data.lon },
-                      label: data.name,
-                      map: map,
-                    });
-                    marker1 = {marker:marker2, name:data.name, number:data.number};
-                    mangmarker.push(marker1);
-                  }
-            else {
-               var test = true;
-              mangmarker.forEach(function(mar){
-                 if (mar.number == data.number){
-                 //  // nếu đã có điểm rồi thì chỉ cập nhật điểm đó thôi
-                 var latlng = new google.maps.LatLng(data.lat, data.lon);
-                   mar.marker.setPosition(latlng);
-                 //  test= false;
-                 //  break;
-                  }
-              });
-
-             }
+// emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(socket.username), number:socket.number});
+  mang_infowindow_main.forEach((tin)=>{
+    if(tin.online==='O' && tin.id === data.number){
+      tin = {name:tin.name, lat:tin.lat, lon:tin.lon, id:tin.id, online:'O'};
+      var check=true;
+      mang_infowindow.forEach((row,key)=>{
+      if(row.id === tin.id && row.wind != null){
+        check= false;
+        var latlng = new google.maps.LatLng(tin.lat, tin.lon);
+        tin.wind.setPosition(latlng);
+        return false;
+      }
+      if(key===(mang_infowindow.length-1)){
+        if(check){
+          let chuoi = "<div class='icon'>"+tin.name+"</div>";
+          var infow = new google.maps.InfoWindow({
+            position:{ lat:lat, lng: lon},
+            content:chuoi
           });
+          mang_infowindow.push({id:tin.id,wind:infow});
+          infow.open(map);
+        }
+      }
+      });
+    }
+  });
+
+  // if (mangmarker.length == 0){
+  //   var marker2 = new google.maps.Marker({
+  //                     position: { lat: data.lat, lng: data.lon },
+  //                     label: data.name,
+  //                     map: map,
+  //                   });
+  //                   marker1 = {marker:marker2, name:data.name, number:data.number};
+  //                   mangmarker.push(marker1);
+  //                 }
+  //           else {
+  //              var test = true;
+  //             mangmarker.forEach(function(mar){
+  //                if (mar.number == data.number){
+  //                //  // nếu đã có điểm rồi thì chỉ cập nhật điểm đó thôi
+  //                var latlng = new google.maps.LatLng(data.lat, data.lon);
+  //                  mar.marker.setPosition(latlng);
+  //               }
+  //             });
+  //            }
+});
 socket.on('S_send_room_member', function(data){
                     var ten ="";
 
@@ -191,22 +215,22 @@ socket.on("S_send_member",(tins)=>{
       }
         mang_infowindow_main.splice(i,1);
     }
-    if(i===0 ){
-      tins.forEach((tin,key)=>{
-        mang_infowindow_main.push({name:strdecode(tin.name),lat:null,lon:null,id:tin.number, online:'O'});
-        var line = '<div class="list_line_member" id="li_lo'+tin.number+'"><div class="lo_list_sub" onclick="fly_to('+tin.number+')">'+strdecode(tin.name)+'</div><input type="checkbox" class="list_line_checkbox" id="chk'+tin.number+'" onchange="hide_show_pos('+tin.number+')"><div class="lo_list_show">Hide</div></div>';
-        $("#id_location_list").append(line);
-      });
+      if(i===0 ){
+        tins.forEach((tin,key)=>{
+          mang_infowindow_main.push({name:strdecode(tin.name),lat:null,lon:null,id:tin.number, online:'O'});
+          var line = '<div class="list_line_member" id="li_lo'+tin.number+'"><div class="lo_list_sub" onclick="fly_to('+tin.number+')">'+strdecode(tin.name)+'</div><input type="checkbox" class="list_line_checkbox" id="chk'+tin.number+'" onchange="hide_show_pos('+tin.number+')"><div class="lo_list_show">Hide</div></div>';
+          $("#id_location_list").append(line);
+        });
+      }
     }
   }
-}
-else {
+  else {
   tins.forEach((tin,key)=>{
     mang_infowindow_main.push({name:strdecode(tin.name),lat:null,lon:null,id:tin.number, online:'O'});
     var line = "<div class='list_line_member' id='li_lo"+tin.number+"'><div class='lo_list_sub' onclick='fly_to("+tin.number+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.number+"' onchange='hide_show_pos("+tin.number+")'><div class='lo_list_show'>Hide</div></div>";
     $("#id_location_list").append(line);
-  });
-}
+    });
+  }
 });
 socket.on('S_send_room_full',(datas)=>{
   cru_online = datas[datas.length-1].ids;
