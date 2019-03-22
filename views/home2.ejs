@@ -83,7 +83,7 @@ socket.on('S_pos_online', function(data){
           if(key===(mang_infowindow.length-1) && check ){
           let chuoi = "<div class='icon'>"+tin.name+"</div>";
           var infow = new google.maps.InfoWindow({
-            position:{ lat:lat, lng: lon},
+            position:{ lat:tin.lat, lng: tin.lon},
             content:chuoi
           });
           mang_infowindow.push({id:tin.id,wind:infow});
@@ -95,7 +95,7 @@ socket.on('S_pos_online', function(data){
       else {
         let chuoi = "<div class='icon'>"+tin.name+"</div>";
         var infow = new google.maps.InfoWindow({
-          position:{ lat:lat, lng: lon},
+          position:{ lat:tin.lat, lng: tin.lon},
           content:chuoi
         });
         mang_infowindow.push({id:tin.id,wind:infow});
