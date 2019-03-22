@@ -65,6 +65,7 @@ socket.on('S_W_kq_check_contact',function(data){
 
     });
 socket.on('S_pos_online', function(data){
+  console.log(' hihi'+data.name);
 // emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(socket.username), number:socket.number});
   mang_infowindow_main.forEach((tin)=>{
     if(tin.online==='O' && tin.id === data.number){
