@@ -192,8 +192,6 @@ socket.on('S_send_room',(data)=>{
 socket.on("S_get_join",()=>{
   document.getElementById("id_online_text").style.display = "block";
   document.getElementById("id_input_subject").html = room_name_chose;
-  // mang_infowindow_main.push({name:name,lat:lat,lon:lon,id:id1});
-  // mang_infowindow.push({id:id1, wind: infow});
   for (var k=(mang_infowindow.length-1); k>0; k--){
     if(mang_infowindow[k].id===mang_infowindow_main[i].id){
       mang_infowindow.splice(k,1);
@@ -210,7 +208,6 @@ socket.on("S_send_member",(tins)=>{
       for (var k=(mang_infowindow.length-1); k>=0; k--){
         if(mang_infowindow[k].id===mang_infowindow_main[i].id){
           mang_infowindow.splice(k,1);
-          console.log('dã xóa:'+mang_infowindow[i].id);
           return false;
         }
       }

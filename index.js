@@ -1129,10 +1129,10 @@ io.on('connection',(socket)=>
   });
   socket.on('C_pos_online', function (info){
     if (socket.number){
-      if ( info != null){
+      if (info != null){
         info.room.forEach(function(room){
           io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(socket.username), number:socket.number});
-          console.log('da gui cho '+room.room_fullname + 'AAAAA' +info.stt+ "ten la:"+ socket.username );
+          
         });
       }
     }
