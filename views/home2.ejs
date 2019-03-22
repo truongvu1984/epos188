@@ -65,8 +65,6 @@ socket.on('S_W_kq_check_contact',function(data){
 
     });
 socket.on('S_pos_online', function(data){
-  console.log('hihi'+data.name);
-// emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(socket.username), number:socket.number});
   mang_infowindow_main.forEach((tin)=>{
     if(tin.online==='O' && tin.id === data.number){
       tin = {name:tin.name, lat:data.lat, lon:data.lon, id:tin.id, online:'O'};
@@ -77,7 +75,6 @@ socket.on('S_pos_online', function(data){
           check= false;
           var latlng = new google.maps.LatLng(data.lat, data.lon);
           row.wind.setPosition(latlng);
-          console.log('hoho');
           return false;
         }
           if(key===(mang_infowindow.length-1) && check ){
@@ -88,7 +85,6 @@ socket.on('S_pos_online', function(data){
           });
           mang_infowindow.push({id:tin.id,wind:infow});
           infow.open(map);
-          console.log('da nhap moi');
         }
         });
       }
@@ -100,31 +96,10 @@ socket.on('S_pos_online', function(data){
         });
         mang_infowindow.push({id:tin.id,wind:infow});
         infow.open(map);
-        console.log('da nhap moi');
       }
       return false;
     }
   });
-
-  // if (mangmarker.length == 0){
-  //   var marker2 = new google.maps.Marker({
-  //                     position: { lat: data.lat, lng: data.lon },
-  //                     label: data.name,
-  //                     map: map,
-  //                   });
-  //                   marker1 = {marker:marker2, name:data.name, number:data.number};
-  //                   mangmarker.push(marker1);
-  //                 }
-  //           else {
-  //              var test = true;
-  //             mangmarker.forEach(function(mar){
-  //                if (mar.number == data.number){
-  //                //  // nếu đã có điểm rồi thì chỉ cập nhật điểm đó thôi
-  //                var latlng = new google.maps.LatLng(data.lat, data.lon);
-  //                  mar.marker.setPosition(latlng);
-  //               }
-  //             });
-  //            }
 });
 socket.on('S_send_room_member', function(data){
                     var ten ="";
