@@ -69,17 +69,18 @@ socket.on('S_pos_online', function(data){
 // emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(socket.username), number:socket.number});
   mang_infowindow_main.forEach((tin)=>{
     if(tin.online==='O' && tin.id === data.number){
-          tin = {name:tin.name, lat:tin.lat, lon:tin.lon, id:tin.id, online:'O'};
-      var check=true;
-      mang_infowindow.forEach((row,key)=>{
-      if(row.id === tin.id && row.wind != null){
-        check= false;
-        var latlng = new google.maps.LatLng(tin.lat, tin.lon);
-        tin.wind.setPosition(latlng);
+      tin = {name:tin.name, lat:tin.lat, lon:tin.lon, id:tin.id, online:'O'};
+      if(mang_infowindow.length >0){
+        var check=true;
+        mang_infowindow.forEach((row,key)=>{
+          if(row.id === tin.id && row.wind != null){
+          check= false;
+          var latlng = new google.maps.LatLng(tin.lat, tin.lon);
+          tin.wind.setPosition(latlng);
           console.log('hoho');
-        return false;
-      }
-      if(key===(mang_infowindow.length-1) && check ){
+          return false;
+        }
+          if(key===(mang_infowindow.length-1) && check ){
           let chuoi = "<div class='icon'>"+tin.name+"</div>";
           var infow = new google.maps.InfoWindow({
             position:{ lat:lat, lng: lon},
@@ -88,9 +89,19 @@ socket.on('S_pos_online', function(data){
           mang_infowindow.push({id:tin.id,wind:infow});
           infow.open(map);
           console.log('da nhap moi');
-
+        }
+        });
       }
-      });
+      else {
+        let chuoi = "<div class='icon'>"+tin.name+"</div>";
+        var infow = new google.maps.InfoWindow({
+          position:{ lat:lat, lng: lon},
+          content:chuoi
+        });
+        mang_infowindow.push({id:tin.id,wind:infow});
+        infow.open(map);
+        console.log('da nhap moi');
+      }
       return false;
     }
   });
