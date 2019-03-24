@@ -610,6 +610,7 @@ function inbox_click(id,name){
       socket.emit('C_reques_point_inbox',tin.id_tinnha_client);
       socket.on('S_send_point',(data)=>{
         $("#id_location_list").html("");
+        $("#id_input_subject").val(room_name_chose);
         if(mang_infowindow.length > 0){
           mang_infowindow.forEach((win,key)=>{
           win.wind.close();
@@ -644,6 +645,7 @@ function save_click(id,name){
       socket.emit('C_reques_point',tin.id_tinnha_client);
       socket.on('S_send_point',(data)=>{
         $("#id_location_list").html("");
+        $("#id_input_subject").val(room_name_chose);
         if(mang_infowindow.length > 0){
           mang_infowindow.forEach((win,key)=>{
           win.wind.close();
@@ -678,6 +680,7 @@ function send_click(id,name){
       socket.emit('C_reques_point',tin.id_tinnha_client);
       socket.on('S_send_point',(data)=>{
         $("#id_location_list").html("");
+        $("#id_input_subject").val(room_name_chose);
         if(mang_infowindow.length > 0){
           mang_infowindow.forEach((win,key)=>{
           win.wind.close();
