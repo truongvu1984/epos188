@@ -176,7 +176,7 @@ socket.on('S_send_room',(data)=>{
   $("#k_online").prepend(line);
   if(data.stt=="F"){socket.emit('danhan_room',data.room_id_server);}
 });
-socket.on("S_send_member",(tins)=>{
+socket.on('S_send_member',(tins)=>{
   if(mang_infowindow_main.length >0){
   for (var i=(mang_infowindow_main.length-1); i>=0; i--){
     if(mang_infowindow_main[i].online ==='O'){
@@ -335,12 +335,6 @@ function online_clk(room,name){
   socket.on('S_get_join',()=>{
     document.getElementById("id_online_text").style.display = "block";
     $("#id_input_subject").val(room_name_chose);
-    for (var k=(mang_infowindow.length-1); k>0; k--){
-      if(mang_infowindow[k].id===mang_infowindow_main[i].id){
-        mang_infowindow.splice(k,1);
-        mang_infowindow_main.splice(i,1);
-      }
-    }
     socket.off('S_get_join');
     });
   socket.emit('C_join_room',room);
@@ -607,8 +601,7 @@ function inbox_click(id,name){
   room_name_chose = name;
   mang_inbox.forEach((tin)=>{
     if(tin.id_pos == id){
-      socket.emit('C_reques_point_inbox',tin.id_tinnha_client);
-      socket.on('S_send_point',(data)=>{
+          socket.on('S_send_point',(data)=>{
         $("#id_location_list").html("");
         $("#id_input_subject").val(room_name_chose);
         if(mang_infowindow.length > 0){
@@ -634,6 +627,7 @@ function inbox_click(id,name){
         }
         socket.off('S_send_point');
       });
+        socket.emit('C_reques_point_inbox',tin.id_tinnha_client);
       return false;
     }
   });
@@ -680,7 +674,6 @@ function send_click(id,name){
       socket.emit('C_reques_point',tin.id_tinnha_client);
       socket.on('S_send_point',(data)=>{
         $("#id_location_list").html("");
-        $("#id_input_subject").val(room_name_chose);
         if(mang_infowindow.length > 0){
           mang_infowindow.forEach((win,key)=>{
           win.wind.close();
