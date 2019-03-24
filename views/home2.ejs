@@ -382,7 +382,7 @@ socket.on('C_danhantinnhan',(data)=>{
 function online_clk(room,name){
   socket.emit('C_join_room',room);
   console.log('hi hi:'+name);
-  $("#id_input_subject").html(name);
+  $("#id_input_subject").val(name);
 }
 function speak_loud(noi_dung){
   var msg = new SpeechSynthesisUtterance(noi_dung);
