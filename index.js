@@ -1132,7 +1132,7 @@ io.on('connection',(socket)=>
       if (info != null){
         info.room.forEach(function(room){
           io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(socket.username), number:socket.number});
-          
+
         });
       }
     }
