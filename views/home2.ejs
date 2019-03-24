@@ -179,7 +179,7 @@ socket.on('S_send_room',(data)=>{
 });
 socket.on("S_get_join",()=>{
   document.getElementById("id_online_text").style.display = "block";
-  document.getElementById("id_input_subject").html = room_name_chose;
+  // document.getElementById("id_input_subject").html = room_name_chose;
   for (var k=(mang_infowindow.length-1); k>0; k--){
     if(mang_infowindow[k].id===mang_infowindow_main[i].id){
       mang_infowindow.splice(k,1);
