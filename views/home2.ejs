@@ -120,7 +120,7 @@ socket.on('S_send_inbox', (row)=>{
       mang_inbox.push(tin);
       if(row.trangthai==="N"){trangthai="Not read";}
       else {trangthai="";}
-      var line = '<div class="line_inbox" id="inbox'+idc+'"><input type="checkbox" id="'+idc+'" class="line_inbox_chk" onclick="checkbox_inbox_click('+idc+')"><div class="line_inbox_main" onClick="inbox_click(\'' + idc + '\',\''+strdecode(row.subject)+'\')"><div class="line_inbox_sub">'+strdecode(row.subject)+'</div><div class="line_inbox_time">'+show_time(row.time)+'</div><div class="line_inbox_from">From:'+strdecode(row.name_nguoigui)+'</div><div class="line_inbox_read">'+trangthai+'</div></div></div>';
+      var line = '<div class="line_inbox" id="inbox'+idc+'"><input type="checkbox" id="'+idc+'" class="line_inbox_chk" onclick="checkbox_inbox_click('+idc+')"><div class="line_inbox_main" onClick="inbox_click(\'' + row.id_tinnha_client + '\',\''+strdecode(row.subject)+'\')"><div class="line_inbox_sub">'+strdecode(row.subject)+'</div><div class="line_inbox_time">'+show_time(row.time)+'</div><div class="line_inbox_from">From:'+strdecode(row.name_nguoigui)+'</div><div class="line_inbox_read">'+trangthai+'</div></div></div>';
       $("#k_inbox").prepend(line);
 
 });
@@ -335,7 +335,7 @@ function online_clk(room,name){
   socket.on('S_get_join',()=>{
     document.getElementById("id_online_text").style.display = "block";
     $("#id_input_subject").val(room_name_chose);
-    socket.off('S_get_join');
+      socket.off('S_get_join');
     });
   socket.emit('C_join_room',room);
   room_name_chose =name;
@@ -598,10 +598,10 @@ function show_time(time) {
 
 }
 function inbox_click(id,name){
+  // lấy cái id kia làm cái id tin nhắn client luôn
   room_name_chose = name;
-  mang_inbox.forEach((tin)=>{
-    if(tin.id_pos == id){
-          socket.on('S_send_point',(data)=>{
+  socket.emit('C_reques_point_inbox',id);
+      socket.on('S_send_point',(data)=>{
         $("#id_location_list").html("");
         $("#id_input_subject").val(room_name_chose);
         if(mang_infowindow.length > 0){
@@ -627,10 +627,7 @@ function inbox_click(id,name){
         }
         socket.off('S_send_point');
       });
-        socket.emit('C_reques_point_inbox',tin.id_tinnha_client);
-      return false;
-    }
-  });
+
 }
 function save_click(id,name){
   room_name_chose = name;
