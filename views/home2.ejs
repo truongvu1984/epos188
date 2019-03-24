@@ -177,17 +177,6 @@ socket.on('S_send_room',(data)=>{
   $("#k_online").prepend(line);
   if(data.stt=="F"){socket.emit('danhan_room',data.room_id_server);}
 });
-socket.on("S_get_join",()=>{
-  document.getElementById("id_online_text").style.display = "block";
-  // document.getElementById("id_input_subject").html = room_name_chose;
-  for (var k=(mang_infowindow.length-1); k>0; k--){
-    if(mang_infowindow[k].id===mang_infowindow_main[i].id){
-      mang_infowindow.splice(k,1);
-      mang_infowindow_main.splice(i,1);
-    }
-  }
-
-});
 socket.on("S_send_member",(tins)=>{
   if(mang_infowindow_main.length >0){
   for (var i=(mang_infowindow_main.length-1); i>=0; i--){
@@ -380,9 +369,22 @@ socket.on('C_danhantinnhan',(data)=>{
 
 });
 function online_clk(room,name){
+  socket.on("S_get_join",()=>{
+    document.getElementById("id_online_text").style.display = "block";
+    $("#id_input_subject").val(name);
+    // document.getElementById("id_input_subject").html = room_name_chose;
+    for (var k=(mang_infowindow.length-1); k>0; k--){
+      if(mang_infowindow[k].id===mang_infowindow_main[i].id){
+        mang_infowindow.splice(k,1);
+        mang_infowindow_main.splice(i,1);
+      }
+    }
+    socket.off('S_get_join');
+    });
   socket.emit('C_join_room',room);
-  console.log('hi hi:'+name);
-  $("#id_input_subject").val(name);
+  room_name_chose =name;
+
+
 }
 function speak_loud(noi_dung){
   var msg = new SpeechSynthesisUtterance(noi_dung);
