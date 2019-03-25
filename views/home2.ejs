@@ -624,7 +624,7 @@ function show_time(time) {
 function inbox_click(id,name){
   // lấy cái id kia làm cái id tin nhắn client luôn
   room_name_chose = name;
-  console.log('vũ yêu van:');
+  console.log('vũ yêu van:'+id);
   socket.emit('C_reques_point_inbox',id);
 }
 function save_click(id,name){
