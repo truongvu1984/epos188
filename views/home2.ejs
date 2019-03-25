@@ -123,7 +123,7 @@ socket.on('S_send_send', (row)=>{
               if(key===(row.nguoinhan.length-1)){space="";}else {space=" ,";}
               if(row1.stt ==="N"){ab=ab+"<font color='red'>"+strdecode(row1.name)+"</font>" +space;}else {ab=ab+strdecode(row1.name)+space;}
           });
-          var line = '<div class="line_inbox" id="send'+idc+'"><input type="checkbox" id="'+idc+'" class="line_send_chk" onclick="checkbox_send_click('+idc+')"><div class="line_send_main" onclick="send_click('+idc+')"><div class="line_send_sub">'+strdecode(row.subject)+'</div><div class="line_send_time">'+show_time(row.time)+'</div><div class="line_send_from">To:'+ab+'</div><div class="line_send_read">ha ha</div></div></div>';
+          var line = '<div class="line_inbox" id="send'+idc+'"><input type="checkbox" id="'+idc+'" class="line_send_chk" onclick="checkbox_send_click('+idc+')"><div class="line_send_main" onClick="send_click(\'' + row.idc+ '\',\''+strdecode(row.subject)+'\')"><div class="line_send_sub">'+strdecode(row.subject)+'</div><div class="line_send_time">'+show_time(row.time)+'</div><div class="line_send_from">To:'+ab+'</div><div class="line_send_read">ha ha</div></div></div>';
           $("#k_send").prepend(line);
 
 });
@@ -136,7 +136,7 @@ socket.on('S_send_save', (data)=>{
          var idc = "2"+id_inbox_pos;
          var tin = {ids: row.ids,id_pos:idc, subject:strdecode(row.subject), id_tinnha_client:row.idc, time:show_time(row.time) };
          mang_save.push(tin);
-        var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_save_chk' onclick='checkbox_save_click("+idc+");'><div class='line_save_main' onclick='save_click("+idc+")'><div class='line_save_sub'>"+strdecode(row.subject)+"</div><div class='line_inbox_time'>"+show_time(row.time)+"</div></div></div>";
+        var line = '<div class="line_inbox"><input type="checkbox" id="'+idc+'" class="line_save_chk" onclick="checkbox_save_click('+idc+')"><div class="line_save_main" onClick="save_click(\'' + row.idc+ '\',\''+strdecode(row.subject)+'\')"><div class="line_save_sub">'+strdecode(row.subject)+'</div><div class="line_inbox_time">'+show_time(row.time)+'</div></div></div>';
           $("#k_save").before(line);
 
        });
@@ -618,14 +618,12 @@ function inbox_click(id,nam){
 function save_click(id,name){
   room_name_chose = name;
   document.getElementById("id_online_text").style.display = "none";
-  mang_save.forEach((tin)=>{
-    if(tin.id_pos == id){
-      socket.emit('C_reques_point',tin.id_tinnha_client);
-      socket.on('S_send_point',(data)=>{
-        $("#id_location_list").html("");
-        $("#id_input_subject").val(room_name_chose);
-        if(mang_infowindow.length > 0){
-          mang_infowindow.forEach((win,key)=>{
+  socket.emit('C_reques_point',id);
+  socket.on('S_send_point',(data)=>{
+  $("#id_location_list").html("");
+  $("#id_input_subject").val(room_name_chose);
+  if(mang_infowindow.length > 0){
+    mang_infowindow.forEach((win,key)=>{
           win.wind.close();
           if(key === (mang_infowindow.length-1)){
             mang_infowindow = [];
@@ -647,16 +645,12 @@ function save_click(id,name){
         }
         socket.off('S_send_point');
       });
-      return false;
-    }
-  });
+
 }
 function send_click(id,name){
   room_name_chose = name;
   document.getElementById("id_online_text").style.display = "none";
-  mang_send.forEach((tin)=>{
-    if(tin.id_pos == id){
-      socket.emit('C_reques_point',tin.id_tinnha_client);
+  socket.emit('C_reques_point',id);
       socket.on('S_send_point',(data)=>{
         $("#id_location_list").html("");
         $("#id_input_subject").val(room_name_chose);
@@ -683,9 +677,7 @@ function send_click(id,name){
         }
         socket.off('S_send_point');
       });
-      return false;
-    }
-  });
+
 }
 function search_contact(){
   document.getElementById("id_list_contact").style.display = "none";
