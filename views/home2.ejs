@@ -109,20 +109,6 @@ socket.on('S_send_room_member', function(data){
 
                       $("#myDropdown6").html( ten);
                   });
-// socket.on('S_send_inbox', (row)=>{
-//    var trangthai="";
-//    var thoigian="";
-//       if(row.stt === "N"){socket.emit("danhantinnhan",row.number_nguoigui,row.id_tinnha_client);}
-//       id_inbox_pos++;
-//       var idc = "4"+id_inbox_pos;
-//       var tin = {ids: row.ids,id_pos:idc, name_nguoigui:strdecode(row.name_nguoigui),number_nguoigui:row.number_nguoigui, subject:strdecode(row.subject), id_tinnha_client:row.id_tinnha_client,trangthai:row.trangthai, stt: row.stt, thoigian:show_time(row.time) };
-//       mang_inbox.push(tin);
-//       if(row.trangthai==="N"){trangthai="Not read";}
-//       else {trangthai="";}
-// var line='<div class="line_inbox" id="inbox'+idc+'"><input type="checkbox" id="'+idc+'" class="line_inbox_chk" onclick="checkbox_inbox_click('+idc+')"><div class="line_inbox_main" onClick="online_clk(\'' + idc + '\',\''+strdecode(data.room_name)+'\')"><div class="line_inbox_sub">'+strdecode(row.subject)+'</div><div class="line_inbox_time">'+show_time(row.time)+'</div><div class="line_inbox_from">From:'+strdecode(row.name_nguoigui)+'</div><div class="line_inbox_read">'+trangthai+'</div></div></div>';
-//   $("#k_inbox").prepend(line);
-//
-// });
 socket.on('S_send_send', (row)=>{
      //S gửi toàn bộ bản tin send về client
      cru_send = row.ids;
@@ -329,31 +315,6 @@ socket.on('C_danhantinnhan',(data)=>{
   });
   // chuyển đổi màu sắc sang đỏ đối với người
 
-});
-socket.on('S_send_point',(data)=>{
-  $("#id_location_list").html("");
-  $("#id_input_subject").val(room_name_chose);
-  if(mang_infowindow.length > 0){
-    mang_infowindow.forEach((win,key)=>{
-    win.wind.close();
-    if(key === (mang_infowindow.length-1)){
-      mang_infowindow = [];
-      mang_infowindow_main=[];
-      data.forEach((tin)=>{
-        show_pos(tin.lat, tin.lon, strdecode(tin.name), tin.id,'A');
-        var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
-        $("#id_location_list").append(line);
-        });
-      }
-    });
-  }
-  else {
-    data.forEach((tin)=>{
-    show_pos(tin.lat, tin.lon, strdecode(tin.name),tin.id,'A');
-    var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
-    $("#id_location_list").append(line);
-  });
-  }
 });
 function online_clk(room,name){
   console.log('hi hi:'+name);
@@ -624,9 +585,34 @@ function show_time(time) {
 }
 function inbox_click(id,nam){
   // lấy cái id kia làm cái id tin nhắn client luôn
-
-  console.log('vũ yêu van:'+nam);
   socket.emit('C_reques_point_inbox',id);
+  room_name_chose = nam;
+  socket.on('S_send_point',(data)=>{
+    $("#id_location_list").html("");
+    $("#id_input_subject").val(room_name_chose);
+    if(mang_infowindow.length > 0){
+      mang_infowindow.forEach((win,key)=>{
+      win.wind.close();
+      if(key === (mang_infowindow.length-1)){
+        mang_infowindow = [];
+        mang_infowindow_main=[];
+        data.forEach((tin)=>{
+          show_pos(tin.lat, tin.lon, strdecode(tin.name), tin.id,'A');
+          var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
+          $("#id_location_list").append(line);
+          });
+        }
+      });
+    }
+    else {
+      data.forEach((tin)=>{
+      show_pos(tin.lat, tin.lon, strdecode(tin.name),tin.id,'A');
+      var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
+      $("#id_location_list").append(line);
+    });
+    }
+    socket.off('S_send_point');
+  });
 }
 function save_click(id,name){
   room_name_chose = name;
