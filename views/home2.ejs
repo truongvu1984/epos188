@@ -109,20 +109,20 @@ socket.on('S_send_room_member', function(data){
 
                       $("#myDropdown6").html( ten);
                   });
-socket.on('S_send_inbox', (row)=>{
-   var trangthai="";
-   var thoigian="";
-      if(row.stt === "N"){socket.emit("danhantinnhan",row.number_nguoigui,row.id_tinnha_client);}
-      id_inbox_pos++;
-      var idc = "4"+id_inbox_pos;
-      var tin = {ids: row.ids,id_pos:idc, name_nguoigui:strdecode(row.name_nguoigui),number_nguoigui:row.number_nguoigui, subject:strdecode(row.subject), id_tinnha_client:row.id_tinnha_client,trangthai:row.trangthai, stt: row.stt, thoigian:show_time(row.time) };
-      mang_inbox.push(tin);
-      if(row.trangthai==="N"){trangthai="Not read";}
-      else {trangthai="";}
-var line='<div class="line_inbox" id="inbox'+idc+'"><input type="checkbox" id="'+idc+'" class="line_inbox_chk" onclick="checkbox_inbox_click('+idc+')"><div class="line_inbox_main" onClick="online_clk(\'' + idc + '\',\''+strdecode(data.room_name)+'\')"><div class="line_inbox_sub">'+strdecode(row.subject)+'</div><div class="line_inbox_time">'+show_time(row.time)+'</div><div class="line_inbox_from">From:'+strdecode(row.name_nguoigui)+'</div><div class="line_inbox_read">'+trangthai+'</div></div></div>';
-  $("#k_inbox").prepend(line);
-
-});
+// socket.on('S_send_inbox', (row)=>{
+//    var trangthai="";
+//    var thoigian="";
+//       if(row.stt === "N"){socket.emit("danhantinnhan",row.number_nguoigui,row.id_tinnha_client);}
+//       id_inbox_pos++;
+//       var idc = "4"+id_inbox_pos;
+//       var tin = {ids: row.ids,id_pos:idc, name_nguoigui:strdecode(row.name_nguoigui),number_nguoigui:row.number_nguoigui, subject:strdecode(row.subject), id_tinnha_client:row.id_tinnha_client,trangthai:row.trangthai, stt: row.stt, thoigian:show_time(row.time) };
+//       mang_inbox.push(tin);
+//       if(row.trangthai==="N"){trangthai="Not read";}
+//       else {trangthai="";}
+// var line='<div class="line_inbox" id="inbox'+idc+'"><input type="checkbox" id="'+idc+'" class="line_inbox_chk" onclick="checkbox_inbox_click('+idc+')"><div class="line_inbox_main" onClick="online_clk(\'' + idc + '\',\''+strdecode(data.room_name)+'\')"><div class="line_inbox_sub">'+strdecode(row.subject)+'</div><div class="line_inbox_time">'+show_time(row.time)+'</div><div class="line_inbox_from">From:'+strdecode(row.name_nguoigui)+'</div><div class="line_inbox_read">'+trangthai+'</div></div></div>';
+//   $("#k_inbox").prepend(line);
+//
+// });
 socket.on('S_send_send', (row)=>{
      //S gửi toàn bộ bản tin send về client
      cru_send = row.ids;
@@ -269,7 +269,7 @@ socket.on('S_guitinnhan', (data)=>{
   mang_inbox.push(tin);
   var stt = data.stt;
   if(stt!= null && stt==("N")){socket.emit("danhantinnhan",data.number_nguoigui,data.id_tinnha_client);}
-  var line = "<div class='line_inbox'><input type='checkbox' id='"+idc+"' class='line_inbox_chk' onclick='checkbox_inbox_click("+idc+");'><div class='line_inbox_main' onclick='inbox_click("+idc+")'><div class='line_inbox_sub'>"+strdecode(data.subject)+"</div><div class='line_inbox_time'>"+show_time(data.time)+"</div><div class='line_inbox_from'>From:"+strdecode(data.name_nguoigui)+"</div><div class='line_inbox_read'>"+"Not read"+"</div></div></div>";
+  var line = '<div class="line_inbox"><input type="checkbox" id="'+idc+'" class="line_inbox_chk" onclick="checkbox_inbox_click('+idc+')"><div class="line_inbox_main" onClick="inbox\(\'' + data.id_tinnha_client+ '\',\''+strdecode(data.subject)+'\')"><div class="line_inbox_sub">'+strdecode(data.subject)+'</div><div class="line_inbox_time">'+show_time(data.time)+'</div><div class="line_inbox_from">From:'+strdecode(data.name_nguoigui)+'</div><div class="line_inbox_read">'+'Not read'+'</div></div></div>';
   $("#k_inbox").prepend(line);
 
 });
