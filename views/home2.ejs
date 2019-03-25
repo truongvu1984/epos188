@@ -138,7 +138,7 @@ socket.on('S_send_member',(tins)=>{
       }
         mang_infowindow_main.splice(i,1);
     }
-      if(i===0 ){
+    if(i===0 ){
         tins.forEach((tin,key)=>{
           mang_infowindow_main.push({name:strdecode(tin.name),lat:null,lon:null,id:tin.number, online:'O'});
           var line = '<div class="list_line_member" id="li_lo'+tin.number+'"><div class="lo_list_sub" onclick="fly_to('+tin.number+')">'+strdecode(tin.name)+'</div><input type="checkbox" class="list_line_checkbox" id="chk'+tin.number+'" onchange="hide_show_pos('+tin.number+')"><div class="lo_list_show">Hide</div></div>';
@@ -610,9 +610,9 @@ function inbox_click(id,nam){
     $("#id_input_subject").val(room_name_chose);
     if(mang_infowindow.length > 0){
       mang_infowindow.forEach((win,key)=>{
-      win.wind.close();
+      if(win.wind != null) {win.wind.close();}
       if(key === (mang_infowindow.length-1)){
-        mang_infowindow = [];
+        mang_infowindow=[];
         mang_infowindow_main=[];
         data.forEach((tin)=>{
           show_pos(tin.lat, tin.lon, strdecode(tin.name), tin.id,'A');
