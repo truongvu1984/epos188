@@ -119,7 +119,7 @@ socket.on('S_send_inbox', (row)=>{
       mang_inbox.push(tin);
       if(row.trangthai==="N"){trangthai="Not read";}
       else {trangthai="";}
-      var line = '<div class="line_inbox" id="inbox'+idc+'"><input type="checkbox" id="'+idc+'" class="line_inbox_chk" onclick="checkbox_inbox_click('+idc+')"><div class="line_inbox_main" onClick="inbox_click(\'' + row.id_tinnha_client + '\',\''+strdecode(row.subject)+'\')"><div class="line_inbox_sub">'+strdecode(row.subject)+'</div><div class="line_inbox_time">'+show_time(row.time)+'</div><div class="line_inbox_from">From:'+strdecode(row.name_nguoigui)+'</div><div class="line_inbox_read">'+trangthai+'</div></div></div>';
+var line='<div class="line_inbox" id="inbox'+idc+'"><input type="checkbox" id="'+idc+'" class="line_inbox_chk" onclick="checkbox_inbox_click('+idc+')"><div class="line_inbox_main" onClick="inbox_click(\'' + idc + '\',\''+strdecode(row.subject)+'\')"><div class="line_inbox_sub">'+strdecode(row.subject)+'</div><div class="line_inbox_time">'+show_time(row.time)+'</div><div class="line_inbox_from">From:'+strdecode(row.name_nguoigui)+'</div><div class="line_inbox_read">'+trangthai+'</div></div></div>';
       $("#k_inbox").prepend(line);
 
 });
