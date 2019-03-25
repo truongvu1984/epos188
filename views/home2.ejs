@@ -349,7 +349,8 @@ function hide_show_pos(id){
       if(mang_infowindow_main[i].id ==id){
         var lat1 = mang_infowindow_main[i].lat;
         var lon1 = mang_infowindow_main[i].lon;
-        var name1 = mang_infowindow_main[i].name;
+        let name1 = "<div class='icon'>"+mang_infowindow_main[i].name+"</div>";
+        // var name1 = mang_infowindow_main[i].name;
         var infowindow = new google.maps.InfoWindow({
             position:{ lat:lat1, lng:lon1},
             content:name1
@@ -416,7 +417,7 @@ function fly_to(id){
     }
   });
 }
-function handleChange(checkbox,id1) {
+function handleChange(checkbox,id1){
     if(checkbox.checked == true){
       cancle_luudiem(id1);
     }else{
@@ -485,7 +486,7 @@ function open_close_list(){
       $("#id_btn_list").html("List");
   }
 }
-function myMap() {
+function myMap(){
       var mapOptions = {
       center: new google.maps.LatLng(41.5, -0.12),
       zoom: 10,
@@ -538,9 +539,6 @@ function luudiem(lat1, lon1, id1){
       mang_infowindow_main.push(diem2);
       var line = "<div class='list_line' id='li_lo"+id1+"'><div class='lo_list_sub' onclick='fly_to("+id1+")'>"+name1+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+id1+"' onchange='hide_show_pos("+id1+")'><div class='lo_list_show'>Hide</div></div>";
       $("#id_location_list").append(line);
-      // var new_pos = "<div id='"+id1+"' class='line_list_pos'><div onclick='fly_to("+id1+")' style='position:absolute; left:0px,color:#4d4dff; cursor:pointer;overflow:hidden;max-width:150px'>"+name1+"</div><div style='position:absolute; right:0px'><input id='input"+id1+"' type='checkbox' onchange='handleChange(this,"+id1+")'><span style='font-size: 20px;'>Hide</span></div></br></div>";
-      // $("#id_list_pos").append(new_pos);
-
       google.maps.event.addListener(mang_infowindow[i].wind,'closeclick',function(){
         document.getElementById("li_lo"+id1).remove();
         for (var i=0; i<mang_infowindow.length; i++){
@@ -555,12 +553,12 @@ function luudiem(lat1, lon1, id1){
             break;
           }
         }
-    });
+      });
       return false;
       }
     }
 }
-function cancle_luudiem(id) {
+function cancle_luudiem(id){
   for (var i=0; i<mang_infowindow.length; i++){
     if(mang_infowindow[i].id ==id){
     mang_infowindow[i].wind.close();
@@ -569,7 +567,7 @@ function cancle_luudiem(id) {
       }
     }
   }
-function show_time(time) {
+function show_time(time){
   let year = time.year;
   let month=time.month;
   let day = time.day;
@@ -587,6 +585,7 @@ function inbox_click(id,nam){
   // lấy cái id kia làm cái id tin nhắn client luôn
   socket.emit('C_reques_point_inbox',id);
   room_name_chose = nam;
+  socket.off('S_pos_online');
   document.getElementById("id_online_text").style.display = "none";
   socket.on('S_send_point',(data)=>{
     $("#id_location_list").html("");
@@ -618,6 +617,7 @@ function inbox_click(id,nam){
 function save_click(id,name){
   room_name_chose = name;
   document.getElementById("id_online_text").style.display = "none";
+  socket.off('S_pos_online');
   socket.emit('C_reques_point',id);
   socket.on('S_send_point',(data)=>{
   $("#id_location_list").html("");
@@ -649,6 +649,7 @@ function save_click(id,name){
 }
 function send_click(id,name){
   room_name_chose = name;
+  socket.off('S_pos_online');
   document.getElementById("id_online_text").style.display = "none";
   socket.emit('C_reques_point',id);
       socket.on('S_send_point',(data)=>{
