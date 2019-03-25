@@ -52,7 +52,7 @@ socket.on('check_pass',()=>{
   let ab = {rightuser:'<%= sodienthoai %>',right_pass:'<%= pass %>',online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
   socket.emit('login2',ab);
 });
-socket.on('S_W_kq_check_contact',function(data){
+socket.on('S_W_kq_check_contact',(data)=>{
       var dropdowns = document.getElementsByClassName("list_contact_1");
       var k;
       for (k = 0; k < dropdowns.length; k++) {
@@ -63,7 +63,7 @@ socket.on('S_W_kq_check_contact',function(data){
       }
 
     });
-socket.on('S_pos_online', function(data){
+socket.on('S_pos_online',(data)=>{
   mang_infowindow_main.forEach((tin)=>{
     if(tin.online==='O' && tin.id === data.number){
       tin = {name:tin.name, lat:data.lat, lon:data.lon, id:tin.id, online:'O'};
@@ -77,7 +77,7 @@ socket.on('S_pos_online', function(data){
           return false;
         }
           if(key===(mang_infowindow.length-1) && check ){
-          let chuoi = "<div class='icon'>"+tin.name+"</div>";
+          let chuoi = "<div class='icon_live'>"+tin.name+"</div>";
           var infow = new google.maps.InfoWindow({
             position:{ lat:data.lat, lng: data.lon},
             content:chuoi
@@ -88,7 +88,7 @@ socket.on('S_pos_online', function(data){
         });
       }
       else {
-        let chuoi = "<div class='icon'>"+tin.name+"</div>";
+        let chuoi = "<div class='icon_live'>"+tin.name+"</div>";
         var infow = new google.maps.InfoWindow({
           position:{ lat:data.lat, lng: data.lon},
           content:chuoi
