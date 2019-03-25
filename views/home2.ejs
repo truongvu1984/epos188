@@ -288,7 +288,9 @@ function online_clk(room,name){
       socket.on('S_pos_online',(data)=>{
         mang_infowindow_main.forEach((tin)=>{
           if(tin.online==='O' && tin.id === data.number){
-            tin = {name:tin.name, lat:data.lat, lon:data.lon, id:tin.id, online:'O'};
+            let name1 = tin.name;
+            let id1 = tin.id;
+            tin = {name:name1, lat:data.lat, lon:data.lon, id:id1, online:'O'};
             if(mang_infowindow.length >0){
               var check=true;
               mang_infowindow.forEach((row,key)=>{
@@ -304,8 +306,16 @@ function online_clk(room,name){
                   position:{ lat:data.lat, lng: data.lon},
                   content:chuoi
                 });
-                mang_infowindow.push({id:tin.id,wind:infow});
+                mang_infowindow.push({id:id1,wind:infow});
                 infow.open(map);
+                google.maps.event.addListener(infow,'closeclick',function(){
+                for (var i=0; i<mang_infowindow.length; i++){
+                    if(mang_infowindow[i].id == id1){
+                      mang_infowindow.splice(i,1);
+                      break;
+                    }
+                  }
+                });
               }
               });
             }
@@ -317,6 +327,14 @@ function online_clk(room,name){
               });
               mang_infowindow.push({id:tin.id,wind:infow});
               infow.open(map);
+              google.maps.event.addListener(infow,'closeclick',function(){
+              for (var i=0; i<mang_infowindow.length; i++){
+                  if(mang_infowindow[i].id == id1){
+                    mang_infowindow.splice(i,1);
+                    break;
+                  }
+                }
+              });
             }
             return false;
           }
