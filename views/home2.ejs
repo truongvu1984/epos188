@@ -587,6 +587,7 @@ function inbox_click(id,nam){
   // lấy cái id kia làm cái id tin nhắn client luôn
   socket.emit('C_reques_point_inbox',id);
   room_name_chose = nam;
+  document.getElementById("id_online_text").style.display = "none";
   socket.on('S_send_point',(data)=>{
     $("#id_location_list").html("");
     $("#id_input_subject").val(room_name_chose);
@@ -616,6 +617,7 @@ function inbox_click(id,nam){
 }
 function save_click(id,name){
   room_name_chose = name;
+  document.getElementById("id_online_text").style.display = "none";
   mang_save.forEach((tin)=>{
     if(tin.id_pos == id){
       socket.emit('C_reques_point',tin.id_tinnha_client);
@@ -651,11 +653,13 @@ function save_click(id,name){
 }
 function send_click(id,name){
   room_name_chose = name;
+  document.getElementById("id_online_text").style.display = "none";
   mang_send.forEach((tin)=>{
     if(tin.id_pos == id){
       socket.emit('C_reques_point',tin.id_tinnha_client);
       socket.on('S_send_point',(data)=>{
         $("#id_location_list").html("");
+        $("#id_input_subject").val(room_name_chose);
         if(mang_infowindow.length > 0){
           mang_infowindow.forEach((win,key)=>{
           win.wind.close();
