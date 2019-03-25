@@ -63,43 +63,7 @@ socket.on('S_W_kq_check_contact',(data)=>{
       }
 
     });
-socket.on('S_pos_online',(data)=>{
-  mang_infowindow_main.forEach((tin)=>{
-    if(tin.online==='O' && tin.id === data.number){
-      tin = {name:tin.name, lat:data.lat, lon:data.lon, id:tin.id, online:'O'};
-      if(mang_infowindow.length >0){
-        var check=true;
-        mang_infowindow.forEach((row,key)=>{
-          if(row.id === tin.id && row.wind != null){
-          check= false;
-          var latlng = new google.maps.LatLng(data.lat, data.lon);
-          row.wind.setPosition(latlng);
-          return false;
-        }
-          if(key===(mang_infowindow.length-1) && check ){
-          let chuoi = "<div class='icon_live'>"+tin.name+"</div>";
-          var infow = new google.maps.InfoWindow({
-            position:{ lat:data.lat, lng: data.lon},
-            content:chuoi
-          });
-          mang_infowindow.push({id:tin.id,wind:infow});
-          infow.open(map);
-        }
-        });
-      }
-      else {
-        let chuoi = "<div class='icon_live'>"+tin.name+"</div>";
-        var infow = new google.maps.InfoWindow({
-          position:{ lat:data.lat, lng: data.lon},
-          content:chuoi
-        });
-        mang_infowindow.push({id:tin.id,wind:infow});
-        infow.open(map);
-      }
-      return false;
-    }
-  });
-});
+
 socket.on('S_send_room_member', function(data){
                     var ten ="";
 
@@ -317,11 +281,47 @@ socket.on('C_danhantinnhan',(data)=>{
 
 });
 function online_clk(room,name){
-  console.log('hi hi:'+name);
   socket.on('S_get_join',()=>{
     document.getElementById("id_online_text").style.display = "block";
     $("#id_input_subject").val(room_name_chose);
       socket.off('S_get_join');
+      socket.on('S_pos_online',(data)=>{
+        mang_infowindow_main.forEach((tin)=>{
+          if(tin.online==='O' && tin.id === data.number){
+            tin = {name:tin.name, lat:data.lat, lon:data.lon, id:tin.id, online:'O'};
+            if(mang_infowindow.length >0){
+              var check=true;
+              mang_infowindow.forEach((row,key)=>{
+                if(row.id === tin.id && row.wind != null){
+                check= false;
+                var latlng = new google.maps.LatLng(data.lat, data.lon);
+                row.wind.setPosition(latlng);
+                return false;
+              }
+                if(key===(mang_infowindow.length-1) && check ){
+                let chuoi = "<div class='icon_live'>"+tin.name+"</div>";
+                var infow = new google.maps.InfoWindow({
+                  position:{ lat:data.lat, lng: data.lon},
+                  content:chuoi
+                });
+                mang_infowindow.push({id:tin.id,wind:infow});
+                infow.open(map);
+              }
+              });
+            }
+            else {
+              let chuoi = "<div class='icon_live'>"+tin.name+"</div>";
+              var infow = new google.maps.InfoWindow({
+                position:{ lat:data.lat, lng: data.lon},
+                content:chuoi
+              });
+              mang_infowindow.push({id:tin.id,wind:infow});
+              infow.open(map);
+            }
+            return false;
+          }
+        });
+      });
     });
   socket.emit('C_join_room',room);
   room_name_chose =name;
