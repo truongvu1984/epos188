@@ -48,7 +48,6 @@ let cru_save=0;
 let cru_contact = 0;
 let cru_group = 0;
 var room_name_chose="";
-
 socket.on('check_pass',()=>{
   let ab = {rightuser:'<%= sodienthoai %>',right_pass:'<%= pass %>',online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
   socket.emit('login2',ab);
@@ -331,6 +330,31 @@ socket.on('C_danhantinnhan',(data)=>{
   // chuyển đổi màu sắc sang đỏ đối với người
 
 });
+socket.on('S_send_point',(data)=>{
+  $("#id_location_list").html("");
+  $("#id_input_subject").val(room_name_chose);
+  if(mang_infowindow.length > 0){
+    mang_infowindow.forEach((win,key)=>{
+    win.wind.close();
+    if(key === (mang_infowindow.length-1)){
+      mang_infowindow = [];
+      mang_infowindow_main=[];
+      data.forEach((tin)=>{
+        show_pos(tin.lat, tin.lon, strdecode(tin.name), tin.id,'A');
+        var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
+        $("#id_location_list").append(line);
+        });
+      }
+    });
+  }
+  else {
+    data.forEach((tin)=>{
+    show_pos(tin.lat, tin.lon, strdecode(tin.name),tin.id,'A');
+    var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
+    $("#id_location_list").append(line);
+  });
+  }
+});
 function online_clk(room,name){
   socket.on('S_get_join',()=>{
     document.getElementById("id_online_text").style.display = "block";
@@ -600,33 +624,9 @@ function show_time(time) {
 function inbox_click(id,name){
   // lấy cái id kia làm cái id tin nhắn client luôn
   room_name_chose = name;
+  console.log('inbox:'+name);
   socket.emit('C_reques_point_inbox',id);
-      socket.on('S_send_point',(data)=>{
-        $("#id_location_list").html("");
-        $("#id_input_subject").val(room_name_chose);
-        if(mang_infowindow.length > 0){
-          mang_infowindow.forEach((win,key)=>{
-          win.wind.close();
-          if(key === (mang_infowindow.length-1)){
-            mang_infowindow = [];
-            mang_infowindow_main=[];
-            data.forEach((tin)=>{
-              show_pos(tin.lat, tin.lon, strdecode(tin.name), tin.id,'A');
-              var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
-              $("#id_location_list").append(line);
-              });
-            }
-          });
-        }
-        else {
-          data.forEach((tin)=>{
-          show_pos(tin.lat, tin.lon, strdecode(tin.name),tin.id,'A');
-          var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
-          $("#id_location_list").append(line);
-        });
-        }
-        socket.off('S_send_point');
-      });
+
 
 }
 function save_click(id,name){
