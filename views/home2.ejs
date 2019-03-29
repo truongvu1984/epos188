@@ -303,7 +303,8 @@ function online_clk(room,name){
                 let chuoi = "<div class='icon_live'>"+tin.name+"</div>";
                 var infow = new google.maps.InfoWindow({
                   position:{ lat:data.lat, lng: data.lon},
-                  content:chuoi
+                  content:chuoi,
+                  disableAutoPan : true
                 });
                 mang_infowindow.push({id:id1,wind:infow});
                 infow.open(map);
@@ -322,7 +323,8 @@ function online_clk(room,name){
               let chuoi = "<div class='icon_live'>"+tin.name+"</div>";
               var infow = new google.maps.InfoWindow({
                 position:{ lat:data.lat, lng: data.lon},
-                content:chuoi
+                content:chuoi,
+                disableAutoPan: true
               });
               mang_infowindow.push({id:tin.id,wind:infow});
               infow.open(map);
