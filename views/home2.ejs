@@ -90,10 +90,9 @@ socket.on('S_send_send', (row)=>{
           $("#k_send").prepend(line);
 
 });
-socket.on('S_send_save', (data)=>{
+socket.on('S_send_save', (row)=>{
      //S gửi toàn bộ bản tin inbox về client
-     cru_save = data[data.length-1].ids;
-       data.forEach((row,key)=>{
+     cru_save = row.ids;
          var thoigian="";
          id_inbox_pos++;
          var idc = "2"+id_inbox_pos;
@@ -101,9 +100,6 @@ socket.on('S_send_save', (data)=>{
          mang_save.push(tin);
         var line = '<div class="line_inbox"><input type="checkbox" id="'+idc+'" class="line_save_chk" onclick="checkbox_save_click('+idc+')"><div class="line_save_main" onClick="save_click(\'' + row.idc+ '\',\''+strdecode(row.subject)+'\')"><div class="line_save_sub">'+strdecode(row.subject)+'</div><div class="line_inbox_time">'+show_time(row.time)+'</div></div></div>';
           $("#k_save").before(line);
-
-       });
-     socket.emit('C_nhan_save');
 });
 socket.on('S_send_contact',(tin)=>{
   cru_contact = tin.ids;
@@ -404,7 +400,7 @@ function show_pos(lat,lon, name, id1,stt){
   var infow = new google.maps.InfoWindow({
       position:{ lat:lat, lng: lon},
       content:chuoi,
-    
+
     });
     mang_infowindow_main.push({name:name,lat:lat,lon:lon,id:id1, online:stt});
     mang_infowindow.push({id:id1, wind: infow});
