@@ -404,6 +404,7 @@ function show_pos(lat,lon, name, id1,stt){
   var infow = new google.maps.InfoWindow({
       position:{ lat:lat, lng: lon},
       content:chuoi,
+    
     });
     mang_infowindow_main.push({name:name,lat:lat,lon:lon,id:id1, online:stt});
     mang_infowindow.push({id:id1, wind: infow});
