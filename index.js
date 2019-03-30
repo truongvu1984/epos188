@@ -1133,6 +1133,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_make_room', function (info){
     if (socket.number){
+      console.log('C muon tao room moi:'+info.room_name);
       let thoigian = new Date();
       socket.emit('S_get_room');
       // bắt đầu xử lý cái room
