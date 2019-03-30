@@ -159,7 +159,7 @@ socket.on('S_W_add_friend_ok',function(data){
 
 
           });
-socket.on('S_del_inbox', ()=>{
+socket.on('S_del_inbox',()=>{
     document.getElementById("id_content_inbox_del").style.display = "none";
     list_del_inbox.forEach((row, key)=>{
       for(var i=0; i< mang_inbox.length; i++){
@@ -175,7 +175,7 @@ socket.on('S_del_inbox', ()=>{
     // document.getElementById(id1).remove();
     alert('Tin nhắn đã được xóa thành công');
 });
-socket.on('S_del_online', ()=>{
+socket.on('S_del_online',()=>{
   document.getElementById("id_content_online_del").style.display = "none";
   list_del_online.forEach((row, key)=>{
     for(var i=0; i< mang_room.length; i++){
@@ -192,7 +192,7 @@ socket.on('S_del_online', ()=>{
   // document.getElementById(id1).remove();
   alert('Tin nhắn đã được xóa thành công');
 });
-socket.on('S_del_send', ()=>{
+socket.on('S_del_send',()=>{
   document.getElementById("id_content_send_del").style.display = "none";
   list_del_send.forEach((row, key)=>{
     for(var i=0; i< mang_send.length; i++){
@@ -207,7 +207,7 @@ socket.on('S_del_send', ()=>{
 
   alert('Tin nhắn đã được xóa thành công');
 });
-socket.on('S_guitinnhan', (data)=>{
+socket.on('S_guitinnhan',(data)=>{
   id_inbox_pos++;
   var idc = "4"+id_inbox_pos;
   var tin = {id_pos:idc, name_nguoigui:strdecode(data.name_nguoigui),number_nguoigui:data.number_nguoigui, subject:strdecode(data.subject), id_tinnha_client:data.id_tinnha_client,trangthai:"N", thoigian:show_time(data.time) };

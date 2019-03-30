@@ -1133,7 +1133,6 @@ io.on('connection',(socket)=>
   });
   socket.on('C_make_room', function (info){
     if (socket.number){
-      console.log('C muon tao room moi:'+info.room_name);
       let thoigian = new Date();
       socket.emit('S_get_room');
       // bắt đầu xử lý cái room
@@ -1154,7 +1153,7 @@ io.on('connection',(socket)=>
               val2 = [[ res.insertId, member.name,member.number,'B']];
               con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
               });
-              socket.emit('S_send_room',{ids:res.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian)});
+              io.sockets.in(socket.number)('S_send_room',{ids:res.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian)});
             }
           });
         }
