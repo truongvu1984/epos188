@@ -613,6 +613,10 @@ io.on('connection',(socket)=>
   });
   socket.on('C_reques_point_inbox',(idc)=>{
     if(socket.number){
+      if(socket.roomabc){
+        socket.leave(socket.roomabc);
+        socket.roomabc = undefined;
+      }
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
          {
            if ( err || ( a1s.length == 0) ){console.log(err);}
@@ -640,6 +644,11 @@ io.on('connection',(socket)=>
   });
   socket.on('C_reques_point',(idc)=>{
       if(socket.number){
+        if(socket.roomabc){
+          socket.leave(socket.roomabc);
+          socket.roomabc = undefined;
+        }
+
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
          {
            if ( err || ( a1s.length == 0) ){console.log(err);}
@@ -1018,9 +1027,16 @@ io.on('connection',(socket)=>
   socket.on('C_join_room', function (room){
     if (socket.number){
         socket.emit('S_get_join');
-        if(socket.roomabc){socket.leave(socket.roomabc);}
-        socket.join(room);
-        socket.roomabc = room;
+        if(socket.roomabc){
+          socket.leave(socket.roomabc);
+          socket.join(room);
+          socket.roomabc = room;
+        }
+        else {
+          socket.join(room);
+          socket.roomabc = room;
+        }
+
 
         // cái này cho app chuyển sang giao diên map
         // gửi danh sách thành viên cho app
@@ -1104,17 +1120,13 @@ io.on('connection',(socket)=>
   socket.on('C_leave_off', function () {
       if (socket.number){
       socket.leave(socket.number);
-      console.log('Da leave user khoi user'+socket.number);
       socket.number = undefined;
-
     }
   });
   socket.on('C_leave_room', function (room) {
       if (socket.number){
       socket.leave(room);
-      console.log('Da leave user khoi room: '+room);
-
-
+      socket.roomabc = undefined;
     }
   });
   socket.on('C_got_friend', function (number){
