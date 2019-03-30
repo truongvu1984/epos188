@@ -48,6 +48,11 @@ let cru_save=0;
 let cru_contact = 0;
 let cru_group = 0;
 var room_name_chose="";
+var timer = setInterval(haha(), 1000);
+function haha(){
+  console.log('vu yeu van');
+
+}
 socket.on('check_pass',()=>{
   let ab = {rightuser:'<%= sodienthoai %>',right_pass:'<%= pass %>',online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
   socket.emit('login2',ab);
@@ -479,18 +484,19 @@ function guitinnhan(){
   }
 }
 function lưu_tinnhan(){
-  var sub = document.getElementById("id_input_subject").value.trim();
-    if ( sub === ""){alert('There is no subjet.');}
-    else {if (mang_infowindow_main.length == 0){alert('There is no position in map to save.');}
-      else {
-        var ma1 = Math.floor(Math.random()*(9000)+1000);
-        var ma2 =Math.floor(Math.random()*(9000)+1000);
-        mafull = "22"+ma1+ma2;
-        var tinnhanfull = {subject:sub,vitri:mang_infowindow_main, idc:mafull, imei:mafull};
-        socket.emit('C_save_pos',tinnhanfull);
-      }
-
-  }
+  clearInterval(timer);
+  // var sub = document.getElementById("id_input_subject").value.trim();
+  //   if ( sub === ""){alert('There is no subjet.');}
+  //   else {if (mang_infowindow_main.length == 0){alert('There is no position in map to save.');}
+  //     else {
+  //       var ma1 = Math.floor(Math.random()*(9000)+1000);
+  //       var ma2 =Math.floor(Math.random()*(9000)+1000);
+  //       mafull = "22"+ma1+ma2;
+  //       var tinnhanfull = {subject:sub,vitri:mang_infowindow_main, idc:mafull, imei:mafull};
+  //       socket.emit('C_save_pos',tinnhanfull);
+  //     }
+  //
+  // }
 }
 function open_close_list(){
   if(document.getElementById("id_btn_list").textContent === "List"){
