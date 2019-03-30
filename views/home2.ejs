@@ -48,11 +48,14 @@ let cru_save=0;
 let cru_contact = 0;
 let cru_group = 0;
 var room_name_chose="";
-var timer = setInterval(haha(), 1000);
+var abc = 1;
+var timer;
 function haha(){
-  console.log('vu yeu van');
-
+timer= setInterval(haha(), 1000);
+  abc ++;
+  console.log('vu yeu van'+abc);
 }
+haha();
 socket.on('check_pass',()=>{
   let ab = {rightuser:'<%= sodienthoai %>',right_pass:'<%= pass %>',online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
   socket.emit('login2',ab);
