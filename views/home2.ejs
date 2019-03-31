@@ -50,15 +50,18 @@ let cru_group = 0;
 var room_name_chose="";
 var abc = 1;
 // var mang_infowindow_main = [{name:'vu yeu Thy', dem:0}];
-var timer = setInterval(check_online, 5000);
+var timer = setInterval(check_online, 3000);
 function check_online(){
   if(mang_infowindow_main.length>0){
     mang_infowindow_main.forEach((row)=>{
       if(document.getElementById("li_lo"+row.id).style.color == "white"){
-        row.dem ++;
-        if(row.dem > 5){
+        row.dem ++ ;
+        if(row.dem > 2){
           document.getElementById("li_lo"+row.id).style.color= "black";
-        }
+          mang_infowindow.forEach((tin)=>{
+            if(tin.id==row.id){tin.wind.close();return false;}
+          });
+      }
       }
     });
   }
@@ -498,7 +501,7 @@ function guitinnhan(){
 }
 function lưu_tinnhan(){
 
-  clearInterval(timer);
+  // clearInterval(timer);
   var sub = document.getElementById("id_input_subject").value.trim();
     if ( sub === ""){alert('There is no subjet.');}
     else {if (mang_infowindow_main.length == 0){alert('There is no position in map to save.');}
