@@ -55,7 +55,7 @@ function check_online(){
     mang_infowindow_main.forEach((row)=>{
       row.dem ++;
       if(row.dem > 5){
-        document.getElementById("li_lo"+row.id).style.color= "green";
+        document.getElementById("li_lo"+row.id).style.color= "white";
       }
     });
   }
@@ -298,6 +298,7 @@ function online_clk(room,name){
             let name1 = tin.name;
             let id1 = tin.id;
             tin = {name:name1, lat:data.lat, lon:data.lon, id:id1, online:'O',dem:0};
+            document.getElementById("li_lo"+tin.id).style.color= "white";
             if(mang_infowindow.length >0){
               var check=true;
               mang_infowindow.forEach((row,key)=>{
