@@ -48,6 +48,7 @@ body {
 }
 .icon_live{
   background-color: green;
+  color: black
 }
 .top_left{
   position: absolute;
