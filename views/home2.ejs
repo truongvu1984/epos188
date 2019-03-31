@@ -300,7 +300,10 @@ function online_clk(room,name){
           if(tin.online==='O' && tin.id === data.number){
             let name1 = tin.name;
             let id1 = tin.id;
-            tin = {name:name1, lat:data.lat, lon:data.lon, id:id1, online:'O',dem:0};
+            tin.lat = data.lat;
+            tin.lon = data.lon;
+            tin.dem = 0;
+            // tin = {name:name1, lat:data.lat, lon:data.lon, id:id1, online:'O',dem:0};
             document.getElementById("li_lo"+tin.id).style.color= "white";
             if(mang_infowindow.length >0){
               var check=true;
