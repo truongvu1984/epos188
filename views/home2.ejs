@@ -299,6 +299,7 @@ function online_clk(room,name){
             let name1 = tin.name;
             let id1 = tin.id;
             tin = {name:'vu yêu Ngân', lat:data.lat, lon:data.lon, id:id1, online:'O',dem:0};
+            console.log('Da nhan diem moi:'+tin.dem);
             document.getElementById("li_lo"+tin.id).style.color= "white";
             if(mang_infowindow.length >0){
               var check=true;
