@@ -58,9 +58,14 @@ function check_online(){
         row.dem ++ ;
         if(row.dem > 2){
           document.getElementById("li_lo"+row.id).style.color= "black";
-          mang_infowindow.forEach((tin)=>{
-            if(tin.id==row.id){tin.wind.close();return false;}
-          });
+          for (var i=0; i<mang_infowindow.length; i++){
+              if(mang_infowindow[i].id == id1){
+                mang_infowindow[i].wind.close();
+                mang_infowindow.splice(i,1);
+                return false;
+              }
+            }
+
       }
       }
     });
@@ -311,21 +316,21 @@ function online_clk(room,name){
               var check=true;
               mang_infowindow.forEach((row,key)=>{
                 if(row.id === tin.id && row.wind != null){
-                check= false;
-                var latlng = new google.maps.LatLng(data.lat, data.lon);
-                row.wind.setPosition(latlng);
-                return false;
-              }
+                  check= false;
+                  var latlng = new google.maps.LatLng(data.lat, data.lon);
+                  row.wind.setPosition(latlng);
+                  return false;
+                }
                 if(key===(mang_infowindow.length-1) && check ){
-                let chuoi = "<div class='icon_live'>"+tin.name+"</div>";
-                var infow = new google.maps.InfoWindow({
-                  position:{ lat:data.lat, lng: data.lon},
-                  content:chuoi,
-                  disableAutoPan : true
-                });
-                mang_infowindow.push({id:id1,wind:infow});
-                infow.open(map);
-                google.maps.event.addListener(infow,'closeclick',function(){
+                  let chuoi = "<div class='icon_live'>"+tin.name+"</div>";
+                  var infow = new google.maps.InfoWindow({
+                    position:{ lat:data.lat, lng: data.lon},
+                    content:chuoi,
+                    disableAutoPan : true
+                  });
+                  mang_infowindow.push({id:id1,wind:infow});
+                  infow.open(map);
+                  google.maps.event.addListener(infow,'closeclick',function(){
                 for (var i=0; i<mang_infowindow.length; i++){
                     if(mang_infowindow[i].id == id1){
                       mang_infowindow.splice(i,1);
