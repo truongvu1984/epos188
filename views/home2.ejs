@@ -52,9 +52,12 @@ var abc = 1;
 var mang_infowindow_main = [{name:'vu yeu Thy', dem:0}];
 var timer = setInterval(check_online, 5000);
 function check_online(){
-  mang_infowindow_main[0].dem ++;
-  console.log('ha ha:'+mang_infowindow_main[0].dem);
-  if(mang_infowindow_main[0].dem > 5){mang_infowindow_main[0].dem = 0;}
+  mang_infowindow_main.forEach((row)=>{
+    row.dem ++;
+    console.log(row.dem);
+    if(row.dem >5){row.dem=0;}
+  });
+
   // if(mang_infowindow_main.length>0){
   //   mang_infowindow_main.forEach((row)=>{
   //     row.dem ++;
