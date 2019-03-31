@@ -54,7 +54,9 @@ function check_online(){
   if(mang_infowindow_main.length>0){
     mang_infowindow_main.forEach((row)=>{
       row.dem ++;
-      if(row.dem > 5){document.getElementById("li_lo"+row.id).style.color: "green";}
+      if(row.dem > 5){
+        document.getElementById("li_lo"+row.id).style.color= "green";
+      }
     });
   }
 }
