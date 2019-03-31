@@ -59,7 +59,7 @@ function check_online(){
         if(row.dem > 2){
           document.getElementById("li_lo"+row.id).style.color= "black";
           for (var i=0; i<mang_infowindow.length; i++){
-              if(mang_infowindow[i].id == id1){
+              if(mang_infowindow[i].id == row.id){
                 mang_infowindow[i].wind.close();
                 mang_infowindow.splice(i,1);
                 return false;
