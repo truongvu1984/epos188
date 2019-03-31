@@ -49,24 +49,20 @@ let cru_contact = 0;
 let cru_group = 0;
 var room_name_chose="";
 var abc = 1;
-var mang_infowindow_main = [{name:'vu yeu Thy', dem:0}];
+// var mang_infowindow_main = [{name:'vu yeu Thy', dem:0}];
 var timer = setInterval(check_online, 5000);
 function check_online(){
-  mang_infowindow_main.forEach((row)=>{
-    row.dem ++;
-    console.log(row.dem);
-    if(row.dem >5){row.dem=0;}
-  });
-
-  // if(mang_infowindow_main.length>0){
-  //   mang_infowindow_main.forEach((row)=>{
-  //     row.dem ++;
-  //     console.log(row.dem);
-  //     if(row.dem > 5){
-  //       document.getElementById("li_lo"+row.id).style.color= "black";
-  //     }
-  //   });
-  // }
+  if(mang_infowindow_main.length>0){
+    mang_infowindow_main.forEach((row)=>{
+      if(document.getElementById("li_lo"+row.id).style.color== "white"){
+        row.dem ++;
+        console.log(row.dem);
+        if(row.dem > 5){
+          document.getElementById("li_lo"+row.id).style.color= "black";
+        }
+      }
+    });
+  }
 }
 socket.on('check_pass',()=>{
   let ab = {rightuser:'<%= sodienthoai %>',right_pass:'<%= pass %>',online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
