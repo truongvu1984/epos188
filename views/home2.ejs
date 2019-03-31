@@ -54,8 +54,7 @@ var timer = setInterval(check_online, 5000);
 function check_online(){
   if(mang_infowindow_main.length>0){
     mang_infowindow_main.forEach((row)=>{
-      if(document.getElementById("li_lo"+row.id).style.color== "white"){
-        row.dem ++;
+      if(document.getElementById("li_lo"+row.id).style.color == "white"){
         console.log(row.dem);
         if(row.dem > 5){
           document.getElementById("li_lo"+row.id).style.color= "black";
@@ -496,7 +495,13 @@ function guitinnhan(){
   }
 }
 function lưu_tinnhan(){
-  clearInterval(timer);
+  mang_infowindow_main.forEach((row)=>{
+    if(document.getElementById("li_lo"+row.id).style.color == "white"){
+      row.dem ++;
+
+    }
+  });
+  // clearInterval(timer);
   // var sub = document.getElementById("id_input_subject").value.trim();
   //   if ( sub === ""){alert('There is no subjet.');}
   //   else {if (mang_infowindow_main.length == 0){alert('There is no position in map to save.');}
