@@ -10,12 +10,12 @@
   var noidung = '<%=noidung %>';
   if(noidung != null){
     if(noidung != 'OK'){
-      document.getElementById("id_thongbao").innerHTML = noidung;
-      document.getElementById("id_thongbao").style.display = "block";
+      document.getElementsByClassName("info_from_server").innerHTML = noidung;
+      document.getElementsByClassName("info_from_server").style.display = "block";
     }
     else {
-      document.getElementById("id_thongbao").innerHTML = "";
-      document.getElementById("id_thongbao").style.display = "none";
+      document.getElementsByClassName("info_from_server").innerHTML = "hi hi";
+      document.getElementsByClassName("info_from_server").style.display = "block";
     }
   }
 
