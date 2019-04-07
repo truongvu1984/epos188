@@ -63,39 +63,6 @@ io.on('connection',(socket)=>
 {
   console.log('Da co ket noi moi '+socket.id);
   socket.emit('check_pass');
-  socket.on('w_get_inbox', function(data, number){
-     con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+data+"' LIMIT 1", function(err, a1s)
-         {
-         if ( err || ( a1s.length == 0) ){console.log('5'+err);}
-         else
-           {
-             con.query("SELECT * FROM `"+number+"mes_sender` WHERE `send_receive` LIKE 'R' AND `ids` LIKE '"+a1s[0].id+"'", function(err2, a2s)
-                 {
-                 if ( err2 || ( a2s.length == 0) ){console.log('2'+err2);}
-                 else
-                   {
-                     console.log("Da chọn");
-                     con.query("SELECT * FROM `"+number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s)
-                         {
-                         if ( err3 || ( a3s.length == 0) ){console.log('3'+err3);}
-                         else
-                           {
-                             let diems =[];
-                             let diem = {lat:0.0, lon:0.0};
-                             a3s.forEach((a3)=>{
-                               diem = {lat:a3.lat, lon:a3.lon, name:a3.name}
-                               diems.push(diem);
-                             });
-                            socket.emit('S_send_inbox', {subject:a1s[0].subject, point:diems, nguoigui:a2s[0].name});
-
-                           }
-                         });
-                   }
-                 });
-           }
-         });
-   });
-  socket.on('disconnect', function(){ console.log('user da disconnect:'+socket.id)});
   socket.on('C_check_numberphone',(idphone,num)=>{
     console.log('xac minh:'+num);
     var date = Math.floor(Date.now() / 1000);
@@ -1091,37 +1058,15 @@ io.on('connection',(socket)=>
           });
       }
   });
-  socket.on('W_join_room', function (room, number)  {
-      if (socket.number){
-    socket.join(room);
-    console.log('da join vao number '+ number);
-    con.query("SELECT id FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+room+"' LIMIT 1", function(err7, a7s)
-      {
-        if ( err7 ||(a7s.length==0)){console.log(err7);}
-        else{
-          console.log(a7s[0].id);
-          con.query("SELECT number, name FROM `"+number+"mes_sender` WHERE `ids` LIKE '"+a7s[0].id+"'", function(err8, a8s)
-            {
-              if ( err8 ||(a8s.length==0)){console.log(err8);}
-              else{
-              socket.emit('S_send_room_member', a8s);
-
-              }
-            });
-
-        }
-      });
-
-
-    }
-
-
-  });
   socket.on('C_leave_off', function () {
       if (socket.number){
       socket.leave(socket.number);
       socket.number = undefined;
-    }
+      }
+      if(socket.roomabc){
+        socket.leave(socket.roomabc);
+        socket.roomabc = undefined;
+      }
   });
   socket.on('C_leave_room', function (room) {
       if (socket.number){

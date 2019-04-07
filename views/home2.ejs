@@ -178,9 +178,6 @@ socket.on('S_W_add_friend_ok',function(data){
              $("#myDropdown_contact").append(new_contact);
              var stt = mang_contact_ok.length;
              mang_contact_ok.push({id:data.id,number:data.number, name:data.name});
-
-
-
           });
 socket.on('S_del_inbox',()=>{
     document.getElementById("id_content_inbox_del").style.display = "none";
@@ -688,8 +685,7 @@ function save_click(id,name){
         });
         }
         socket.off('S_send_point');
-      });
-
+  });
 }
 function send_click(id,name){
   room_name_chose = name;
@@ -946,6 +942,9 @@ function show_contact_list(){
 function show_content_top_right(id){
   document.getElementById(id).style.display = "block";
 }
+function log_out(){
+  socket.emit('C_leave_off');
+}
 window.onclick = function(event) {
 
   if (!event.target.matches('.btn_account')) {
@@ -973,8 +972,7 @@ window.onclick = function(event) {
   <div class="wrapper">
       <div class="top_right">
         <div class="top_right_item">
-          <button class="btn_account" onclick="kiemtra()">ACCOUNT</button>
-          <!-- <button class="btn_account" onclick="show_content_top_right('id_content_account')">ACCOUNT</button> -->
+          <button class="btn_account" onclick="log_out()">LOG OUT</button>
           <div class="content_account" id="id_content_account"></div>
         </div>
         <div class="top_right_item">
