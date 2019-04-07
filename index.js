@@ -30,7 +30,7 @@ con.connect(function(err) {
       app.set('view engine', 'ejs');
       app.set('views', './views');
       app.use(express.static('public'));
-      app.get('/', (req, res) => res.render('dangnhap'),{noidung:'OK'});
+      app.get('/', (req, res) => res.render('dangnhap',{noidung:'OK'});
       app.post('/', urlencodedParser, function (req, res){
         if (!req.body) return res.sendStatus(400)
         else {
