@@ -1067,6 +1067,7 @@ io.on('connection',(socket)=>
         socket.leave(socket.roomabc);
         socket.roomabc = undefined;
       }
+      socket.emit('log_out_ok');
   });
   socket.on('C_leave_room', function (room) {
       if (socket.number){

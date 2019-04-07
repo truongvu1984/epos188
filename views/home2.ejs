@@ -944,6 +944,9 @@ function show_content_top_right(id){
 }
 function log_out(){
   socket.emit('C_leave_off');
+  socket.on('log_out_ok',()=>{
+    window.location.replace("https://epos188.herokuapp.com/");
+  });
 }
 window.onclick = function(event) {
 
