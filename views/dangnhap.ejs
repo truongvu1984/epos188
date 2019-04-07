@@ -4,8 +4,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title> Vũ yêu Vân</title>
  <script src="jquery-3.1.1.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <style>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style>
       html, body
       {
         height: 100%;
@@ -54,14 +55,14 @@
         background-color: #4CAF50;
       }
     </style>
-    <script>
-var noidung = <%= sodienthoai %>;
-if(noidung != null){
-  console.log(noidung);
-}
-else {
+<script>
+  var noidung = '<%= sodienthoai %>';
+  if(noidung != null){
+    console.log(noidung);
+  }
+  else {
   console.log('Hi hi');
-}
+  }
     </script>
 </head>
 <body>
