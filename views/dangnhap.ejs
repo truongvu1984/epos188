@@ -2,68 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style2.css" />
 <title> Vũ yêu Vân</title>
  <script src="jquery-3.1.1.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
-
-<style>
-      html, body
-      {
-        height: 100%;
-        width: 100%;
-        margin-left: 5px;
-      }
-      .my_a1{
-      width: 100%;
-      height:100%;
-      margin-right: 10px
-      }
-      .my_login_number, .my_login_pass, .my_submit, .my_login_code{
-       position: relative;
-       display: inline-block;
-       float:right;
-       margin-right: 10px;
-     }
-     .my_submit{
-      margin-top:20px
-     }
-     .my_banner{
-       position: relative;
-       width: 100%;
-       height:50px;
-       vertical-align: center;
-       background-color: #4CAF50;
-      }
-        .my_content{
-        position: relative;
-        width: 100%;
-        height: 100%;
-        background-color: #96B76A;
-      }
-      .my_left{
-        position: relative;
-        float: right;
-        width: 500px;
-        height:100%;
-        background-color: #D3B1B1;
-      }
-      .my_right{
-        position: relative;
-        float: left;
-        width: 300px;
-        height:100%;
-        background-color: #4CAF50;
-      }
-    </style>
 <script>
   var noidung = '<%=noidung %>';
   if(noidung != null){
-    console.log(noidung);
+    if(noidung != 'OK'){
+      document.getElementById("my_info_from_server").innerHTML = noi_dung;
+      document.getElementById("my_info_from_server").style.display = "block";
+    }
+    else {
+      document.getElementById("my_info_from_server").innerHTML = "";
+      document.getElementById("my_info_from_server").style.display = "none";
+    }
   }
-  else {
-  console.log('Hi hi');
-  }
-    </script>
+
+</script>
 </head>
 <body>
 <div id="a1" class="my_a1">
@@ -82,11 +38,7 @@
 		  </div>
       <div id="login_code" class="my_login_code">
         <div id="login_code">Quốc gia</div>
-        <!-- <input type="text" name="number" value="" id= "login_code_2"></input> -->
-
-
-<!-- country codes (ISO 3166) and Dial codes. -->
-<select name="code" id= "login_code_2">
+        <select name="code" id= "login_code_2">
 	<!-- <option data-countryCode="GB" value="44" Selected>UK (+44)</option>
 	<option data-countryCode="US" value="1">USA (+1)</option>
 	<optgroup label="Other countries"> -->
@@ -306,16 +258,15 @@
 		<option data-countryCode="ZW" value="263">Zimbabwe (+263)</option>
 	<!-- </optgroup> -->
 </select>
-
       </div>
   </form>
 	</div>
 	<div id="content" class="my_content">
-    <div id="left" class="my_left">   </div>
-    <div id="right" class = "my_right">   </div>
+    <div id="left" class="my_left"></div>
+    <div id="right" class = "my_right">
+    <div id = "my_info_from_server" class = "info_from_server"></div>
+    </div>
 	</div>
-
-
 </div>
 </body>
 </html>
