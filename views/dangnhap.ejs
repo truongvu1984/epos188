@@ -10,12 +10,12 @@
   var noidung = '<%=noidung %>';
   if(noidung != null){
     if(noidung != 'OK'){
-      document.getElementById("my_info_from_server").innerHTML = noidung;
-      document.getElementById("my_info_from_server").style.display = "block";
+      document.getElementById("id_thongbao").innerHTML = noidung;
+      document.getElementById("id_thongbao").style.display = "block";
     }
     else {
-      document.getElementById("my_info_from_server").innerHTML = "";
-      document.getElementById("my_info_from_server").style.display = "none";
+      document.getElementById("id_thongbao").innerHTML = "";
+      document.getElementById("id_thongbao").style.display = "none";
     }
   }
 
@@ -264,7 +264,7 @@
 	<div id="content" class="my_content">
     <div id="left" class="my_left"></div>
     <div id="right" class = "my_right">
-    <div id = "my_info_from_server" class = "info_from_server"></div>
+      <div id = "id_thongbao" class = "info_from_server">vu yeu van</div>
     </div>
 	</div>
 </div>
