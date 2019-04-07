@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html;application/json; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="style2.css" />
 <title> Vũ yêu Vân</title>
  <script src="jquery-3.1.1.min.js"></script>
@@ -10,12 +10,12 @@
   var noidung = '<%=noidung %>';
   if(noidung != null){
     if(noidung != 'OK'){
-      document.getElementById("info_from_server").innerHTML = noidung;
-      document.getElementById("info_from_server").style.display = "block";
+      document.getElementById("id_thongbao").innerHTML = noidung;
+      document.getElementById("id_thongbao").style.display = "block";
     }
     else {
-      document.getElementById("info_from_server").innerHTML = "";
-      document.getElementById("info_from_server").style.display = "block";
+      document.getElementById("id_thongbao").innerHTML = "";
+      document.getElementById("id_thongbao").style.display = "block";
     }
   }
 
@@ -264,7 +264,7 @@
 	<div id="content" class="my_content">
     <div id="left" class="my_left"></div>
     <div id="right" class = "my_right">
-      <div id = "id_thongbao" class = "info_from_server">vu yeu van</div>
+      <div id="id_thongbao" class="info_from_server">vu yeu van</div>
     </div>
 	</div>
 </div>
