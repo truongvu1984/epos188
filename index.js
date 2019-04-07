@@ -37,13 +37,16 @@ con.connect(function(err) {
           var full_number = "+"+req.body.code + req.body.number.replace('0','');
           con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
                 if (err || rows.length ==0){
-                   res.send("Dang nhap khong dung");
+                   res.render('dangnhap', {noidung:'Tài khoản này không tồn tại'});
               }
                else{
                  if (passwordHash.verify(req.body.pass, rows[0].pass)){
                    res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });
                  }
-                 else {res.send("Dang nhap khong dung");}
+                 else {
+                   // res.send("Dang nhap khong dung");
+                   res.render('dangnhap', {noidung:'Mật khẩu không đúng'});
+                 }
                }
              });
 
@@ -64,7 +67,6 @@ io.on('connection',(socket)=>
   console.log('Da co ket noi moi '+socket.id);
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
-    console.log('xac minh:'+num);
     var date = Math.floor(Date.now() / 1000);
     con.query("SELECT * FROM `dangky` WHERE `phone_id` LIKE '"+idphone+"'", function(err1, rows1){
       if(err1){console.log(err1);}
@@ -1076,10 +1078,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_got_friend', function (number){
-      if (socket.number){
-    console.log('Người dùng đã lưu friend la:'+number);
-    // con.query("DELETE FROM `"+host+"contact` WHERE `number` LIKE '"+number+"'", function(err){console.log('loi delete'+err)});
-    con.query("UPDATE `"+socket.number+"contact` SET `fr` = 'OK' WHERE `number` LIKE '"+number+"'",function(err3, ok){ console.log('loi update'+err)});
+      if (socket.number){con.query("UPDATE `"+socket.number+"contact` SET `fr` = 'OK' WHERE `number` LIKE '"+number+"'",function(err3, ok){ console.log('loi update'+err)});
     }
   });
   socket.on('C_pos_online', function (info){
