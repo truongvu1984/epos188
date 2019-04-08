@@ -33,7 +33,7 @@ html, body
 }
 .my_left{
   position: relative;
-  float: right;
+  float: left;
   width: 500px;
   height:100%;
   /* background-color: #D3B1B1; */
@@ -41,7 +41,7 @@ html, body
 }
 .my_right{
   position: relative;
-  float: left;
+  float: right;
   width: 300px;
   height:100%;
   /* background-color: #4CAF50; */
@@ -51,4 +51,5 @@ html, body
   position: absolute;
   width: 300px;
   height: 50px;
+  text-align:center;
 }
