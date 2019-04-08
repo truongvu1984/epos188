@@ -36,14 +36,16 @@ html, body
   float: right;
   width: 500px;
   height:100%;
-  background-color: #D3B1B1;
+  /* background-color: #D3B1B1; */
+  background-color: red;
 }
 .my_right{
   position: relative;
   float: left;
   width: 300px;
   height:100%;
-  background-color: #4CAF50;
+  /* background-color: #4CAF50; */
+  background-color: yellow
 }
 .info_from_server{
   position: absolute;
