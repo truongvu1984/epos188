@@ -6,22 +6,7 @@
 <title> Vũ yêu Vân</title>
  <script src="jquery-3.1.1.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-  var noidung = '<%=noidung %>';
-  if(noidung != null){
-    if(noidung != 'OK'){
-      document.getElementById("id_thongbao").innerHTML = noidung;
-      document.getElementById("id_thongbao").style.display = "block";
-    }
-    else {
-      console.log(' Vũ yêu Thy');
-      $("#id_content_account").append('hi hi ha ha');
-      // document.getElementById("id_content_account").innerHTML = "";
-      // document.getElementById("id_content_account").style.display = "block";
-    }
-  }
 
-</script>
 </head>
 <body>
 <div id="a1" class="my_a1">
@@ -270,5 +255,20 @@
     </div>
 	</div>
 </div>
+<script>
+  var noidung = '<%=noidung %>';
+  if(noidung != null){
+    if(noidung != 'OK'){
+      document.getElementById("id_thongbao").innerHTML = noidung;
+      document.getElementById("id_thongbao").style.display = "block";
+    }
+    else {
+      console.log(' Vũ yêu Thy');
+       document.getElementById("id_content_account").innerHTML = "Trời đất ơi";
+      // document.getElementById("id_content_account").style.display = "block";
+    }
+  }
+
+</script>
 </body>
 </html>
