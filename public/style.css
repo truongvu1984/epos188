@@ -118,8 +118,8 @@ body {
   left:30px;
   width: 130px;
   height:20px;
-   background-color: red;
-   overflow-x: hidden;
+  background-color: red;
+  overflow-x: hidden;
 }
 .line_inbox_time, .line_send_time, .line_save_time{
   position:absolute;
@@ -251,17 +251,14 @@ body {
   width: 200px;
   height: 80px;
   text-align:center;
-
 }
 .info_input{
   width: 190px;
-
 }
 .posname_2{
   width: 200px;
   height: 20px;
   margin-top: 10px
-
 }
 .info_cancle{
   position: relative;
