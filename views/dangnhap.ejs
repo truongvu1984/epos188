@@ -28,6 +28,15 @@ function login(){
     document.body.appendChild(form);
     form.submit();
   });
+  socket.on('login1_khongtaikhoan',()=>{
+    document.getElementById("id_thongbao").innerHTML('Không có tài khoản');
+    document.getElementById("id_thongbao").style.display = "block";
+  });
+  socket.on('login1_sai',()=>{
+    document.getElementById("id_thongbao").innerHTML('Không đúng mật khẩu');
+    document.getElementById("id_thongbao").style.display = "block";
+  });
+
   function add_form(name1,value1){
     var hiddenField = document.createElement("input");
     hiddenField.setAttribute("type", "hidden");
@@ -35,9 +44,7 @@ function login(){
     hiddenField.setAttribute("value", value1);
     form.appendChild(hiddenField);
   }
-
 }
-
 </script>
 </head>
 <body>
