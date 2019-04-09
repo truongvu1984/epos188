@@ -28,15 +28,16 @@ function login(){
     document.body.appendChild(form);
     form.submit();
   });
+  function add_form(name1,value1){
+    var hiddenField = document.createElement("input");
+    hiddenField.setAttribute("type", "hidden");
+    hiddenField.setAttribute("name", name1);
+    hiddenField.setAttribute("value", value1);
+    form.appendChild(hiddenField);
+  }
 
 }
-function add_form(name1,value1){
-  var hiddenField = document.createElement("input");
-  hiddenField.setAttribute("type", "hidden");
-  hiddenField.setAttribute("name", name1);
-  hiddenField.setAttribute("value", value1);
-  form.appendChild(hiddenField);
-}
+
 </script>
 </head>
 <body>
