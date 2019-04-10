@@ -3,13 +3,13 @@
    position: relative;
    display: inline-block;
    float:right;
-
+   margin-right: 10px
 }
 .my_submit{
    position: relative;
    display: inline-block;
    float:right;
-
+   margin-right: 10px
 }
 
 .main_banner{
