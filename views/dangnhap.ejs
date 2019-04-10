@@ -28,12 +28,12 @@ function login(){
     form.submit();
   });
   socket.on('login1_khongtaikhoan',()=>{
-    document.getElementById("id_thongbao").innerHTML = 'Không có tài khoản';
-    document.getElementById("id_thongbao").style.display = "block";
+    document.getElementById("my_info_from_server").innerHTML = 'Không có tài khoản';
+    document.getElementById("my_info_from_server").style.display = "block";
   });
   socket.on('login1_sai',()=>{
-    document.getElementById("id_thongbao").innerHTML='Không đúng mật khẩu';
-    document.getElementById("id_thongbao").style.display = "block";
+    document.getElementById("my_info_from_server").innerHTML='Không đúng mật khẩu';
+    document.getElementById("my_info_from_server").style.display = "block";
   });
 
   function add_form(name1,value1){
@@ -283,7 +283,7 @@ function login(){
   </div>
   <div class="ad_banner">
   </div>
-  <div class="info_banner">
+  <div class="info_banner"><div class="info_from_server" id ="my_info_from_server"></div>
   </div>
 
 </div>
