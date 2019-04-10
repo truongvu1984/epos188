@@ -31,11 +31,11 @@ body{
 }
 .ad_banner{
   position: absolute;
-  width: 300px;
   top:60px;
   bottom: 0px;
+  left: 0px;
   right:700px;
-  background-color: red
+  background-color: blue
 }
 .info_banner{
   position: absolute;
