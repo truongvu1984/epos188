@@ -1,9 +1,15 @@
 
-.my_login_number, .my_login_pass, .my_submit, .my_login_code{
+.my_login_number, .my_login_pass, .my_login_code{
    position: relative;
    display: inline-block;
    float:right;
    margin-right: 10px;
+}
+.my_submit{
+   position: relative;
+   display: inline-block;
+   float:right;
+   
 }
 .my_submit{
   margin-top:20px
@@ -28,7 +34,7 @@
   background-color: red;
 }
 .my_right{
-  position: relative;
+  position: absolute;
   float: right;
   width: 300px;
   height:100%;
