@@ -23,15 +23,15 @@
 .info_banner{
   position: absolute;
   right:0px;
-  top:50px;
+  margin-top: 50px;
   width: 700px;
   height: 100%;
   background-color: red
 }
 .ad_banner{
   position: absolute;
-  top:50px;
-  left:700px;
+  margin-top:50px;
+  margin-left:700px;
   width: 100%;
   height: 100%;
   background-color: blue
