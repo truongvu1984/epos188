@@ -23,8 +23,7 @@
 .info_banner{
   position: absolute;
   right:0px;
-  top: 50px;
-  width: 700px;
+  width: 900px;
   height: 100%;
   background-color: red
 }
