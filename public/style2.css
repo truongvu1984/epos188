@@ -5,7 +5,9 @@ body{
 }
 .my_a1{
   width: 100%;
-  height: 100%
+  height: 100%;
+  margin-right: auto;
+  margin-left: auto;
 }
 .my_login_number, .my_login_pass, .my_login_code{
    position: relative;
