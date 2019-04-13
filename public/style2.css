@@ -1,14 +1,24 @@
 
 body{
   width: 100%;
-  height: 100%
+  height: 100%;
+  overflow: scroll;
 }
 .my_a1{
   width: 100%;
   height: 100%;
   margin-right: auto;
   margin-left: auto;
-  background-color: red
+  background-color: red;
+  overflow: scroll;
+}
+.main_banner{
+   position: absolute;
+   right:10px;
+   left:10px;
+   height:50px;
+   top:10px;
+   background-color: #4CAF50;
 }
 .my_login_number, .my_login_pass, .my_login_code{
    position: relative;
@@ -24,14 +34,7 @@ body{
    margin-top: 20px;
 }
 
-.main_banner{
-   position: absolute;
-   right:10px;
-   left:10px;
-   height:50px;
-   top:10px;
-   background-color: #4CAF50;
-}
+
 .ad_banner{
   position: absolute;
   top:60px;
