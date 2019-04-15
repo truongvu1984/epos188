@@ -52,6 +52,7 @@ body{
 .my_login_code{
    position: absolute;
    display: inline-block;
+  width: 20%;
    right: 61%;
    bottom: 5%;
    margin-left: 0px
