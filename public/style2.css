@@ -11,16 +11,16 @@ body{
 }
 .main_banner{
    position: absolute;
-   right:1%;
-   left:1%;
+   right:0px;
+   left:0px;
    height:10%;
-   top:2%;
+   top:0px;
    background-color: #4CAF50;
 }
 .login_banner{
   position: absolute;
   right:0px;
-  left:50%;
+  left:40%;
   bottom: 0px;
   top:0px;
   background-color: brown;
@@ -41,17 +41,17 @@ body{
 .ad_banner{
   position: absolute;
   top:10%;
-  bottom: 2%;
-  left: 1%;
-  right:50%;
+  bottom: 0px;
+  left: 0px;
+  right:60%;
   background-color: blue
 }
 .info_banner{
   position: absolute;
-  left:50%;
+  left:40%;
   top:10%;
-  bottom: 2%;
-  right:1%;
+  bottom: 0px;
+  right:0px;
   background-color: yellow
 }
 .info_from_server{
