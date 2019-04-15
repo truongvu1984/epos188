@@ -25,30 +25,32 @@ body{
   top:0px;
   background-color: brown;
 }
-.my_login_code{
+.my_submit{
    position: absolute;
    display: inline-block;
    width: 20%;
-   right: 88%
+   right: 1%
 }
 .my_login_pass{
    position: absolute;
    display: inline-block;
    width: 20%;
-   right: 24%
+   right: 22%
 }
 .my_login_number{
    position: absolute;
    display: inline-block;
    width: 20%;
-   right: 66%
+   right: 43%
 }
-.my_submit{
+.my_login_code{
    position: absolute;
    display: inline-block;
    width: 20%;
-   right: 2%
+   right: 64%
 }
+
+
 .ad_banner{
   position: absolute;
   top:10%;
