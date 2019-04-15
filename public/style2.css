@@ -26,25 +26,28 @@ body{
   background-color: brown;
 }
 .my_login_code{
-   position: relative;
+   position: absolute;
    display: inline-block;
-   float:right;
    width: 20%;
-   margin-right: 2%
+   right: 88%
 }
-.my_login_number, .my_login_pass{
-   position: relative;
+.my_login_pass{
+   position: absolute;
    display: inline-block;
-   float:right;
    width: 20%;
-   margin-right: 2%
+   right: 24%
+}
+.my_login_number{
+   position: absolute;
+   display: inline-block;
+   width: 20%;
+   right: 66%
 }
 .my_submit{
-   position: relative;
+   position: absolute;
    display: inline-block;
-   float:right;
-   margin-right: 2px;
-   margin-top: 5px;
+   width: 20%;
+   right: 2%
 }
 .ad_banner{
   position: absolute;
