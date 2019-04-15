@@ -29,27 +29,29 @@ body{
    position: absolute;
    display: inline-block;
    width: 20%;
-   right: 1%
+   right: 1%;
+   top:1%
 }
 .my_login_pass{
    position: absolute;
    display: inline-block;
    width: 20%;
-   right: 22%
+   right: 21%;
+   top:1%
 }
 .my_login_number{
    position: absolute;
    display: inline-block;
    width: 20%;
-   right: 43%
+   right: 41%;
+   top:1%
 }
 .my_login_code{
    position: absolute;
    display: inline-block;
-   right: 64%
+   right: 61%;
+   top:1%
 }
-
-
 .ad_banner{
   position: absolute;
   top:10%;
