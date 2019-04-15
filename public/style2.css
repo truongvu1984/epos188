@@ -25,11 +25,19 @@ body{
   top:0px;
   background-color: brown;
 }
-.my_login_number, .my_login_pass, .my_login_code{
+.my_login_code{
    position: relative;
    display: inline-block;
    float:right;
-   margin-right: 10px
+   width: 25%;
+   margin-right: 2%
+}
+.my_login_number, .my_login_pass{
+   position: relative;
+   display: inline-block;
+   float:right;
+   width: 25%;
+   margin-right: 2%
 }
 .my_submit{
    position: relative;
