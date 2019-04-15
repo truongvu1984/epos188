@@ -1,7 +1,6 @@
 
 body{
   color: #666666;
-  padding: 80px;
   overflow-x: hidden;
 }
 .my_a1{
@@ -12,16 +11,16 @@ body{
 }
 .main_banner{
    position: absolute;
-   right:10px;
-   left:10px;
+   right:3%;
+   left:3%;
    height:20%;
-   top:10px;
+   top:3%;
    background-color: #4CAF50;
 }
 .login_banner{
   position: absolute;
-  right:3%;
-  left:3%;
+  right:0px;
+  left:50px;
   bottom: 0px;
   top:0px;
   background-color: brown;
@@ -41,24 +40,24 @@ body{
 }
 .ad_banner{
   position: absolute;
-  top:60px;
-  bottom: 10px;
-  left: 10px;
+  top:20%;
+  bottom: 3%;
+  left: 3%;
   right:50%;
   background-color: blue
 }
 .info_banner{
   position: absolute;
   left:50%;
-  top:60px;
-  bottom: 10px;
-  right:10px;
+  top:20%;
+  bottom: 3%;
+  right:3%;
   background-color: yellow
 }
 .info_from_server{
   position: absolute;
-  top:10px;
-  bottom: 10px;
+  top:3%;
+  bottom: 13%;
   right: 3%;
   left: 3%;
   background-color: white
