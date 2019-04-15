@@ -30,27 +30,31 @@ body{
    display: inline-block;
    width: 20%;
    right: 1%;
-   bottom: 1%
+   bottom: 5%;
+   margin-left: 0px
 }
 .my_login_pass{
    position: absolute;
    display: inline-block;
    width: 20%;
    right: 21%;
-   bottom: 1%
+   bottom: 5%;
+   margin-left: 0px
 }
 .my_login_number{
    position: absolute;
    display: inline-block;
    width: 20%;
    right: 41%;
-  bottom: 1%
+   bottom: 5%;
+   margin-left: 0px
 }
 .my_login_code{
    position: absolute;
    display: inline-block;
    right: 61%;
-   bottom: 1%
+   bottom: 5%;
+   margin-left: 0px
 }
 .ad_banner{
   position: absolute;
