@@ -29,23 +29,23 @@ body{
    position: absolute;
    display: inline-block;
    background-color: pink;
-   width: 20%;
    bottom: 30%;
-   right:0px;
+   right:0%;
+   left:75%
  }
 .my_login_pass{
    position: absolute;
    display: inline-block;
    background-color: green;
-   width: 25%;
-   right: 21%;
+   right: 25%;
+   left:75%;
    bottom: 5%;
 }
 .my_login_number{
    position: absolute;
    display: inline-block;
    background-color: pink;
-   width: 25%;
+   left:50%;
    right: 41%;
    bottom: 5%;
 
@@ -54,7 +54,7 @@ body{
    position: absolute;
    display: inline-block;
    background-color: blue;
-   width: 30%;
+   left:75%;
    right: 61%;
    bottom: 5%;
 
