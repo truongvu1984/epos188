@@ -15,7 +15,25 @@ body{
    left:0%;
    height:10%;
    top:0%;
-   background-color: #4CAF50;
+   background-color: white
+   /* background-color: #4CAF50; */
+}
+.login_banner{
+  position: absolute;
+  right:0%;
+  left:60%;
+  top:0%;
+  bottom: 0%;
+  background-color: #4CAF50
+}
+.icon_banner{
+  position: absolute;
+  right:0%;
+  right: 40%;
+  left:0%;
+  top:0%;
+  bottom: 0%;
+  background-color: pink
 }
 
 .ad_banner{
