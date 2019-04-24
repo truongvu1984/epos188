@@ -21,15 +21,32 @@ body{
 .login_banner{
   position: absolute;
   right:0%;
-  left:60%;
+  left:40%;
   top:0%;
   bottom: 0%;
   background-color: #4CAF50
 }
+.submit{
+  position: absolute;
+  right:0%;
+  left:40%;
+  top:0%;
+  bottom: 0%;
+  background-color: blue
+}
+.number{
+  position: absolute;
+  right:0%;
+  right: 60%;
+  left:0%;
+  top:0%;
+  bottom: 0%;
+  background-color: red
+}
 .icon_banner{
   position: absolute;
   right:0%;
-  right: 40%;
+  right: 60%;
   left:0%;
   top:0%;
   bottom: 0%;
