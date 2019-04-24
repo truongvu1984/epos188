@@ -17,48 +17,7 @@ body{
    top:0%;
    background-color: #4CAF50;
 }
-.login_banner{
-  position: absolute;
-  right:0%;
-  left:40%;
-  bottom: 0%;
-  top:0%;
-  background-color: brown;
-}
-.my_submit{
-   position: absolute;
-   display: inline-block;
-   background-color: pink;
-   bottom: 30%;
-   right:0px;
-   width: 100px
- }
-.my_login_pass{
-   position: absolute;
-   display: inline-block;
-   background-color: green;
-   right: 100px;
-   width: 100px;
-   bottom: 5%;
-}
-.my_login_number{
-   position: absolute;
-   display: inline-block;
-   background-color: pink;
-   right: 200px;
-   width: 100px;
-   bottom: 5%;
 
-}
-.my_login_code{
-   position: absolute;
-   display: inline-block;
-   background-color: blue;
-   right: 300px;
-   width: 100px;
-   bottom: 5%;
-
-}
 .ad_banner{
   position: absolute;
   top:10%;
