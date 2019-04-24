@@ -37,7 +37,7 @@ body{
 .my_login_pass{
    position: absolute;
    display: inline-block;
-   background-color: pink;
+   background-color: green;
    width: 20%;
    right: 21%;
    bottom: 5%;
@@ -55,7 +55,7 @@ body{
 .my_login_code{
    position: absolute;
    display: inline-block;
-   background-color: pink;
+   background-color: blue;
   width: 30%;
    right: 61%;
    bottom: 5%;
