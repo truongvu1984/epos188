@@ -29,7 +29,7 @@ body{
 .submit{
   position: absolute;
   right:0%;
-  left:40%;
+  left:75%;
   top:0%;
   bottom: 0%;
   background-color: blue
@@ -37,11 +37,29 @@ body{
 .number{
   position: absolute;
   right:0%;
-  right: 60%;
-  left:0%;
+  right:25%;
+  left:50%;
   top:0%;
   bottom: 0%;
   background-color: red
+}
+.password{
+  position: absolute;
+  right:0%;
+  right:50%;
+  left:25%;
+  top:0%;
+  bottom: 0%;
+  background-color: purple
+}
+.code{
+  position: absolute;
+  right:0%;
+  right:75%;
+  left:0%;
+  top:0%;
+  bottom: 0%;
+  background-color: yellow
 }
 .icon_banner{
   position: absolute;
