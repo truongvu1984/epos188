@@ -28,6 +28,7 @@ body{
 .my_submit{
    position: absolute;
    display: inline-block;
+   background-color: pink;
    width: 20%;
    right: 1%;
    bottom: 10%;
@@ -36,6 +37,7 @@ body{
 .my_login_pass{
    position: absolute;
    display: inline-block;
+   background-color: pink;
    width: 20%;
    right: 21%;
    bottom: 5%;
@@ -44,6 +46,7 @@ body{
 .my_login_number{
    position: absolute;
    display: inline-block;
+   background-color: pink;
    width: 20%;
    right: 41%;
    bottom: 5%;
@@ -52,6 +55,7 @@ body{
 .my_login_code{
    position: absolute;
    display: inline-block;
+   background-color: pink;
   width: 30%;
    right: 61%;
    bottom: 5%;
