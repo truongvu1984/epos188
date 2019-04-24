@@ -11,18 +11,18 @@ body{
 }
 .main_banner{
    position: absolute;
-   right:0px;
-   left:0px;
+   right:0%;
+   left:0%;
    height:10%;
-   top:0px;
+   top:0%;
    background-color: #4CAF50;
 }
 .login_banner{
   position: absolute;
-  right:0px;
+  right:0%;
   left:40%;
-  bottom: 0px;
-  top:0px;
+  bottom: 0%;
+  top:0%;
   background-color: brown;
 }
 .my_submit{
