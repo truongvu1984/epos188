@@ -28,7 +28,7 @@ con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
       console.log("Da co ket noi ok ha ha ha");
-      app.get('/', (req, res) => res.render('dangnhap'));
+      app.get('/', (req, res) => res.render('dangnhap2'));
       app.post('/', urlencodedParser, function (req, res){
         if (!req.body) return res.sendStatus(400)
         else {
