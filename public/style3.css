@@ -32,22 +32,22 @@ body{
 }
 .number_1{
   position: absolute;
-  left:250px;
+  left:220px;
 }
 .number_2{
   position: absolute;
-  left:250px;
+  left:220px;
   top:20px;
 }
 .pass_1{
   position: absolute;
-  left:250px;
-  top:70px;
+  left:220px;
+  top:40px;
 }
 .pass_2{
   position: absolute;
-  left:250px;
-  top:90px;
+  left:220px;
+  top:60px;
 }
 .adver{
   position: absolute;
