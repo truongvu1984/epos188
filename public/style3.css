@@ -17,7 +17,7 @@ body{
   top:0%;
   bottom: 0%;
   right: 0%;
-  left:50%;
+  left:40%;
   background-color: purple
 }
 .code{
@@ -26,11 +26,19 @@ body{
   margin-left: 0 auto;
   margin-right: 0 auto;
 }
+.code_name{
+  position: absolute;
+  left:0px;
+}
+.code_1{
+  position: absolute;
+  left: 100px;
+}
 .adver{
   position: absolute;
   top:0%;
   bottom: 0%;
-  right: 50%;
+  right: 60%;
   left:0%;
   background-color: #4CAF50
 }
