@@ -1,7 +1,7 @@
 
 body{
   color: #666666;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 .wrap{
   position: absolute;
