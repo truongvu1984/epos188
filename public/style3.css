@@ -28,27 +28,26 @@ body{
 .code_1{
   position: absolute;
   left: 0px;
-  top: 50px;
+  top: 20px;
 }
 .number_1{
   position: absolute;
-  left:200px;
-
+  left:250px;
 }
 .number_2{
   position: absolute;
-  left:200px;
-  top:50px;
+  left:250px;
+  top:20px;
 }
 .pass_1{
   position: absolute;
-  left:200px;
-  top:120px;
+  left:250px;
+  top:70px;
 }
 .pass_2{
   position: absolute;
-  left:200px;
-  top:120px;
+  left:250px;
+  top:90px;
 }
 .adver{
   position: absolute;
