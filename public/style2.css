@@ -34,7 +34,7 @@ body{
   bottom: 0%;
   background-color: blue
 }
-.number{
+.password{
   position: absolute;
   right:0%;
   right:25%;
@@ -43,7 +43,7 @@ body{
   bottom: 0%;
   background-color: red
 }
-.password{
+.number{
   position: absolute;
   right:0%;
   right:50%;
