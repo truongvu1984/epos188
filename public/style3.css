@@ -1,0 +1,26 @@
+
+body{
+  color: #666666;
+  overflow-x: hidden;
+}
+.wrap{
+  position: absolute;
+  overflow-x: scroll;
+  background-color: black;
+}
+.main{
+  position: absolute;
+  top:0%;
+  bottom: 0%;
+  right: 0%;
+  left:50%;
+  background-color: purple
+}
+.adver{
+  position: absolute;
+  top:0%;
+  bottom: 0%;
+  right: 50%;
+  left:0%;
+  background-color: #4CAF50
+}
