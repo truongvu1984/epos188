@@ -42,12 +42,17 @@ body{
 .pass_1{
   position: absolute;
   left:220px;
-  top:40px;
+  top:45px;
 }
 .pass_2{
   position: absolute;
   left:220px;
-  top:60px;
+  top:65px;
+}
+.submit{
+  position: absolute;
+  left:220px;
+  top:90px;
 }
 .adver{
   position: absolute;
