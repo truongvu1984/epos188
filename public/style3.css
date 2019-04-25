@@ -34,6 +34,26 @@ body{
   position: absolute;
   left: 100px;
 }
+.number_1{
+  position: absolute;
+  left:0px;
+  top:60px;
+}
+.number_2{
+  position: absolute;
+  left:100px;
+  top:60px;
+}
+.pass_1{
+  position: absolute;
+  left:0px;
+  top:120px;
+}
+.pass_2{
+  position: absolute;
+  left:100px;
+  top:120px;
+}
 .adver{
   position: absolute;
   top:0%;
