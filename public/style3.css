@@ -52,7 +52,7 @@ body{
 .submit{
   position: absolute;
   left:220px;
-  top:90px;
+  top:100px;
 }
 .adver{
   position: absolute;
@@ -61,4 +61,71 @@ body{
   right: 60%;
   left:0%;
   background-color: #4CAF50
+}
+
+
+@media only screen and (max-width: 900px) {
+  body{
+    color: #666666;
+    overflow: hidden;
+    background-color: black
+  }
+  .wrap{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin-right: 100px;
+    margin-bottom: 100px;
+    background-color: white;
+  }
+  .main{
+    position: absolute;
+    top:0%;
+    bottom: 0%;
+    right: 0%;
+    left:40%;
+    background-color: purple
+  }
+
+  .code_name{
+    position: absolute;
+    left:0px;
+  }
+  .code_1{
+    position: absolute;
+    left: 0px;
+    top: 20px;
+  }
+  .number_1{
+    position: absolute;
+    left:220px;
+  }
+  .number_2{
+    position: absolute;
+    left:220px;
+    top:20px;
+  }
+  .pass_1{
+    position: absolute;
+    left:220px;
+    top:45px;
+  }
+  .pass_2{
+    position: absolute;
+    left:220px;
+    top:65px;
+  }
+  .submit{
+    position: absolute;
+    left:220px;
+    top:100px;
+  }
+  .adver{
+    position: absolute;
+    top:0%;
+    bottom: 0%;
+    right: 60%;
+    left:0%;
+    background-color: red
+  }
 }
