@@ -3,6 +3,8 @@ body{
   color: #666666;
   overflow: hidden;
   margin: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
   background-color: black
 }
 .wrap{
