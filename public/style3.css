@@ -33,6 +33,7 @@ html,body{
   position: absolute;
   left: 0px;
   top: 20px;
+  width: 100px
 }
 .number_1{
   position: absolute;
@@ -42,6 +43,7 @@ html,body{
   position: absolute;
   left:300px;
   top:20px;
+  width: 100px
 }
 .pass_1{
   position: absolute;
@@ -51,6 +53,7 @@ html,body{
   position: absolute;
   left:700px;
   top:20px;
+  width: 150px
 }
 .submit{
   position: absolute;
