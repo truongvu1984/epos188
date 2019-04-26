@@ -18,7 +18,8 @@ html,body{
 }
 .main{
   position: absolute;
-  width: 100%;
+  left:0px;
+  right:0px;
   height: 100px;
   background-color: green;
   min-width: 100%;
@@ -45,7 +46,6 @@ html,body{
 .pass_1{
   position: absolute;
   left:700px;
-
 }
 .pass_2{
   position: absolute;
