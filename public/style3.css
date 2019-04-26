@@ -5,6 +5,7 @@ html,body{
   overflow: auto;
   margin: 0 auto 0;
   min-height:100%;
+  min-width: 100%;
 }
 .wrap{
   position: absolute;
