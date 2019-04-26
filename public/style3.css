@@ -13,7 +13,7 @@ body{
   width: 100%;
   height: 100%;
   background-color: brown;
-  overflow: auto;
+
 }
 
 .code_name{
@@ -27,37 +27,29 @@ body{
 }
 .number_1{
   position: absolute;
-  left:220px;
+  left:300px;
 }
 .number_2{
   position: absolute;
-  left:220px;
+  left:300px;
   top:20px;
 }
 .pass_1{
   position: absolute;
-  left:220px;
-  top:45px;
+  left:700px;
+
 }
 .pass_2{
   position: absolute;
-  left:220px;
-  top:65px;
+  left:700px;
+  top:20px;
 }
 .submit{
   position: absolute;
-  left:220px;
-  top:100px;
+  left:800px;
+  top:20px;
 }
-.adver{
-  position: absolute;
-  top:0%;
-  bottom: 0%;
-  right: 60%;
-  left:0%;
-  background-color: #4CAF50;
-  overflow: auto;
-}
+
 
 
 /* @media only screen and (max-width: 900px) {
