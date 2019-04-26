@@ -12,11 +12,10 @@ html,body{
 }
 .main{
   position: absolute;
-  width: 100%;
+  width: 2000px;
   height: 100px;
   background-color: green;
-  overflow: auto;
-}
+  }
 
 .code_name{
   position: absolute;
