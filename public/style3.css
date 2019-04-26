@@ -4,6 +4,9 @@ html,body{
   height: 100%;
   overflow: auto;
 }
+body{
+  position: static;
+}
 
 .wrap{
   position: static;
