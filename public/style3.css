@@ -4,15 +4,10 @@ html,body{
   height: 100%;
   overflow: auto;
 }
-body{
-  position: static;
-}
-
 .wrap{
   position: absolute;
   width: 100%;
   height: 100%;
-  margin-right: 0px;
   background-color: brown;
 }
 .main{
