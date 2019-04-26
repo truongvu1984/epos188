@@ -9,13 +9,13 @@ body{
 }
 
 .wrap{
-  position: static;
+  position: absolute;
   width: 100%;
   height: 100%;
   background-color: brown;
 }
 .main{
-  position: static;
+  position: absolute;
   top:0%;
   bottom: 0%;
   right: 0%;
