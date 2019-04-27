@@ -10,7 +10,7 @@ html,body{
 }
 .wrap{
   position: absolute;
-  width: 100%;
+  width: 100vw;
   height: 100%;
   background-color: brown;
   min-height:100%;
@@ -18,8 +18,7 @@ html,body{
 }
 .main{
   position: absolute;
-  left:0px;
-  right:0px;
+  width: 100vw;
   height: 100px;
   background-color: green;
   min-width: 100%;
