@@ -18,7 +18,7 @@ html,body{
   margin: 0 auto;
 }
 .main{
-  position: absolute;
+  position:fixed;
   top:0px;
   left:0px;
   width: inherit;
