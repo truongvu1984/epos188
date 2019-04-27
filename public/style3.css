@@ -14,14 +14,14 @@ html,body{
   height: 100%;
   background-color: brown;
   min-height:100%;
-  min-width: 100%;
+  min-width: 100vw;
 }
 .main{
   position: absolute;
   width: 100vw;
   height: 100px;
   background-color: green;
-  min-width: 100%;
+  min-width: 100vw;
   }
 
 .code_name{
