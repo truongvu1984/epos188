@@ -27,10 +27,10 @@ html,body{
   background-color: green
   }
 .blue{
-    position:absolute;
+    position:static;
     top:0px;
     left:0px;
-    right:0px;    
+    right:0px;
     height: 100px;
     z-index: 1
 }
