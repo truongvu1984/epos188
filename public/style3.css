@@ -30,7 +30,7 @@ html,body{
     position:absolute;
     top:0px;
     left:0px;
-    width: 1000px;
+    right:0px;    
     height: 100px;
     z-index: 1
 }
