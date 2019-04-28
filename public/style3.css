@@ -24,7 +24,7 @@ html,body{
 }
 .code_1{
   position: absolute;
-  height: 30px;
+  height: 25px;
   top: 20px;
 
 }
@@ -38,7 +38,7 @@ html,body{
   left:215px;
   top:20px;
   width: 150px;
-  height: 30px;
+  height: 25px;
 
 }
 .pass_1{
@@ -51,14 +51,14 @@ html,body{
   left:380px;
   top:20px;
   width: 150px;
-  height: 30px;
+  height: 25px;
 
 }
 .submit{
   position: absolute;
   left:545px;
   width: 100px;
-  height: 30px;
+  height: 25px;
   top:19px;
 
 }
