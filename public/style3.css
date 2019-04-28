@@ -27,10 +27,8 @@ html,body{
   background-color: green
   }
 .blue{
-    position:static;
-    top:0px;
-    left:0px;
-    right:0px;
+    position:relative;
+    width: 100%;
     height: 100px;
     z-index: 1
 }
