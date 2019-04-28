@@ -14,7 +14,7 @@ html,body{
 }
 .login{
   position: absolute;
-  width: 800px;
+  width: 700px;
   height: 50px;
   background-color: green;
 
@@ -53,9 +53,9 @@ html,body{
 }
 .submit{
   position: absolute;
-  left:500px;
+  left:550px;
   width: 70px;
-  top:20px;
+  top:19px;
 
 }
 /* @media only screen and (max-width: 900px) {
