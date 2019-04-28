@@ -16,6 +16,12 @@ html,body{
   background-color: brown;
   overflow: auto;
 }
+.ban{
+  position: absolute;
+  width: 100%;
+  height: 50px;
+   background-color: green
+}
 
 .code_name{
   position: absolute;
