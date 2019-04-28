@@ -26,14 +26,10 @@ html,body{
   margin: 0 auto;
   background-color: green
   }
-.blue{
-    position:static;
-    width: 100%;
-    height: 100px;
-    z-index: 1;
-    overflow: visible;
+.ba{
+  position:relative;
+  background-color: yellow
 }
-
 .code_name{
   position: absolute;
   left:0px;
