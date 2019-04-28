@@ -24,11 +24,11 @@ html,body{
   height: 100px;
   z-index: 2;
   margin: 0 auto;
-  background-color: green
+  background-color: yellow
   }
 .ba{
-  position:static;
-  background-color: yellow;
+  position:absolute;
+  background-color: green;
   height: 70px;
   width:100%;
   left:100px;
