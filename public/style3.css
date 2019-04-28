@@ -31,7 +31,7 @@ html,body{
   background-color: yellow;
   height: 70px;
   width:100%;
-  
+  left:100px;
 }
 .code_name{
   position: absolute;
