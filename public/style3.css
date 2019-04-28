@@ -28,7 +28,10 @@ html,body{
   }
 .ba{
   position:static;
-  background-color: yellow
+  background-color: yellow;
+  height: 70px;
+  width:100%;
+  
 }
 .code_name{
   position: absolute;
