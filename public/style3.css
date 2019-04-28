@@ -30,7 +30,8 @@ html,body{
   position:absolute;
   background-color: green;
   height: 70px;
-  width:auto;
+  width:100%;
+  overflow: auto;
 
 }
 .code_name{
