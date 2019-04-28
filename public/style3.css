@@ -29,12 +29,12 @@ html,body{
 }
 .number_1{
   position: absolute;
-  left:205px;
+  left:215px;
 
 }
 .number_2{
   position: absolute;
-  left:205px;
+  left:215px;
   top:20px;
   width: 150px;
 
@@ -53,7 +53,7 @@ html,body{
 }
 .submit{
   position: absolute;
-  left:535px;
+  left:545px;
   width: 100px;
   top:19px;
 
