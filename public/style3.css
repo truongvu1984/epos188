@@ -29,32 +29,32 @@ html,body{
 }
 .number_1{
   position: absolute;
-  left:225px;
+  left:205px;
 
 }
 .number_2{
   position: absolute;
-  left:225px;
+  left:205px;
   top:20px;
   width: 150px;
 
 }
 .pass_1{
   position: absolute;
-  left:400px;
+  left:380px;
 
 }
 .pass_2{
   position: absolute;
-  left:400px;
+  left:380px;
   top:20px;
   width: 150px;
 
 }
 .submit{
   position: absolute;
-  left:575px;
-  width: 70px;
+  left:535px;
+  width: 100px;
   top:19px;
 
 }
