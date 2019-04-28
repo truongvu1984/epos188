@@ -18,9 +18,10 @@ html,body{
 }
 .ban{
   position: absolute;
-  width: 100%;
+  width: 3000px;
+  overflow: hidden;
   height: 50px;
-   background-color: green
+  background-color: green
 }
 
 .code_name{
