@@ -21,45 +21,41 @@ html,body{
 }
 .code_name{
   position: absolute;
-  left:0px;
-  z-index: 2
 }
 .code_1{
   position: absolute;
-  left: 0px;
   top: 20px;
-  width: 100px;
-  z-index: 2
+
 }
 .number_1{
   position: absolute;
-  left:150px;
-  z-index: 2
+  left:200px;
+
 }
 .number_2{
   position: absolute;
-  left:150px;
+  left:200px;
   top:20px;
-  width: 100px;
-  z-index: 2
+  width: 150px;
+
 }
 .pass_1{
   position: absolute;
-  left:300px;
-  z-index: 2
+  left:350px;
+
 }
 .pass_2{
   position: absolute;
-  left:300px;
+  left:350px;
   top:20px;
   width: 150px;
-  z-index: 2
+
 }
 .submit{
   position: absolute;
-  left:450px;
+  left:600px;
   top:20px;
-  z-index: 2
+
 }
 /* @media only screen and (max-width: 900px) {
 
