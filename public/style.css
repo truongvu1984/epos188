@@ -172,10 +172,9 @@ body {
 .list_contact_ok{
   position:absolute;
   bottom: 5px;
-  width: 380px;
+  width: 350px;
   height: 40px;
-  left:5px;
-  overflow-x: scroll;
+  overflow-x: auto;
   white-space: nowrap;
 }
 .list_contact_ok_item{
