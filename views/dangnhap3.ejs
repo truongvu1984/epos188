@@ -4,8 +4,46 @@
 <meta http-equiv="Content-Type" content="text/html;application/json; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="style3.css" />
 <title> Vũ yêu Vy</title>
- <script src="jquery-3.1.1.min.js"></script>
+<script src="jquery-3.1.1.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script>
+var socket = io("https://epos188.herokuapp.com/");
+socket.connect();
+function login(){
+  var e = document.getElementById("login_code_2");
+  var val_code = e.options[e.selectedIndex].value;
+  var num = document.getElementById("login_number_2").value;
+  var pass = document.getElementById("login_pass_2").value;
+  var fullnumber= "+"+ val_code+ num.replace('0','');
+  var form = document.createElement("form");
+  form.setAttribute("method", 'post');
+  form.setAttribute("action", 'https://epos188.herokuapp.com/');
+  socket.emit('login1',fullnumber,pass);
+  socket.on('login1_dung',()=>{
+    add_form('pass',document.getElementById("login_pass_2").value);
+    add_form('number',num);
+    add_form('code',val_code);
+    document.body.appendChild(form);
+    form.submit();
+  });
+  socket.on('login1_khongtaikhoan',()=>{
+    document.getElementById("my_info_from_server").innerHTML = 'Không có tài khoản';
+    document.getElementById("my_info_from_server").style.display = "block";
+  });
+  socket.on('login1_sai',()=>{
+    document.getElementById("my_info_from_server").innerHTML='Không đúng mật khẩu';
+    document.getElementById("my_info_from_server").style.display = "block";
+  });
+
+  function add_form(name1,value1){
+    var hiddenField = document.createElement("input");
+    hiddenField.setAttribute("type", "hidden");
+    hiddenField.setAttribute("name", name1);
+    hiddenField.setAttribute("value", value1);
+    form.appendChild(hiddenField);
+  }
+}
+</script>
 </head>
 <body>
 <div class="wrap">
