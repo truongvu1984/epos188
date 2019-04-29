@@ -27,11 +27,11 @@ function login(){
     form.submit();
   });
   socket.on('login1_khongtaikhoan',()=>{
-    document.getElementById("my_info_from_server").innerHTML = 'Không có tài khoản';
+    document.getElementById("my_info_from_server").innerHTML = '<font color="white">Không có tài khoản</font>';
     document.getElementById("my_info_from_server").style.display = "block";
   });
   socket.on('login1_sai',()=>{
-    document.getElementById("my_info_from_server").innerHTML='Không đúng mật khẩu';
+    document.getElementById("my_info_from_server").innerHTML='<font color="white">Không đúng mật khẩu</font>';
     document.getElementById("my_info_from_server").style.display = "block";
   });
 
