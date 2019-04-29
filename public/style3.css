@@ -73,7 +73,7 @@ html,body{
   position: absolute;
   width: 645px;
   height: 25px;
-  top:40px;
+  bottom: 0px;
   background-color: blue
 }
 /* @media only screen and (max-width: 900px) {
