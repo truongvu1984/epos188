@@ -68,7 +68,15 @@ html,body{
   height: 25px;
   padding: 0px;
   top:19px;
-
+}
+.info_from_server{
+  position: absolute;
+  width: 100px;
+  height: 25px;
+  top:30px;
+  margin-left:auto;
+  margin-right:auto;
+  background-color: blue
 }
 /* @media only screen and (max-width: 900px) {
 
