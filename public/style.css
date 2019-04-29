@@ -25,7 +25,7 @@ body {
 }
 .top_right{
   position: absolute;
-  left: 400px;
+  left: 500px;
   top:10px;
   z-index:2;
 }
