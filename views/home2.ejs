@@ -948,7 +948,6 @@ function log_out(){
     window.location.replace("https://epos188.herokuapp.com/");
   });
 }
-myMap();
 window.onclick = function(event) {
 
   if (!event.target.matches('.btn_account')) {
@@ -973,8 +972,8 @@ window.onclick = function(event) {
 </script>
 </head>
 <body>
-      <div id="map" class="class_map"></div>
-      <!-- <div class="top_right">
+  <div class="wrapper">
+      <div class="top_right">
         <div class="top_right_item">
           <button class="btn_account" onclick="log_out()">LOG OUT</button>
           <div class="content_account" id="id_content_account"></div>
@@ -1024,11 +1023,11 @@ window.onclick = function(event) {
         <button class="btn_list" onclick="open_close_list()" id="id_btn_list">List</button>
         <div class="location_list" id="id_location_list"></div>
       </div>
-      <button class="bottom_right" onclick="kiemtra()" id="btn_sw_map">Satelite</button> -->
-
+      <button class="bottom_right" onclick="kiemtra()" id="btn_sw_map">Satelite</button>
+      <div id="map" class="class_map"></div>
       <!-- <audio src="" hidden></audio> -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript"></script>
-
+  </div>
 
   </body>
 </html>
