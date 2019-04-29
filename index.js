@@ -36,7 +36,7 @@ con.connect(function(err) {
           con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
             if (err || rows.length ==0){res.render('dangnhap', {noidung:'Tài khoản này không tồn tại'});}
             else{
-              if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });}
+              if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('test', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });}
               else {res.render('dangnhap', {noidung:'Mật khẩu không đúng'});}
             }
           });
