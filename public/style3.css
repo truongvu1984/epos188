@@ -65,14 +65,14 @@ html,body{
   position: absolute;
   left:545px;
   width: 100px;
-  height: 25px;
+  height: 26px;
   padding: 0px;
   top:19px;
 }
 .info_from_server{
   position: absolute;
   width: 645px;
-  height: 25px;
+  height: 20px;
   bottom: 0px;
   background-color: blue
 }
