@@ -2,15 +2,19 @@
 body {
     width: 100%;
     height: 100%;
-    overflow: auto;
 
 }
-
-.class_map{
-  position: fixed;
+.wrapper{
   width: 100%;
   height: 100%;
-  z-index: 3;
+  overflow: scroll;
+}
+.class_map{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  
+  z-index: 1;
 }
 .content{
   position: absolute;
