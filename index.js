@@ -29,19 +29,19 @@ con.connect(function(err) {
     else {
       console.log("Da co ket noi ok ha ha ha");
       app.get('/', (req, res) => res.render('dangnhap3'));
-      // app.post('/', urlencodedParser, function (req, res){
-      //   if (!req.body) return res.sendStatus(400)
-      //   else {
-      //     var full_number = "+"+req.body.code + req.body.number.replace('0','');
-      //     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
-      //       if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
-      //       else{
-      //         if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });}
-      //         else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
-      //       }
-      //     });
-      //   }
-      // })
+      app.post('/', urlencodedParser, function (req, res){
+        if (!req.body) return res.sendStatus(400)
+        else {
+          var full_number = "+"+req.body.code + req.body.number.replace('0','');
+          con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
+            if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
+            else{
+              if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });}
+              else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
+            }
+          });
+        }
+      })
 function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
