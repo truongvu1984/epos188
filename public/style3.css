@@ -72,8 +72,8 @@ html,body{
 .info_from_server{
   position: absolute;
   width: 645px;
-  height: 50px;
-  top:35px;
+  height: 25px;
+  top:40px;
   background-color: blue
 }
 /* @media only screen and (max-width: 900px) {
