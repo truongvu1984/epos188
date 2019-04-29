@@ -14,7 +14,7 @@ html,body{
 }
 .blue{
   position: absolute;
-  width: 1000px;
+  width: 700px;
   height: 50px;
   background-color: blue;
 }
@@ -23,7 +23,7 @@ html,body{
   width: 100%;
   height: 50px;
   background-color: blue;
-  overflow: auto;
+
 }
 .content{
   position: absolute;
@@ -31,7 +31,7 @@ html,body{
   top:50px;
   bottom: 0px;
   background-color: green;
-  verflow: auto;
+
 }
 
 /* @media only screen and (max-width: 900px) {
