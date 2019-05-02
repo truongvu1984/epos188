@@ -86,13 +86,13 @@ body {
   width: 150px;
   left:5px;
   bottom: 50px;
-
+  border: 2px solid black
 }
 .btn_show_cont{
   position: absolute;
   width: 50px;
   left:100px;
-  
+
 }
 .input_contact{
   position: absolute;
