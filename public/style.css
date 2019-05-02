@@ -71,7 +71,7 @@ body {
 .input_sub{
   position: absolute;
   width: 100px;
-  left:70px;
+  left:5px;
   top:5px
 }
 .online_text{
@@ -81,10 +81,22 @@ body {
   left:270px;
   display: none
 }
-.input_contact{
+.input_cont_wrap{
   position: absolute;
   width: 150px;
-  left:70px;
+  left:5px;
+  bottom: 50px;
+  border: 1px;
+}
+.btn_show_cont{
+  position: absolute;
+  width: 50px;
+  left:100px;
+  bottom: 50px;
+}
+.input_contact{
+  position: absolute;
+  width: 100px;
   bottom: 50px;
   border: medium none
 }
