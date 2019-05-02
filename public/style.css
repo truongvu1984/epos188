@@ -42,7 +42,7 @@ body {
   right:0px;
   display: none;
   overflow-y: scroll;
-  z-index: 3;
+  z-index: 4;
 
 }
 .icon{
