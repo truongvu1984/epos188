@@ -33,6 +33,7 @@ body {
   position: relative;
   float: right;
   margin-left: 5px;
+  z-index: 3
 }
 .content_account, .content_online,.content_save,.content_send,.content_inbox{
   position: absolute;
@@ -42,9 +43,7 @@ body {
   right:0px;
   display: none;
   overflow-y: scroll;
-  z-index: 4;
-
-}
+  }
 .icon{
   background-color: red;
 }
