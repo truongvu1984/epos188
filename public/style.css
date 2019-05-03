@@ -81,7 +81,7 @@ body {
   width: 144px;
   height: 16px;
   left: 3px;
-  top:2px;
+  top:3px;
   border: medium none;
 }
 .online_text{
@@ -112,10 +112,10 @@ body {
 }
 .input_contact{
   position: absolute;
-  width: 110px;
+  width: 115px;
   height: 16px;
   left: 3px;
-  top:2px;
+  top:3px;
   border: medium none
 }
 .list_contact{
