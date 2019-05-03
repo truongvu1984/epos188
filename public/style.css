@@ -55,7 +55,7 @@ body {
   position: absolute;
   background-color: white;
   width: 300px;
-  height: 100px;
+  height: 55px;
   left: 10px;
   top:10px;
   z-index:2;
@@ -124,9 +124,9 @@ body {
   height: 400px;
   background-color: yellow;
   top:100px;
-  right:150px;
+  left:30px;
   display: none;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .line_inbox{
   width: 300px;
@@ -202,9 +202,10 @@ body {
 }
 .list_contact_ok{
   position:absolute;
-  bottom: 5px;
+  top: 56px;
   width: 350px;
   height: 40px;
+  background-color: green;
   overflow-x: auto;
   white-space: nowrap;
 }
