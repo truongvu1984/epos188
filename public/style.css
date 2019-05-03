@@ -193,18 +193,18 @@ body {
 }
 .list_contact_line_btn{
   position:absolute;
-  margin-left: 210px;
+  margin-left: 203px;
   margin-top:5px;
 }
 .list_contact_line_name{
   position: absolute;
-  width: 207px;
+  width: 200px;
   overflow-x: hidden;
 }
 .list_contact_line_number{
   position:absolute;
   margin-top:20px;
-  width: 207px;
+  width: 200px;
 }
 
 .list_contact_ok{
