@@ -92,9 +92,8 @@ body {
 .btn_show_cont{
   position: absolute;
   width: 30px;
-  top:2px;
-  bottom: 2px;
-  left:98px;
+  height: 30px;
+  right: 5px;
   background-image: url("a1.png");
 }
 .input_contact{
