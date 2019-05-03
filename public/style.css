@@ -94,7 +94,11 @@ body {
   width: 20px;
   height: 20px;
   right: 3px;
-  background-image: url("a1.png") fixed / cover;
+  background-image: url("a1.png");
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: cover;
+  background-attachment: fixed;
 }
 .input_contact{
   position: absolute;
