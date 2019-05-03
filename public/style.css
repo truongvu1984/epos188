@@ -83,7 +83,6 @@ body {
   left: 3px;
   top:2px;
   border: medium none;
-
 }
 .online_text{
   position: absolute;
@@ -110,7 +109,6 @@ body {
   background-repeat: no-repeat;
   background-position: left top;
   background-size: contain;
-
 }
 .input_contact{
   position: absolute;
