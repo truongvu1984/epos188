@@ -72,8 +72,8 @@ body {
   position: absolute;
   width: 150px;
   height: 24px;
-  left:5px;
-  top:5px;
+  left:2px;
+  top:2px;
   border: 1px solid black
 }
 .input_sub{
@@ -96,8 +96,8 @@ body {
   position: absolute;
   width: 150px;
   height: 24px;
-  left:5px;
-  bottom: 50px;
+  left:2px;
+  top: 27px;
   border: 1px solid black
 }
 .btn_show_cont{
