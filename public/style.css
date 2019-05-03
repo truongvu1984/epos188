@@ -70,7 +70,7 @@ body {
 }
 .input_sub{
   position: absolute;
-  width: 100px;
+  width: 150px;
   left:5px;
   top:5px
 }
@@ -84,17 +84,18 @@ body {
 .input_cont_wrap{
   position: absolute;
   width: 150px;
-  height: 20px;
+  height: 22px;
   left:5px;
   bottom: 50px;
   border: 1px solid black
 }
 .btn_show_cont{
   position: absolute;
-  width: 50px;
-  height: 15px;
-  left:100px;
-
+  width: 30px;
+  top:2px;
+  bottom: 2px;
+  left:98px;
+  background-image: url("a1.png");
 }
 .input_contact{
   position: absolute;
