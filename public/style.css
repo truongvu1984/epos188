@@ -94,12 +94,12 @@ body {
   width: 20px;
   height: 20px;
   right: 3px;
-  background-image: url("a1.png");
+  background-image: url("a1.png") no-repeat 50% fixed / cover;
 }
 .input_contact{
   position: absolute;
   width: 100px;
-  height: 15px;
+  height: 16px;
   left: 3px;
   top:2px;
   border: medium none
