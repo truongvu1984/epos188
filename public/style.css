@@ -97,7 +97,7 @@ body {
   width: 150px;
   height: 24px;
   left:2px;
-  top: 27px;
+  top: 29px;
   border: 1px solid black
 }
 .btn_show_cont{
@@ -114,7 +114,7 @@ body {
 }
 .input_contact{
   position: absolute;
-  width: 100px;
+  width: 110px;
   height: 16px;
   left: 3px;
   top:2px;
