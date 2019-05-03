@@ -97,7 +97,7 @@ body {
   background-image: url("a1.png");
   background-repeat: no-repeat;
   background-position: left top;
-  background-size: cover;
+  background-size: contain;
 
 }
 .input_contact{
