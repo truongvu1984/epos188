@@ -129,7 +129,7 @@ socket.on('S_send_contact',(tin)=>{
     id_contact ++;
     var idc = "1"+id_contact;
     mang_contact.push({ids: tin.ids,id: idc, name: tin.name, number:tin.number});
-    var line = "<div class='list_contact_main_line'><div style='position:absolute;' id='list_contact_name'>"+strdecode(tin.name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+tin.number+"</div><button class='list_contact_line_btn' id='btn"+idc+"' onclick='add_contact_click("+idc+")'>Add</button></div>";
+    var line = "<div class='list_contact_main_line'><div class='list_contact_line_name' id='list_contact_name'>"+strdecode(tin.name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+tin.number+"</div><button class='list_contact_line_btn' id='btn"+idc+"' onclick='add_contact_click("+idc+")'>Add</button></div>";
       $("#id_list_contact").append(line);
 
 });

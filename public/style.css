@@ -186,24 +186,32 @@ body {
   left:5px;
 }
 .list_contact_main_line{
-  width:231px;
+  width:230px;
   height:40px;
   background-color:green;
   margin-top:5px
 }
 .list_contact_line_btn{
   position:absolute;
-  right:5px;
+  left:220px;
   margin-top:5px
+}
+.list_contact_line_name{
+  position: absolute;
+  width: 210px;
+  overflow-x: hidden;
 }
 .list_contact_line_number{
   position:absolute;
   margin-top:20px
+  width: 210px;
+  overflow-x: hidden;
 }
+
 .list_contact_ok{
   position:absolute;
   top: 56px;
-  width: 350px;
+  width: 300px;
   height: 40px;
   background-color: green;
   overflow-x: auto;
