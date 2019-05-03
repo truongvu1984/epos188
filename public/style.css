@@ -124,7 +124,7 @@ body {
   height: 400px;
   background-color: yellow;
   top:100px;
-  left:30px;
+  left:2px;
   display: none;
   overflow-y: auto;
 }
