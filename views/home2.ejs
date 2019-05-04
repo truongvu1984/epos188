@@ -960,7 +960,7 @@ window.onclick = function(event) {
   if (!(event.target.matches('.btn_inbox')||(event.target.matches('.line_inbox_chk')  )  )  ) {
     document.getElementById("id_content_inbox").style.display = "none";
   }
-  if (!(event.target.matches('.list_contact_line_btn')||(event.target.matches('.list_contact_main_line')  )  )  ) {
+  if (!(event.target.matches('.list_contact_line_btn')||(event.target.matches('.list_contact_main_line')  )|| (event.target.matches('.btn_show_cont')  )||(event.target.matches('.list_contact_line_name')  )||(event.target.matches('.list_contact_line_number')  ) )  ) {
     document.getElementById("id_list_contact").style.display = "none";
     document.getElementById("id_list_contact_search").style.display = "none";
 
