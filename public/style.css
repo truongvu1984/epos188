@@ -27,7 +27,7 @@ body {
   position: absolute;
   right: 5px;
   top:10px;
-  z-index:2;
+  z-index:3;
 }
 .top_right_item {
   position: relative;
@@ -209,7 +209,6 @@ body {
   position:absolute;
   top: 58px;
   width: 300px;
-  background-color: green;
   overflow-x: auto;
   white-space: nowrap;
 }
