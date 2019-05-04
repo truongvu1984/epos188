@@ -930,14 +930,7 @@ function show_contact_list(){
       else {
         document.getElementById("id_list_contact").style.display = "block";
       }
-
-
   }
-  // mang_contact.forEach((tin)=>{
-  //   var chuoi  ="<div class='line_inbox' ><div style='position:absolute;left:5px;width:150px;'>"+ strdecode(tin.name) +"</div></br>"+
-  //   "<div style='position:absolute; left:5px'>"+strdecode(tin.number)+"</div></div>";
-  //    $("#my_list_contact").append( chuoi);
-  // });
   }
 function show_content_top_right(id){
   document.getElementById(id).style.display = "block";
@@ -966,6 +959,11 @@ window.onclick = function(event) {
   }
   if (!(event.target.matches('.btn_inbox')||(event.target.matches('.line_inbox_chk')  )  )  ) {
     document.getElementById("id_content_inbox").style.display = "none";
+  }
+  if (!(event.target.matches('.list_contact_line_btn')||(event.target.matches('.list_contact_main_line')  )  )  ) {
+    document.getElementById("id_list_contact").style.display = "none";
+    document.getElementById("id_list_contact_search").style.display = "none";
+
   }
 
 }
