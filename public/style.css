@@ -210,7 +210,6 @@ body {
 .list_contact_line_name{
   position: absolute;
   width: 185px;
-  background-color: yellow;
   overflow-x: hidden;
 }
 .list_contact_line_number{
