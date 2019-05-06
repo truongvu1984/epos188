@@ -191,16 +191,19 @@ body {
   margin-top:5px
 }
 .list_contact_line_btn{
+  position: absolute;
   width: 42px;
   margin-left: 190px;
   margin-top:5px;
 }
 .list_contact_line_name{
+  position: absolute;
   width: 185px;
   background-color: yellow;
   overflow-x: hidden;
 }
 .list_contact_line_number{
+  position: absolute;
   margin-top:20px;
   width: 185px;
   overflow-x: hidden;
