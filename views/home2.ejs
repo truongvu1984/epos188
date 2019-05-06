@@ -129,7 +129,7 @@ socket.on('S_send_contact',(tin)=>{
     id_contact ++;
     var idc = "1"+id_contact;
     mang_contact.push({ids: tin.ids,id: idc, name: tin.name, number:tin.number});
-    var line = "<div class='list_contact_main_line'><div class='list_contact_line_name' id='list_contact_name'>"+strdecode(tin.name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+tin.number+"</div><button class='list_contact_line_btn' id='btn"+idc+"' onclick='add_contact_click("+idc+")'>Add</button></div>";
+    var line = "<div class='list_contact_main_line'><div class='main_line_wrap'><div class='list_contact_line_name' id='list_contact_name'>"+strdecode(tin.name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+tin.number+"</div><button class='list_contact_line_btn' id='btn"+idc+"' onclick='add_contact_click("+idc+")'>Add</button></div></div>";
       $("#id_list_contact").append(line);
 
 });
@@ -1016,9 +1016,10 @@ window.onclick = function(event) {
           <button style="position:absolute;width:50px;height:30px;right:60px;top:10px" id="id_btn_send" onclick="guitinnhan()">SEND</button>
           <div  class="online_text" id="id_online_text"><i><mark>online</mark></i></div>
         </div>
+
         <div class="list_contact_ok" id="id_list_contact_ok"></div>
         <div class="list_contact" id="id_list_contact"></div>
-        <div class="list_contact" id="id_list_contact_search"></div>
+        <!-- <div class="list_contact" id="id_list_contact_search"></div> -->
       </div>
       <div class="right_bar" id="id_right_bar">
         <button class="btn_list" onclick="open_close_list()" id="id_btn_list">List</button>
