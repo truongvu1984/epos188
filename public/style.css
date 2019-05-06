@@ -52,7 +52,6 @@ body {
   color: black
 }
 .top_left_1{
-  position: absolute;
   background-color: white;
   width: 300px;
   height: 55px;
@@ -117,11 +116,8 @@ body {
   border: medium none
 }
 .list_contact{
-  position: absolute;
   width: 250px;
   height: 400px;
-  top:100px;
-  left:2px;
   display: none;
   overflow-y: auto;
 }
@@ -207,9 +203,9 @@ body {
   overflow-x: hidden;
 }
 .list_contact_ok{
-  position:absolute;
   top: 58px;
   width: 300px;
+  width: 30px;
   overflow-x: auto;
   white-space: nowrap;
 }
