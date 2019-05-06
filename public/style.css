@@ -185,6 +185,7 @@ body {
   left:5px;
 }
 .list_contact_main_line{
+  position: absolute;
   width:230px;
   height:40px;
   background-color:green;
