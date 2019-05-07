@@ -220,6 +220,7 @@ body {
   margin-top:20px;
   width: 185px;
   overflow-x: hidden;
+  white-space: nowrap;
    text-overflow: ellipsis;
 }
 .list_contact_ok{
