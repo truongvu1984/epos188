@@ -653,8 +653,9 @@ function inbox_click(id,nam){
           show_pos(tin.lat, tin.lon, strdecode(tin.name), tin.id,'A');
           var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
           $("#id_location_list").append(line);
-          if(key1==(data.length-1)){console.log('đã xong');}
+          // if(key1==(data.length-1)){console.log('đã xong');}
           });
+          console.log('đã xong');
         }
       });
     }
