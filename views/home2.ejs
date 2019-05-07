@@ -730,7 +730,8 @@ function search_contact(){
     var kiemtra = true;
     for (var i=0; i<mang_contact.length; i++){
       if  ( strdecode(mang_contact[i].name).toLowerCase().indexOf(chuoi.toLowerCase()) !== -1 || mang_contact[i].number.toLowerCase().indexOf(chuoi.toLowerCase()) !== -1){
-        var line = "<div class='list_contact_main_line'><div style='position:absolute;' id='list_contact_name'>"+strdecode(mang_contact[i].name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+mang_contact[i].number+"</div><button class='list_contact_line_btn' id='bt"+mang_contact[i].id+"' onclick='add_contact__search_click("+mang_contact[i].id+")'>"+document.getElementById("btn"+mang_contact[i].id).textContent+"</button></div>";
+        // var line = "<div class='list_contact_main_line'><div style='position:absolute;' id='list_contact_name'>"+strdecode(mang_contact[i].name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+mang_contact[i].number+"</div><button class='list_contact_line_btn' id='bt"+mang_contact[i].id+"' onclick='add_contact__search_click("+mang_contact[i].id+")'>"+document.getElementById("btn"+mang_contact[i].id).textContent+"</button></div>";
+        var line = "<div class='list_contact_main_line'><div class='abc'><div class='list_contact_line_name' id='list_contact_name'>"+strdecode(mang_contact[i].name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+mang_contact[i].number+"</div><button class='list_contact_line_btn' id='btn"+mang_contact[i].id+"' onclick='add_contact__search_click("+mang_contact[i].id+")'>"+document.getElementById("btn"+mang_contact[i].id).textContent+"</button></div></div>";
           $("#id_list_contact_search").append(line);
           kiemtra = false;
         }
@@ -960,7 +961,7 @@ window.onclick = function(event) {
   if (!(event.target.matches('.btn_inbox')||(event.target.matches('.line_inbox_chk')  )  )  ) {
     document.getElementById("id_content_inbox").style.display = "none";
   }
-  if (!(event.target.matches('.list_contact_line_btn')||(event.target.matches('.list_contact_main_line')  )|| (event.target.matches('.btn_show_cont')  )||(event.target.matches('.list_contact_line_name')  )||(event.target.matches('.list_contact_line_number')  ) )  ) {
+  if (!(event.target.matches('.list_contact_line_btn')||(event.target.matches('.list_contact_main_line')  )|| (event.target.matches('.btn_show_cont')  )||(event.target.matches('.list_contact_line_name')  )||(event.target.matches('.list_contact_line_number')  ) || (event.target.matches('.input_contact')  ))  ) {
     document.getElementById("id_list_contact").style.display = "none";
     document.getElementById("id_list_contact_search").style.display = "none";
 
@@ -1016,7 +1017,6 @@ window.onclick = function(event) {
           <button style="position:absolute;width:50px;height:30px;right:60px;top:10px" id="id_btn_send" onclick="guitinnhan()">SEND</button>
           <div  class="online_text" id="id_online_text"><i><mark>online</mark></i></div>
         </div>
-
         <div class="list_contact_ok" id="id_list_contact_ok"></div>
         <div class="list_contact" id="id_list_contact"></div>
         <div class="list_contact" id="id_list_contact_search"></div>
