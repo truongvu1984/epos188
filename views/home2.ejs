@@ -295,6 +295,15 @@ socket.on('C_danhantinnhan',(data)=>{
   // chuyển đổi màu sắc sang đỏ đối với người
 
 });
+function test(){
+  var toronto = new H.map.Marker({lat:43.7,  lng:-79.4}),
+      boston = new H.map.Marker({lat:42.35805, lng:-71.0636}),
+      washington = new H.map.Marker({lat:38.8951, lng:-77.0366}),
+      group = new H.map.Group();
+  group.addObjects([toronto, boston, washington]);
+  map.addObject(group);
+  map.setViewBounds(group.getBounds());
+}
 function online_clk(room,name){
   socket.on('S_get_join',()=>{
     document.getElementById("id_online_text").style.display = "block";
@@ -1013,7 +1022,7 @@ window.onclick = function(event) {
             <input type="text" class="input_contact" id="id_input_contact" placeholder="Search contact" oninput="search_contact()" autocomplete="off"></input>
             <button class="btn_show_cont" onclick="show_contact_list()"></button>
           </div>
-          <button style="position:absolute;width:50px;height:30px;right:5px;top:10px" id="id_btn_save" onclick="lưu_tinnhan()">SAVE</button>
+          <button style="position:absolute;width:50px;height:30px;right:5px;top:10px" id="id_btn_save" onclick="test()">SAVE</button>
           <button style="position:absolute;width:50px;height:30px;right:60px;top:10px" id="id_btn_send" onclick="guitinnhan()">SEND</button>
           <div  class="online_text" id="id_online_text"><i><mark>online</mark></i></div>
         </div>
