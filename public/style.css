@@ -212,7 +212,8 @@ body {
   width: 185px;
   height: 20px;
   overflow-x:hidden;
-   text-overflow: ellipsis;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .list_contact_line_number{
   position:absolute;
