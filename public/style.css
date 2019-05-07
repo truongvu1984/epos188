@@ -211,14 +211,14 @@ body {
   width: 185px;
   height: 20px;
   overflow-x: hidden;
-  text-overflow: ellipsis;
+
 }
 .list_contact_line_number{
   position:absolute;
   margin-top:20px;
   width: 185px;
   overflow-x: hidden;
-  text-overflow: ellipsis;
+
 }
 .list_contact_ok{
   top: 58px;
