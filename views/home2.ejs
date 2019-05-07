@@ -678,27 +678,34 @@ function save_click(id,name){
   socket.off('S_pos_online');
   socket.emit('C_reques_point',id);
   socket.on('S_send_point',(data)=>{
+    var
   $("#id_location_list").html("");
   $("#id_input_subject").val(room_name_chose);
   if(mang_infowindow.length > 0){
     mang_infowindow.forEach((win,key)=>{
           win.wind.close();
           if(key === (mang_infowindow.length-1)){
+            var bounds = new google.maps.LatLngBounds();
             mang_infowindow = [];
             mang_infowindow_main=[];
-            data.forEach((tin)=>{
+            data.forEach((tin,key1)=>{
               show_pos(tin.lat, tin.lon, strdecode(tin.name), tin.id,'A');
               var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
               $("#id_location_list").append(line);
+              bounds.extend( new google.maps.LatLng(tin.lat, tin.lon));
+              if(key1==(data.length-1)){map.fitBounds(bounds);}
               });
             }
           });
         }
         else {
-          data.forEach((tin)=>{
+          var bounds = new google.maps.LatLngBounds();
+          data.forEach((tin,key1)=>{
           show_pos(tin.lat, tin.lon, strdecode(tin.name),tin.id,'A');
           var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
           $("#id_location_list").append(line);
+          bounds.extend( new google.maps.LatLng(tin.lat, tin.lon));
+          if(key1==(data.length-1)){map.fitBounds(bounds);}
         });
         }
         socket.off('S_send_point');
@@ -716,21 +723,27 @@ function send_click(id,name){
           mang_infowindow.forEach((win,key)=>{
           win.wind.close();
           if(key === (mang_infowindow.length-1)){
+            var bounds = new google.maps.LatLngBounds();
             mang_infowindow = [];
             mang_infowindow_main=[];
-            data.forEach((tin)=>{
+            data.forEach((tin,key1)=>{
               show_pos(tin.lat, tin.lon, strdecode(tin.name), tin.id,'A');
               var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
               $("#id_location_list").append(line);
+              bounds.extend( new google.maps.LatLng(tin.lat, tin.lon));
+              if(key1==(data.length-1)){map.fitBounds(bounds);}
               });
             }
           });
         }
         else {
-          data.forEach((tin)=>{
+          var bounds = new google.maps.LatLngBounds();
+          data.forEach((tin,key1)=>{
           show_pos(tin.lat, tin.lon, strdecode(tin.name),tin.id,'A');
           var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
           $("#id_location_list").append(line);
+          bounds.extend( new google.maps.LatLng(tin.lat, tin.lon));
+          if(key1==(data.length-1)){map.fitBounds(bounds);}
         });
         }
         socket.off('S_send_point');
