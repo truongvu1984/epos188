@@ -199,7 +199,6 @@ body {
   position: relative;
   width:230px;
   height:40px;
-
 }
 .list_contact_line_btn{
   position:absolute;
@@ -211,7 +210,6 @@ body {
   position: absolute;
   width: 185px;
   height: 20px;
-  white-space: nowrap;
   overflow-x: hidden;
   text-overflow: ellipsis;
 }
@@ -219,9 +217,8 @@ body {
   position:absolute;
   margin-top:20px;
   width: 185px;
-  white-space: nowrap;
   overflow-x: hidden;
-   text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
 .list_contact_ok{
   top: 58px;
