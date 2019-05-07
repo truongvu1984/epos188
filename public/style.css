@@ -212,7 +212,7 @@ body {
   width: 185px;
   height: 20px;
   white-space: nowrap;
-  overflow:hidden;
+  overflow-x: hidden;
   text-overflow: ellipsis;
 }
 .list_contact_line_number{
@@ -220,7 +220,7 @@ body {
   margin-top:20px;
   width: 185px;
   white-space: nowrap;
-  overflow: hidden;
+  overflow-x: hidden;
    text-overflow: ellipsis;
 }
 .list_contact_ok{
