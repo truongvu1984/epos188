@@ -211,7 +211,7 @@ body {
   position: absolute;
   width: 185px;
   height: 20px;
-  overflow-x:visible;
+  overflow-x:hidden;
 }
 .list_contact_line_number{
   position:absolute;
