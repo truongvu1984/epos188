@@ -678,7 +678,7 @@ function save_click(id,name){
   socket.off('S_pos_online');
   socket.emit('C_reques_point',id);
   socket.on('S_send_point',(data)=>{
-    var
+    
   $("#id_location_list").html("");
   $("#id_input_subject").val(room_name_chose);
   if(mang_infowindow.length > 0){
