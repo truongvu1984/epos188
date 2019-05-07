@@ -303,9 +303,7 @@ function test(){
   bounds.extend( new google.maps.LatLng(43.7,  -79.4));
   bounds.extend( new google.maps.LatLng(42.35805, -71.0636));
   bounds.extend( new google.maps.LatLng(38.8951, -77.0366));
-map.fitBounds(bounds);
-
-
+  map.fitBounds(bounds);
 }
 function online_clk(room,name){
   socket.on('S_get_join',()=>{
@@ -649,10 +647,13 @@ function inbox_click(id,nam){
       if(key === (mang_infowindow.length-1)){
         mang_infowindow=[];
         mang_infowindow_main=[];
-        data.forEach((tin)=>{
+        var bounds = new google.maps.LatLngBounds();
+        data.forEach((tin,key)=>{
+          bounds.extend( new google.maps.LatLng(tin.lat, tin.lon));
           show_pos(tin.lat, tin.lon, strdecode(tin.name), tin.id,'A');
           var line = "<div class='list_line' id='li_lo"+tin.id+"'><div class='lo_list_sub' onclick='fly_to("+tin.id+")'>"+strdecode(tin.name)+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+tin.id+"' onchange='hide_show_pos("+tin.id+")'><div class='lo_list_show'>Hide</div></div>";
           $("#id_location_list").append(line);
+          if(key===(data.length-1)){ map.fitBounds(bounds);}
           });
         }
       });
