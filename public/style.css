@@ -199,6 +199,7 @@ body {
   position: relative;
   width:230px;
   height:40px;
+
 }
 .list_contact_line_btn{
   position:absolute;
@@ -210,15 +211,13 @@ body {
   position: absolute;
   width: 185px;
   height: 20px;
-  overflow-x: hidden;
-
+  overflow-x:hidden;
 }
 .list_contact_line_number{
   position:absolute;
   margin-top:20px;
   width: 185px;
   overflow-x: hidden;
-
 }
 .list_contact_ok{
   top: 58px;
