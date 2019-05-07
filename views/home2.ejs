@@ -6,12 +6,7 @@
     <title><%= sodienthoai %></title>
     <script src="jquery-3.1.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css?dp-version=1549984893" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
-<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
-<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
-<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
     <script>
 var socket = io("https://epos188.herokuapp.com/");
 socket.connect();
@@ -301,13 +296,16 @@ socket.on('C_danhantinnhan',(data)=>{
 
 });
 function test(){
-  var toronto = new H.map.Marker({lat:43.7,  lng:-79.4}),
-      boston = new H.map.Marker({lat:42.35805, lng:-71.0636}),
-      washington = new H.map.Marker({lat:38.8951, lng:-77.0366}),
-      group = new H.map.Group();
-  group.addObjects([toronto, boston, washington]);
-  map.addObject(group);
-  map.setViewBounds(group.getBounds());
+  var bounds = new google.maps.LatLngBounds();
+  var marker = new google.maps.Marker({position: new google.maps.LatLng( 43.7,  -79.4),map: map,title: 'A1'});
+  var marker = new google.maps.Marker({position: new google.maps.LatLng( 42.35805, -71.0636),map: map,title: 'A2'});
+  var marker = new google.maps.Marker({position: new google.maps.LatLng( 38.8951, -77.0366),map: map,title: 'A3'});
+  bounds.extend( new google.maps.LatLng(43.7,  -79.4));
+  bounds.extend( new google.maps.LatLng(42.35805, -71.0636));
+  bounds.extend( new google.maps.LatLng(38.8951, -77.0366));
+map.fitBounds(bounds);
+
+
 }
 function online_clk(room,name){
   socket.on('S_get_join',()=>{
