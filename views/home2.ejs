@@ -429,7 +429,7 @@ function hide_show_pos(id){
   }
 }
 function show_pos(lat,lon, name, id1,stt){
-  let chuoi = '<div class="icon" onmouseover="onmouse_pos('+id1+')">'+name+'</div>';
+  let chuoi = '<div class="icon" onmouseover="onmouse_pos('+id1+',event)">'+name+'</div>';
   var infow = new google.maps.InfoWindow({
       position:{ lat:lat, lng: lon},
       content:chuoi,
@@ -453,8 +453,12 @@ function show_pos(lat,lon, name, id1,stt){
       }
   });
 }
-function onmouse_pos(id){
-  console.log(id);
+function onmouse_pos(id,event){
+  var x = event.clientX;
+  var y = event.clientY;
+  var coor = "X coords: " + x + ", Y coords: " + y;
+  console.log(coor);
+
 }
 function fly_to(id){
   mang_infowindow.forEach((tin)=>{
