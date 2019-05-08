@@ -454,8 +454,8 @@ function show_pos(lat,lon, name, id1,stt){
   });
 }
 function onmouse_pos(id,event){
-  var x = event.clientX+3;
-  var y = event.clientY+3;
+  var x = event.clientX;
+  var y = event.clientY;
   var coor = "X coords: " + x + ", Y coords: " + y;
 
   document.getElementById("id_small_window").style.top=x+"px";
