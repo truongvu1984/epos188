@@ -140,6 +140,7 @@ body {
   width: 30px;
   height: 20px;
   display: block;
+  z-index: 4
 }
 .line_inbox{
   width: 300px;
