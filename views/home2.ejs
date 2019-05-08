@@ -457,16 +457,13 @@ function onmouse_pos(id,event){
   var x = event.clientX+3;
   var y = event.clientY+3;
   var coor = "X coords: " + x + ", Y coords: " + y;
-
+  document.getElementById("id_small_window").style.display="block";
   document.getElementById("id_small_window").style.top=x+"px";
   document.getElementById("id_small_window").style.left=y+"px";
-  document.getElementById("id_small_window").style.display="block";
   console.log(coor);
 
 }
-// function onmouse_out(){
-//   document.getElementById("id_small_window").style.display="none";
-// }
+fun
 function fly_to(id){
   mang_infowindow.forEach((tin)=>{
     if(tin.id == id){

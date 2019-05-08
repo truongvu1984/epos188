@@ -124,7 +124,7 @@ body {
   height: 16px;
   left: 3px;
   top:3px;
-
+  border: medium none
 }
 .list_contact{
   width: 250px;
@@ -139,8 +139,6 @@ body {
   border: medium none;
   width: 30px;
   height: 20px;
-  border: 1px solid black;
-  background-color: white;
   display: block;
   z-index: 4
 }
