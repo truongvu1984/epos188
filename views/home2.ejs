@@ -454,7 +454,7 @@ function show_pos(lat,lon, name, id1,stt){
   });
 }
 function onmouse_pos(id){
-  console.log(id);
+  console.log('ha ha');
 }
 function fly_to(id){
   mang_infowindow.forEach((tin)=>{
@@ -1047,7 +1047,7 @@ window.onclick = function(event) {
           </div>
           <button style="position:absolute;width:50px;height:25px;right:10px;top: 25px" id="id_btn_save" onclick="test()">SAVE</button>
           <button style="position:absolute;width:50px;height:25px;right:65px;top: 25px" id="id_btn_send" onclick="guitinnhan()">SEND</button>
-          <div  class="online_text" id="id_online_text"><i><mark>online</mark></i></div>
+          <div  class="online_text" id="id_online_text" onmouseover="onmouse_pos(123)"><i><mark>online</mark></i></div>
         </div>
         <div class="list_contact_ok" id="id_list_contact_ok"></div>
         <div class="list_contact" id="id_list_contact"></div>
