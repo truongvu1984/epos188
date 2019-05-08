@@ -429,11 +429,10 @@ function hide_show_pos(id){
   }
 }
 function show_pos(lat,lon, name, id1,stt){
-  let chuoi = "<div class='icon'>"+name+"</div>";
+  let chuoi = '<div class="icon" onmouseover="onmouse_pos('+id1+')">'+name+'</div>';
   var infow = new google.maps.InfoWindow({
       position:{ lat:lat, lng: lon},
       content:chuoi,
-
     });
     mang_infowindow_main.push({name:name,lat:lat,lon:lon,id:id1, online:stt,dem:0});
     mang_infowindow.push({id:id1, wind: infow});
@@ -453,6 +452,9 @@ function show_pos(lat,lon, name, id1,stt){
         }
       }
   });
+}
+function onmouse_pos(id){
+  console.log(id);
 }
 function fly_to(id){
   mang_infowindow.forEach((tin)=>{
@@ -1057,6 +1059,7 @@ window.onclick = function(event) {
       </div>
       <button class="bottom_right" onclick="kiemtra()" id="btn_sw_map">Satelite</button>
       <div id="map" class="class_map"></div>
+      <div class="small_window" id="id_small_window">Modify</div>
       <!-- <audio src="" hidden></audio> -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript"></script>
   </div>
