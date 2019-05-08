@@ -458,8 +458,9 @@ function onmouse_pos(id,event){
   var y = event.clientY;
   var coor = "X coords: " + x + ", Y coords: " + y;
   document.getElementById("id_small_window").style.display="block";
-  document.getElementById("id_small_window").style.top=y;
-  document.getElementById("id_small_window").style.left=x;
+  document.getElementById("id_small_window").style.top=y+"px";
+  document.getElementById("id_small_window").style.left=x+"px";
+  console.log(coor);
 
 }
 function fly_to(id){
