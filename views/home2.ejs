@@ -460,7 +460,7 @@ function fly_to(id){
       if(tin.wind != null){
       var center = new google.maps.LatLng(tin.wind.getPosition().lat(),tin.wind.getPosition().lng());
        map.panTo(center);
-       map.setZoom(15);
+       map.setZoom(18);
        return false;
      }
     }
@@ -678,7 +678,7 @@ function save_click(id,name){
   socket.off('S_pos_online');
   socket.emit('C_reques_point',id);
   socket.on('S_send_point',(data)=>{
-    
+
   $("#id_location_list").html("");
   $("#id_input_subject").val(room_name_chose);
   if(mang_infowindow.length > 0){
