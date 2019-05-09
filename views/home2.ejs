@@ -295,6 +295,9 @@ socket.on('C_danhantinnhan',(data)=>{
   // chuyển đổi màu sắc sang đỏ đối với người
 
 });
+function isOverflown(element) {
+    return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+}
 function test(){
   var bounds = new google.maps.LatLngBounds();
   var marker = new google.maps.Marker({position: new google.maps.LatLng( 43.7,  -79.4),map: map,title: 'A1'});
@@ -460,7 +463,10 @@ function onmouse_pos(id,event){
   document.getElementById("id_small_window").style.top=y+"px";
   document.getElementById("id_small_window").style.left=x+"px";
   document.getElementById("id_small_window").style.display="block";
-  console.log(coor);
+  if(isOverflown(document.getElementById("id_small_window"))){
+    console.log('Đã quá xa vời');
+  }
+  
 }
 function onmouse_out(){
   document.getElementById("id_small_window").style.display="none";
