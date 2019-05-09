@@ -46,6 +46,7 @@ body {
   }
 .icon{
   background-color: red;
+  z-index: 1;
 }
 .icon_live{
   background-color: green;
