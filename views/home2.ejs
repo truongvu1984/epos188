@@ -470,7 +470,7 @@ function modify_name(id){
         var infowindow = new google.maps.InfoWindow({position:{ lat:tin.lat, lng: tin.long}});
           var noidung=  "<div class='info_wrap'><div>Input name of this place</div><input type='text' id='input_123' class='info_input'></input>"+
           "<div class='posname_2'><button onclick='cancle_luudiem("+id1+")' class='info_cancle'>CANCLE</button>"+
-          "<button onclick='luudiem2("+lat1+","+lon1+","+id+")' class='info_ok'>OK</button></div></div>";
+          "<button onclick='luudiem2("+tin.lat+","+tin.long+","+id+")' class='info_ok'>OK</button></div></div>";
           infowindow.setContent(noidung);
           infowindow.open(map);
           var win = {id:id1, wind: infowindow, stt:'N'};
