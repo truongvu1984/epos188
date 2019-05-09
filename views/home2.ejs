@@ -467,10 +467,10 @@ function modify_name(id){
       if(tin.id == id){
         console.log('ha ha:'+id);
         var id1 =  new Date().getTime();
-        var infowindow = new google.maps.InfoWindow({position:{ lat:tin.lat, lng: tin.long}});
+        var infowindow = new google.maps.InfoWindow({position:{ lat:tin.lat, lng: tin.lon}});
           var noidung=  "<div class='info_wrap'><div>Input name of this place</div><input type='text' id='input_123' class='info_input'></input>"+
           "<div class='posname_2'><button onclick='cancle_luudiem("+id1+")' class='info_cancle'>CANCLE</button>"+
-          "<button onclick='luudiem2("+tin.lat+","+tin.long+","+id+")' class='info_ok'>OK</button></div></div>";
+          "<button onclick='luudiem2("+tin.lat+","+tin.lon+","+id+")' class='info_ok'>OK</button></div></div>";
           infowindow.setContent(noidung);
           infowindow.open(map);
           var win = {id:id1, wind: infowindow, stt:'N'};
