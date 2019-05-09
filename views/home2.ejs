@@ -465,8 +465,10 @@ function onmouse_pos(id,event){
     y1 = w.innerHeight|| e.clientHeight|| g.clientHeight;
   var x = event.clientX+10;
   var y = event.clientY+10;
-  if(x> (x1-50)){x=x-50;}
-  if(y> (y1-20)){y=y-20;}
+  console.log('hi hi:x='+x+' x1='+x1);
+  console.log('hi hi:y='+y+' y1='+y1);
+  if(x> (x1-50)){console.log(x+' x lớn hơn '+x1);}
+  if(y> (y1-20)){console.log(y+' y lớn hơn '+y1);}
   document.getElementById("id_small_window").style.top=y+"px";
   document.getElementById("id_small_window").style.left=x+"px";
   document.getElementById("id_small_window").style.display="block";
