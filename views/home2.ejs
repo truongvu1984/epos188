@@ -457,16 +457,21 @@ function show_pos(lat,lon, name, id1,stt){
   });
 }
 function onmouse_pos(id,event){
+  var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('body')[0],
+    x1 = w.innerWidth || e.clientWidth || g.clientWidth,
+    y1 = w.innerHeight|| e.clientHeight|| g.clientHeight;
   var x = event.clientX+10;
   var y = event.clientY+10;
-  var coor = "X coords: " + x + ", Y coords: " + y;
+  if(x> (x1-50)){x=x-50;}
+  if(y> (y1-20)){y=y-20;}
   document.getElementById("id_small_window").style.top=y+"px";
   document.getElementById("id_small_window").style.left=x+"px";
   document.getElementById("id_small_window").style.display="block";
-  if(isOverflown(document.getElementById("id_small_window"))){
-    console.log('Đã quá xa vời');
-  }
-  
+
+
 }
 function onmouse_out(){
   document.getElementById("id_small_window").style.display="none";
