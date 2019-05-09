@@ -49,8 +49,9 @@ let cru_contact = 0;
 let cru_group = 0;
 var room_name_chose="";
 var abc = 1;
-// var mang_infowindow_main = [{name:'vu yeu Thy', dem:0}];
 var timer = setInterval(check_online, 3000);
+// mang_infowindow_main.push({name:name,lat:lat,lon:lon,id:id1, online:stt,dem:0});
+// mang_infowindow.push({id:id1, wind: infow});
 function check_online(){
   if(mang_infowindow_main.length>0){
     mang_infowindow_main.forEach((row)=>{
@@ -295,9 +296,6 @@ socket.on('C_danhantinnhan',(data)=>{
   // chuyển đổi màu sắc sang đỏ đối với người
 
 });
-function isOverflown(element) {
-    return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
-}
 function test(){
   var bounds = new google.maps.LatLngBounds();
   var marker = new google.maps.Marker({position: new google.maps.LatLng( 43.7,  -79.4),map: map,title: 'A1'});
@@ -432,13 +430,13 @@ function hide_show_pos(id){
   }
 }
 function show_pos(lat,lon, name, id1,stt){
-  let chuoi = '<div class="icon" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';
+  let chuoi = '<div class="icon" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';
   var infow = new google.maps.InfoWindow({
       position:{ lat:lat, lng: lon},
       content:chuoi,
     });
     mang_infowindow_main.push({name:name,lat:lat,lon:lon,id:id1, online:stt,dem:0});
-    mang_infowindow.push({id:id1, wind: infow});
+    mang_infowindow.push({id:id1, wind: infow,stt:'Y'});
     infow.open(map);
     google.maps.event.addListener(infow,'closeclick',function(){
       document.getElementById("li_lo"+id1).remove();
@@ -455,6 +453,28 @@ function show_pos(lat,lon, name, id1,stt){
         }
       }
   });
+}
+function modify_name(id){
+    if(mang_infowindow.length>0){
+      if(mang_infowindow[mang_infowindow.length-1].stt=='N'){
+        mang_infowindow[mang_infowindow.length-1].wind.close();
+        mang_infowindow.splice(mang_infowindow.length-1, 1);
+      }
+    }
+    mang_infowindow_main.forEach((tin)=>{
+      if(tin.id === id){
+        var id1 =  new Date().getTime();
+        var infowindow = new google.maps.InfoWindow({position:{ lat:tin.lat, lng: tin.long}});
+          var noidung=  "<div class='info_wrap'><div>Input name of this place</div><input type='text' id='input_123' class='info_input'></input>"+
+          "<div class='posname_2'><button onclick='cancle_luudiem("+id1+")' class='info_cancle'>CANCLE</button>"+
+          "<button onclick='luudiem2("+lat1+","+lon1+","+id+")' class='info_ok'>OK</button></div></div>";
+          infowindow.setContent(noidung);
+          infowindow.open(map);
+          var win = {id:id1, wind: infowindow, stt:'N'};
+          mang_infowindow.push(win);
+          return false;
+      }
+    });
 }
 function onmouse_pos(id,event){
   var w = window,
@@ -597,6 +617,7 @@ function myMap(){
       });
 }
 function map_rightclick( lat1, lon1){
+  // xóa các info window hiện tại nếu nó đang mở
   if(mang_infowindow.length>0){
     if(mang_infowindow[mang_infowindow.length-1].stt=='N'){
       mang_infowindow[mang_infowindow.length-1].wind.close();
@@ -615,6 +636,36 @@ function map_rightclick( lat1, lon1){
     var win = {id:id, wind: infowindow, stt:'N'};
     mang_infowindow.push(win);
 }
+function luudiem2(lat1, lon1, id1){
+  var name1 = document.getElementById("input_123").value;
+  for (var i=0; i<mang_infowindow.length; i++){
+    if(mang_infowindow[i].id ==id1){
+      let chuoi = '<div class="icon" onmouseover="onmouse_pos('+id1+')">'+name1+'</div>';
+      mang_infowindow[i].wind.setContent(chuoi);
+      mang_infowindow[i].stt = 'Y';
+      var diem2 = {name:name1, lat:lat1, lon:lon1, id:id1,online:'A',dem:0};
+      mang_infowindow_main.push(diem2);
+      var line = "<div class='list_line' id='li_lo"+id1+"'><div class='lo_list_sub' onclick='fly_to("+id1+")'>"+name1+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+id1+"' onchange='hide_show_pos("+id1+")'><div class='lo_list_show'>Hide</div></div>";
+      $("#id_location_list").append(line);
+      google.maps.event.addListener(mang_infowindow[i].wind,'closeclick',function(){
+        document.getElementById("li_lo"+id1).remove();
+        for (var i=0; i<mang_infowindow.length; i++){
+          if(mang_infowindow[i].id == id1){
+            mang_infowindow.splice(i,1);
+            break;
+          }
+        }
+        for (var k=0; k<mang_infowindow_main.length; k++){
+          if(mang_infowindow_main[k].id == id1){
+            mang_infowindow_main.splice(k,1);
+            break;
+          }
+        }
+      });
+      return false;
+      }
+    }
+}
 function luudiem(lat1, lon1, id1){
   var name1 = document.getElementById("input_123").value;
   for (var i=0; i<mang_infowindow.length; i++){
@@ -622,7 +673,7 @@ function luudiem(lat1, lon1, id1){
       let chuoi = '<div class="icon" onmouseover="onmouse_pos('+id1+')">'+name1+'</div>';
       mang_infowindow[i].wind.setContent(chuoi);
       mang_infowindow[i].stt = 'Y';
-      var diem2 = {name:name1, lat:lat1, lon:lon1, id:id1,stt:'A',dem:0};
+      var diem2 = {name:name1, lat:lat1, lon:lon1, id:id1,online:'A',dem:0};
       mang_infowindow_main.push(diem2);
       var line = "<div class='list_line' id='li_lo"+id1+"'><div class='lo_list_sub' onclick='fly_to("+id1+")'>"+name1+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+id1+"' onchange='hide_show_pos("+id1+")'><div class='lo_list_show'>Hide</div></div>";
       $("#id_location_list").append(line);
