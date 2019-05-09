@@ -467,11 +467,11 @@ function onmouse_pos(id,event){
   var y = event.clientY+10;
   if(x> (x1-50)){
     console.log(x+' x lớn hơn '+x1);
-    x=x-100;
+    x=x-50;
     document.getElementById("id_small_window").style.left=x+"px";
     if(y> (y1-20)){
       console.log(y+' y lớn hơn '+y1);
-      y=y-40;
+      y=y-20;
       document.getElementById("id_small_window").style.top=y+"px";
       document.getElementById("id_small_window").style.display="block";
     }
