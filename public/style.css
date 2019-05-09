@@ -314,6 +314,7 @@ body {
   width: 200px;
   height: 80px;
   text-align:center;
+  z-index: 5;
 }
 .info_input{
   width: 190px;
