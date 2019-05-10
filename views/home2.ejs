@@ -646,6 +646,12 @@ function luudiem2(lat1, lon1, id1){
       mang_infowindow_main.forEach((tin)=>{if(tin.id==id1){tin.name = name1;return false;}});
       var line = "<div class='lo_list_sub' onclick='fly_to("+id1+")'>"+name1+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+id1+"' onchange='hide_show_pos("+id1+")'><div class='lo_list_show'>Hide</div>";
       document.getElementById("li_lo"+id1).innerHTML =line;
+      if(mang_infowindow.length>0){
+          if(mang_infowindow[mang_infowindow.length-1].stt=='N'){
+            mang_infowindow[mang_infowindow.length-1].wind.close();
+            mang_infowindow.splice(mang_infowindow.length-1, 1);
+          }
+        }
       return false;
       }
     }
