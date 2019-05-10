@@ -48,6 +48,11 @@ body {
   background-color: red;
   z-index: 1;
 }
+.icon2{
+  background-color: red;
+  width: 100px;
+  z-index: 1;
+}
 .icon_live{
   background-color: green;
   color: black

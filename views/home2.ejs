@@ -430,7 +430,11 @@ function hide_show_pos(id){
   }
 }
 function show_pos(lat,lon, name, id1,stt){
-  let chuoi = '<div class="icon" id="'+id1+'" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';
+  let chuoi;
+  if(name.length >5){chuoi = '<div class="icon" id="'+id1+'" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';}
+  else {
+    chuoi = '<div class="icon2" id="'+id1+'" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';
+  }
   var infow = new google.maps.InfoWindow({
       position:{ lat:lat, lng: lon},
       content:chuoi,
@@ -438,10 +442,6 @@ function show_pos(lat,lon, name, id1,stt){
     mang_infowindow_main.push({name:name,lat:lat,lon:lon,id:id1,online:stt,dem:0});
     mang_infowindow.push({id:id1, wind: infow,stt:'Y'});
     infow.open(map);
-  var x =   document.getElementsByClassName("icon");
-  x.forEach((tin)=>{
-    console.log(tin.style.width);
-  });
     google.maps.event.addListener(infow,'closeclick',function(){
       document.getElementById("li_lo"+id1).remove();
       for (var i=0; i<mang_infowindow.length; i++){
@@ -455,8 +455,7 @@ function show_pos(lat,lon, name, id1,stt){
           mang_infowindow_main.splice(k,1);
           break;
         }
-      }
-  });
+      } });
 }
 function modify_name(id){
   if(mang_infowindow.length>0){
