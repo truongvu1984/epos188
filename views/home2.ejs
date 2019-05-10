@@ -430,7 +430,11 @@ function hide_show_pos(id){
   }
 }
 function show_pos(lat,lon, name, id1,stt){
-  let chuoi = '<div class="icon" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';
+  let chuoi;
+  if(name.length >5){chuoi = '<div class="icon" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';}
+else {
+  chuoi = '<div class="icon2" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';
+}
   var infow = new google.maps.InfoWindow({
       position:{ lat:lat, lng: lon},
       content:chuoi,
@@ -463,7 +467,6 @@ function modify_name(id){
     }
     mang_infowindow_main.forEach((tin)=>{
       if(tin.id == id){
-        console.log('ha ha:'+id);
         var id1 =  new Date().getTime();
         var infowindow = new google.maps.InfoWindow({position:{ lat:tin.lat, lng: tin.lon}});
           var noidung=  "<div class='info_wrap'><div>Input name of this place</div><input type='text' id='input_123' class='info_input'></input>"+
