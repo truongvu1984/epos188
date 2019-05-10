@@ -455,15 +455,13 @@ function show_pos(lat,lon, name, id1,stt){
   });
 }
 function modify_name(id){
-  console.log('hihi:'+id);
-    if(mang_infowindow.length>0){
+  if(mang_infowindow.length>0){
       if(mang_infowindow[mang_infowindow.length-1].stt=='N'){
         mang_infowindow[mang_infowindow.length-1].wind.close();
         mang_infowindow.splice(mang_infowindow.length-1, 1);
       }
     }
     mang_infowindow_main.forEach((tin)=>{
-      console.log(tin.id);
       if(tin.id == id){
         console.log('ha ha:'+id);
         var id1 =  new Date().getTime();
@@ -643,28 +641,11 @@ function luudiem2(lat1, lon1, id1){
   var name1 = document.getElementById("input_123").value;
   for (var i=0; i<mang_infowindow.length; i++){
     if(mang_infowindow[i].id ==id1){
-      let chuoi = '<div class="icon" onmouseover="onmouse_pos('+id1+')">'+name1+'</div>';
+      let chuoi = '<div class="icon" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';
       mang_infowindow[i].wind.setContent(chuoi);
-      mang_infowindow[i].stt = 'Y';
-      var diem2 = {name:name1, lat:lat1, lon:lon1, id:id1,online:'A',dem:0};
-      mang_infowindow_main.push(diem2);
-      var line = "<div class='list_line' id='li_lo"+id1+"'><div class='lo_list_sub' onclick='fly_to("+id1+")'>"+name1+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+id1+"' onchange='hide_show_pos("+id1+")'><div class='lo_list_show'>Hide</div></div>";
-      $("#id_location_list").append(line);
-      google.maps.event.addListener(mang_infowindow[i].wind,'closeclick',function(){
-        document.getElementById("li_lo"+id1).remove();
-        for (var i=0; i<mang_infowindow.length; i++){
-          if(mang_infowindow[i].id == id1){
-            mang_infowindow.splice(i,1);
-            break;
-          }
-        }
-        for (var k=0; k<mang_infowindow_main.length; k++){
-          if(mang_infowindow_main[k].id == id1){
-            mang_infowindow_main.splice(k,1);
-            break;
-          }
-        }
-      });
+      mang_infowindow_main.forEach((tin)=>{if(tin.id==id1){tin.name = name1;return false;}});
+      var line = "<div class='lo_list_sub' onclick='fly_to("+id1+")'>"+name1+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+id1+"' onchange='hide_show_pos("+id1+")'><div class='lo_list_show'>Hide</div>";
+      document.getElementById("li_lo"+id1).innerHTML =line;
       return false;
       }
     }
