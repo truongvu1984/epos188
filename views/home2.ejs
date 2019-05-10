@@ -438,7 +438,10 @@ function show_pos(lat,lon, name, id1,stt){
     mang_infowindow_main.push({name:name,lat:lat,lon:lon,id:id1,online:stt,dem:0});
     mang_infowindow.push({id:id1, wind: infow,stt:'Y'});
     infow.open(map);
-    console.log(document.getElementById(id1).style.widht);
+  var x =   document.getElementsByClassName("icon");
+  x.forEach((tin)=>{
+    console.log(tin.style.width);
+  });
     google.maps.event.addListener(infow,'closeclick',function(){
       document.getElementById("li_lo"+id1).remove();
       for (var i=0; i<mang_infowindow.length; i++){
