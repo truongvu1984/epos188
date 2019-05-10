@@ -321,6 +321,7 @@ body {
   height: 90px;
   text-align:center;
   z-index: 5;
+  background-color: white
 }
 .info_input{
   width: 190px;
