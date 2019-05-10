@@ -430,7 +430,7 @@ function hide_show_pos(id){
   }
 }
 function show_pos(lat,lon, name, id1,stt){
-  let chuoi = '<div class="icon" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';
+  let chuoi = '<div class="icon" id="'+id1+'" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';
   var infow = new google.maps.InfoWindow({
       position:{ lat:lat, lng: lon},
       content:chuoi,
@@ -438,6 +438,7 @@ function show_pos(lat,lon, name, id1,stt){
     mang_infowindow_main.push({name:name,lat:lat,lon:lon,id:id1,online:stt,dem:0});
     mang_infowindow.push({id:id1, wind: infow,stt:'Y'});
     infow.open(map);
+    console.log(document.getElementById(id1).style.widht);
     google.maps.event.addListener(infow,'closeclick',function(){
       document.getElementById("li_lo"+id1).remove();
       for (var i=0; i<mang_infowindow.length; i++){
@@ -641,7 +642,7 @@ function luudiem2(lat1, lon1, id1){
   var name1 = document.getElementById("input_123").value;
   for (var i=0; i<mang_infowindow.length; i++){
     if(mang_infowindow[i].id ==id1){
-      let chuoi = '<div class="icon" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';
+      let chuoi = '<div class="icon" id="'+id1+'" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';
       mang_infowindow[i].wind.setContent(chuoi);
       mang_infowindow_main.forEach((tin)=>{if(tin.id==id1){tin.name = name1;return false;}});
       var line = "<div class='lo_list_sub' onclick='fly_to("+id1+")'>"+name1+"</div><input type='checkbox' class='list_line_checkbox' id='chk"+id1+"' onchange='hide_show_pos("+id1+")'><div class='lo_list_show'>Hide</div>";
