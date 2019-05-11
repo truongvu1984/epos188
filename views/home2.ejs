@@ -490,14 +490,17 @@ function onmouse_pos(id,event){
     y1 = w.innerHeight|| e.clientHeight|| g.clientHeight;
   var x = event.clientX;
   var y = event.clientY;
-  if(x> (x1-50)){document.getElementById("id_small_window").style.right=x+"px";}
-  else {document.getElementById("id_small_window").style.left=x+"px";}
-  if(y> (y1-20)){document.getElementById("id_small_window").style.top=y+"px";}
-  else {document.getElementById("id_small_window").style.bottom=y+"px";}
+  document.getElementById("id_small_window").style.left=x+"px";
+  document.getElementById("id_small_window").style.top=y+"px";
   document.getElementById("id_small_window").style.display="block";
-  if(isOverflown(document.getElementById("pos"+id))){
-      document.getElementById("id_small_window").textContent=document.getElementById("pos"+id).textContent;
-  }
+  // if(x> (x1-50)){document.getElementById("id_small_window").style.right=x+"px";}
+  // else {document.getElementById("id_small_window").style.left=x+"px";}
+  // if(y> (y1-20)){document.getElementById("id_small_window").style.top=y+"px";}
+  // else {document.getElementById("id_small_window").style.bottom=y+"px";}
+  // document.getElementById("id_small_window").style.display="block";
+  // if(isOverflown(document.getElementById("pos"+id))){
+  //     document.getElementById("id_small_window").textContent=document.getElementById("pos"+id).textContent;
+  // }
 
 }
 function isOverflown(element) {
