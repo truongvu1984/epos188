@@ -643,12 +643,13 @@ function map_rightclick( lat1, lon1){
 }
 function luudiem2(lat1, lon1, id1){
   var name1 = document.getElementById("input_123").value;
+  let abc = 'pos'+id1;
   for (var i=0; i<mang_infowindow.length; i++){
     if(mang_infowindow[i].id ==id1){
       let chuoi;
-      if(name1.length >5) {chuoi='<div align="center" class="icon" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';}
+      if(name1.length >5) {chuoi='<div align="center" id="'+abc+'" class="icon" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';}
       else {
-      chuoi='<div align="center" class="icon2" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';
+      chuoi='<div align="center" id="'+abc+'" class="icon2" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';
       }
       mang_infowindow[i].wind.setContent(chuoi);
       mang_infowindow_main.forEach((tin)=>{if(tin.id==id1){tin.name = name1;return false;}});
@@ -666,12 +667,13 @@ function luudiem2(lat1, lon1, id1){
 }
 function luudiem(lat1, lon1, id1){
   var name1 = document.getElementById("input_123").value;
+  let abc = 'pos'+id1;
   for (var i=0; i<mang_infowindow.length; i++){
     if(mang_infowindow[i].id ==id1){
       let chuoi;
-      if(name1.length >5) {chuoi= '<div align="center" class="icon" id="'+id1+'" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';}
+      if(name1.length >5) {chuoi= '<div align="center" id="'+abc+'" class="icon" id="'+id1+'" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';}
       else {
-        chuoi= '<div align="center" class="icon2" id="'+id1+'" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';
+        chuoi= '<div align="center" id="'+abc+'" class="icon2" id="'+id1+'" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';
       }
       mang_infowindow[i].wind.setContent(chuoi);
       mang_infowindow[i].stt = 'Y';
