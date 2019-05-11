@@ -46,6 +46,10 @@ body {
 .icon{
   background-color: red;
   z-index: 1;
+  max-width: 150px;
+  overflow-x:hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .icon2{
   background-color: red;
