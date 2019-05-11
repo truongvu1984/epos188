@@ -431,9 +431,9 @@ function hide_show_pos(id){
 }
 function show_pos(lat,lon, name, id1,stt){
   let chuoi;
-  if(name.length >5){chuoi = '<div align="center" class="icon" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';}
+  if(name.length >5){chuoi = '<div align="center" id="pos'+id1+'" class="icon" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';}
   else {
-    chuoi = '<div align="center" class="icon2" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';
+    chuoi = '<div align="center" id="pos'+id1+'" class="icon2" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name+'</div>';
   }
   var infow = new google.maps.InfoWindow({
       position:{ lat:lat, lng: lon},
@@ -481,7 +481,6 @@ function modify_name(id){
     });
 }
 function onmouse_pos(id,event){
-  console.log(event);
   var w = window,
     d = document,
     e = d.documentElement,
@@ -495,7 +494,6 @@ function onmouse_pos(id,event){
     x=x-50;
     document.getElementById("id_small_window").style.left=x+"px";
     if(y> (y1-20)){
-      console.log(y+' y lớn hơn '+y1);
       y=y-20;
       document.getElementById("id_small_window").style.top=y+"px";
       document.getElementById("id_small_window").style.display="block";
@@ -510,6 +508,8 @@ function onmouse_pos(id,event){
     document.getElementById("id_small_window").style.top=y+"px";
     document.getElementById("id_small_window").style.display="block";
   }
+  var name1 = document.getElementById("pos"+id).value;
+  console.log(name1);
 
 }
 function onmouse_out(){
