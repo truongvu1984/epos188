@@ -490,9 +490,6 @@ function onmouse_pos(id,event){
     y1 = w.innerHeight|| e.clientHeight|| g.clientHeight;
   var x = event.clientX+10;
   var y = event.clientY+10;
-  document.getElementById("id_small_window").style.left=x+"px";
-  document.getElementById("id_small_window").style.top=y+"px";
-
   if(x> (x1-50)){document.getElementById("id_small_window").style.right=x+"px";}
   else {document.getElementById("id_small_window").style.left=x+"px";}
   if(y> (y1-20)){document.getElementById("id_small_window").style.bottom=y+"px";}
