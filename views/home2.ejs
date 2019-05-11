@@ -482,6 +482,7 @@ function modify_name(id){
     });
 }
 function onmouse_pos(id,event){
+
   var w = window,
     d = document,
     e = d.documentElement,
@@ -509,11 +510,11 @@ function onmouse_pos(id,event){
     document.getElementById("id_small_window").style.top=y+"px";
     document.getElementById("id_small_window").style.display="block";
   }
-
   if(isOverflown(document.getElementById("pos"+id))){
-    console.log(' ha ha hi hi');
-  }
+    let abc = document.getElementById("pos"+id).textContent;
 
+    document.getElementById("id_small_window").html=abc;
+  }
 }
 function isOverflown(element) {
   return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
