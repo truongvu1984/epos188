@@ -511,10 +511,9 @@ function onmouse_pos(id,event){
     document.getElementById("id_small_window").style.display="block";
   }
   if(isOverflown(document.getElementById("pos"+id))){
-    
+
     let abc = document.getElementById("pos"+id).textContent;
-    console.log(abc);
-    // document.getElementById("id_small_window").html=abc;
+    document.getElementById("id_small_window").textContent=abc;
   }
 }
 function isOverflown(element) {
