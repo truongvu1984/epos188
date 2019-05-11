@@ -50,6 +50,7 @@ body {
   overflow-x:hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  display: none
 }
 .icon2{
   background-color: red;
