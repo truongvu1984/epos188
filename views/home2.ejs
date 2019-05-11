@@ -491,12 +491,11 @@ function onmouse_pos(id,event){
   var x = event.clientX+10;
   var y = event.clientY+10;
   if(x> (x1-50)){
-    console.log(x+' x lớn hơn '+x1);
-    x=x-50;
-    document.getElementById("id_small_window").style.left=x+"px";
+    // x=x-50;
+    document.getElementById("id_small_window").style.right=x+"px";
     if(y> (y1-20)){
-      y=y-20;
-      document.getElementById("id_small_window").style.top=y+"px";
+      // y=y-20;
+      document.getElementById("id_small_window").style.bottom=y+"px";
       document.getElementById("id_small_window").style.display="block";
     }
     else {
@@ -508,10 +507,6 @@ function onmouse_pos(id,event){
     document.getElementById("id_small_window").style.left=x+"px";
     document.getElementById("id_small_window").style.top=y+"px";
     document.getElementById("id_small_window").style.display="block";
-  }
-
-  if(isOverflown(document.getElementById("pos"+id))){
-    console.log('Đã quá nhiều rồi ha hia ');
   }
 
 }
