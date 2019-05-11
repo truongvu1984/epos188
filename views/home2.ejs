@@ -509,9 +509,12 @@ function onmouse_pos(id,event){
     document.getElementById("id_small_window").style.top=y+"px";
     document.getElementById("id_small_window").style.display="block";
   }
-  var name1 = document.getElementById("pos"+id).textContent;
-  console.log(name1);
+  var name1 = document.getElementById("pos"+id);
+  if(isOverflown(name1)){console.log('Đã quá nhiều rồi');}
 
+}
+function isOverflown(element) {
+  return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
 }
 function onmouse_out(){
   document.getElementById("id_small_window").style.display="none";
