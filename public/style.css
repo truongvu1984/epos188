@@ -151,7 +151,7 @@ body {
   padding: 5px;
   height: 20px;
   min-width: 50px;
-  display: none;
+  display: block;
   z-index: 4
 }
 .line_inbox{

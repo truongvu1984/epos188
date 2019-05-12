@@ -482,9 +482,6 @@ function modify_name(id){
     });
 }
 function onmouse_pos(id,event){
-  var abc = parseInt(document.getElementById("id_small_window").offsetWidth);
-  console.log('vux:'+abc);
-  console.log('haha'+document.getElementById("id_small_window").offsetWidth);
   var w = window,
     d = document,
     e = d.documentElement,
@@ -497,12 +494,12 @@ function onmouse_pos(id,event){
       document.getElementById("id_small_window").textContent=document.getElementById("pos"+id).textContent;
       document.getElementById("id_small_window").style.width = "auto";
   }
-  if(x> (x1-50)){x=x-50;console.log('x:'+x);}
-  if(y> (y1-20)){y=y-20;console.log('y:'+y);}
-  document.getElementById("id_small_window").style.left=x+"px";
-  document.getElementById("id_small_window").style.top=y+"px";
-  document.getElementById("id_small_window").style.display="block";
-  console.log('ok:'+x+':'+y);
+  // if(x> (x1-50)){x=x-50;console.log('x:'+x);}
+  // if(y> (y1-20)){y=y-20;console.log('y:'+y);}
+  // document.getElementById("id_small_window").style.left=x+"px";
+  // document.getElementById("id_small_window").style.top=y+"px";
+  // document.getElementById("id_small_window").style.display="block";
+  // console.log('ok:'+x+':'+y);
   // if(x> (x1-50)){document.getElementById("id_small_window").style.right=x+"px";}
   // else {document.getElementById("id_small_window").style.left=x+"px";}
   // if(y> (y1-20)){document.getElementById("id_small_window").style.bottom=y+"px";}
