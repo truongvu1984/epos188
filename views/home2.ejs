@@ -297,14 +297,18 @@ socket.on('C_danhantinnhan',(data)=>{
 
 });
 function test(){
-  let abc = document.getElementById("id_input_contact").style.width;
-  console.log('a3:'+abc);
-  let a2 = document.getElementById("id_input_contact").offsetWidth;
-  console.log('a4'+abc);
-  var eleStyle = document.getElementById("id_input_contact").currentStyle;
-/* Below is the width of ele */
-var eleWidth = eleStyle.width;
-console.log('a5:'+eleWidth);
+  $(window).load(function() {
+  var height = $('#id_input_contact').width();
+  alert(height);
+});
+//   let abc = document.getElementById("id_input_contact").style.width;
+//   console.log('a3:'+abc);
+//   let a2 = document.getElementById("id_input_contact").offsetWidth;
+//   console.log('a4'+abc);
+//   var eleStyle = document.getElementById("id_input_contact").currentStyle;
+// /* Below is the width of ele */
+// var eleWidth = eleStyle.width;
+// console.log('a5:'+eleWidth);
 
   // var bounds = new google.maps.LatLngBounds();
   // var marker = new google.maps.Marker({position: new google.maps.LatLng( 43.7,  -79.4),map: map,title: 'A1'});
@@ -513,8 +517,6 @@ function onmouse_pos(id,event){
   // else {document.getElementById("id_small_window").style.left=x+"px";}
   // if(y> (y1-20)){document.getElementById("id_small_window").style.bottom=y+"px";}
   // else {document.getElementById("id_small_window").style.top=y+"px";}
-
-
 
 }
 function isOverflown(element) {
