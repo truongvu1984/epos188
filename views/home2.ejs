@@ -298,8 +298,10 @@ socket.on('C_danhantinnhan',(data)=>{
 });
 function test(){
   $(window).load(function() {
-  var height = $('#id_input_contact').width();
-  alert(height);
+    let abc = document.getElementById("id_input_contact").style.width;
+      console.log('a3:'+abc);
+      let a2 = document.getElementById("id_input_contact").offsetWidth;
+      console.log('a4'+a2);
 });
 //   let abc = document.getElementById("id_input_contact").style.width;
 //   console.log('a3:'+abc);
