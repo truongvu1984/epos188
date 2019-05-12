@@ -297,14 +297,24 @@ socket.on('C_danhantinnhan',(data)=>{
 
 });
 function test(){
-  var bounds = new google.maps.LatLngBounds();
-  var marker = new google.maps.Marker({position: new google.maps.LatLng( 43.7,  -79.4),map: map,title: 'A1'});
-  var marker = new google.maps.Marker({position: new google.maps.LatLng( 42.35805, -71.0636),map: map,title: 'A2'});
-  var marker = new google.maps.Marker({position: new google.maps.LatLng( 38.8951, -77.0366),map: map,title: 'A3'});
-  bounds.extend( new google.maps.LatLng(43.7,  -79.4));
-  bounds.extend( new google.maps.LatLng(42.35805, -71.0636));
-  bounds.extend( new google.maps.LatLng(38.8951, -77.0366));
-  map.fitBounds(bounds);
+  let abc = document.getElementById("id_small_window").style.width;
+  console.log('a1:'+abc);
+  let a2 = document.getElementById("id_small_window").offsetWidth;
+  console.log('a2'+abc);
+  var ele = document.getElementById("id_small_window"), // Do not use #
+    eleStyle = ele.currentStyle;
+/* Below is the width of ele */
+var eleWidth = eleStyle.width;
+console.log('a3:'+eleWidth);
+
+  // var bounds = new google.maps.LatLngBounds();
+  // var marker = new google.maps.Marker({position: new google.maps.LatLng( 43.7,  -79.4),map: map,title: 'A1'});
+  // var marker = new google.maps.Marker({position: new google.maps.LatLng( 42.35805, -71.0636),map: map,title: 'A2'});
+  // var marker = new google.maps.Marker({position: new google.maps.LatLng( 38.8951, -77.0366),map: map,title: 'A3'});
+  // bounds.extend( new google.maps.LatLng(43.7,  -79.4));
+  // bounds.extend( new google.maps.LatLng(42.35805, -71.0636));
+  // bounds.extend( new google.maps.LatLng(38.8951, -77.0366));
+  // map.fitBounds(bounds);
 }
 function online_clk(room,name){
   socket.on('S_get_join',()=>{
