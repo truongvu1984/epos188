@@ -297,7 +297,7 @@ socket.on('C_danhantinnhan',(data)=>{
 
 });
 function test(){
-  $(window).load(function() {
+  $(window).on('load',function() {
     let abc = document.getElementById("id_input_contact").style.width;
       console.log('a3:'+abc);
       let a2 = document.getElementById("id_input_contact").offsetWidth;
