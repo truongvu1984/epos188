@@ -301,8 +301,7 @@ function test(){
   console.log('a1:'+abc);
   let a2 = document.getElementById("id_small_window").offsetWidth;
   console.log('a2'+abc);
-  var ele = document.getElementById("id_small_window"), // Do not use #
-    eleStyle = ele.currentStyle;
+  var eleStyle = document.getElementById("id_small_window").currentStyle;
 /* Below is the width of ele */
 var eleWidth = eleStyle.width;
 console.log('a3:'+eleWidth);
