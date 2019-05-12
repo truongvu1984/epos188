@@ -297,12 +297,9 @@ socket.on('C_danhantinnhan',(data)=>{
 
 });
 function test(){
-  $(window).on('load',function() {
-    let abc = document.getElementById("id_input_contact").style.width;
-      console.log('a3:'+abc);
-      let a2 = document.getElementById("id_input_contact").offsetWidth;
-      console.log('a4'+a2);
-});
+  var abc = $("#id_input_contact").width();
+  console.log('ha ha:'+abc);
+
 //   let abc = document.getElementById("id_input_contact").style.width;
 //   console.log('a3:'+abc);
 //   let a2 = document.getElementById("id_input_contact").offsetWidth;
