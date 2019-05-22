@@ -1286,8 +1286,13 @@ io.on('connection',(socket)=>
          else {
            cb.phoneInformation(sdt,(error3,ketqua) => {
              if(error3){}
-             else if (!ketqua.is_mobile){socket.emit('S_ketqua_check_taikhoan','K');}
-             else {socket.emit('S_ketqua_check_taikhoan','Y');}
+             else if (ketqua.is_mobile){
+               
+               socket.emit('S_ketqua_check_taikhoan','Y');
+             }
+             else {
+               socket.emit('S_ketqua_check_taikhoan','K');
+           }
            });
 
          }
