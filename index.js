@@ -1282,9 +1282,14 @@ io.on('connection',(socket)=>
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+sdt+"' LIMIT 1", function(err, rows){
 	     if (err){}
 			 else{
-         if(rows.length >0){socket.emit('S_ketqua_check_taikhoan','OK');}
+         if(rows.length >0){socket.emit('S_ketqua_check_taikhoan','N');}
          else {
-           socket.emit('S_ketqua_check_taikhoan','N');
+           cb.phoneInformation(sdt,(error3,ketqua) => {
+             if(error3){}
+             else if (!ketqua.is_mobile){socket.emit('S_ketqua_check_taikhoan','K');}
+             else {socket.emit('S_ketqua_check_taikhoan','Y');}
+           });
+
          }
        }
      });
