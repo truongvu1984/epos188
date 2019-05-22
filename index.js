@@ -1279,6 +1279,7 @@ io.on('connection',(socket)=>
       }
   });
   socket.on('C_check_taikhoan',(sdt)=>{
+    console.log('ha ha'+sdt);
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+sdt+"' LIMIT 1", function(err, rows){
 	     if (err){}
 			 else{
@@ -1287,11 +1288,12 @@ io.on('connection',(socket)=>
            cb.phoneInformation(sdt,(error3,ketqua) => {
              if(error3){}
              else if (ketqua.is_mobile){
-               
                socket.emit('S_ketqua_check_taikhoan','Y');
+               console.log('hi hi');
              }
              else {
                socket.emit('S_ketqua_check_taikhoan','K');
+               console.log('Đã chuyển K');
            }
            });
 
