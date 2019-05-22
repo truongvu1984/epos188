@@ -144,8 +144,6 @@ body {
 }
 .small_window{
   position: absolute;
-  top:100px;
-  left:200px;
   background-color: white;
   border: 1px solid black;
   padding: 5px;
@@ -153,6 +151,13 @@ body {
   min-width: 50px;
   display: block;
   z-index: 4
+}
+.wrap_small_window{
+  position: absolute;
+  top:100px;
+  left:200px;
+  width: 2px;
+  height: 2px;
 }
 .line_inbox{
   width: 300px;

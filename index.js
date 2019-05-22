@@ -1278,6 +1278,17 @@ io.on('connection',(socket)=>
         });
       }
   });
+  socket.on('C_check_taikhoan',(sdt)=>{
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+sdt+"' LIMIT 1", function(err, rows){
+	     if (err){}
+			 else{
+         if(rows.length >0){socket.emit('S_ketqua_check_taikhoan','OK');}
+         else {
+           socket.emit('S_ketqua_check_taikhoan','N');
+         }
+       }
+     });
+  });
   socket.on('manager_login', (name, pass)=>{
     if(name ==='admin' && pass === '1234'){
       socket.admin = 'admin';
