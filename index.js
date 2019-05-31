@@ -786,6 +786,7 @@ io.on('connection',(socket)=>
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
           if (passwordHash.verify(pass, rows[0].pass)){
+            console.log('Bắt đầu xóa');
             socket.emit('S_del_acc_kq','OK');
             con.query("DROP TABLE IF EXISTS `"+socket.number+"mes_main`",(err)=>{if(err)console.log(err);});
             con.query("DROP TABLE IF EXISTS `"+socket.number+"mes_detail`",(err)=>{if(err)console.log(err);});
@@ -794,11 +795,11 @@ io.on('connection',(socket)=>
             con.query("DELETE FROM `account` WHERE `number` LIKE '"+socket.number+"'", function(err1)
               {
                 if(err1){console.log(err1);}
-                else {socket.number = null;socket.roomabc = undefined;}
+                else {socket.number = null;socket.roomabc = undefined;console.log('đã gửi đi');}
             });
 
           }
-          else {socket.emit('S_del_acc_kq','N');}
+          else {socket.emit('S_del_acc_kq','Password is incorrect. Delete account is not successful.');}
         }
       });
     }
