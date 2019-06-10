@@ -65,13 +65,13 @@ body {
   background-color: white;
   width: 300px;
   height: 55px;
+  margin-top: 5px;
 }
 .left{
   position: absolute;
   width: 300px;
   height: 100%;
   background-color: blue;
-  margin-top: 5px;
   left:5px;
   z-index:2;
   overflow-y: hidden;
