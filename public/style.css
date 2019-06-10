@@ -141,8 +141,8 @@ body {
 }
 .list_contact{
   width: 250px;
-  height: 800px;
-  
+  height: 600px;
+
   display: none;
   overflow-y: auto;
 }
