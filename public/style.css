@@ -139,7 +139,13 @@ body {
   top:3px;
   border: 0px;
 }
-
+.list_contact_wrap{
+  width: 270px;
+  height: 400px;
+  display: block;
+  background-color: green;
+  overflow-y: scroll;
+}
 .list_contact{
   width: 270px;
   height: 400px;
