@@ -74,7 +74,7 @@ body {
   background-color: blue;
   left:5px;
   z-index:2;
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 .main_line_wrap{
   position: absolute;
@@ -141,8 +141,7 @@ body {
 }
 .list_contact{
   width: 250px;
-  height: 600px;
-
+  max-height: 600px;
   display: none;
   overflow-y: auto;
 }
