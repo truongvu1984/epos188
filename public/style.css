@@ -142,13 +142,14 @@ body {
 .list_contact_wrap{
   width: 250px;
   height: 100%;
-  display: none;
+  display: block;
   background-color: yellow;
 }
 .list_contact{
   width: 200px;
-  height: 100%;
-  display: none;
+  height: 300px;
+  display: block;
+  background-color: pink;
   overflow-y: auto;
 }
 

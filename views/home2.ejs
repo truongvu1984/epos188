@@ -1049,7 +1049,6 @@ function checkbox_save_click(idc){
 
 }
 function show_contact_list(){
-
   if(document.getElementById("id_list_contact_2").style.display == "block"){
   document.getElementById("id_list_contact_2").style.display = "none";
   }
@@ -1058,19 +1057,19 @@ function show_contact_list(){
   }
 
 
-  if(document.getElementById("id_list_contact").style.display == "block"){
-  document.getElementById("id_list_contact").style.display = "none";
-  }
-  else {
-    // nếu mục chính contact không hiện, thì có 2 trường hợp: 1 là nó ẩn, và 2 là mục tìm kiếm đang hiện
-      if(document.getElementById("id_list_contact_search").style.display == "block"){
-        document.getElementById("id_list_contact_search").style.display = "none";
-      }
-      else {
-        document.getElementById("id_list_contact").style.display = "block";
-      }
-  }
-  }
+  // if(document.getElementById("id_list_contact").style.display == "block"){
+  // document.getElementById("id_list_contact").style.display = "none";
+  // }
+  // else {
+  //   // nếu mục chính contact không hiện, thì có 2 trường hợp: 1 là nó ẩn, và 2 là mục tìm kiếm đang hiện
+  //     if(document.getElementById("id_list_contact_search").style.display == "block"){
+  //       document.getElementById("id_list_contact_search").style.display = "none";
+  //     }
+  //     else {
+  //       document.getElementById("id_list_contact").style.display = "block";
+  //     }
+  // }
+}
 function show_content_top_right(id){
   document.getElementById(id).style.display = "block";
 }
@@ -1158,7 +1157,7 @@ window.onclick = function(event) {
         <div class="list_contact_ok" id="id_list_contact_ok"></div>
         <div class="list_contact_wrap" id="id_list_contact_2">
         <div class="list_contact" id="id_list_contact"></div>
-        <div class="list_contact" id="id_list_contact_search"></div>
+        <!-- <div class="list_contact" id="id_list_contact_search"></div> -->
       </div>
       </div>
       <div class="right_bar" id="id_right_bar">
