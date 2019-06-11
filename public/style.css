@@ -72,6 +72,7 @@ body {
   width: 300px;
   max-height: 100%;
   background-color: blue;
+  top:100px;
   left:5px;
   z-index:2;
   overflow-y:scroll;
