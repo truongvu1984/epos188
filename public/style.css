@@ -141,8 +141,8 @@ body {
 }
 .list_contact_wrap{
   width: 270px;
-  height: 400px;
-  top:100px;
+  height: 500px;
+  top:200px;
   display: block;
   background-color: green;
   overflow-y: scroll;
