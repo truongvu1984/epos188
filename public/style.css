@@ -138,15 +138,17 @@ body {
   left: 3px;
   top:3px;
   border: 0px;
-
-
+}
+.list_contact_wrap{
+  width: 270px;
+  bottom: 0px;
+  overflow-y: scroll;
 }
 .list_contact{
   width: 270px;
   max-height: 100%;
   display: block;
   background-color: pink;
-  overflow-y: scroll;
 
 }
 
