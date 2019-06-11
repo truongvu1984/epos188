@@ -74,7 +74,7 @@ body {
   background-color: blue;
   left:5px;
   z-index:2;
-  overflow-y:
+  overflow-y:scroll;
 
 }
 .main_line_wrap{
