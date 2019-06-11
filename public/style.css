@@ -74,7 +74,7 @@ body {
   background-color: blue;
   left:5px;
   z-index:2;
-  overflow-y: auto;
+
 }
 .main_line_wrap{
   position: absolute;
@@ -139,10 +139,17 @@ body {
   border: 0px
 
 }
+.list_contact_wrap{
+  width: 250px;
+  height: 100%;
+  display: none;
+  background-color: yellow;
+}
 .list_contact{
   width: 200px;
   height: 100%;
   display: none;
+  overflow-y: auto;
 }
 
 .small_window{
