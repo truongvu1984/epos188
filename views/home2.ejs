@@ -1049,6 +1049,15 @@ function checkbox_save_click(idc){
 
 }
 function show_contact_list(){
+
+  if(document.getElementById("id_list_contact_2").style.display == "block"){
+  document.getElementById("id_list_contact_2").style.display = "none";
+  }
+  else {
+    document.getElementById("id_list_contact_2").style.display == "block"
+  }
+
+
   if(document.getElementById("id_list_contact").style.display == "block"){
   document.getElementById("id_list_contact").style.display = "none";
   }
@@ -1147,7 +1156,7 @@ window.onclick = function(event) {
           <div  class="online_text" id="id_online_text"><i><mark>online</mark></i></div>
         </div>
         <div class="list_contact_ok" id="id_list_contact_ok"></div>
-        <div class="list_contact_wrap">
+        <div class="list_contact_wrap" id="id_list_contact_2">
         <div class="list_contact" id="id_list_contact"></div>
         <div class="list_contact" id="id_list_contact_search"></div>
       </div>
