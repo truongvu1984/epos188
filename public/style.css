@@ -141,8 +141,14 @@ body {
 }
 .list_contact{
   width: 250px;
-  max-height: 600px;
+  height: 100%;
   display: none;
+  overflow-y: auto;
+}
+.list_contact_2{
+  width: 250px;
+  height: 100%;
+  background-color: green;
   overflow-y: auto;
 }
 .small_window{
