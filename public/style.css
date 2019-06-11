@@ -147,7 +147,7 @@ body {
 }
 .list_contact{
   width: 200px;
-  height: 400px;
+  height: 100%;
   display: block;
   background-color: pink;
   overflow-y: auto;
