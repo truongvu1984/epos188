@@ -140,6 +140,7 @@ body {
 
 }
 .list_contact_wrap{
+  position: absolute;
   width: 250px;
   height: 100%;
   display: block;
