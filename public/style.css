@@ -141,14 +141,13 @@ body {
 }
 .list_contact_wrap{
   width: 250px;
-  height: 600px;
+  height: 100%;
   display: block;
   background-color: yellow;
-
 }
 .list_contact{
   width: 200px;
-  height: 500px;
+  height: 400px;
   display: block;
   background-color: pink;
   overflow-y: auto;
