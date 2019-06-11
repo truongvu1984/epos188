@@ -144,15 +144,14 @@ body {
   max-height: 100%;
   display: block;
   background-color: yellow;
-
+overflow-y: auto;
 }
 .list_contact{
   position: absolute;
   width: 200px;
-  max-height: 100%;
   display: block;
   background-color: pink;
-  overflow-y: auto;
+
 }
 
 .small_window{
