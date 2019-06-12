@@ -61,6 +61,7 @@ body {
   color: black
 }
 .top_left_1{
+  position: absolute;
   background-color: white;
   width: 250px;
   height: 55px;
@@ -142,12 +143,11 @@ body {
 .list_contact_wrap{
   position: absolute;
   width: 270px;
-  height: 500px;
   top: 100px;
   bottom: 0px;
   display: block;
   background-color: green;
-  overflow-y: scroll;
+  
 }
 .list_contact{
   width: 270px;
