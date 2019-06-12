@@ -63,21 +63,12 @@ body {
 .top_left_1{
   position: absolute;
   background-color: white;
-  width: 250px;
-  height: 55px;
-  margin-top: 5px;
-  z-index:2;
-}
-.left{
-  position: absolute;
   width: 300px;
-  max-height: 100%;
-  background-color: blue;
-  left:5px;
+  height: 55px;
+  top: 5px;
   z-index:2;
-
-
 }
+
 .main_line_wrap{
   position: absolute;
   width: 300px;
