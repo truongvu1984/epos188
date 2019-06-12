@@ -135,7 +135,7 @@ body {
   position: absolute;
   width: 300px;
   top: 60px;
-  height: 500px;
+  bottom: 0px;
   display: block;
   background-color: green;
   z-index: 2;
