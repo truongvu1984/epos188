@@ -133,8 +133,8 @@ body {
 }
 .list_contact_wrap{
   position: absolute;
-  width: 270px;
-  top: 50px;
+  width: 300px;
+  top: 60px;
   height: 500px;
   display: block;
   background-color: green;
