@@ -138,6 +138,7 @@ body {
   height: 500px;
   display: block;
   background-color: green;
+  z-index: 2;
 
 }
 .list_contact{
