@@ -259,7 +259,6 @@ body {
    text-overflow: ellipsis;
 }
 .list_contact_ok{
-  top: 58px;
   width: 300px;
   overflow-x: auto;
   white-space: nowrap;
