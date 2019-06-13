@@ -909,21 +909,19 @@ function add_contact_click(id){
       }
     });
     $("#btn"+id).html("Move");
-
     document.getElementById("id_list_contact").style.top = "100px";
   }
   else {
     del_contact_ok(id);
     $("#btn"+id).html("Add");
-      console.log('hihi'+document.getElementById("id_list_contact_ok").innerHTML);
-    if (document.getElementById("id_list_contact_ok").firstChild) {
-      console.log('Đã có hi hi');
-      document.getElementById("id_list_contact").style.top = "80px";
+      // console.log('hihi'+document.getElementById("id_list_contact_ok").innerHTML);
+    if (document.getElementById("id_list_contact_ok").innerHTML.trim() == '') {
+      document.getElementById("id_list_contact").style.top = "75px";
     }
-    if (!document.getElementById("id_list_contact_ok").firstChild) {
-      console.log('Đã có ha ha');
-      document.getElementById("id_list_contact").style.top = "80px";
-    }
+    // if (!document.getElementById("id_list_contact_ok").firstChild) {
+    //   console.log('Đã có ha ha');
+    //   document.getElementById("id_list_contact").style.top = "80px";
+    // }
 
   }
 }
