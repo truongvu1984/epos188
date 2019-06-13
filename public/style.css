@@ -134,7 +134,7 @@ body {
 .list_contact_wrap{
   position: absolute;
   width: 300px;
-  top: 95px;
+  top: 100px;
   bottom: 0px;
   display: block;
   background-color: green;
