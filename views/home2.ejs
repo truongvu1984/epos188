@@ -910,11 +910,14 @@ function add_contact_click(id){
       }
     });
     $("#btn"+id).html("Move");
-    var x = document.getElementById("id_list_contact").style.top = "100px";
+    document.getElementById("id_list_contact").style.top = "100px";
   }
   else {
     del_contact_ok(id);
     $("#btn"+id).html("Add");
+    if (!document.getElementById("id_list_contact_ok").firstChild) {
+      document.getElementById("id_list_contact").style.top = "80px";
+    }
   }
 }
 function del_contact_ok(id){
