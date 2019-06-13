@@ -144,7 +144,7 @@ body {
 .list_contact{
   position: absolute;
   width: 270px;
-  top: 100px;
+  top: 80px;
   bottom: 0px;
   display: none;
   background-color: pink;

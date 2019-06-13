@@ -910,6 +910,7 @@ function add_contact_click(id){
       }
     });
     $("#btn"+id).html("Move");
+    var x = document.getElementsByClassName("list_contact").style.top = "100px";
   }
   else {
     del_contact_ok(id);
