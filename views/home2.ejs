@@ -132,7 +132,6 @@ socket.on('S_send_contact',(tin)=>{
     mang_contact.push({ids: tin.ids,id: idc, name: tin.name, number:tin.number});
     var line = "<div class='list_contact_main_line'><div class='abc'><div class='list_contact_line_name' id='list_contact_name'>"+strdecode(tin.name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+tin.number+"</div><button class='list_contact_line_btn' id='btn"+idc+"' onclick='add_contact_click("+idc+")'>Add</button></div></div>";
       $("#id_list_contact").append(line);
-
 });
 socket.on('S_send_room',(data)=>{
   id_inbox_pos++;
@@ -1083,18 +1082,16 @@ window.onclick = function(event) {
   if (!(event.target.matches('.btn_online')||(event.target.matches('.line_online_chk')  )  )  ) {
     document.getElementById("id_content_online").style.display = "none";
   }
-
   if (!(event.target.matches('.btn_save')||(event.target.matches('.line_save_chk')  )  )  ) {
     document.getElementById("id_content_save").style.display = "none";
   }
-
   if (!(event.target.matches('.btn_send')||(event.target.matches('.line_send_chk')  )  )  ) {
     document.getElementById("id_content_send").style.display = "none";
   }
   if (!(event.target.matches('.btn_inbox')||(event.target.matches('.line_inbox_chk')  )  )  ) {
     document.getElementById("id_content_inbox").style.display = "none";
   }
-  if (!(event.target.matches('.list_contact_line_btn')||(event.target.matches('.list_contact_main_line')  )|| (event.target.matches('.btn_show_cont')  )||(event.target.matches('.list_contact_line_name')  )||(event.target.matches('.list_contact_line_number')  ) || (event.target.matches('.input_contact')  ))  ) {
+  if (!(event.target.matches('.list_contact_line_btn')||(event.target.matches('.list_contact_main_line')  )|| (event.target.matches('.btn_show_cont')  )||(event.target.matches('.list_contact_line_name')  )||(event.target.matches('.list_contact_line_number')  ) || (event.target.matches('.input_contact'))||(event.target.matches('.a222')) )  ) {
     document.getElementById("id_list_contact").style.display = "none";
     document.getElementById("id_list_contact_search").style.display = "none";
 
