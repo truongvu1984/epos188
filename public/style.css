@@ -149,6 +149,7 @@ body {
   display: block;
   background-color: pink;
   overflow-y: scroll;
+  z-index: 2;
 
 }
 
