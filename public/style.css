@@ -146,7 +146,7 @@ body {
   width: 270px;
   top: 100px;
   bottom: 0px;
-  display: block;
+  display: none;
   background-color: pink;
   overflow-y: scroll;
   z-index: 2;
