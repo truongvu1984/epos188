@@ -913,7 +913,7 @@ function add_contact_click(id){
   }
   else {
     del_contact_ok(id);
-    $("#btn"+id).html("Add");
+    // $("#btn"+id).html("Add");
       // console.log('hihi'+document.getElementById("id_list_contact_ok").innerHTML);
 
     // if (!document.getElementById("id_list_contact_ok").firstChild) {
@@ -929,12 +929,13 @@ function del_contact_ok(id){
    for(var i=mang_contact_ok.length-1; i >=0 ; i--){
      if(mang_contact_ok[i].id == id){
        mang_contact_ok.splice(i, 1);
+       if (document.getElementById("id_list_contact_ok").innerHTML.trim() == '') {
+         document.getElementById("id_list_contact").style.top = "75px";
+       }
        return false;
      }
    }
-   if (document.getElementById("id_list_contact_ok").innerHTML.trim() == '') {
-     document.getElementById("id_list_contact").style.top = "75px";
-   }
+
 
 }
 function xoadiem_inbox(){
