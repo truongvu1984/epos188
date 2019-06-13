@@ -915,9 +915,7 @@ function add_contact_click(id){
     del_contact_ok(id);
     $("#btn"+id).html("Add");
       // console.log('hihi'+document.getElementById("id_list_contact_ok").innerHTML);
-    if (document.getElementById("id_list_contact_ok").innerHTML.trim() == '') {
-      document.getElementById("id_list_contact").style.top = "75px";
-    }
+
     // if (!document.getElementById("id_list_contact_ok").firstChild) {
     //   console.log('Đã có ha ha');
     //   document.getElementById("id_list_contact").style.top = "80px";
@@ -933,6 +931,9 @@ function del_contact_ok(id){
        mang_contact_ok.splice(i, 1);
        return false;
      }
+   }
+   if (document.getElementById("id_list_contact_ok").innerHTML.trim() == '') {
+     document.getElementById("id_list_contact").style.top = "75px";
    }
 
 }
