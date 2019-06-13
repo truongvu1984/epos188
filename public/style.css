@@ -131,7 +131,7 @@ body {
   top:3px;
   border: 0px;
 }
-.list_contact_wrap{
+/* .list_contact_wrap{
   position: absolute;
   width: 300px;
   top: 100px;
@@ -140,10 +140,12 @@ body {
   background-color: green;
   z-index: 2;
 
-}
+} */
 .list_contact{
+  position: absolute;
   width: 270px;
-  max-height: 100%;
+  top: 100px;
+  bottom: 0px;
   display: block;
   background-color: pink;
   overflow-y: scroll;
