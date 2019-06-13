@@ -915,8 +915,14 @@ function add_contact_click(id){
     del_contact_ok(id);
     $("#btn"+id).html("Add");
     if (document.getElementById("id_list_contact_ok").firstChild) {
+      console.log('Đã có hi hi');
       document.getElementById("id_list_contact").style.top = "80px";
     }
+    if (!document.getElementById("id_list_contact_ok").firstChild) {
+      console.log('Đã có ha ha');
+      document.getElementById("id_list_contact").style.top = "80px";
+    }
+
   }
 }
 function del_contact_ok(id){
