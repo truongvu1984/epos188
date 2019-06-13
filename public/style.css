@@ -64,7 +64,7 @@ body {
   position: absolute;
   background-color: white;
   width: 300px;
-  height: 55px;
+  height: 80px;
   top: 5px;
   z-index:2;
 }
@@ -134,7 +134,7 @@ body {
 .list_contact_wrap{
   position: absolute;
   width: 300px;
-  top: 60px;
+  top: 85px;
   bottom: 0px;
   display: block;
   background-color: green;
@@ -259,6 +259,8 @@ body {
    text-overflow: ellipsis;
 }
 .list_contact_ok{
+  position: absolute;
+  top:60px;
   width: 300px;
   overflow-x: auto;
   white-space: nowrap;
