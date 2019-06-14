@@ -889,6 +889,7 @@ function add_contact__search_click(id){
     $("#btn"+id).html("Move");
     $("#bt"+id).html("Move");
     document.getElementById("id_list_contact").style.top = "100px";
+    document.getElementById("id_list_contact_search").style.top = "100px";
   }
   else {
     del_contact_ok(id);
@@ -909,6 +910,8 @@ function add_contact_click(id){
     });
     $("#btn"+id).html("Move");
     document.getElementById("id_list_contact").style.top = "100px";
+    document.getElementById("id_list_contact_search").style.top = "100px";
+
   }
   else {
     del_contact_ok(id);
@@ -930,6 +933,7 @@ function del_contact_ok(id){
        mang_contact_ok.splice(i, 1);
        if (document.getElementById("id_list_contact_ok").innerHTML.trim() == '') {
          document.getElementById("id_list_contact").style.top = "75px";
+         document.getElementById("id_list_contact_search").style.top = "75px";
        }
        return false;
      }
