@@ -888,10 +888,11 @@ function add_contact__search_click(id){
     });
     $("#btn"+id).html("Move");
     $("#bt"+id).html("Move");
+    document.getElementById("id_list_contact").style.top = "100px";
   }
   else {
     del_contact_ok(id);
-    $("#btn"+id).html("Add");
+    // $("#btn"+id).html("Add");
     $("#bt"+id).html("Add");
   }
 }
