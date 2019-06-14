@@ -857,7 +857,7 @@ function search_contact(){
     for (var i=0; i<mang_contact.length; i++){
       if  ( strdecode(mang_contact[i].name).toLowerCase().indexOf(chuoi.toLowerCase()) !== -1 || mang_contact[i].number.toLowerCase().indexOf(chuoi.toLowerCase()) !== -1){
         // var line = "<div class='list_contact_main_line'><div style='position:absolute;' id='list_contact_name'>"+strdecode(mang_contact[i].name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+mang_contact[i].number+"</div><button class='list_contact_line_btn' id='bt"+mang_contact[i].id+"' onclick='add_contact__search_click("+mang_contact[i].id+")'>"+document.getElementById("btn"+mang_contact[i].id).textContent+"</button></div>";
-        var line = "<div class='list_contact_main_line'><div class='abc'><div class='list_contact_line_name' id='list_contact_name'>"+strdecode(mang_contact[i].name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+mang_contact[i].number+"</div><button class='list_contact_line_btn' id='btn"+mang_contact[i].id+"' onclick='add_contact__search_click("+mang_contact[i].id+")'>"+document.getElementById("btn"+mang_contact[i].id).textContent+"</button></div></div>";
+        var line = "<div class='list_contact_main_line'><div class='abc'><div class='list_contact_line_name' id='list_contact_name'>"+strdecode(mang_contact[i].name)+"</div><div class='list_contact_line_number' id='list_contact_number'>"+mang_contact[i].number+"</div><button class='list_contact_line_btn' id='bt"+mang_contact[i].id+"' onclick='add_contact__search_click("+mang_contact[i].id+")'>"+document.getElementById("btn"+mang_contact[i].id).textContent+"</button></div></div>";
           $("#id_list_contact_search").append(line);
           kiemtra = false;
         }
@@ -887,12 +887,12 @@ function add_contact__search_click(id){
       }
     });
     $("#btn"+id).html("Move");
-    // $("#bt"+id).html("Move");
+    $("#bt"+id).html("Move");
   }
   else {
     del_contact_ok(id);
-    // $("#btn"+id).html("Add");
-    // $("#bt"+id).html("Add");
+    $("#btn"+id).html("Add");
+    $("#bt"+id).html("Add");
   }
 }
 function add_contact_click(id){
