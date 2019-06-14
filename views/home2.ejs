@@ -50,8 +50,6 @@ let cru_group = 0;
 var room_name_chose="";
 var abc = 1;
 var timer = setInterval(check_online, 3000);
-// mang_infowindow_main.push({name:name,lat:lat,lon:lon,id:id1, online:stt,dem:0});
-// mang_infowindow.push({id:id1, wind: infow});
 function check_online(){
   if(mang_infowindow_main.length>0){
     mang_infowindow_main.forEach((row)=>{
@@ -889,12 +887,12 @@ function add_contact__search_click(id){
       }
     });
     $("#btn"+id).html("Move");
-    $("#bt"+id).html("Move");
+    // $("#bt"+id).html("Move");
   }
   else {
     del_contact_ok(id);
-    $("#btn"+id).html("Add");
-    $("#bt"+id).html("Add");
+    // $("#btn"+id).html("Add");
+    // $("#bt"+id).html("Add");
   }
 }
 function add_contact_click(id){
