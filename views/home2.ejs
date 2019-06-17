@@ -943,8 +943,19 @@ function del_contact_ok(id){
      if(mang_contact_ok[i].id == id){
        mang_contact_ok.splice(i, 1);
        if (document.getElementById("id_list_contact_ok").innerHTML.trim() == '') {
-         document.getElementById("id_list_contact").style.top = "75px";
-         document.getElementById("id_list_contact_search").style.top = "75px";
+         document.getElementById("id_top_left_1").style.height = "60px";
+         document.getElementById("id_list_contact").style.top = "65px";
+         document.getElementById("id_list_contact_search").style.top = "65px";
+       }
+       else {
+         if(!(document.getElementById("id_list_contact_ok").offsetHeight>document.getElementById("id_list_contact_ok").scrollHeight)){
+           document.getElementById("id_top_left_1").style.height = "85px";
+           document.getElementById("id_list_contact").style.top = "90px";
+           document.getElementById("id_list_contact_search").style.top = "90px";
+         }
+
+
+
        }
        return false;
      }
