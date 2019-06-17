@@ -296,24 +296,6 @@ socket.on('C_danhantinnhan',(data)=>{
 function test(){
   var abc = $("#id_small_window").width();
 
-
-//   let abc = document.getElementById("id_input_contact").style.width;
-//   console.log('a3:'+abc);
-//   let a2 = document.getElementById("id_input_contact").offsetWidth;
-//   console.log('a4'+abc);
-//   var eleStyle = document.getElementById("id_input_contact").currentStyle;
-// /* Below is the width of ele */
-// var eleWidth = eleStyle.width;
-// console.log('a5:'+eleWidth);
-
-  // var bounds = new google.maps.LatLngBounds();
-  // var marker = new google.maps.Marker({position: new google.maps.LatLng( 43.7,  -79.4),map: map,title: 'A1'});
-  // var marker = new google.maps.Marker({position: new google.maps.LatLng( 42.35805, -71.0636),map: map,title: 'A2'});
-  // var marker = new google.maps.Marker({position: new google.maps.LatLng( 38.8951, -77.0366),map: map,title: 'A3'});
-  // bounds.extend( new google.maps.LatLng(43.7,  -79.4));
-  // bounds.extend( new google.maps.LatLng(42.35805, -71.0636));
-  // bounds.extend( new google.maps.LatLng(38.8951, -77.0366));
-  // map.fitBounds(bounds);
 }
 function online_clk(room,name){
   socket.on('S_get_join',()=>{
@@ -503,16 +485,15 @@ function onmouse_pos(id,event){
       document.getElementById("id_small_window").textContent=document.getElementById("pos"+id).textContent;
       document.getElementById("id_small_window").style.width = "auto";
   }
-  // if(x> (x1-50)){x=x-50;console.log('x:'+x);}
-  // if(y> (y1-20)){y=y-20;console.log('y:'+y);}
-  // document.getElementById("id_small_window").style.left=x+"px";
-  // document.getElementById("id_small_window").style.top=y+"px";
-  // document.getElementById("id_small_window").style.display="block";
-  // console.log('ok:'+x+':'+y);
-  // if(x> (x1-50)){document.getElementById("id_small_window").style.right=x+"px";}
-  // else {document.getElementById("id_small_window").style.left=x+"px";}
-  // if(y> (y1-20)){document.getElementById("id_small_window").style.bottom=y+"px";}
-  // else {document.getElementById("id_small_window").style.top=y+"px";}
+  if(x> (x1-50)){x=x-50;console.log('x:'+x);}
+  if(y> (y1-20)){y=y-20;console.log('y:'+y);}
+  document.getElementById("id_small_window").style.left=x+"px";
+  document.getElementById("id_small_window").style.top=y+"px";
+  document.getElementById("id_small_window").style.display="block";
+  if(x> (x1-50)){document.getElementById("id_small_window").style.right=x+"px";}
+  else {document.getElementById("id_small_window").style.left=x+"px";}
+  if(y> (y1-20)){document.getElementById("id_small_window").style.bottom=y+"px";}
+  else {document.getElementById("id_small_window").style.top=y+"px";}
 
 }
 function isOverflown(element) {
@@ -888,8 +869,17 @@ function add_contact__search_click(id){
     });
     $("#btn"+id).html("Move");
     $("#bt"+id).html("Move");
-    document.getElementById("id_list_contact").style.top = "100px";
-    document.getElementById("id_list_contact_search").style.top = "100px";
+    if(document.getElementById("id_list_contact_ok").offsetHeight>document.getElementById("id_list_contact_ok").scrollHeight){
+      document.getElementById("id_list_contact").style.top = "105px";
+      document.getElementById("id_list_contact_search").style.top = "105px";
+      document.getElementById("id_top_left_1").style.height = "100px";
+    }
+    else {
+      document.getElementById("id_top_left_1").style.height = "85px";
+      document.getElementById("id_list_contact").style.top = "90px";
+      document.getElementById("id_list_contact_search").style.top = "90px";
+    }
+
   }
   else {
     del_contact_ok(id);
@@ -953,9 +943,6 @@ function del_contact_ok(id){
            document.getElementById("id_list_contact").style.top = "90px";
            document.getElementById("id_list_contact_search").style.top = "90px";
          }
-
-
-
        }
        return false;
      }
