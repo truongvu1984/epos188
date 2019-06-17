@@ -905,14 +905,23 @@ function add_contact_click(id){
         mang_contact_ok.push({id:id, name:strdecode(row.name), number:row.number});
         var line = "<div class='list_contact_ok_item' id='"+id+"'><div class='a111'>"+strdecode(row.name)+"</div><button class='a222' onclick='del_contact_ok("+id+")'>X</button></div>";
         $("#id_list_contact_ok").append(line);
-        if(document.getElementById("id_list_contact_ok").offsetHeight>document.getElementById("id_list_contact_ok").scrollHeight){console.log('vũ yêu vân');}
+
 
         return false;
       }
     });
     $("#btn"+id).html("Move");
-    document.getElementById("id_list_contact").style.top = "100px";
-    document.getElementById("id_list_contact_search").style.top = "100px";
+    if(document.getElementById("id_list_contact_ok").offsetHeight>document.getElementById("id_list_contact_ok").scrollHeight){
+      document.getElementById("id_list_contact").style.top = "120px";
+      document.getElementById("id_list_contact_search").style.top = "120px";
+      document.getElementById("id_top_left_1").style.height = "100px";
+    }
+    else {
+      document.getElementById("id_top_left_1").style.height = "80px";
+      document.getElementById("id_list_contact").style.top = "100px";
+      document.getElementById("id_list_contact_search").style.top = "100px";
+    }
+
 
   }
   else {
@@ -1149,7 +1158,7 @@ window.onclick = function(event) {
           </div>
         </div>
       </div>
-      <div class="top_left_1">
+      <div class="top_left_1" id="id_top_left_1">
           <div class="input_sub_wrap"><input type="text" class="input_sub" autocomplete="off" placeholder="Subject" id="id_input_subject"></input></div>
           <div class="input_cont_wrap">
             <input type="text" class="input_contact" id="id_input_contact" placeholder="Search contact" oninput="search_contact()" autocomplete="off"></input>
