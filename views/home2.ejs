@@ -905,6 +905,8 @@ function add_contact_click(id){
         mang_contact_ok.push({id:id, name:strdecode(row.name), number:row.number});
         var line = "<div class='list_contact_ok_item' id='"+id+"'><div class='a111'>"+strdecode(row.name)+"</div><button class='a222' onclick='del_contact_ok("+id+")'>X</button></div>";
         $("#id_list_contact_ok").append(line);
+        console.log('hi hi:'+document.getElementById("id_list_contact_ok").scrollHeight);
+        console.log('ha ha:'+document.getElementById("id_list_contact_ok").offsetHeight);
         return false;
       }
     });
