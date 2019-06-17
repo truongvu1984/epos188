@@ -472,10 +472,7 @@ function modify_name(id){
       }
     });
 }
-var z=0;
 function onmouse_pos(id,event){
-  z++;
-  console.log('vu yeu van:'+z);
       var w = window,
       d = document,
       e = d.documentElement,
@@ -483,7 +480,7 @@ function onmouse_pos(id,event){
       x1 = w.innerWidth || e.clientWidth || g.clientWidth,
       y1 = w.innerHeight|| e.clientHeight|| g.clientHeight;
     var x = event.clientX+5;
-    var y = event.clientY+10;
+    var y = event.clientY+15;
     // if(x> (x1-50)){x=x-50;console.log('x:'+x);}
     // if(y> (y1-20)){y=y-20;console.log('y:'+y);}
     document.getElementById("id_small_window").style.left=x+"px";
