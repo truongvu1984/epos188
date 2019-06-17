@@ -160,7 +160,7 @@ body {
   padding: 5px;
   height: 20px;
   min-width: 50px;
-  display: block;
+  display: none;
   z-index: 4
 }
 

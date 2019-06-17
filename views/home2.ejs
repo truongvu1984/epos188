@@ -459,6 +459,7 @@ function modify_name(id){
     }
     mang_infowindow_main.forEach((tin)=>{
       if(tin.id == id){
+        document.getElementById("id_small_window").style.display="none";
         var id1 =  new Date().getTime();
         var infowindow = new google.maps.InfoWindow({position:{ lat:tin.lat, lng: tin.lon}});
           var noidung=  "<div class='info_wrap'><div>Input name of this place</div><input type='text' id='input_123' class='info_input'></input>"+
