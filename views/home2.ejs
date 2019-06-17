@@ -657,7 +657,7 @@ function luudiem(lat1, lon1, id1){
       let chuoi;
       if(name1.length >5) {chuoi= '<div align="center" id="'+abc+'" class="icon" id="'+id1+'" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';}
       else {
-        chuoi= '<div align="center" id="'+abc+'" class="icon2" id="'+id1+'" onclick="modify_name('+id1+')" onmouseover="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';
+        chuoi= '<div align="center" id="'+abc+'" class="icon2" id="'+id1+'" onclick="modify_name('+id1+')" onmousemove="onmouse_pos('+id1+',event)" onmouseout="onmouse_out()">'+name1+'</div>';
       }
       mang_infowindow[i].wind.setContent(chuoi);
       mang_infowindow[i].stt = 'Y';
