@@ -473,19 +473,22 @@ function modify_name(id){
     });
 }
 function onmouse_pos(id,event){
-  var w = window,
-    d = document,
-    e = d.documentElement,
-    g = d.getElementsByTagName('body')[0],
-    x1 = w.innerWidth || e.clientWidth || g.clientWidth,
-    y1 = w.innerHeight|| e.clientHeight|| g.clientHeight;
-  var x = event.clientX+10;
-  var y = event.clientY+10;
-  // if(x> (x1-50)){x=x-50;console.log('x:'+x);}
-  // if(y> (y1-20)){y=y-20;console.log('y:'+y);}
-  document.getElementById("id_small_window").style.left=x+"px";
-  document.getElementById("id_small_window").style.top=y+"px";
-  document.getElementById("id_small_window").style.display="block";
+  setTimeout(function() {
+    var w = window,
+      d = document,
+      e = d.documentElement,
+      g = d.getElementsByTagName('body')[0],
+      x1 = w.innerWidth || e.clientWidth || g.clientWidth,
+      y1 = w.innerHeight|| e.clientHeight|| g.clientHeight;
+    var x = event.clientX+5;
+    var y = event.clientY+5;
+    // if(x> (x1-50)){x=x-50;console.log('x:'+x);}
+    // if(y> (y1-20)){y=y-20;console.log('y:'+y);}
+    document.getElementById("id_small_window").style.left=x+"px";
+    document.getElementById("id_small_window").style.top=y+"px";
+    document.getElementById("id_small_window").style.display="block";
+}, 1000);
+
   // if(x> (x1-50)){document.getElementById("id_small_window").style.right=x+"px";}
   // else {document.getElementById("id_small_window").style.left=x+"px";}
   // if(y> (y1-20)){document.getElementById("id_small_window").style.bottom=y+"px";}
