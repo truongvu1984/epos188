@@ -450,15 +450,17 @@ function show_pos(lat,lon, name, id1,stt){
       }
   });
 }
+var check_123 = true;
 function modify_name(id){
   if(mang_infowindow.length>0){
       if(mang_infowindow[mang_infowindow.length-1].stt=='N'){
         mang_infowindow[mang_infowindow.length-1].wind.close();
         mang_infowindow.splice(mang_infowindow.length-1, 1);
       }
-    }
+  }
     mang_infowindow_main.forEach((tin)=>{
       if(tin.id == id){
+        check_123 = false;
         document.getElementById("id_small_window").style.display="none";
         var id1 =  new Date().getTime();
         var infowindow = new google.maps.InfoWindow({position:{ lat:tin.lat, lng: tin.lon}});
@@ -474,6 +476,7 @@ function modify_name(id){
     });
 }
 function onmouse_pos(id,event){
+  if(check_123){
       var w = window,
       d = document,
       e = d.documentElement,
@@ -487,8 +490,7 @@ function onmouse_pos(id,event){
     document.getElementById("id_small_window").style.left=x+"px";
     document.getElementById("id_small_window").style.top=y+"px";
     document.getElementById("id_small_window").style.display="block";
-
-
+  }
   // if(x> (x1-50)){document.getElementById("id_small_window").style.right=x+"px";}
   // else {document.getElementById("id_small_window").style.left=x+"px";}
   // if(y> (y1-20)){document.getElementById("id_small_window").style.bottom=y+"px";}
@@ -627,6 +629,7 @@ function map_rightclick( lat1, lon1){
     mang_infowindow.push(win);
 }
 function luudiem2(lat1, lon1, id1){
+  check_123 = true;
   var name1 = document.getElementById("input_123").value;
   let abc = 'pos'+id1;
   for (var i=0; i<mang_infowindow.length; i++){
@@ -651,6 +654,7 @@ function luudiem2(lat1, lon1, id1){
     }
 }
 function luudiem(lat1, lon1, id1){
+  check_123 = true;
   var name1 = document.getElementById("input_123").value;
   let abc = 'pos'+id1;
   for (var i=0; i<mang_infowindow.length; i++){
