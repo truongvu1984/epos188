@@ -481,13 +481,8 @@ function onmouse_pos(id,event){
     y1 = w.innerHeight|| e.clientHeight|| g.clientHeight;
   var x = event.clientX+10;
   var y = event.clientY+10;
-  if(isOverflown(document.getElementById("pos"+id))){
-    console.log('Đã quá');
-      // document.getElementById("id_small_window").textContent=document.getElementById("pos"+id).textContent;
-      // document.getElementById("id_small_window").style.width = "auto";
-  }
-  if(x> (x1-50)){x=x-50;console.log('x:'+x);}
-  if(y> (y1-20)){y=y-20;console.log('y:'+y);}
+  // if(x> (x1-50)){x=x-50;console.log('x:'+x);}
+  // if(y> (y1-20)){y=y-20;console.log('y:'+y);}
   document.getElementById("id_small_window").style.left=x+"px";
   document.getElementById("id_small_window").style.top=y+"px";
   document.getElementById("id_small_window").style.display="block";
