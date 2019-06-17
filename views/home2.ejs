@@ -460,7 +460,7 @@ function modify_name(id){
   }
     mang_infowindow_main.forEach((tin)=>{
       if(tin.id == id){
-        check_123 = false;
+        check_123 = true;
         document.getElementById("id_small_window").style.display="none";
         var id1 =  new Date().getTime();
         var infowindow = new google.maps.InfoWindow({position:{ lat:tin.lat, lng: tin.lon}});
@@ -690,6 +690,7 @@ function luudiem(lat1, lon1, id1){
     }
 }
 function cancle_luudiem(id){
+  check_123 = true;
   for (var i=0; i<mang_infowindow.length; i++){
     if(mang_infowindow[i].id ==id){
     mang_infowindow[i].wind.close();
