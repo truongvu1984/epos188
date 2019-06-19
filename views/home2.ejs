@@ -1122,11 +1122,15 @@ window.onclick = function(event) {
   }
 
 }
-window.history.forward();
-function noBack() { window.history.forward(); }
+// window.history.forward();
+// function noBack() { window.history.forward(); }
+history.pushState({ page: 1 }, "Title 1", "#no-back");
+window.onhashchange = function (event) {
+  window.location.hash = "no-back";
+};
 </script>
 </head>
-<body onload="noBack();" onpageshow="if (event.persisted) noBack();" onunload="">
+<body>
   <div class="wrapper">
       <div class="top_right">
         <div class="top_right_item">
