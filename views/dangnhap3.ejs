@@ -54,11 +54,13 @@ function login(){
 //   window.location.hash = "no-back";
 // };
 
-console.log('ha ha'+document.referrer);
-history.pushState(null, null, document.URL);
-window.addEventListener('popstate', function () {
-    history.pushState(null, null, document.URL);
-});
+if(document.referrer=="https://epos188.herokuapp.com/"){
+  history.pushState(null, null, document.URL);
+  window.addEventListener('popstate', function () {
+      history.pushState(null, null, document.URL);
+  });
+}
+
 </script>
 </head>
 <body>
