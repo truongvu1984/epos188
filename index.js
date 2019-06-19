@@ -271,8 +271,8 @@ io.on('connection',(socket)=>
             socket.emit('login1_dung', {name:strencode(rows[0].user)});
         }
         else {
-          socket.emit('login1_sai', {name:strencode(rows[0].user)});
-          console.log('login 1 sai','Password is incorrect');
+          socket.emit('login1_sai', {name:strencode(rows[0].user)},'Password is incorrect');
+        
         }
       }
     });

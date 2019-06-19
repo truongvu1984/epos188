@@ -35,7 +35,7 @@ function login(){
       document.getElementById("my_info_from_server").innerHTML = '<font color="white">'+noidung+'</font>';
       document.getElementById("my_info_from_server").style.display = "block";
     });
-    socket.on('login1_sai',(noidung)=>{
+    socket.on('login1_sai',(a1,noidung)=>{
       document.getElementById("my_info_from_server").innerHTML='<font color="white">'+noidung+'</font>';
       document.getElementById("my_info_from_server").style.display = "block";
     });
