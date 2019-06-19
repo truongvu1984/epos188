@@ -49,7 +49,7 @@ function login(){
     }
   }
 }
-history.pushState({ page: 1 }, "Title 1", "#no-back");
+history.pushState({ page: 1 }, "Title 1", "");
 window.onhashchange = function (event) {
   window.location.hash = "no-back";
 };
