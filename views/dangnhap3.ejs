@@ -55,6 +55,7 @@ function login(){
 // };
 history.pushState(null, null, document.URL);
 window.addEventListener('popstate', function () {
+  console.log(document.URL);
     history.pushState(null, null, document.URL);
 });
 </script>
