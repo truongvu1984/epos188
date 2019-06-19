@@ -11,7 +11,8 @@ var socket = io("https://epos188.herokuapp.com/");
 socket.connect();
 function login(){
   if(document.getElementById("login_number_2").value.trim()==""){
-
+    document.getElementById("my_info_from_server").innerHTML='<font color="white">Enter phone number</font>';
+    document.getElementById("my_info_from_server").style.display = "block";
   }
   else {
     var e = document.getElementById("login_code_2");
