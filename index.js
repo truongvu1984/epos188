@@ -265,14 +265,14 @@ io.on('connection',(socket)=>
   });
   socket.on('login1',(user1, pass1)=>{
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
-	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
+	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan','There is no account '+user1);}
 			 else{
         if (passwordHash.verify(pass1, rows[0].pass)){
             socket.emit('login1_dung', {name:strencode(rows[0].user)});
         }
         else {
           socket.emit('login1_sai', {name:strencode(rows[0].user)});
-          console.log('login 1 sai');
+          console.log('login 1 sai','Password is incorrect');
         }
       }
     });
