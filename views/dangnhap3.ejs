@@ -54,7 +54,7 @@ function login(){
 //   window.location.hash = "no-back";
 // };
 // history.pushState(null, null, document.URL);
-console.log('hihi:'+History.previous);
+console.log('hihi:'+History.state);
 window.addEventListener('popstate', function () {
 
     history.pushState(null, null, document.URL);
