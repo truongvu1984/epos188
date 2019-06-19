@@ -53,10 +53,10 @@ function login(){
 // window.onhashchange = function (event) {
 //   window.location.hash = "no-back";
 // };
-// history.pushState(null, null, document.URL);
-console.log('hihi:'+History.state);
-window.addEventListener('popstate', function () {
 
+console.log(document.referrer);
+history.pushState(null, null, document.URL);
+window.addEventListener('popstate', function () {
     history.pushState(null, null, document.URL);
 });
 </script>
