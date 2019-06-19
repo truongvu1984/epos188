@@ -54,7 +54,7 @@ function login(){
 //   window.location.hash = "no-back";
 // };
 
-console.log(document.referrer);
+console.log('ha ha'+document.referrer);
 history.pushState(null, null, document.URL);
 window.addEventListener('popstate', function () {
     history.pushState(null, null, document.URL);
