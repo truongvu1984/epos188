@@ -27,7 +27,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      console.log("Da co ket noi ok ha ha ha");
+
       app.get('/', (req, res) => res.render('dangnhap3'));
       app.post('/', urlencodedParser, function (req, res){
         if (!req.body) return res.sendStatus(400)
@@ -278,7 +278,8 @@ io.on('connection',(socket)=>
     });
   });
   socket.on('login2',(data)=>{
-    console.log(data);
+    
+
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
 	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
       else{

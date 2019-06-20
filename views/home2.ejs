@@ -1093,12 +1093,18 @@ function show_content_top_right(id){
   document.getElementById(id).style.display = "block";
 }
 function log_out(){
-  localStorage.clear();
-  socket.emit('C_leave_off');
-  socket.on('log_out_ok',()=>{
-    // window.location.replace("https://epos188.herokuapp.com/");
-    window.location.href = "https://epos188.herokuapp.com/";
-  });
+  let haha=undefined;
+socket.emit('login2',haha);
+  // socket.emit('C_leave_off');
+  // socket.on('log_out_ok',()=>{
+  //   let ab = null;
+  //
+  //   // localStorage.clear();
+  // document.getElementById("id_list_contact_ok").innerHTML="";
+  //
+  //   // window.location.replace("https://epos188.herokuapp.com/");
+  //   window.location.href = "https://epos188.herokuapp.com/";
+  // });
 }
 window.onclick = function(event) {
 
@@ -1137,7 +1143,7 @@ window.addEventListener('popstate', function () {
 </script>
 </head>
 <body>
-  <div class="wrapper">
+  <div class="wrapper" id="id_wrapper">
       <div class="top_right">
         <div class="top_right_item">
           <button class="btn_account" onclick="log_out()">LOG OUT</button>
