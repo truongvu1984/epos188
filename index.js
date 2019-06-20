@@ -279,6 +279,7 @@ io.on('connection',(socket)=>
   }
   });
   socket.on('login2',(data)=>{
+    if(data){
     if(data.rightuser&&data.right_pass&&data.online&&data.inbox&&data.send&&data.save&&data.contact&&data.group){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
 	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -396,6 +397,7 @@ io.on('connection',(socket)=>
       }
    	 });
     }
+  }
   });
   socket.on('C_del_inbox',(mes)=>{
     if(socket.number){
