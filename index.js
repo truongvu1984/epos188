@@ -264,6 +264,7 @@ io.on('connection',(socket)=>
 
   });
   socket.on('login1',(user1, pass1)=>{
+      if(user1&&pass1){
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
 	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan','There is no account '+user1);}
 			 else{
@@ -272,15 +273,14 @@ io.on('connection',(socket)=>
         }
         else {
           socket.emit('login1_sai', {name:strencode(rows[0].user)},'Password is incorrect');
-
         }
       }
     });
+  }
   });
   socket.on('login2',(data)=>{
-    
-
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
+    if(data.rightuser&&data.right_pass&&data.online&&data.inbox&&data.send&&data.save&&data.contact&&data.group){
+      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
 	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
       else{
         if (passwordHash.verify(data.right_pass, rows[0].pass)){
@@ -395,7 +395,8 @@ io.on('connection',(socket)=>
         }
       }
    	 });
-	});
+    }
+  });
   socket.on('C_del_inbox',(mes)=>{
     if(socket.number){
       mes.forEach((mes1,key)=>{
