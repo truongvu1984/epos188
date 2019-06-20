@@ -50,6 +50,7 @@ let cru_group = 0;
 var room_name_chose="";
 var abc = 1;
 var timer = setInterval(check_online, 3000);
+let ab;
 function check_online(){
   if(mang_infowindow_main.length>0){
     mang_infowindow_main.forEach((row)=>{
@@ -71,7 +72,7 @@ function check_online(){
   }
 }
 socket.on('check_pass',()=>{
-  let ab = {rightuser:'<%= sodienthoai %>',right_pass:'<%= pass %>',online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
+   ab= {rightuser:'<%= sodienthoai %>',right_pass:'<%= pass %>',online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
   socket.emit('login2',ab);
 });
 socket.on('S_W_kq_check_contact',(data)=>{
@@ -1093,18 +1094,15 @@ function show_content_top_right(id){
   document.getElementById(id).style.display = "block";
 }
 function log_out(){
-  let haha=undefined;
-socket.emit('login2',haha);
-  // socket.emit('C_leave_off');
-  // socket.on('log_out_ok',()=>{
-  //   let ab = null;
-  //
-  //   // localStorage.clear();
-  // document.getElementById("id_list_contact_ok").innerHTML="";
-  //
-  //   // window.location.replace("https://epos188.herokuapp.com/");
-  //   window.location.href = "https://epos188.herokuapp.com/";
-  // });
+  socket.emit('C_leave_off');
+  socket.on('log_out_ok',()=>{
+    ab = null;
+    // localStorage.clear();
+  document.getElementById("id_list_contact_ok").innerHTML="";
+
+    // window.location.replace("https://epos188.herokuapp.com/");
+    window.location.href = "https://epos188.herokuapp.com/";
+  });
 }
 window.onclick = function(event) {
 
