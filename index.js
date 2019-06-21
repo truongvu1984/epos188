@@ -27,7 +27,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-
       app.get('/', (req, res) => res.render('dangnhap3'));
       app.post('/', urlencodedParser, function (req, res){
         if (!req.body) return res.sendStatus(400)
