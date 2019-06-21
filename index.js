@@ -397,6 +397,13 @@ io.on('connection',(socket)=>
       }
    	 });
     }
+    else {
+      console.log('Sai 123');
+    }
+
+  }
+  else {
+    console.log('sai 4444');
   }
   });
   socket.on('C_del_inbox',(mes)=>{
