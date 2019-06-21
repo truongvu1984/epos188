@@ -36,7 +36,7 @@ con.connect(function(err) {
             if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
             else{
               if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });console.log('Đăng nhập 2');}
-              else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
+              else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'}); console.log('Mật khẩu không đúng');}
             }
           });
         }
