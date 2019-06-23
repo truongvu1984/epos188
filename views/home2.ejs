@@ -51,7 +51,7 @@ var room_name_chose="";
 var abc = 1;
 var timer = setInterval(check_online, 3000);
 let ab;
-var form = document.createElement("form");
+console.log('Bắt đầu tải');
 function check_online(){
   if(mang_infowindow_main.length>0){
     mang_infowindow_main.forEach((row)=>{
@@ -295,6 +295,10 @@ socket.on('C_danhantinnhan',(data)=>{
   // chuyển đổi màu sắc sang đỏ đối với người
 
 });
+function test(){
+  var abc = $("#id_small_window").width();
+
+}
 function online_clk(room,name){
   socket.on('S_get_join',()=>{
     document.getElementById("id_online_text").style.display = "block";
@@ -1090,28 +1094,17 @@ function show_contact_list(){
 function show_content_top_right(id){
   document.getElementById(id).style.display = "block";
 }
-function add_form(name1,value1){
-  var hiddenField = document.createElement("input");
-  hiddenField.setAttribute("type", "hidden");
-  hiddenField.setAttribute("name", name1);
-  hiddenField.setAttribute("value", value1);
-  form.appendChild(hiddenField);
-}
 function log_out(){
-  add_form('out','OK');
-  document.body.appendChild(form);
-  form.submit();
-
-  // socket.emit('C_leave_off');
-  // socket.on('log_out_ok',()=>{
-  //   ab = null;
-  //   // localStorage.clear();
-  // document.getElementById("id_list_contact_ok").innerHTML="";
-  // // history.pushState(null, null, https://epos188.herokuapp.com);
-  // // window.history.pushState(null, null, "/" + https://epos188.herokuapp.com);
-  //    window.location.replace("https://epos188.herokuapp.com");
-  //   // window.location.href = "https://epos188.herokuapp.com/";
-  // });
+  socket.emit('C_leave_off');
+  socket.on('log_out_ok',()=>{
+    ab = null;
+    // localStorage.clear();
+  document.getElementById("id_list_contact_ok").innerHTML="";
+  // history.pushState(null, null, https://epos188.herokuapp.com);
+  // window.history.pushState(null, null, "/" + https://epos188.herokuapp.com);
+     window.location.replace("https://epos188.herokuapp.com");
+    // window.location.href = "https://epos188.herokuapp.com/";
+  });
 }
 window.onclick = function(event) {
 
@@ -1137,6 +1130,16 @@ window.onclick = function(event) {
   }
 
 }
+// window.history.forward();
+// function noBack() { window.history.forward(); }
+
+
+history.pushState(null, null, document.URL);
+window.addEventListener('popstate', function () {
+    history.pushState(null, null, document.URL);
+});
+
+
 </script>
 </head>
 <body>
