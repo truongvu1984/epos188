@@ -51,7 +51,7 @@ var room_name_chose="";
 var abc = 1;
 var timer = setInterval(check_online, 3000);
 let ab;
-console.log('Bắt đầu tải');
+var form = document.createElement("form");
 function check_online(){
   if(mang_infowindow_main.length>0){
     mang_infowindow_main.forEach((row)=>{
@@ -1094,17 +1094,28 @@ function show_contact_list(){
 function show_content_top_right(id){
   document.getElementById(id).style.display = "block";
 }
+function add_form(name1,value1){
+  var hiddenField = document.createElement("input");
+  hiddenField.setAttribute("type", "hidden");
+  hiddenField.setAttribute("name", name1);
+  hiddenField.setAttribute("value", value1);
+  form.appendChild(hiddenField);
+}
 function log_out(){
-  socket.emit('C_leave_off');
-  socket.on('log_out_ok',()=>{
-    ab = null;
-    // localStorage.clear();
-  document.getElementById("id_list_contact_ok").innerHTML="";
-  // history.pushState(null, null, https://epos188.herokuapp.com);
-  // window.history.pushState(null, null, "/" + https://epos188.herokuapp.com);
-     window.location.replace("https://epos188.herokuapp.com");
-    // window.location.href = "https://epos188.herokuapp.com/";
-  });
+  add_form('out','OK');
+  document.body.appendChild(form);
+  form.submit();
+
+  // socket.emit('C_leave_off');
+  // socket.on('log_out_ok',()=>{
+  //   ab = null;
+  //   // localStorage.clear();
+  // document.getElementById("id_list_contact_ok").innerHTML="";
+  // // history.pushState(null, null, https://epos188.herokuapp.com);
+  // // window.history.pushState(null, null, "/" + https://epos188.herokuapp.com);
+  //    window.location.replace("https://epos188.herokuapp.com");
+  //   // window.location.href = "https://epos188.herokuapp.com/";
+  // });
 }
 window.onclick = function(event) {
 
