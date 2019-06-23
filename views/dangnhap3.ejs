@@ -9,6 +9,10 @@
 <script>
 var socket = io("https://epos188.herokuapp.com/");
 socket.connect();
+function kiemtra(){
+  document.getElementById("id_wrap").style.display = "none";
+  document.getElementById("id_wrapper").style.display = "block";
+}
 function login(){
   if(document.getElementById("login_number_2").value.trim()==""){
     document.getElementById("my_info_from_server").innerHTML='<font color="white">Enter phone number</font>';
@@ -63,7 +67,7 @@ if(document.referrer=="https://epos188.herokuapp.com/"){
 </script>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="id_wrap">
   <div class="blue"></div>
   <div class="login">
       <div class="info_from_server" id ="my_info_from_server" align="center"></div>
@@ -288,7 +292,7 @@ if(document.referrer=="https://epos188.herokuapp.com/"){
       <input class="number_2" type="text" name="number" value="" id= "login_number_2"></input>
       <div class="pass_1"><font color="white">Password</font></div>
       <input class="pass_2" type="password" name="pass" value="" id= "login_pass_2"></input>
-      <button class="submit" onclick="login()">Đăng nhập</button>
+      <button class="submit" onclick="kiemtra()">Đăng nhập</button>
 
   </div>
 
