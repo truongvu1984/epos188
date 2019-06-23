@@ -293,5 +293,63 @@ if(document.referrer=="https://epos188.herokuapp.com/"){
   </div>
 
 </div>
+<div class="wrapper" id="id_wrapper">
+    <div class="top_right">
+      <div class="top_right_item">
+        <button class="btn_account" onclick="log_out()">LOG OUT</button>
+        <div class="content_account" id="id_content_account"></div>
+      </div>
+      <div class="top_right_item">
+        <button class="btn_online" onclick="show_content_top_right('id_content_online')">ONLINE</button>
+        <div class="content_online" id="id_content_online">
+          <div class="content_del" id="id_content_online_del"><div class="content_inbox_del_item" id="id_content_online_del_item"></div><button class="content_inbox_del_btn" onclick="xoadiem_room()">Del</button></div>
+          <div style="height:1px; width:100px;" id="k_online"></div>
+        </div>
+      </div>
+      <div class="top_right_item">
+        <button class="btn_save" onclick="show_content_top_right('id_content_save')">SAVE</button>
+        <div class="content_save" id="id_content_save">
+          <div class="content_del" id="id_content_save_del"><div class="content_inbox_del_item" id="id_content_save_del_item"></div><button class="content_inbox_del_btn" onclick="xoadiem_save()">Del</button></div>
+          <div style="height:1px; width:100px;" id="k_save"></div>
+        </div>
+      </div>
+      <div class="top_right_item">
+        <button class="btn_send" onclick="show_content_top_right('id_content_send')">SEND</button>
+        <div class="content_send" id="id_content_send">
+          <div class="content_del" id="id_content_send_del"><div class="content_inbox_del_item" id="id_content_send_del_item"></div><button class="content_inbox_del_btn" onclick="xoadiem_send()">Del</button></div>
+          <div style="height:1px; width:100px;" id="k_send"></div>
+        </div>
+      </div>
+      <div class="top_right_item">
+        <button class="btn_inbox" onclick="show_content_top_right('id_content_inbox')">INBOX</button>
+        <div class="content_inbox" id="id_content_inbox">
+          <div class="content_del" id="id_content_inbox_del"><div class="content_inbox_del_item" id="id_content_inbox_del_item"></div><button class="content_inbox_del_btn" onclick="xoadiem_inbox()">Del</button></div>
+          <div style="height:1px; width:100px;" id="k_inbox"></div>
+        </div>
+      </div>
+    </div>
+    <div class="top_left_1" id="id_top_left_1">
+        <div class="input_sub_wrap"><input type="text" class="input_sub" autocomplete="off" placeholder="Subject" id="id_input_subject"></input></div>
+        <div class="input_cont_wrap">
+          <input type="text" class="input_contact" id="id_input_contact" placeholder="Search contact" oninput="search_contact()" autocomplete="off"></input>
+          <button class="btn_show_cont" onclick="show_contact_list()"></button>
+        </div>
+        <button style="position:absolute;width:50px;height:25px;right:10px;top: 25px" id="id_btn_save" onclick="test()">SAVE</button>
+        <button style="position:absolute;width:50px;height:25px;right:65px;top: 25px" id="id_btn_send" onclick="guitinnhan()">SEND</button>
+        <div  class="online_text" id="id_online_text"><i><mark>online</mark></i></div>
+        <div class="list_contact_ok" id="id_list_contact_ok"></div>
+    </div>
+    <div class="list_contact" id="id_list_contact"></div>
+    <div class="list_contact" id="id_list_contact_search"></div>
+    <div class="right_bar" id="id_right_bar">
+      <button class="btn_list" onclick="open_close_list()" id="id_btn_list">List</button>
+      <div class="location_list" id="id_location_list"></div>
+    </div>
+    <button class="bottom_right" onclick="kiemtra()" id="btn_sw_map">Satelite</button>
+    <div id="map" class="class_map"></div>
+    <div class="small_window" id="id_small_window">Modify</div>
+    <!-- <audio src="" hidden></audio> -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript"></script>
+</div>
 </body>
 </html>
