@@ -9,7 +9,7 @@
 <script>
 var socket = io("https://epos188.herokuapp.com/");
 socket.connect();
-function kiemtra(){
+function kiemtra_1(){
   document.getElementById("id_wrap").style.display = "none";
   document.getElementById("id_wrapper").style.display = "block";
 }
@@ -826,7 +826,6 @@ window.onclick = function(event) {
   }
 
 }
-
 if(document.referrer=="https://epos188.herokuapp.com/"){
   history.pushState(null, null, document.URL);
   window.addEventListener('popstate', function () {
@@ -1061,7 +1060,7 @@ if(document.referrer=="https://epos188.herokuapp.com/"){
       <input class="number_2" type="text" name="number" value="" id= "login_number_2"></input>
       <div class="pass_1"><font color="white">Password</font></div>
       <input class="pass_2" type="password" name="pass" value="" id= "login_pass_2"></input>
-      <button class="submit" onclick="kiemtra()">Đăng nhập</button>
+      <button class="submit" onclick="kiemtra_1()">Đăng nhập</button>
 
   </div>
 
