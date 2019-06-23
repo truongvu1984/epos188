@@ -1,5 +1,6 @@
 var express = require("express");
 var app = express();
+const session = require('express-session');
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start")});
@@ -16,6 +17,7 @@ var con = mysql.createConnection({
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
+app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
 function strencode( data ){return unescape( encodeURIComponent(data));}
 function strdecode( data ){
   return JSON.parse( decodeURIComponent( escape ( data ) ) );
@@ -24,6 +26,7 @@ var passwordHash = require('password-hash');
 let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var sess;
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
@@ -35,8 +38,17 @@ con.connect(function(err) {
           con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
             if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
             else{
-              if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });console.log('Đăng nhập 2');}
-              else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'}); console.log('Mật khẩu không đúng');}
+              if (passwordHash.verify(req.body.pass, rows[0].pass)){
+                res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });
+                console.log('Đăng nhập 2');
+                sess.ok = "OK";
+              }
+              else {
+                res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});
+                console.log('Mật khẩu không đúng');
+                sess.ok=null;
+
+              }
             }
           });
         }
