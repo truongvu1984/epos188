@@ -278,9 +278,7 @@ io.on('connection',(socket)=>
   }
   });
   socket.on('login2',(data)=>{
-    console.log(data);
-    console.log(data.rightuser+'1'+data.right_pass+'2'+data.online+'3'+data.inbox+'4'+data.send+'5'+data.save+'6'+data.contact+'7'+data.group);
-    console.log(data.rightuser&&data.right_pass&&data.online&&data.inbox&&data.send&&data.save&&data.contact&&data.group);
+
     if(data){
     if(data.rightuser&&data.right_pass&&data.online&&data.inbox&&data.send&&data.save&&data.contact&&data.group){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){

