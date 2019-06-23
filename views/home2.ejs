@@ -295,10 +295,6 @@ socket.on('C_danhantinnhan',(data)=>{
   // chuyển đổi màu sắc sang đỏ đối với người
 
 });
-function test(){
-  var abc = $("#id_small_window").width();
-
-}
 function online_clk(room,name){
   socket.on('S_get_join',()=>{
     document.getElementById("id_online_text").style.display = "block";
@@ -1141,16 +1137,6 @@ window.onclick = function(event) {
   }
 
 }
-// window.history.forward();
-// function noBack() { window.history.forward(); }
-
-
-history.pushState(null, null, document.URL);
-window.addEventListener('popstate', function () {
-    history.pushState(null, null, document.URL);
-});
-
-
 </script>
 </head>
 <body>
