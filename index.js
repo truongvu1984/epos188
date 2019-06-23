@@ -26,7 +26,7 @@ var passwordHash = require('password-hash');
 let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
-var sess;
+
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
@@ -34,6 +34,7 @@ con.connect(function(err) {
       app.post('/', urlencodedParser, function (req, res){
         if (!req.body) return res.sendStatus(400)
         else {
+          var sess;
           var full_number = "+"+req.body.code + req.body.number.replace('0','');
           con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
             if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
