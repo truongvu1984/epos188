@@ -35,6 +35,7 @@ con.connect(function(err) {
         console.log('haha');
         console.log(req.session);
         if(req.session.ok){
+
           console.log(req.session.ok);
         }
       });
@@ -44,7 +45,6 @@ con.connect(function(err) {
           let sess = req.session;
           console.log(sess);
           console.log(sess.ok);
-
           var full_number = "+"+req.body.code + req.body.number.replace('0','');
           con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
             if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
