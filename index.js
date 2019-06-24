@@ -32,7 +32,8 @@ con.connect(function(err) {
     else {
       app.get('/', (req, res) => {
         res.render('dangnhap3');
-        console.log('haha'+ req.session);
+        console.log('haha');
+        console.log(req.session);
         if(req.session.ok){
           console.log(req.session.ok);
         }
