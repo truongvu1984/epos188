@@ -30,7 +30,13 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      app.get('/', (req, res) => res.render('dangnhap3'));
+      app.get('/', (req, res) => {
+        res.render('dangnhap3');
+        console.log('haha'+let sess = req.session;);
+        if(req.session.ok){
+          console.log(req.session.ok);
+        }
+      });
       app.post('/', urlencodedParser, function (req, res){
         if (!req.body) return res.sendStatus(400)
         else {
