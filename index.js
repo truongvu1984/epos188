@@ -35,13 +35,23 @@ con.connect(function(err) {
         console.log('haha');
         console.log(req.session);
         if(req.session.ok){
-
           console.log(req.session.ok);
         }
       });
       app.post('/', urlencodedParser, function (req, res){
         if (!req.body) return res.sendStatus(400)
         else {
+          if(req.body.out){
+            let cookie = req.cookies;
+              for (var prop in cookie) {
+                if (!cookie.hasOwnProperty(prop)) {
+                  continue;
+                }
+                res.cookie(prop, '', {expires: new Date(0)});
+              }
+            res.redirect('/');
+          }
+          else {
           let sess = req.session;
           console.log(sess);
           console.log(sess.ok);
@@ -63,9 +73,10 @@ con.connect(function(err) {
             }
           });
         }
+        }
       })
 function kiemtra_taikhoan(){
-  setTimeout(function() {
+setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
     var date2 = Math.floor(Date.now() / 1000) - 600;
     // mở khóa cho số điện thoại hoặc phoneid bị khóa
