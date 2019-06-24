@@ -28,12 +28,17 @@ function login(){
     // form.setAttribute("method", 'post');
     // form.setAttribute("action", 'https://epos188.herokuapp.com/');
     socket.emit('login1',fullnumber,pass);
-    socket.on('login1_dung',()=>{
+    socket.on('login1_dung',(bando)=>{
       // add_form('pass',document.getElementById("login_pass_2").value);
       // add_form('number',num);
       // add_form('code',val_code);
       // document.body.appendChild(form);
       // form.submit();
+      var my_awesome_script = document.createElement('script');
+      my_awesome_script.setAttribute('src',bando);
+      my_awesome_script.setAttribute('type',"text/javascript");
+      document.getElementById('id_wrapper').appendChild(my_awesome_script);
+      // document.head.appendChild(my_awesome_script);
       document.getElementById("id_wrap").style.display = "none";
       document.getElementById("id_wrapper").style.display = "block";
 
@@ -1124,7 +1129,7 @@ if(document.referrer=="https://epos188.herokuapp.com/"){
     <div id="map" class="class_map"></div>
     <div class="small_window" id="id_small_window">Modify</div>
     <!-- <audio src="" hidden></audio> -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript"></script>
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap" type="text/javascript"></script> -->
 </div>
 </body>
 </html>

@@ -275,6 +275,7 @@ io.on('connection',(socket)=>
 			 else{
         if (passwordHash.verify(pass1, rows[0].pass)){
             socket.emit('login1_dung', {name:strencode(rows[0].user)});
+            socket.emit('login1_web', "https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap");
         }
         else {
           socket.emit('login1_sai', {name:strencode(rows[0].user)},'Password is incorrect');
