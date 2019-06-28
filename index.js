@@ -27,26 +27,20 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      app.get('/', (req, res) => res.render('dangnhap3'));
-      app.post('/', urlencodedParser, function (req, res){
-        if (!req.body) return res.sendStatus(400)
-        else {
-          if(!req.body.out){
-            var full_number = "+"+req.body.code + req.body.number.replace('0','');
-            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
-              if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
-              else{
-                if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });console.log('Đăng nhập 2');}
-                else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'}); console.log('Mật khẩu không đúng');}
-              }
-            });
-          }
-          else {
-            res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});
-          }
-
-        }
-      })
+        app.get('/', (req, res) => res.render('home2'));
+        // app.post('/', urlencodedParser, function (req, res){
+        //   if (!req.body) return res.sendStatus(400)
+        //   else {
+        //     var full_number = "+"+req.body.code + req.body.number.replace('0','');
+        //     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
+        //       if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
+        //       else{
+        //         if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });}
+        //         else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
+        //       }
+        //     });
+        //   }
+        // });
 function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
@@ -98,8 +92,6 @@ io.on('connection',(socket)=>
     });
   });
   socket.on('regis', function (user_info){
-    console.log('regis:');
-    console.log(user_info);
     socket.emit('dangky_thanhcong');
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user_info.number +"' LIMIT 1", function(err, rows){
             // nếu tài khoản đã có người đăng ký rồi thì:
@@ -107,12 +99,7 @@ io.on('connection',(socket)=>
             else {
               if (rows.length >0 )	{socket.emit('regis_already_account');}
               else {
-                // Tìm xem liệu số điện thoại đó có đúng là của người đó không
-
-                      // nếu số điện thoại và mã xác nhận khớp nhau
-                    // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
-                      // 1. Bảng chính: lưu id của bản tin đó trên server, id của người dùng, tên tin nhắn, tin nhắn gửi đi hay tin nhắn nhận về, trạng thái gửi đi hay nhận về.
-                      con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                    con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //2. Bảng địa điểm: lưu id bản tin đó trên server, tên điểm, tọa độ điểm
                       con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"mes_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
