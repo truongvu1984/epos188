@@ -27,20 +27,21 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-        app.get('/', (req, res) => res.render('home2'));
-        // app.post('/', urlencodedParser, function (req, res){
-        //   if (!req.body) return res.sendStatus(400)
-        //   else {
-        //     var full_number = "+"+req.body.code + req.body.number.replace('0','');
-        //     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
-        //       if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
-        //       else{
-        //         if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });}
-        //         else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
-        //       }
-        //     });
-        //   }
-        // });
+      console.log("Da co ket noi ok ha ha ha");
+      app.get('/', (req, res) => res.render('dangnhap3'));
+      app.post('/', urlencodedParser, function (req, res){
+        if (!req.body) return res.sendStatus(400)
+        else {
+          var full_number = "+"+req.body.code + req.body.number.replace('0','');
+          con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
+            if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
+            else{
+              if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });}
+              else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
+            }
+          });
+        }
+      })
 function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
@@ -92,6 +93,8 @@ io.on('connection',(socket)=>
     });
   });
   socket.on('regis', function (user_info){
+    console.log('regis:');
+    console.log(user_info);
     socket.emit('dangky_thanhcong');
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user_info.number +"' LIMIT 1", function(err, rows){
             // nếu tài khoản đã có người đăng ký rồi thì:
@@ -99,7 +102,12 @@ io.on('connection',(socket)=>
             else {
               if (rows.length >0 )	{socket.emit('regis_already_account');}
               else {
-                    con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
+                // Tìm xem liệu số điện thoại đó có đúng là của người đó không
+
+                      // nếu số điện thoại và mã xác nhận khớp nhau
+                    // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
+                      // 1. Bảng chính: lưu id của bản tin đó trên server, id của người dùng, tên tin nhắn, tin nhắn gửi đi hay tin nhắn nhận về, trạng thái gửi đi hay nhận về.
+                      con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //2. Bảng địa điểm: lưu id bản tin đó trên server, tên điểm, tọa độ điểm
                       con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"mes_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                       //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
@@ -156,6 +164,7 @@ io.on('connection',(socket)=>
   }
   // lắng nghe sự kiện đăng ký tài khoản mới
   socket.on('C_yeucau_chuoi_forgotpass',function(idphone, num){
+    console.log('nguoi dung yeu cau chuoi');
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"'", function(err, rows){
       if(err){console.log(err);}
       else {
@@ -256,26 +265,22 @@ io.on('connection',(socket)=>
 
   });
   socket.on('login1',(user1, pass1)=>{
-      if(user1&&pass1){
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
-	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan','There is no account '+user1);}
+	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
 			 else{
         if (passwordHash.verify(pass1, rows[0].pass)){
             socket.emit('login1_dung', {name:strencode(rows[0].user)});
-            socket.emit('login1_web', {map:"https://maps.googleapis.com/maps/api/js?key=AIzaSyCTmmp8QAjy0E7SWlcrAFjRRTzGefS4lH0&callback=myMap"});
         }
         else {
-          socket.emit('login1_sai', {name:strencode(rows[0].user)},'Password is incorrect');
+          socket.emit('login1_sai', {name:strencode(rows[0].user)});
+          console.log('login 1 sai');
         }
       }
     });
-  }
   });
   socket.on('login2',(data)=>{
-
-    if(data){
-    if(data.rightuser&&data.right_pass&&data.online&&data.inbox&&data.send&&data.save&&data.contact&&data.group){
-      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
+    console.log(data);
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
 	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
       else{
         if (passwordHash.verify(data.right_pass, rows[0].pass)){
@@ -390,17 +395,9 @@ io.on('connection',(socket)=>
         }
       }
    	 });
-    }
-    else {
-      console.log('Sai 123');
-    }
-
-  }
-  else {
-    console.log('sai 4444');
-  }
-  });
+	});
   socket.on('C_del_inbox',(mes)=>{
+    console.log('C yeu cau xoa:'+mes.length);
     if(socket.number){
       mes.forEach((mes1,key)=>{
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'R' LIMIT 1", function(err, res)
@@ -436,7 +433,6 @@ io.on('connection',(socket)=>
 
       });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_del_send',(mes)=>{
     if(socket.number){
@@ -475,7 +471,6 @@ io.on('connection',(socket)=>
 
       });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_del_save',(mes)=>{
     if(socket.number){
@@ -509,7 +504,6 @@ io.on('connection',(socket)=>
 
       });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_del_online',(mes)=>{
     if(socket.number){
@@ -556,7 +550,6 @@ io.on('connection',(socket)=>
         });
       });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_del_friend',(numbers)=>{
     if(socket.number){
@@ -569,7 +562,6 @@ io.on('connection',(socket)=>
         });
       });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_reques_point_inbox',(idc)=>{
     if(socket.number){
@@ -601,10 +593,9 @@ io.on('connection',(socket)=>
              }
         });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_reques_point',(idc)=>{
-    if(socket.number){
+      if(socket.number){
         if(socket.roomabc){
           socket.leave(socket.roomabc);
           socket.roomabc = undefined;
@@ -629,7 +620,6 @@ io.on('connection',(socket)=>
              }
         });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_reques_point_import',(list)=>{
     if(socket.number){
@@ -657,7 +647,6 @@ io.on('connection',(socket)=>
 
       });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_gui_tinnhan', function(mess){
     if (socket.number){
@@ -731,10 +720,8 @@ io.on('connection',(socket)=>
                 }
             });
         }
-    });
-  }
-    else {socket.emit('no_acc');}
-  });
+      });
+    }});
   socket.on('C_check_send',(data)=>{
     if(socket.number){
       let list=[];
@@ -762,7 +749,6 @@ io.on('connection',(socket)=>
         });
       });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_save_pos',(mess)=>{
     if(socket.number){
@@ -783,31 +769,6 @@ io.on('connection',(socket)=>
           }
       });
     }
-    else {socket.emit('no_acc');}
-  });
-  socket.on('C_del_acc',(pass)=>{
-    if(socket.number){
-      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
-  	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
-        else{
-          if (passwordHash.verify(pass, rows[0].pass)){
-            socket.emit('S_del_acc_kq','OK');
-            con.query("DROP TABLE IF EXISTS `"+socket.number+"mes_main`",(err)=>{if(err)console.log(err);});
-            con.query("DROP TABLE IF EXISTS `"+socket.number+"mes_detail`",(err)=>{if(err)console.log(err);});
-            con.query("DROP TABLE IF EXISTS `"+socket.number+"mes_sender`",(err)=>{if(err)console.log(err);});
-            con.query("DROP TABLE IF EXISTS `"+socket.number+"contact`",(err)=>{if(err)console.log(err);});
-            con.query("DELETE FROM `account` WHERE `number` LIKE '"+socket.number+"'", function(err1)
-              {
-                if(err1){console.log(err1);}
-                else {socket.number = null;socket.roomabc = undefined;}
-            });
-
-          }
-          else {socket.emit('S_del_acc_kq','Password is incorrect. Delete account is not successful.');}
-        }
-      });
-    }
-    else {socket.emit('no_acc');}
   });
   socket.on('danhantinnhan', function (nguoigui, idc){
    	if (socket.number){
@@ -833,7 +794,6 @@ io.on('connection',(socket)=>
 
         });
       }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_read_mes',(idc)=>{
     if(socket.number){
@@ -846,7 +806,6 @@ io.on('connection',(socket)=>
         });
 
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_send_group',(mess)=>{
     if(socket.number){
@@ -867,7 +826,6 @@ io.on('connection',(socket)=>
           }
         });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_send__edit_group',(mess)=>{
     if(socket.number){
@@ -901,7 +859,6 @@ io.on('connection',(socket)=>
 
 
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('search_contact', function (string){
     if (socket.number){
@@ -921,10 +878,9 @@ io.on('connection',(socket)=>
       }
     });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_check_contact', function (string){
-    if (socket.number){
+      if (socket.number){
         console.log(string);
     con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
       if ( err){console.log(err);}
@@ -956,12 +912,13 @@ io.on('connection',(socket)=>
       }
     });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('W_check_contact', function (string){
+    console.log("Chuoi nhan duoc la:"+string);
     if (socket.number){
-      string = string.trim();
-      if (string.charAt(0)=='0'){
+      console.log('vu yeu van');
+    string = string.trim();
+    if (string.charAt(0)=='0'){
       string = string.substr(1);
       console.log(string);
     }
@@ -987,11 +944,11 @@ io.on('connection',(socket)=>
     });
     }
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('W_add_friend',function(data){
-    if (socket.number){
-      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.admin+"' AND `pass` LIKE '"+ data.password+"' LIMIT 1", function(err, rows){
+      if (socket.number){
+    console.log('Da nhan:'+data.password);
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.admin+"' AND `pass` LIKE '"+ data.password+"' LIMIT 1", function(err, rows){
        if (err || rows.length ==0){
           console.log("Dang nhap first khong dung");
         }
@@ -1018,7 +975,6 @@ io.on('connection',(socket)=>
       }
     });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_join_room', function (room){
     if (socket.number){
@@ -1064,11 +1020,10 @@ io.on('connection',(socket)=>
     });
     console.log('ten room la:' +room);
     }
-    else {socket.emit('no_acc');}
 
   });
   socket.on('C_send_contact', function (contact){
-    if (socket.number){
+      if (socket.number){
         console.log('C gửi new contact'+contact.name);
         con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
            {
@@ -1087,30 +1042,27 @@ io.on('connection',(socket)=>
                }
           });
       }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_leave_off', function () {
-    if (socket.number){
+      if (socket.number){
       socket.leave(socket.number);
       socket.number = undefined;
-    }
-    if(socket.roomabc){
+      }
+      if(socket.roomabc){
         socket.leave(socket.roomabc);
         socket.roomabc = undefined;
-    }
-    socket.emit('log_out_ok');
+      }
+      socket.emit('log_out_ok');
   });
   socket.on('C_leave_room', function (room) {
       if (socket.number){
       socket.leave(room);
       socket.roomabc = undefined;
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_got_friend', function (number){
       if (socket.number){con.query("UPDATE `"+socket.number+"contact` SET `fr` = 'OK' WHERE `number` LIKE '"+number+"'",function(err3, ok){ console.log('loi update'+err)});
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_pos_online', function (info){
     if (socket.number){
@@ -1121,7 +1073,6 @@ io.on('connection',(socket)=>
         });
       }
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_make_room', function (info){
     if (socket.number){
@@ -1187,8 +1138,7 @@ io.on('connection',(socket)=>
 
         });
     }
-    else {socket.emit('no_acc');}
-   });
+   	});
   socket.on('danhan_room',(idc)=>{
     if(socket.number){
       con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'O'",function(err5,res5)
@@ -1196,7 +1146,6 @@ io.on('connection',(socket)=>
 
       });
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_change_pass', function(oldpass,newpass){
    if (socket.number){
@@ -1223,7 +1172,6 @@ io.on('connection',(socket)=>
      });
 
     }
-   else {socket.emit('no_acc');}
   });
   socket.on('C_get_add_mem', function(info){
    if (socket.number){
@@ -1250,7 +1198,6 @@ io.on('connection',(socket)=>
 
 
     }
-    else {socket.emit('no_acc');}
   });
   socket.on('C_bosung_member', function(info){
     //nếu socket này đang tham gia room thì mới chấp nhận các thao tác tiếp theo
@@ -1314,9 +1261,9 @@ io.on('connection',(socket)=>
       }
     });
       }
-      else {socket.emit('no_acc');}
-  });
+    });
   socket.on('C_get_manager',()=>{
+      console.log('ha ha ha');
     if(socket.admin ==='admin'){
       console.log('C_yeu cau');
       con.query("SELECT * FROM `manager` ", function(err1, row1s) {
@@ -1330,28 +1277,6 @@ io.on('connection',(socket)=>
           }
         });
       }
-  });
-  socket.on('C_check_taikhoan',(sdt)=>{
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+sdt+"' LIMIT 1", function(err, rows){
-	     if (err){}
-			 else{
-         if(rows.length >0){socket.emit('S_ketqua_check_taikhoan','N');}
-         else {
-           cb.phoneInformation(sdt,(error3,ketqua) => {
-             if(error3){socket.emit('S_ketqua_check_taikhoan','K');}
-             else if (ketqua.is_mobile){
-               socket.emit('S_ketqua_check_taikhoan','Y');
-               console.log('hi hi');
-             }
-             else {
-               socket.emit('S_ketqua_check_taikhoan','K');
-
-           }
-           });
-
-         }
-       }
-     });
   });
   socket.on('manager_login', (name, pass)=>{
     if(name ==='admin' && pass === '1234'){
