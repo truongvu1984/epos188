@@ -26,6 +26,7 @@ body {
   right: 5px;
   top:10px;
   z-index:3;
+  display: none
 }
 .top_right_item {
   position: relative;
@@ -67,6 +68,7 @@ body {
   height: 60px;
   top: 5px;
   z-index:2;
+  display: none
 }
 
 .main_line_wrap{
