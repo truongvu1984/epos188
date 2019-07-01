@@ -1,7 +1,7 @@
 var express = require("express");
 var app = express();
 var session = require('express-session');
-app.use(session());
+app.use(session({secret: 'hahahih'}));
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start")});
