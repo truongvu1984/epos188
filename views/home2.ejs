@@ -51,6 +51,9 @@ var room_name_chose="";
 var abc = 1;
 var timer = setInterval(check_online, 3000);
 let ab;
+var form = document.createElement("form");
+form.setAttribute("method", 'post');
+form.setAttribute("action", 'https://epos188.herokuapp.com/');
 function check_online(){
   if(mang_infowindow_main.length>0){
     mang_infowindow_main.forEach((row)=>{
