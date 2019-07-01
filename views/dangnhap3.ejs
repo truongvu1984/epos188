@@ -8,7 +8,6 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
 var socket = io("https://epos188.herokuapp.com/");
-console.log(document.URL);
 socket.connect();
 function login(){
   if(document.getElementById("login_number_2").value.trim()==""){
@@ -31,7 +30,9 @@ function login(){
       add_form('code',val_code);
       document.body.appendChild(form);
       form.submit();
-      sessionStorage.taikhoan = fullnumber;
+      sessionStorage.number = fullnumber;
+      sessionStorage.pass = pass;
+
     });
     socket.on('login1_khongtaikhoan',(noidung)=>{
       document.getElementById("my_info_from_server").innerHTML = '<font color="white">'+noidung+'</font>';
@@ -51,9 +52,6 @@ function login(){
     }
   }
 }
-
-
-
 function add_form(name1,value1){
   var hiddenField = document.createElement("input");
   hiddenField.setAttribute("type", "hidden");

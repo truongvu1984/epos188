@@ -75,6 +75,9 @@ function check_online(){
     });
   }
 }
+socket.on('check_pass',()=>{
+  socket.emit('login2',{rightuser:sessionStorage.number,right_pass:sessionStorage.pass})
+});
 socket.on('S_W_kq_check_contact',(data)=>{
       var dropdowns = document.getElementsByClassName("list_contact_1");
       var k;
@@ -1097,7 +1100,10 @@ function log_out(){
   // document.body.appendChild(form);
   // form.submit();
   socket.emit('C_leave_off');
-  delete sessionStorage.taikhoan;
+
+  delete sessionStorage.number;
+  delete sessionStorage.code;
+  delete sessionStorage.pass;
   history.pushState(null, null, "https://epos188.herokuapp.com");
   window.location.replace("https://epos188.herokuapp.com");
 
