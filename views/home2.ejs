@@ -55,6 +55,7 @@ var form = document.createElement("form");
 form.setAttribute("method", 'post');
 form.setAttribute("action", 'https://epos188.herokuapp.com/');
 console.log(sessionStorage);
+console.log(sessionStorage.taikhoan);
 if(!sessionStorage.taikhoan){
   add_form('out','OK');
   document.body.appendChild(form);
@@ -1103,7 +1104,7 @@ function log_out(){
   document.body.appendChild(form);
   form.submit();
   delete sessionStorage.taikhoan;
-  
+
 
   // socket.emit('C_leave_off');
   // socket.on('log_out_ok',()=>{
