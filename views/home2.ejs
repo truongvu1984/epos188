@@ -8,6 +8,10 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
+    if(sessionStorage.taikhoan==undefined){
+      history.pushState(null, null, "https://epos188.herokuapp.com");
+      window.location.replace("https://epos188.herokuapp.com");
+    }
 var socket = io("https://epos188.herokuapp.com/");
 socket.connect();
 var map;
@@ -51,15 +55,6 @@ var room_name_chose="";
 var abc = 1;
 var timer = setInterval(check_online, 3000);
 let ab;
-var form = document.createElement("form");
-form.setAttribute("method", 'post');
-form.setAttribute("action", 'https://epos188.herokuapp.com/');
-console.log(sessionStorage);
-console.log(sessionStorage.taikhoan);
-if(sessionStorage.taikhoan==undefined){
-  history.pushState(null, null, "https://epos188.herokuapp.com");
-  window.location.replace("https://epos188.herokuapp.com");
-}
 function check_online(){
   if(mang_infowindow_main.length>0){
     mang_infowindow_main.forEach((row)=>{
@@ -80,7 +75,6 @@ function check_online(){
     });
   }
 }
-console.log(socket);
 socket.on('S_W_kq_check_contact',(data)=>{
       var dropdowns = document.getElementsByClassName("list_contact_1");
       var k;
@@ -1106,7 +1100,7 @@ function log_out(){
   delete sessionStorage.taikhoan;
   history.pushState(null, null, "https://epos188.herokuapp.com");
   window.location.replace("https://epos188.herokuapp.com");
-  
+
 
 
   //
