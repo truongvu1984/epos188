@@ -35,7 +35,9 @@ con.connect(function(err) {
       app.post('/', urlencodedParser, function (req, res){
         if (!req.body) return res.sendStatus(400)
         else {
+          console.log('vu yeu van');
           if(req.body.number&&req.body.code&&req.body.pass){
+            console.log('hi hi đăng nhập đúng');
             var full_number = "+"+req.body.code + req.body.number.replace('0','');
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
               if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
