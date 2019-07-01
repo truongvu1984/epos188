@@ -57,7 +57,7 @@ form.setAttribute("action", 'https://epos188.herokuapp.com/');
 console.log(sessionStorage);
 console.log(sessionStorage.taikhoan);
 if(sessionStorage.taikhoan==undefined){
-  window.history.pushState(null, null, "/" + https://epos188.herokuapp.com);
+  history.pushState(null, null, "https://epos188.herokuapp.com");
   window.location.replace("https://epos188.herokuapp.com");
 }
 function check_online(){
