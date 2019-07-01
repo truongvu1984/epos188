@@ -36,6 +36,7 @@ con.connect(function(err) {
         if (!req.body) return res.sendStatus(400)
         else {
             console.log('Có yêu cầu post');
+            if(req.body.number){
             var full_number = "+"+req.body.code + req.body.number.replace('0','');
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
               if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
@@ -47,6 +48,10 @@ con.connect(function(err) {
                 else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
               }
             });
+          }
+          else {
+            res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});
+          }
 
         }
       })
