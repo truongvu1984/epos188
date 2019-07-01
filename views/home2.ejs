@@ -76,7 +76,8 @@ function check_online(){
   }
 }
 socket.on('check_pass',()=>{
-  socket.emit('login2',{rightuser:sessionStorage.number,right_pass:sessionStorage.pass})
+  let ab = {rightuser:sessionStorage.number,right_pass:sessionStorage.number,online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
+  socket.emit('login2',ab);
 });
 socket.on('S_W_kq_check_contact',(data)=>{
       var dropdowns = document.getElementsByClassName("list_contact_1");
@@ -1100,6 +1101,7 @@ function log_out(){
   // document.body.appendChild(form);
   // form.submit();
   socket.emit('C_leave_off');
+  ab=null;
 
   delete sessionStorage.number;
   delete sessionStorage.code;
