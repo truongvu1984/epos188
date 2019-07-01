@@ -34,7 +34,7 @@ con.connect(function(err) {
       app.post('/', urlencodedParser, function (req, res){
         if (!req.body) return res.sendStatus(400)
         else {
-          if(!req.body.out){
+          if(!req.body.number){
             console.log('Có yêu cầu post');
             var full_number = "+"+req.body.code + req.body.number.replace('0','');
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
