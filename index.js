@@ -1,5 +1,7 @@
 var express = require("express");
 var app = express();
+var session = require('express-session');
+app.use(session());
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start")});
@@ -38,15 +40,18 @@ con.connect(function(err) {
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
               if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
               else{
-                if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });}
+                if (passwordHash.verify(req.body.pass, rows[0].pass)){
+                  res.render('home2');
+                  req.session.number = full_number;
+                }
                 else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
               }
             });
           }
           else {
+            req.session.number = undefined;
             res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});
           }
-
         }
       })
 function kiemtra_taikhoan(){
