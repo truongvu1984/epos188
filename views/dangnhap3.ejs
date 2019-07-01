@@ -30,6 +30,7 @@ function login(){
       add_form('code',val_code);
       document.body.appendChild(form);
       form.submit();
+      sessionStorage.taikhoan = fullnumber;
     });
     socket.on('login1_khongtaikhoan',(noidung)=>{
       document.getElementById("my_info_from_server").innerHTML = '<font color="white">'+noidung+'</font>';

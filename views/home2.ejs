@@ -54,6 +54,11 @@ let ab;
 var form = document.createElement("form");
 form.setAttribute("method", 'post');
 form.setAttribute("action", 'https://epos188.herokuapp.com/');
+if(!sessionStorage.taikhoan){
+  add_form('out','OK');
+  document.body.appendChild(form);
+  form.submit();
+}
 function check_online(){
   if(mang_infowindow_main.length>0){
     mang_infowindow_main.forEach((row)=>{
@@ -1096,6 +1101,7 @@ function log_out(){
   add_form('out','OK');
   document.body.appendChild(form);
   form.submit();
+  sessionStorage.taikhoan=undefined;
 
   // socket.emit('C_leave_off');
   // socket.on('log_out_ok',()=>{
