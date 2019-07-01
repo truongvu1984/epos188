@@ -54,6 +54,7 @@ let ab;
 var form = document.createElement("form");
 form.setAttribute("method", 'post');
 form.setAttribute("action", 'https://epos188.herokuapp.com/');
+console.log(sessionStorage);
 if(!sessionStorage.taikhoan){
   add_form('out','OK');
   document.body.appendChild(form);
