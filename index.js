@@ -1,7 +1,7 @@
 var express = require("express");
 var app = express();
 var session = require('express-session');
-// app.use(session({secret: 'hahahih'}));
+
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start")});
@@ -18,6 +18,7 @@ var con = mysql.createConnection({
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
+app.use(session({secret: 'hahahih'}));
 function strencode( data ){return unescape( encodeURIComponent(data));}
 function strdecode( data ){
   return JSON.parse( decodeURIComponent( escape ( data ) ) );
@@ -41,7 +42,7 @@ con.connect(function(err) {
               else{
                 if (passwordHash.verify(req.body.pass, rows[0].pass)){
                   res.render('home2');
-                  // req.session.number = full_number;
+                  req.session.number = full_number;
                 }
                 else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
               }
