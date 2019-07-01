@@ -46,7 +46,6 @@ con.connect(function(err) {
                 else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
               }
             });
-          }
 
         }
       })
