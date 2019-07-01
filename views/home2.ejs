@@ -79,6 +79,9 @@ socket.on('check_pass',()=>{
   let ab = {rightuser:sessionStorage.number,right_pass:sessionStorage.pass,online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
   socket.emit('login2',ab);
 });
+socket.on('login2_sai',()=>{
+  log_out();
+});
 socket.on('S_W_kq_check_contact',(data)=>{
       var dropdowns = document.getElementsByClassName("list_contact_1");
       var k;
@@ -374,14 +377,17 @@ function speak_loud(noi_dung){
 function kiemtra(){
   // var url = "https://translate.google.com/translate_tts?ie=utf-8&q="+hihi+"&tl=en";
   // $("audio").attr('src', url).get(0).play();
-  if(document.getElementById("btn_sw_map").innerHTML =="Map"){
-    document.getElementById("btn_sw_map").innerHTML = "Satelite";
-    map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
-  }
-  else {
-    document.getElementById("btn_sw_map").innerHTML = "Map";
-    map.setMapTypeId(google.maps.MapTypeId.HYBRID);
-  }
+  add_form('out','OK');
+  document.body.appendChild(form);
+  form.submit();
+  // if(document.getElementById("btn_sw_map").innerHTML =="Map"){
+  //   document.getElementById("btn_sw_map").innerHTML = "Satelite";
+  //   map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+  // }
+  // else {
+  //   document.getElementById("btn_sw_map").innerHTML = "Map";
+  //   map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+  // }
 }
 function hide_show_pos(id){
   if(document.getElementById("chk"+id).checked == true){cancle_luudiem(id);}

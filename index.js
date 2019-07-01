@@ -400,10 +400,7 @@ io.on('connection',(socket)=>
               }
           });
           }
-        else {
-          console.log('dang nhap sai roi');
-          socket.emit('login2_sai');
-        }
+        else {socket.emit('login2_sai');}
       }
    	 });
 	});
