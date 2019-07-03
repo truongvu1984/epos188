@@ -1,6 +1,6 @@
 var express = require("express");
 var app = express();
-var session = require('express-session');
+// var session = require('express-session');
 
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
@@ -18,7 +18,7 @@ var con = mysql.createConnection({
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
-app.use(session({ secret: 'haha1234', cookie: { maxAge: 60000 }}));
+// app.use(session({ secret: 'haha1234', cookie: { maxAge: 60000 }}));
 function strencode( data ){return unescape( encodeURIComponent(data));}
 function strdecode( data ){
   return JSON.parse( decodeURIComponent( escape ( data ) ) );
@@ -44,7 +44,7 @@ con.connect(function(err) {
               else{
                 if (passwordHash.verify(req.body.pass, rows[0].pass)){
                   res.render('home2');
-                  req.session.number = full_number;
+                  // req.session.number = full_number;
                 }
                 else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
               }
@@ -53,7 +53,6 @@ con.connect(function(err) {
           else {
             res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});
           }
-
         }
       })
 function kiemtra_taikhoan(){
@@ -441,7 +440,6 @@ socket.on('login2',(data)=>{
                                 else {
                                   console.log('Da xoa ban tin');
                                   if(key===(mes.length-1)){socket.emit('S_del_inbox');}
-
                                 }
                             });
                           }
