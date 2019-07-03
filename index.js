@@ -297,7 +297,7 @@ io.on('connection',(socket)=>
   });
   function check_data1(data){
     let abc;
-    if(data==null||isNaN(data)||data==0)abc=false;
+    if(data==null||isNaN(data))abc=false;
     else abc=true;
     return abc;
 
