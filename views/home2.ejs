@@ -79,8 +79,7 @@ function check_online(){
   }
 }
 socket.on('check_pass',()=>{
-  // let ab = {rightuser:sessionStorage.number,right_pass:sessionStorage.pass,online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
-let ab = {rightuser:sessionStorage.number,right_pass:sessionStorage.pass};
+   let ab = {rightuser:sessionStorage.number,right_pass:sessionStorage.pass,online:cru_online,inbox:cru_inbox,send:cru_send,save:cru_save,contact:cru_contact,group:cru_group};
   socket.emit('login2',ab);
 });
 socket.on('login2_sai',()=>{

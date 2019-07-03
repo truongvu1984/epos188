@@ -302,20 +302,7 @@ io.on('connection',(socket)=>
     return abc;
 
   }
-//   function check_data(data){
-//     var online,inbox,send,save,contact,group;
-//     if(data.rightuser)rightuser=true;
-//     if(data.right_pass)right_pass=true;
-//     if(data.online==0)online=true;
-//     if(data.inbox==0)inbox=true;
-//     if(data.send==0)send=true;
-//     if(data.save==0)save=true;
-//     if(data.contact==0)contact=true;
-//     if(data.group==0)group=true;
-// return rightuser&&right_pass&&online&&inbox&&send&&save&&contact&&group
-//   }
-  socket.on('login2',(data)=>{
-    console.log(check_data1(data.online));
+socket.on('login2',(data)=>{
     if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
