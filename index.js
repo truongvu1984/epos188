@@ -305,7 +305,7 @@ io.on('connection',(socket)=>
     console.log(data.contact);
     console.log(data.group);
     // if(data.rightuser&&data.right_pass&&data.online&&data.inbox&&data.send&&data.save&&data.contact&&data.group){
-if(data.rightuser&&data.right_pass){
+if(data.rightuser&&data.right_pass&&data.online){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
