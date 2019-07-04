@@ -176,6 +176,8 @@ io.on('connection',(socket)=>
   }
   // lắng nghe sự kiện đăng ký tài khoản mới
   socket.on('C_yeucau_chuoi_forgotpass',function(idphone, num){
+    console.log(idphone);
+    console.log(num);
     if(idphone&&num){
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"'", function(err, rows){
       if(err){console.log(err);}
