@@ -152,6 +152,18 @@ io.on('connection',(socket)=>
     });
     }
   });
+  socket.on('C_revify_number_ok',(idphone, number)=>{
+    if(idphone&&number){
+      var sql = "INSERT INTO `real_number`(id_phone,number) VALUES ?";
+      var values = [[idphone,number]];
+      con.query(sql, [values], function (err4, result) {
+        if (err4){console.log(err4);}
+        else {
+          socket.emit('S_save_real_number_ok');
+        }
+      });
+    }
+  });
   socket.on('regis', function (user_info){
     if(user_info.number&&user_info.user&&user_info.code&&user_info.pass){
     socket.emit('dangky_thanhcong');
@@ -310,6 +322,18 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_chuoi_forgot',function(num,chuoi,pass){
+    if(num&chuoi&pass){
+      con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"' AND `chuoi` LIKE '"+chuoi+"' AND `status` LIKE 'Y'", function(err1, row1s) {
+          if((err1)|| (row1s.length==0)) {socket.emit('S_chuoikhongdung');}
+          else {
+            con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
+            socket.emit('S_doipass_thanhcong');
+          });
+          }
+      });
+    }
+  });
+  socket.on('C_change_pass_admin',function(id,num,chuoi,pass){
     if(num&chuoi&pass){
       con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"' AND `chuoi` LIKE '"+chuoi+"' AND `status` LIKE 'Y'", function(err1, row1s) {
           if((err1)|| (row1s.length==0)) {socket.emit('S_chuoikhongdung');}
@@ -1269,8 +1293,5 @@ socket.on('login2',(data)=>{
     });
       }
     });
-
-
-
 });
 }});
