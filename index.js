@@ -1,7 +1,5 @@
 var express = require("express");
 var app = express();
-// var session = require('express-session');
-
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start")});
@@ -18,6 +16,14 @@ var con = mysql.createConnection({
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
+// https.get('https://api.checkmobi.com/v1/validation/request', (resp) => {
+// let data= '';
+//   resp.on('data', (chunk) => {
+//     data += chunk;
+//     console.log(chunk);
+//   });
+//   console.log(data);
+// });
 // app.use(session({ secret: 'haha1234', cookie: { maxAge: 60000 }}));
 function strencode( data ){return unescape( encodeURIComponent(data));}
 function strdecode( data ){
@@ -25,6 +31,8 @@ function strdecode( data ){
 }
 var passwordHash = require('password-hash');
 let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
+let map = {"type": "reverse_cli","number":'+84982025401',"platform":"android"};
+
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
@@ -88,6 +96,44 @@ io.on('connection',(socket)=>
                     if(err2){console.log(err2);}
                     else {
                       if (rows2.length >0 ){socket.emit('regis_already_account');}
+                      else {
+                        cb.phoneInformation(num,(error3,ketqua) => {
+                          if(error3){socket.emit('sodienthoaikhongdung');}
+                          else if (!ketqua.is_mobile){socket.emit('sodienthoaikhongdung');}
+                          else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');}
+                        });
+                      }
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      }
+    });
+    }
+  });
+  socket.on('C_check_forget',(idphone,num)=>{
+    if(idphone&&num){
+    var date = Math.floor(Date.now() / 1000);
+    con.query("SELECT * FROM `dangky` WHERE `phone_id` LIKE '"+idphone+"'", function(err1, rows1){
+      if(err1){console.log(err1);}
+      else {
+        if(rows1.length >2){socket.emit('regis1_quasolan_number');}
+        else {
+          var sql = "INSERT INTO `dangky`(phone_id,time1, time2) VALUES ?";
+          var values = [[idphone,date,date]];
+          con.query(sql, [values], function (err4, result) {
+            if (err4){console.log(err4);}
+            else {
+              con.query("UPDATE `dangky` SET `time2` = '"+date+"' WHERE `phone_id` LIKE '"+idphone+"'",function(err5, ok){
+                if (err5){console.log('update bị loi'+err5);}
+                else {
+                  con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err2, rows2){
+                    if(err2){console.log(err2);}
+                    else {
+                      if (rows2.length ==0 ){socket.emit('taikhoankhongco');}
                       else {
                         cb.phoneInformation(num,(error3,ketqua) => {
                           if(error3){socket.emit('sodienthoaikhongdung');}
@@ -176,8 +222,6 @@ io.on('connection',(socket)=>
   }
   // lắng nghe sự kiện đăng ký tài khoản mới
   socket.on('C_yeucau_chuoi_forgotpass',function(idphone, num){
-    console.log(idphone);
-    console.log(num);
     if(idphone&&num){
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"'", function(err, rows){
       if(err){console.log(err);}
@@ -204,16 +248,13 @@ io.on('connection',(socket)=>
                             else {
                                 // cho phép đăng ký liên tục 3 lần, nếu là lần đầu
                               if(rows6.length==0){
-                                  console.log('xac thuc moi');
                                 var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid,date,status) VALUES ?";
                                 var values = [[num, string,idphone,date,'Y']];
                                 con.query(sql, [values], function(err, result){
                                   if(err){console.log(err);}
                                   else {
                                     con.query("SELECT * FROM `xacthuc` WHERE `phoneid` LIKE '"+ idphone +"'", function(err9, rows9){
-
                                     if(rows9.length >=3){
-                                      console.log('da insert khoa idphone');
                                       var sql = "INSERT INTO `danhsachkhoa` (phoneid,date) VALUES ?";
                                       var values = [[idphone,date]];
                                       con.query(sql, [values], function(err, result){ if(err)console.log(err);});
