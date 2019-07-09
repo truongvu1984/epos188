@@ -340,7 +340,8 @@ io.on('connection',(socket)=>
         else {
           if(rows1[0].number==num){
             con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
-            socket.emit('S_doipass_thanhcong');
+              socket.emit('S_doipass_thanhcong');
+            });
           }
           else {
             socket.emit('doi_pass_ko_ok');
