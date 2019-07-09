@@ -120,7 +120,7 @@ io.on('connection',(socket)=>
     con.query("SELECT * FROM `dangky` WHERE `phone_id` LIKE '"+idphone+"'", function(err1, rows1){
       if(err1){console.log(err1);}
       else {
-        if(rows1.length >2){socket.emit('regis1_quasolan_number');}
+        if(rows1.length >2){socket.emit('regis1_quasolan_number');console.log('qua so lan dang ky');}
         else {
           var sql = "INSERT INTO `dangky`(phone_id,time1, time2) VALUES ?";
           var values = [[idphone,date,date]];
