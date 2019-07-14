@@ -152,7 +152,9 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_revify_number_ok',(idphone, number)=>{
+    console.log('có yêu cầu');
     if(idphone&&number){
+      console.log('yêu cầu hi hi');
       con.query("UPDATE `real_number` SET `number` = '"+number+"' WHERE `id_phone` LIKE '"+idphone+"'",function(err5, ok){
         if (err5){console.log('update bị loi'+err5);}
         else {
