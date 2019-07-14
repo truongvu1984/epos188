@@ -333,7 +333,9 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_change_pass_admin',function(id,num,pass){
-
+console.log(id);
+console.log(num);
+console.log(pass);
     if(num&id&pass){
       console.log('muon chan pâss');
       con.query("SELECT * FROM `real_number` WHERE `id_phone` LIKE '"+id+"' LIMIT 1", function(err1, rows1){
