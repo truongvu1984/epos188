@@ -336,7 +336,7 @@ io.on('connection',(socket)=>
 console.log(id);
 console.log(num);
 console.log(pass);
-    if(num&id&pass){
+    if(num&&id&&pass){
       console.log('muon chan pâss');
       con.query("SELECT * FROM `real_number` WHERE `id_phone` LIKE '"+id+"' LIMIT 1", function(err1, rows1){
         if(err1){console.log(err1);}
@@ -375,7 +375,6 @@ console.log(pass);
     if(data==null||isNaN(data))abc=false;
     else abc=true;
     return abc;
-
   }
 socket.on('login2',(data)=>{
     if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
