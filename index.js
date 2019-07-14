@@ -156,7 +156,7 @@ io.on('connection',(socket)=>
       con.query("UPDATE `real_number` SET `number` = '"+number+"' WHERE `id_phone` LIKE '"+idphone+"'",function(err5, ok){
         if (err5){console.log('update bị loi'+err5);}
         else {
-          console.log(ok);
+          if(ok.insertId==0){
           var sql = "INSERT INTO `real_number`(id_phone,number) VALUES ?";
           var values = [[idphone,number]];
           con.query(sql, [values], function (err4, result) {
@@ -165,6 +165,10 @@ io.on('connection',(socket)=>
               socket.emit('S_save_real_number_ok');
             }
           });
+        }
+        else {
+          socket.emit('S_save_real_number_ok');
+        }
         }
       });
 
