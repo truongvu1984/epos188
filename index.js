@@ -1,5 +1,6 @@
 var express = require("express");
 var app = express();
+var http = require("http");
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start")});
@@ -16,22 +17,20 @@ var con = mysql.createConnection({
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
-// https.get('https://api.checkmobi.com/v1/validation/request', (resp) => {
-// let data= '';
-//   resp.on('data', (chunk) => {
-//     data += chunk;
-//     console.log(chunk);
-//   });
-//   console.log(data);
-// });
-// app.use(session({ secret: 'haha1234', cookie: { maxAge: 60000 }}));
+
 function strencode( data ){return unescape( encodeURIComponent(data));}
 function strdecode( data ){
   return JSON.parse( decodeURIComponent( escape ( data ) ) );
 }
 var passwordHash = require('password-hash');
 let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
-let map = {"type": "reverse_cli","number":'+84982025401',"platform":"android"};
+
+// cb.validatePhone('+84982025401','reverse_cli',(a1,a2)=>{
+//   if(a1){console.log(a1);}
+//   else {
+//     console.log(a2);
+//   }
+// });
 
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
