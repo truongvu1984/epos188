@@ -333,13 +333,16 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_change_pass_admin',function(id,num,pass){
+
     if(num&id&pass){
+      console.log('muon chan pâss');
       con.query("SELECT * FROM `real_number` WHERE `id_phone` LIKE '"+id+"' LIMIT 1", function(err1, rows1){
         if(err1){console.log(err1);}
         else {
           if(rows1[0].number==num){
             con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
               socket.emit('S_doipass_thanhcong');
+              console.log('change ok');
             });
           }
           else {
