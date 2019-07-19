@@ -154,7 +154,7 @@ io.on('connection',(socket)=>
   socket.on('C_revify_number_ok',(idphone, number)=>{
     console.log('có yêu cầu');
     if(idphone&&number){
-      console.log('yêu cầu hi hi');
+
       con.query("UPDATE `real_number` SET `number` = '"+number+"' WHERE `id_phone` LIKE '"+idphone+"'",function(err5, ok){
         if (err5){console.log('update bị loi'+err5);}
         else {
@@ -165,11 +165,13 @@ io.on('connection',(socket)=>
             if (err4){console.log(err4);}
             else {
               socket.emit('S_save_real_number_ok');
+              console.log('yêu cầu ha ha');
             }
           });
         }
         else {
           socket.emit('S_save_real_number_ok');
+          console.log('yêu cầu ho ho');
         }
         }
       });
@@ -346,9 +348,6 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_change_pass_admin',function(id,num,pass){
-console.log(id);
-console.log(num);
-console.log(pass);
     if(num&&id&&pass){
       console.log('muon chan pâss');
       con.query("SELECT * FROM `real_number` WHERE `id_phone` LIKE '"+id+"' LIMIT 1", function(err1, rows1){
