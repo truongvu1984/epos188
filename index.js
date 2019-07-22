@@ -352,11 +352,11 @@ io.on('connection',(socket)=>
           if(rows1[0].number==num){
             con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
               socket.emit('S_doipass_thanhcong');
-              console.log('doi pass thanh công hi hi');
+
               con.query("DELETE FROM `real_number` WHERE `id_phone` LIKE '"+id+"'", function(err2,kq)
                     {
                       if (err2){console.log(err2);}
-                      
+
 
                     });
               });
@@ -527,7 +527,7 @@ socket.on('login2',(data)=>{
                               {
                                 if (err3){console.log(err3);}
                                 else {
-                                  console.log('Da xoa ban tin');
+
                                   if(key===(mes.length-1)){socket.emit('S_del_inbox');}
                                 }
                             });
@@ -597,7 +597,7 @@ socket.on('login2',(data)=>{
                               {
                                 if (err3){console.log(err3);}
                                 else {
-                                  console.log('Da xoa ban tin');
+
                                   if(key===(mes.length-1)){socket.emit('S_del_save');}
 
                                 }
@@ -628,7 +628,7 @@ socket.on('login2',(data)=>{
                     if ( err1|| (res1.length ==0) ){console.log('2:'+err1);}
                     else
                       {
-                        console.log('Da nhan 2:'+res1.length);
+                  
                         res1.forEach((member1,key1)=>{
                           con.query("SELECT * FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err2, res2)
                             {
@@ -639,7 +639,7 @@ socket.on('login2',(data)=>{
                                     {
                                         if (err3){console.log(err3);}
                                         else {
-                                          console.log('Da xoa tai khoan:'+member1.name);
+
                                           if(key1===(res1.length-1)){
                                           con.query("DELETE FROM `"+socket.number+"mes_main` WHERE `id` = "+res[0].id, function(err9){if (err9){console.log(err9);}});
                                           con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` = "+res[0].id , function(err8){if (err8){console.log(err8);}});
