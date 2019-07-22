@@ -152,9 +152,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_revify_number_ok',(idphone, number)=>{
-    console.log('có yêu cầu');
     if(idphone&&number){
-
       con.query("UPDATE `real_number` SET `number` = '"+number+"' WHERE `id_phone` LIKE '"+idphone+"'",function(err5, ok){
         if (err5){console.log('update bị loi'+err5);}
         else {
@@ -165,13 +163,12 @@ io.on('connection',(socket)=>
             if (err4){console.log(err4);}
             else {
               socket.emit('S_save_real_number_ok');
-              console.log('yêu cầu ha ha');
             }
           });
         }
         else {
           socket.emit('S_save_real_number_ok');
-          console.log('yêu cầu ho ho');
+
         }
         }
       });
@@ -349,15 +346,18 @@ io.on('connection',(socket)=>
   });
   socket.on('C_change_pass_admin',function(id,num,pass){
     if(num&&id&&pass){
-      console.log('muon chan pâss');
       con.query("SELECT * FROM `real_number` WHERE `id_phone` LIKE '"+id+"' LIMIT 1", function(err1, rows1){
         if(err1){console.log(err1);}
         else {
           if(rows1[0].number==num){
             con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
               socket.emit('S_doipass_thanhcong');
-              console.log('change ok');
-            });
+              con.query("DELETE FROM `real_number` WHERE `id_phone` LIKE 'id'", function(err2)
+                    {
+                      if (err2){console.log(err2);}
+                      
+                    });
+              });
           }
           else {
             socket.emit('doi_pass_ko_ok');
