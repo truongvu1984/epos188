@@ -352,10 +352,14 @@ io.on('connection',(socket)=>
           if(rows1[0].number==num){
             con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
               socket.emit('S_doipass_thanhcong');
+              console.log('doi pass thanh công hi hi');
               con.query("DELETE FROM `real_number` WHERE `id_phone` LIKE 'id'", function(err2)
                     {
                       if (err2){console.log(err2);}
-                      
+                      else {
+                        console.log('xóa thành công ha ha');
+                      }
+
                     });
               });
           }
