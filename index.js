@@ -628,7 +628,7 @@ socket.on('login2',(data)=>{
                     if ( err1|| (res1.length ==0) ){console.log('2:'+err1);}
                     else
                       {
-                  
+
                         res1.forEach((member1,key1)=>{
                           con.query("SELECT * FROM `"+member1.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err2, res2)
                             {
@@ -875,7 +875,9 @@ socket.on('login2',(data)=>{
     }
   }); //ok
   socket.on('C_save_pos',(mess)=>{
+    console.log('ha ha gui den');
     if(socket.number&&mess.idc&&mess.Subject){
+      console.log('có luu');
       let thoigian = new Date();
       var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
       var val = [[mess.idc, mess.subject,'H',thoigian]];
