@@ -479,6 +479,7 @@ socket.on('login2',(data)=>{
                              if(key2===(a2s.length-1)){
                                tinfull={ids:a1.id,idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact};
                                socket.emit('S_send_group',tinfull);
+                               console.log(tinfull);
                              }
                            });
                          }
