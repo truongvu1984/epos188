@@ -473,6 +473,7 @@ socket.on('login2',(data)=>{
                       con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err2, a2s){
                        if(err2){console.log(err2);}
                        else {
+                         if(a2s.length>0){
                            a2s.forEach(function(a2,key2){
                              mangcontact.push({name:strencode(a2.name), number:a2.number});
                              if(key2===(a2s.length-1)){
@@ -480,7 +481,7 @@ socket.on('login2',(data)=>{
                                socket.emit('S_send_group',tinfull);
                              }
                            });
-
+                         }
                        }
                      });
                   });
