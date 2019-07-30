@@ -874,9 +874,13 @@ socket.on('login2',(data)=>{
       }
     }
   }); //ok
+
   socket.on('C_save_pos',(mess)=>{
     console.log('ha ha gui den');
-    if(socket.number&&mess.idc&&mess.Subject){
+    console.log(socket.number);
+    console.log(mess.idc);
+    console.log(mess.subject);
+    if(socket.number&&mess.idc&&mess.subject&&mess.vitri&&isArray(mess.vitri)){
       console.log('có luu');
       let thoigian = new Date();
       var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
