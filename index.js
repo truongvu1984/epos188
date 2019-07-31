@@ -391,8 +391,7 @@ io.on('connection',(socket)=>
     return abc;
   }
 socket.on('login2',(data)=>{
-  console.log(data);
-  console.log('có login2');
+
     if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -401,7 +400,7 @@ socket.on('login2',(data)=>{
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
-            console.log('có lấy dữ liệu');
+
             //lấy bảng inbox
             con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
              {
@@ -413,6 +412,7 @@ socket.on('login2',(data)=>{
                        if(err2){console.log(err2);}
                        else {
                          socket.emit('S_guitinnhan',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
+                         console.log('đã đẩy inbox đi');
                        }
                      });
                   });
@@ -434,6 +434,7 @@ socket.on('login2',(data)=>{
                                 nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
                                 if(key2 === (a2s.length-1)){
                                   socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
+console.log('đã đẩy send đi');
                                 }
                               });
                             }
