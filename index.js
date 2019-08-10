@@ -84,7 +84,7 @@ io.on('connection',(socket)=>
         rows.forEach((row,key)=>{
           tin.push({donvi:strencode(row.donvi),diem:row.tongdiem});
           if(key===(rows.length-1)){
-            socket.emit('toan_doan',{ketqua:tin});
+            socket.emit('toan_doan',tin);
             console.log(tin);
           }
         });
