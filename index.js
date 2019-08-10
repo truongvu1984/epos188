@@ -76,13 +76,17 @@ io.on('connection',(socket)=>
 {
   console.log(socket.id);
   socket.on('hoithao',()=>{
+
     con.query("SELECT * FROM `toan_doan` ", function(err, rows){
       if (err){console.log(err);}
       else{
         let tin=[];
         rows.forEach((row,key)=>{
           tin.push({donvi:row.donvi,diem:row.tongdiem});
-          if(key===(rows.length-1)){socket.emit('toan_doan',tin);}
+          if(key===(rows.length-1)){
+            socket.emit('toan_doan',tin);
+            console.log(tin);
+          }
         });
 
 
