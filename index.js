@@ -82,6 +82,7 @@ io.on('connection',(socket)=>
         socket.emit('ketqua_hoithao',rows);
         console.log(rows);
       }
+      });
   });
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
