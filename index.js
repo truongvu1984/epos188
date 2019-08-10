@@ -79,7 +79,7 @@ io.on('connection',(socket)=>
     con.query("SELECT * FROM `toan_doan` ", function(err, rows){
       if (err){console.log(err);}
       else{
-        socket.emit('ketqua_hoithao',rows);
+        socket.emit('ketqua_hoithao',"haha");
         console.log(rows);
       }
       });
