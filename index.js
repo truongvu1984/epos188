@@ -75,6 +75,14 @@ kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
   console.log(socket.id);
+  socket.on('hoithao',()=>{
+    con.query("SELECT * FROM `toan_doan` ", function(err, rows){
+      if (err){console.log(err);}
+      else{
+        socket.emit('ketqua_hoithao',rows);
+        console.log(rows);
+      }
+  });
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
     if(idphone&&num){
