@@ -84,7 +84,7 @@ io.on('connection',(socket)=>
         rows.forEach((row,key)=>{
           tin.push({donvi:row.donvi,diem:row.tongdiem});
           if(key===(rows.length-1)){
-            socket.emit('toan_doan',tin);
+            socket.emit('toan_doan',"ha ha");
             console.log(tin);
           }
         });
