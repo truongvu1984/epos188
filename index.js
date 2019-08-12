@@ -100,9 +100,9 @@ io.on('connection',(socket)=>
               if (err1){console.log(err1);}
               else {
                   let noidung=[];
-                  rows1.forEach((row1,key1)=>{
+                  row1s.forEach((row1,key1)=>{
                     noidung.push(row1.COLUMN_NAME);
-                    if(key1===(rows1.length-1)){
+                    if(key1===(row1s.length-1)){
                       socket.emit('toan_doan',noidung,tin);
                       console.log('DA GUI DI');
                     }
