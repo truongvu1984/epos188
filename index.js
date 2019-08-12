@@ -96,29 +96,32 @@ io.on('connection',(socket)=>
         rows.forEach((row,key)=>{
           tin.push({donvi:strencode(row.donvi),tongdiem:row.tongdiem,bonmon:row.bonmon,chiensikhoe:row.chiensikhoe,boivutrang:row.boivutrang,chayvutrang:row.chayvutrang,k16:row.k16,bongchuyen:row.bongchuyen,keoco:row.keoco,chay10000m:row.chay10000m,caulong:row.caulong,bongban:row.bongban});
           if(key===(rows.length-1)){
-            con.query("SELECT * FROM information_schema.columns WHERE table_name = 'toan_doan'", function(err1, row1s){
-              if (err1){console.log('co loi 2:'+err1);}
-              else {
-                  let noidung=[];
-                  row1s.forEach((row1,key1)=>{
-                    noidung.push(row1.COLUMN_NAME);
-                    if(key1===(row1s.length-2)){
-                       con.query("SELECT * FROM `danhsach_monthi` ", function(err3, row3s){
-                        if (err3){console.log('co loi 2:'+err3);}
-                        else {
-                          let monthi=[];
-                          row3s.forEach((row3,key3)=>{
-                            monthi.push(strencode(row3.ten));
-                            if(key3===(row3s.length-1))socket.emit('toan_doan',monthi,noidung,tin);
-                          });
-                        }
-                      });
-                    return false;
-                    }
-                  });
-              }
-            });
+            con.query("SELECT * FROM `danhsach_monthi` ", function(err3, row3s){
+             if (err3){console.log('co loi 2:'+err3);}
+             else {
+               let monthi=[];
+               row3s.forEach((row3,key3)=>{
+                 monthi.push(strencode(row3.ten));
+                 if(key3===(row3s.length-1)){
 
+                   con.query("SELECT * FROM information_schema.columns WHERE table_name = 'toan_doan'", function(err1, row1s){
+                     if (err1){console.log('co loi 2:'+err1);}
+                     else {
+                         let noidung=[];
+                         row1s.forEach((row1,key1)=>{
+                           noidung.push(row1.COLUMN_NAME);
+                           if(key1===(row1s.length-2)){
+                              socket.emit('toan_doan',monthi,noidung,tin);
+                              return false;
+                           }
+                         });
+                     }
+                   });
+
+                 }
+               });
+             }
+            });
           }
         });
 
