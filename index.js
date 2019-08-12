@@ -100,13 +100,20 @@ io.on('connection',(socket)=>
               if (err1){console.log('co loi 2:'+err1);}
               else {
                   let noidung=[];
-
                   row1s.forEach((row1,key1)=>{
                     noidung.push(row1.COLUMN_NAME);
                     if(key1===(row1s.length-2)){
-                      socket.emit('toan_doan',noidung,tin);
-                      console.log('Troi dat oi');
-                      return false;
+                       con.query("SELECT * FROM `danhsach_monthi` ", function(err3, row3s){
+                        if (err3){console.log('co loi 2:'+err3);}
+                        else {
+                          let monthi=[];
+                          row3s.forEach((row3,key3)=>{
+                            monthi.push(strencode(row3.ten));
+                            if(key3===(row3s.length-1))socket.emit('toan_doan',monthi,noidung,tin);
+                          });
+                        }
+                      });
+                    return false;
                     }
                   });
               }
