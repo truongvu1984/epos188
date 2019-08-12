@@ -90,14 +90,14 @@ io.on('connection',(socket)=>
   console.log(socket.id);
   socket.on('hoithao',()=>{
     con.query("SELECT * FROM `toan_doan` ", function(err, rows){
-      if (err){console.log(err);}
+      if (err){console.log('co loi 1:'+err);}
       else{
         let tin=[];
         rows.forEach((row,key)=>{
           tin.push({donvi:strencode(row.donvi),tongdiem:row.tongdiem,bonmon:row.bonmon,chiensikhoe:row.chiensikhoe,boivutrang:row.boivutrang,chayvutrang:row.chayvutrang,k16:row.k16,bongchuyen:row.bongchuyen,keoco:row.keoco,chay10000m:row.chay10000m,caulong:row.caulong,bongban:row.bongban});
           if(key===(rows.length-1)){
             con.query("SELECT * FROM information_schema.columns WHERE table_name = 'toan_doan'", function(err1, row1s){
-              if (err1){console.log(err1);}
+              if (err1){console.log('co loi 2:'+err1);}
               else {
                   let noidung=[];
                   row1s.forEach((row1,key1)=>{
@@ -105,7 +105,7 @@ io.on('connection',(socket)=>
                     if(key1===(row1s.length-2)){
                       socket.emit('toan_doan',noidung,tin);
                       break;
-            
+
                     }
                   });
               }
