@@ -104,6 +104,7 @@ io.on('connection',(socket)=>
                     noidung.push(row1.COLUMN_NAME);
                     if(key1===(rows1.length-1)){
                       socket.emit('toan_doan',noidung,tin);
+                      console.log('DA GUI DI');
                     }
                   });
               }
