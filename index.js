@@ -100,13 +100,13 @@ io.on('connection',(socket)=>
               if (err1){console.log('co loi 2:'+err1);}
               else {
                   let noidung=[];
-                
+
                   row1s.forEach((row1,key1)=>{
                     noidung.push(row1.COLUMN_NAME);
                     if(key1===(row1s.length-2)){
                       socket.emit('toan_doan',noidung,tin);
                       console.log('Troi dat oi');
-                      break;
+                      return false;
                     }
                   });
               }
