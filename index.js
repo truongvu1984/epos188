@@ -37,6 +37,18 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
+
+// for(i=1; i<9;i++){
+//   let ab = "";
+//   for(k=1; k<14;k++){
+//     // console.log("a"+i+""+k+" = (TextView)findViewById(R.id.a"+i+""+k+") ;");
+//     let abc = "abc.add(a"+i+""+k+");";
+//     ab=ab+abc;
+//   }
+//   console.log(ab);
+//
+// }
+
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
@@ -72,20 +84,31 @@ function kiemtra_taikhoan(){
   }, 5000);
 }
 kiemtra_taikhoan();
+
 io.on('connection',(socket)=>
 {
   console.log(socket.id);
   socket.on('hoithao',()=>{
-
     con.query("SELECT * FROM `toan_doan` ", function(err, rows){
       if (err){console.log(err);}
       else{
         let tin=[];
         rows.forEach((row,key)=>{
-          tin.push({donvi:strencode(row.donvi),diem:row.tongdiem});
+          tin.push({donvi:strencode(row.donvi),tongdiem:row.tongdiem,bonmon:row.bonmon,chiensikhoe:row.chiensikhoe,boivutrang:row.boivutrang,chayvutrang:row.chayvutrang,k16:row.k16,bongchuyen:row.bongchuyen,keoco:row.keoco,chay10000m:row.chay10000m,caulong:row.caulong,bongban:row.bongban});
           if(key===(rows.length-1)){
-            socket.emit('toan_doan',tin);
-            console.log(tin);
+            con.query("SELECT * FROM information_schema.columns WHERE table_name = 'toan_doan'", function(err1, row1s){
+              if (err1){console.log(err1);}
+              else {
+                  let noidung=[];
+                  rows1.forEach((row1,key1)=>{
+                    noidung.push(row1.COLUMN_NAME);
+                    if(key1===(rows1.length-1)){
+                      socket.emit('toan_doan',noidung,tin);
+                    }
+                  });
+              }
+            });
+
           }
         });
 
