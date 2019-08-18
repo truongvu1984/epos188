@@ -103,7 +103,7 @@ io.on('connection',(socket)=>
                            monthi.push(strencode(row3.ten));
                            if(key3===(row3s.length-1)){
                              console.log('Hi hi hi');
-                             con.query("SELECT * FROM information_schema.columns WHERE table_name = 'toan_doan'", function(err1, row1s){
+                             con.query("SELECT * FROM information_schema.columns WHERE table_name = 'toandoan'", function(err1, row1s){
                                if (err1){console.log('co loi 2:'+err1);}
                                else {
                                    let noidung=[];
