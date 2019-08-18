@@ -77,16 +77,20 @@ io.on('connection',(socket)=>
 {
   console.log(socket.id);
   socket.on('hoithao',(tin)=>{
-    console.log(tin);
+
     if(tin.toandoan != null){
-      console.log(tin.toandoan);
+      let time = new Date();
+      con.query("UPDATE `thoigian` SET `time` = "+time.getTime()+" WHERE `maso` LIKE 'A1' ",function(err11,res11)
+          {if(err11){console.log(err11);}
+
+      });
       con.query("SELECT * FROM `thoigian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
           if(err10)console.log(err10);
           else {
-            console.log(row10s[0].time);
+
             if(row10s[0].time>tin.toandoan)
             {
-              console.log('Có lớn hơn');
+
               con.query("SELECT * FROM `toandoan` ", function(err, rows){
                 if (err){console.log('co loi 1:'+err);}
                 else{
@@ -94,7 +98,7 @@ io.on('connection',(socket)=>
                   rows.forEach((row,key)=>{
                     tin.push({donvi:strencode(row.donvi),tongdiem:row.tongdiem,bonmon:row.bonmon,chiensikhoe:row.chiensikhoe,boivutrang:row.boivutrang,chayvutrang:row.chayvutrang,k16:row.k16,bongchuyen:row.bongchuyen,keoco:row.keoco,chay10000m:row.chay10000m,caulong:row.caulong,bongban:row.bongban});
                     if(key===(rows.length-1)){
-                      console.log('Ha ha ha');
+
                       con.query("SELECT * FROM `danhsach_monthi` ", function(err3, row3s){
                        if (err3){console.log('co loi 2:'+err3);}
                        else {
@@ -110,7 +114,7 @@ io.on('connection',(socket)=>
                                    row1s.forEach((row1,key1)=>{
                                      noidung.push(row1.COLUMN_NAME);
                                      if(key1===(row1s.length-2)){
-                                        socket.emit('toan_doan',monthi,noidung,tin);
+                                        socket.emit('toan_doan',monthi,noidung,tin, time.getTime());
                                         console.log('Đã gửi đi');
                                         return false;
                                      }
@@ -944,10 +948,7 @@ console.log('đã đẩy send đi');
   }); //ok
 
   socket.on('C_save_pos',(mess)=>{
-    console.log('ha ha gui den');
-    console.log(socket.number);
-    console.log(mess.idc);
-    console.log(mess.subject);
+
     if(socket.number&&mess.idc&&mess.subject&&mess.vitri&&isArray(mess.vitri)){
       console.log('có luu');
       let thoigian = new Date();
