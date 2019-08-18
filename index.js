@@ -108,6 +108,7 @@ io.on('connection',(socket)=>
                                      noidung.push(row1.COLUMN_NAME);
                                      if(key1===(row1s.length-2)){
                                         socket.emit('toan_doan',monthi,noidung,tin);
+                                        console.log('Đã gửi đi');
                                         return false;
                                      }
                                    });
