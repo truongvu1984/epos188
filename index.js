@@ -78,12 +78,14 @@ io.on('connection',(socket)=>
   console.log(socket.id);
   socket.on('hoithao',(tin)=>{
     if(tin.toandoan != null){
-      con.query("SELECT * FROM `thoigian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
+      console.log(tin.toandoan);
+      con.query("SELECT * FROM `thoi_gian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
           if(err10)console.log(err10);
           else {
+            console.log(row10s[0].time);
             if(row10s[0].time>tin.toandoan)
             {
-              con.query("SELECT * FROM `toan_doan` ", function(err, rows){
+              con.query("SELECT * FROM `toandoan` ", function(err, rows){
                 if (err){console.log('co loi 1:'+err);}
                 else{
                   let tin=[];
