@@ -17,7 +17,6 @@ var con = mysql.createConnection({
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
-
 function strencode( data ){return unescape( encodeURIComponent(data));}
 function strdecode( data ){
   return JSON.parse( decodeURIComponent( escape ( data ) ) );
@@ -37,17 +36,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
-
-// for(i=1; i<9;i++){
-//   let ab = "";
-//   for(k=1; k<14;k++){
-//     // console.log("a"+i+""+k+" = (TextView)findViewById(R.id.a"+i+""+k+") ;");
-//     let abc = "abc.add(a"+i+""+k+");";
-//     ab=ab+abc;
-//   }
-//   console.log(ab);
-//
-// }
 
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
@@ -88,46 +76,60 @@ kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
   console.log(socket.id);
-  socket.on('hoithao',()=>{
-    con.query("SELECT * FROM `toan_doan` ", function(err, rows){
-      if (err){console.log('co loi 1:'+err);}
-      else{
-        let tin=[];
-        rows.forEach((row,key)=>{
-          tin.push({donvi:strencode(row.donvi),tongdiem:row.tongdiem,bonmon:row.bonmon,chiensikhoe:row.chiensikhoe,boivutrang:row.boivutrang,chayvutrang:row.chayvutrang,k16:row.k16,bongchuyen:row.bongchuyen,keoco:row.keoco,chay10000m:row.chay10000m,caulong:row.caulong,bongban:row.bongban});
-          if(key===(rows.length-1)){
-            con.query("SELECT * FROM `danhsach_monthi` ", function(err3, row3s){
-             if (err3){console.log('co loi 2:'+err3);}
-             else {
-               let monthi=[];
-               row3s.forEach((row3,key3)=>{
-                 monthi.push(strencode(row3.ten));
-                 if(key3===(row3s.length-1)){
+  socket.on('hoithao',(tin)=>{
+    if(tin.toandoan != null){
+      con.query("SELECT * FROM `thoigian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
+          if(err10)console.log(err10);
+          else {
+            if(row10s[0].time>tin.toandoan)
+            {
+              con.query("SELECT * FROM `toan_doan` ", function(err, rows){
+                if (err){console.log('co loi 1:'+err);}
+                else{
+                  let tin=[];
+                  rows.forEach((row,key)=>{
+                    tin.push({donvi:strencode(row.donvi),tongdiem:row.tongdiem,bonmon:row.bonmon,chiensikhoe:row.chiensikhoe,boivutrang:row.boivutrang,chayvutrang:row.chayvutrang,k16:row.k16,bongchuyen:row.bongchuyen,keoco:row.keoco,chay10000m:row.chay10000m,caulong:row.caulong,bongban:row.bongban});
+                    if(key===(rows.length-1)){
+                      con.query("SELECT * FROM `danhsach_monthi` ", function(err3, row3s){
+                       if (err3){console.log('co loi 2:'+err3);}
+                       else {
+                         let monthi=[];
+                         row3s.forEach((row3,key3)=>{
+                           monthi.push(strencode(row3.ten));
+                           if(key3===(row3s.length-1)){
+                             con.query("SELECT * FROM information_schema.columns WHERE table_name = 'toan_doan'", function(err1, row1s){
+                               if (err1){console.log('co loi 2:'+err1);}
+                               else {
+                                   let noidung=[];
+                                   row1s.forEach((row1,key1)=>{
+                                     noidung.push(row1.COLUMN_NAME);
+                                     if(key1===(row1s.length-2)){
+                                        socket.emit('toan_doan',monthi,noidung,tin);
+                                        return false;
+                                     }
+                                   });
+                               }
+                             });
 
-                   con.query("SELECT * FROM information_schema.columns WHERE table_name = 'toan_doan'", function(err1, row1s){
-                     if (err1){console.log('co loi 2:'+err1);}
-                     else {
-                         let noidung=[];
-                         row1s.forEach((row1,key1)=>{
-                           noidung.push(row1.COLUMN_NAME);
-                           if(key1===(row1s.length-2)){
-                              socket.emit('toan_doan',monthi,noidung,tin);
-                              return false;
                            }
                          });
-                     }
-                   });
+                       }
+                      });
+                    }
+                  });
 
-                 }
-               });
-             }
-            });
+
+                }
+                });
+              // có nghĩa là một trong những bảng từng môn có sự thay đổi, bây giờ bắt đầu đi lấy từng bảng gửi về
+
+            }
+            else {
+              socket.emit('ketqua_toandan_ok');
+            }
           }
-        });
-
-
-      }
       });
+    }
   });
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
