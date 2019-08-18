@@ -80,7 +80,7 @@ io.on('connection',(socket)=>
     console.log(tin);
     if(tin.toandoan != null){
       console.log(tin.toandoan);
-      con.query("SELECT * FROM `thoi_gian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
+      con.query("SELECT * FROM `thoigian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
           if(err10)console.log(err10);
           else {
             console.log(row10s[0].time);
