@@ -80,10 +80,7 @@ io.on('connection',(socket)=>
 
     if(tin.toandoan != null){
       let time = new Date();
-      con.query("UPDATE `thoigian` SET `time` = "+time.getTime()+" WHERE `maso` LIKE 'A1' ",function(err11,res11)
-          {if(err11){console.log(err11);}
 
-      });
       con.query("SELECT * FROM `thoigian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
           if(err10)console.log(err10);
           else {
@@ -114,6 +111,10 @@ io.on('connection',(socket)=>
                                    row1s.forEach((row1,key1)=>{
                                      noidung.push(row1.COLUMN_NAME);
                                      if(key1===(row1s.length-2)){
+                                       con.query("UPDATE `thoigian` SET `time` = "+time.getTime()+" WHERE `ma_so` LIKE 'A1' ",function(err11,res11)
+                                           {if(err11){console.log(err11);}
+
+                                       });
                                         socket.emit('toan_doan',monthi,noidung,tin, time.getTime());
                                         console.log('Đã gửi đi');
                                         return false;
