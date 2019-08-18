@@ -77,6 +77,7 @@ io.on('connection',(socket)=>
 {
   console.log(socket.id);
   socket.on('hoithao',(tin)=>{
+    console.log(tin);
     if(tin.toandoan != null){
       console.log(tin.toandoan);
       con.query("SELECT * FROM `thoi_gian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
