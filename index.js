@@ -77,14 +77,12 @@ io.on('connection',(socket)=>
 {
   console.log(socket.id);
   socket.on('hoithao',(tin)=>{
-
     if(tin.toandoan != null){
+      console.log('có yêu cầu toàn đoàn');
       let time = new Date();
-
       con.query("SELECT * FROM `thoigian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
           if(err10)console.log(err10);
           else {
-
             if(row10s[0].time>tin.toandoan)
             {
 
@@ -95,7 +93,6 @@ io.on('connection',(socket)=>
                   rows.forEach((row,key)=>{
                     tin.push({donvi:strencode(row.donvi),tongdiem:row.tongdiem,bonmon:row.bonmon,chiensikhoe:row.chiensikhoe,boivutrang:row.boivutrang,chayvutrang:row.chayvutrang,k16:row.k16,bongchuyen:row.bongchuyen,keoco:row.keoco,chay10000m:row.chay10000m,caulong:row.caulong,bongban:row.bongban});
                     if(key===(rows.length-1)){
-
                       con.query("SELECT * FROM `danhsach_monthi` ", function(err3, row3s){
                        if (err3){console.log('co loi 2:'+err3);}
                        else {
@@ -113,7 +110,6 @@ io.on('connection',(socket)=>
                                      if(key1===(row1s.length-2)){
                                        con.query("UPDATE `thoigian` SET `time` = "+time.getTime()+" WHERE `ma_so` LIKE 'A1' ",function(err11,res11)
                                            {if(err11){console.log(err11);}
-
                                        });
                                         socket.emit('toan_doan',monthi,noidung,tin, time.getTime());
                                         console.log('Đã gửi đi');
@@ -139,6 +135,12 @@ io.on('connection',(socket)=>
             else {
               socket.emit('ketqua_toandan_ok');
             }
+          }
+      });
+      con.query("SELECT * FROM `bongchuyen` WHERE `ma_doi` IS NOT NULL ", function(err, rows){
+          if(err)console.log(err);
+          else {
+            console.log(rows);
           }
       });
     }
