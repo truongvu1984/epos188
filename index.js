@@ -137,13 +137,27 @@ io.on('connection',(socket)=>
             }
           }
       });
-      con.query("SELECT * FROM `bongchuyen` WHERE `ma_doi` IS NOT NULL ", function(err, rows){
-          if(err)console.log(err);
-          else {
-            console.log(rows);
-          }
-      });
+      // con.query("SELECT * FROM `bongchuyen` WHERE `ma_doi` IS NOT NULL ", function(err, rows){
+
     }
+  });
+  socket.on('trongtai_bongchuyen',()=>{
+    con.query("SELECT * FROM `bongchuyen` ", function(err, rows){
+        if(err)console.log(err);
+        else {
+          let tin=[];
+          rows.forEach((row,key)=>{
+//             if(row.setnumber ==3){
+// tin.push({matran:row.matran,tentran:strencode(row.tentran),doi1:strencode(row.doi1), set1:row.set1,set2:row.set2,set3:row.set3,doi2:row.doi2, set21:row.set21, set22:row.set22, set23:row.set23, setnumber:row.setnumber});
+//             }
+//             else {
+// tin.push({matran:row.matran,tentran:strencode(row.tentran),doi1:strencode(row.doi1), set1:row.set1,set2:row.set2,set3:row.set3,set4:row.set4,set5:row.set5,doi2:row.doi2, set21:row.set21, set22:row.set22, set23:row.set23, set24:row.set24, set25:row.set25,setnumber:row.setnumber});
+//             }
+            tin.push({matran:row.matran,tentran:strencode(row.tentran),doi1:strencode(row.doi1),doi2:strdecode(row.doi2),setnumber:row.setnumber});
+            if(key===(row.length-1)){socket.emit('S_trongtai_bongchuyen',tin);}
+          });
+        }
+    });
   });
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
