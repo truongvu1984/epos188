@@ -159,6 +159,12 @@ io.on('connection',(socket)=>
         }
     });
   });
+  socket.on('C_ketqua_bongchuyen',(tin)=>{
+    con.query("UPDATE `bongchuyen` SET `set1` = "+tin.doi1.set1+",`set2` = "+tin.doi1.set2+",`set3` = "+tin.doi1.set3+ " WHERE `matran` LIKE '"+tin.matran+"'",function(err,res)
+        {if(err){console.log(err);}
+
+    });
+  });
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
     if(idphone&&num){
