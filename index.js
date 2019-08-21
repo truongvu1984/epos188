@@ -160,8 +160,12 @@ io.on('connection',(socket)=>
     });
   });
   socket.on('C_ketqua_bongchuyen',(tin)=>{
-    con.query("UPDATE `bongchuyen` SET `set1` = "+tin.doi1.set1+",`set2` = "+tin.doi1.set2+",`set3` = "+tin.doi1.set3+ " WHERE `matran` LIKE '"+tin.matran+"'",function(err,res)
+    con.query("UPDATE `bongchuyen` SET `set1` = "+tin.doi1.set1+",`set2` = "+tin.doi1.set2+",`set3` = "+tin.doi1.set3+ ",`set21` = "+tin.doi2.set1+" ,`set22` = "+tin.doi2.set2+",`set22` = "+tin.doi2.set3+" WHERE `matran` LIKE '"+tin.matran+"'",function(err,res)
         {if(err){console.log(err);}
+        else {
+          socket.emit('send_ketqua_bongchuyen_ok');
+          // io.sockets.in('donvi').emit
+        }
 
     });
   });
