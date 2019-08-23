@@ -153,7 +153,7 @@ io.on('connection',(socket)=>
 //             else {
 // tin.push({matran:row.matran,tentran:strencode(row.tentran),doi1:strencode(row.doi1), set1:row.set1,set2:row.set2,set3:row.set3,set4:row.set4,set5:row.set5,doi2:row.doi2, set21:row.set21, set22:row.set22, set23:row.set23, set24:row.set24, set25:row.set25,setnumber:row.setnumber});
 //             }
-            tin.push({matran:row.matran,tentran:strencode(row.tentran),doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber});
+            tin.push({matran:row.matran,tentran:strencode(row.tentran),doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});
             if(key===(rows.length-1)){socket.emit('S_trongtai_bongchuyen',tin);}
           });
         }
@@ -164,7 +164,7 @@ io.on('connection',(socket)=>
         {if(err){console.log(err);}
         else {
           socket.emit('send_ketqua_bongchuyen_ok');
-          // io.sockets.in('donvi').emit
+
         }
 
     });
