@@ -162,18 +162,16 @@ io.on('connection',(socket)=>
   socket.on('C_ketqua_bongchuyen',(tin)=>{
     if(tin.setnumber==3){
       console.log('có kết quả 1');
-    con.query("UPDATE `bongchuyen` SET `set1` = "+tin.doi1.set1+",`set2` = "+tin.doi1.set2+",`set3` = "+tin.doi1.set3+ ",`set21` = "+tin.doi2.set1+" ,`set22` = "+tin.doi2.set2+",`set22` = "+tin.doi2.set3+" WHERE `matran` LIKE '"+tin.matran+"'",function(err,res)
+    con.query("UPDATE `bongchuyen` SET `diem11` = "+tin.doi1.set1+",`diem12` = "+tin.doi1.set2+",`diem13` = "+tin.doi1.set3+ ",`diem21` = "+tin.doi2.set1+" ,`diem22` = "+tin.doi2.set2+",`diem23` = "+tin.doi2.set3+" WHERE `matran` LIKE '"+tin.matran+"'",function(err,res)
         {if(err){console.log(err);}
         else {
           socket.emit('send_ketqua_bongchuyen_ok');
-
         }
-
     });
   }
   else {
     console.log('có kết quả 2');
-    con.query("UPDATE `bongchuyen` SET `set1` = "+tin.doi1.set1+",`set2` = "+tin.doi1.set2+",`set3` = "+tin.doi1.set3+ ",`set4` = "+tin.doi1.set4+ ",`set5` = "+tin.doi1.set5+ ",`set21` = "+tin.doi2.set1+" ,`set22` = "+tin.doi2.set2+",`set23` = "+tin.doi2.set3+",`set24` = "+tin.doi2.set4+ ",`set25` = "+tin.doi2.set5+ " WHERE `matran` LIKE '"+tin.matran+"'",function(err1,res1)
+    con.query("UPDATE `bongchuyen` SET `diem11` = "+tin.doi1.set1+",`diem12` = "+tin.doi1.set2+",`diem13` = "+tin.doi1.set3+ ",`diem14` = "+tin.doi1.set4+ ",`diem15` = "+tin.doi1.set5+ ",`diem21` = "+tin.doi2.set1+" ,`diem22` = "+tin.doi2.set2+",`diem23` = "+tin.doi2.set3+",`diem24` = "+tin.doi2.set4+ ",`diem25` = "+tin.doi2.set5+ " WHERE `matran` LIKE '"+tin.matran+"'",function(err1,res1)
         {if(err1){console.log(err1);}
         else {
           socket.emit('send_ketqua_bongchuyen_ok');
