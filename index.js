@@ -160,6 +160,7 @@ io.on('connection',(socket)=>
     });
   });
   socket.on('C_ketqua_bongchuyen',(tin)=>{
+    if(tin.setnumber==3){
     con.query("UPDATE `bongchuyen` SET `set1` = "+tin.doi1.set1+",`set2` = "+tin.doi1.set2+",`set3` = "+tin.doi1.set3+ ",`set21` = "+tin.doi2.set1+" ,`set22` = "+tin.doi2.set2+",`set22` = "+tin.doi2.set3+" WHERE `matran` LIKE '"+tin.matran+"'",function(err,res)
         {if(err){console.log(err);}
         else {
@@ -168,6 +169,16 @@ io.on('connection',(socket)=>
         }
 
     });
+  }
+  else {
+    con.query("UPDATE `bongchuyen` SET `set1` = "+tin.doi1.set1+",`set2` = "+tin.doi1.set2+",`set3` = "+tin.doi1.set3+ ",`set4` = "+tin.doi1.set4+ ",`set5` = "+tin.doi1.set5+ ",`set21` = "+tin.doi2.set1+" ,`set22` = "+tin.doi2.set2+",`set23` = "+tin.doi2.set3+",`set24` = "+tin.doi2.set4+ ",`set25` = "+tin.doi2.set5+ " WHERE `matran` LIKE '"+tin.matran+"'",function(err1,res1)
+        {if(err1){console.log(err1);}
+        else {
+          socket.emit('send_ketqua_bongchuyen_ok');
+        }
+
+    });
+  }
   });
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
