@@ -76,16 +76,15 @@ kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
   console.log(socket.id);
+  socket.emit('truy_cap_moi_hoithao');
   socket.on('hoithao',(tin)=>{
     if(tin.toandoan != null){
-      console.log('có yêu cầu toàn đoàn');
-      let time = new Date();
+
       con.query("SELECT * FROM `thoigian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
           if(err10)console.log(err10);
           else {
             if(row10s[0].time>tin.toandoan)
             {
-
               con.query("SELECT * FROM `toandoan` ", function(err, rows){
                 if (err){console.log('co loi 1:'+err);}
                 else{
@@ -100,7 +99,6 @@ io.on('connection',(socket)=>
                          row3s.forEach((row3,key3)=>{
                            monthi.push(strencode(row3.ten));
                            if(key3===(row3s.length-1)){
-                             console.log('Hi hi hi');
                              con.query("SELECT * FROM information_schema.columns WHERE table_name = 'toandoan'", function(err1, row1s){
                                if (err1){console.log('co loi 2:'+err1);}
                                else {
@@ -112,7 +110,7 @@ io.on('connection',(socket)=>
                                            {if(err11){console.log(err11);}
                                        });
                                         socket.emit('toan_doan',monthi,noidung,tin, time.getTime());
-                                        console.log('Đã gửi đi');
+
                                         return false;
                                      }
                                    });
@@ -141,15 +139,29 @@ io.on('connection',(socket)=>
 
     }
   });
-  socket.on('trongtai_bongchuyen',()=>{
+  socket.on('trongtai_bongchuyen',(tin,number)=>{
     con.query("SELECT * FROM `bongchuyen` ", function(err, rows){
         if(err)console.log(err);
         else {
           rows.forEach((row,key)=>{
-            socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});
-            // if(key===(rows.length-1)){socket.emit('S_trongtai_bongchuyen',tin);}
+            if(tin.length==0) socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});
+            else {
+              let test = true;
+              tin.forEach((tin1,key1)=>{
+              if(row.matran===tin1.matran){
+                console.log(tin1.matran);
+                  if(row.time > tin1.time){
+                    console.log('tim thay');
+                    socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});
+                    test = false;
+                    return false;
+                  }
+                }
+              if(key1===(tin.length-1)){if(test)socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});}
+              });
+            }
           });
-        }
+      }
     });
   });
   socket.on('C_ketqua_bongchuyen',(tin)=>{
