@@ -140,11 +140,13 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('trongtai_bongchuyen',(tin,number)=>{
+    console.log(tin);
+    console.log(number);
     con.query("SELECT * FROM `bongchuyen` ", function(err, rows){
         if(err)console.log(err);
         else {
           rows.forEach((row,key)=>{
-            if(tin.length==0) socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});
+            if(number==0) socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});
             else {
               let test = true;
               tin.forEach((tin1,key1)=>{
