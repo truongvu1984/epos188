@@ -139,6 +139,18 @@ io.on('connection',(socket)=>
 
     }
   });
+  socket.on('reg_monthi',()=>{
+    con.query("SELECT * FROM `danhsach_monthi`", function(err, rows){
+        if(err)console.log(err);
+        else {
+            let tin=[];
+            rows.forEach((row,key)=>{
+              tin.push({monthi:strencode(row. ten),code:row.code});
+              if(key===(rows.length-1))socket.emit('S_send_monthi',tin);
+            });
+          }
+        });
+  });
   socket.on('trongtai_bongchuyen',(tin,number)=>{
     console.log(tin);
     console.log(number);
