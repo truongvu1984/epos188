@@ -140,6 +140,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('reg_monthi',()=>{
+    console.log(tin);
     con.query("SELECT * FROM `danhsach_monthi`", function(err, rows){
         if(err)console.log(err);
         else {
