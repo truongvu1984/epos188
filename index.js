@@ -146,9 +146,37 @@ io.on('connection',(socket)=>
         else {
             let tin=[];
             rows.forEach((row,key)=>{
-              tin.push({monthi:strencode(row. ten),code:row.code});
+              tin.push({monthi:strencode(row. ten),code:row.code,type:row.type});
               if(key===(rows.length-1))socket.emit('S_send_monthi',tin);
             });
+          }
+        });
+  });
+  socket.on('C_reg_trandau',(code,type)=>{
+    con.query("SELECT * FROM `"+code+"`", function(err, rows){
+        if(err)console.log(err);
+        else {
+            if(type=="a"){
+              let tin=[];
+              rows.forEach((row,key)=>{
+                con.query("SELECT * FROM `"+code+"loi` WHERE `maso` LIKE '"+row.tt+"'", function(err2, r2s){
+                    if(err2)console.log(err2);
+                    else {
+                      let loi1=[];
+                      r2s.forEach((r2,key2)=>{
+                        loi1.push({ten:strencode(r2.ten),diem:r2.diem});
+                        if(key2===(r2s.length-1)){
+                          tin.push({ten:strencode(row.ten),thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
+                          if(key===(rows.length-1))socket.emit('S_send_trandau','a',tin);
+                        }
+                      });
+                    }
+                });
+              });
+            }
+            else {
+
+            }
           }
         });
   });
