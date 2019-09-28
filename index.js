@@ -158,6 +158,7 @@ io.on('connection',(socket)=>
         else {
             if(type=="a" && code=="a8"){
               let tin=[];
+              console.log('nhận mã số 8');
               rows.forEach((row,key)=>{
                 con.query("SELECT * FROM `"+code+"loi` WHERE `maso` LIKE '"+row.tt+"'", function(err2, r2s){
                     if(err2)console.log(err2);
