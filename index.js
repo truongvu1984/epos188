@@ -167,7 +167,7 @@ io.on('connection',(socket)=>
                       r2s.forEach((r2,key2)=>{
                         loi1.push({ten:strencode(r2.ten),diem:r2.diem});
                         if(key2===(r2s.length-1)){
-                          tin.push({ten:strencode(row.ten),thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
+                          tin.push({ten:strencode(row.ten),donvi:strencode(row.donvi),thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
                           if(key===(rows.length-1))socket.emit('S_send_trandau','a',tin);
                         }
                       });
