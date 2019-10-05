@@ -140,7 +140,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('reg_monthi',()=>{
-    console.log('có nhân yêu cầu');
+
     con.query("SELECT * FROM `danhsach_monthi`", function(err, rows){
         if(err)console.log(err);
         else {
@@ -151,8 +151,19 @@ io.on('connection',(socket)=>
             });
           }
         });
+        con.query("SELECT * FROM `list_donvi`", function(err, rows){
+            if(err)console.log(err);
+            else {
+              let tin=[];
+              rows.forEach((row,key)=>{
+                tin.push({ten:strencode(row.donvi),code:row.code});
+                if(key==(rows.length-1))socket.emit('S_list_donvi',tin);
+              });
+            }
+        });
   });
   socket.on('C_reg_trandau',(code,type)=>{
+
     con.query("SELECT * FROM `"+code+"`", function(err, rows){
         if(err)console.log(err);
         else {
