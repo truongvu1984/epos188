@@ -157,7 +157,7 @@ io.on('connection',(socket)=>
               let tin1=[];
               row1s.forEach((row1,key)=>{
                 tin1.push({ten:strencode(row1.donvi),code:row1.code});
-                if(key==(rows.length-1))socket.emit('S_list_donvi',tin1);
+                if(key==(row1s.length-1))socket.emit('S_list_donvi',tin1);
               });
             }
         });
