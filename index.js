@@ -146,7 +146,7 @@ io.on('connection',(socket)=>
         else {
             let tin=[];
             rows.forEach((row,key)=>{
-              tin.push({monthi:strencode(row. ten),code:row.code,type:row.type});
+              tin.push({monthi:strencode(row.ten),code:row.code,type:row.type});
               if(key===(rows.length-1))socket.emit('S_send_monthi',tin);
             });
           }
