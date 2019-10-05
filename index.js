@@ -151,13 +151,13 @@ io.on('connection',(socket)=>
             });
           }
         });
-        con.query("SELECT * FROM `list_donvi`", function(err, rows){
-            if(err)console.log(err);
+        con.query("SELECT * FROM `list_donvi`", function(err1, row1s){
+            if(err1)console.log(err1);
             else {
-              let tin=[];
-              rows.forEach((row,key)=>{
-                tin.push({ten:strencode(row.donvi),code:row.code});
-                if(key==(rows.length-1))socket.emit('S_list_donvi',tin);
+              let tin1=[];
+              row1s.forEach((row1,key)=>{
+                tin.push({ten:strencode(row1.donvi),code:row1.code});
+                if(key==(rows.length-1))socket.emit('S_list_donvi',tin1);
               });
             }
         });
