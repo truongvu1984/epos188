@@ -188,8 +188,8 @@ io.on('connection',(socket)=>
                       r2s.forEach((r2,key2)=>{
                         loi1.push({ten:strencode(r2.ten),type:r2.type,diem:r2.diem,solan:r2.solan,tong:r2.tong});
                         if(key2===(r2s.length-1)){
-                          tin.push({ten:strencode(row.ten),donvi:strencode(row.donvi),code:row.code,thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
-                          if(key===(rows.length-1))socket.emit('S_send_trandau','a',tin);
+                          tin.push({code_monthi:code,ten:strencode(row.ten),donvi:strencode(row.donvi),code:row.code,thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
+                          if(key===(rows.length-1)){socket.emit('S_send_trandau','a',tin);console.log('Đã send trận đấu');}
                         }
                       });
                     }
