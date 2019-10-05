@@ -156,7 +156,7 @@ io.on('connection',(socket)=>
             else {
               let tin1=[];
               row1s.forEach((row1,key)=>{
-                tin.push({ten:strencode(row1.donvi),code:row1.code});
+                tin1.push({ten:strencode(row1.donvi),code:row1.code});
                 if(key==(rows.length-1))socket.emit('S_list_donvi',tin1);
               });
             }
