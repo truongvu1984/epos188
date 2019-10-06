@@ -166,7 +166,7 @@ io.on('connection',(socket)=>
             else {
                 let tin=[];
                 rows.forEach((row,key)=>{
-                  tin.push({monthi:strencode(row.ten),code_monthi:row.code,type:row.type,loi:strencode(row.ten_loi), code_loi:row.code_loi, diem:row.diem});
+                  tin.push({monthi:strencode(row.ten),code_monthi:row.code_monthi,type:row.type,loi:strencode(row.ten_loi), code_loi:row.code_loi, diem:row.diem});
                   if(key===(rows.length-1))socket.emit('S_send_list_loi',tin);
                 });
               }
