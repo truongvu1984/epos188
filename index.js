@@ -197,7 +197,7 @@ io.on('connection',(socket)=>
                     else {
                       let loi1=[];
                       tin.push({code_monthi:code,ten:strencode(row.ten),donvi:strencode(row.donvi),code:row.code,thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
-                      socket.emit('S_send_trandau','a',tin);console.log('Đã send trận đấu');
+                      if(key===(rows.length-1)){socket.emit('S_send_trandau','a',tin);console.log('Đã send trận đấu');}
 
                     }
                   }
