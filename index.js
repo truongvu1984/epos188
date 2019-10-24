@@ -76,6 +76,7 @@ kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
   console.log(socket.id);
+
   socket.emit('truy_cap_moi_hoithao');
   socket.on('hoithao',(tin)=>{
     if(tin.toandoan != null){
@@ -140,7 +141,6 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('reg_monthi',()=>{
-
     con.query("SELECT * FROM `danhsach_monthi`", function(err, rows){
         if(err)console.log(err);
         else {
@@ -174,7 +174,6 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_reg_trandau',(code,type)=>{
-
     con.query("SELECT * FROM `"+code+"`", function(err, rows){
         if(err)console.log(err);
         else {
@@ -197,7 +196,7 @@ io.on('connection',(socket)=>
                     else {
                       let loi1=[];
                       tin.push({code_monthi:code,ten:strencode(row.ten),donvi:strencode(row.donvi),code:row.code,thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
-                      if(key===(rows.length-1)){socket.emit('S_send_trandau','a',tin);console.log('Đã send trận đấu');}
+                      if(key===(rows.length-1)){socket.emit('S_send_trandau',tin);console.log('Đã send trận đấu');}
 
                     }
                   }
@@ -205,7 +204,22 @@ io.on('connection',(socket)=>
               });
             }
             else {
-
+              let tin=[];
+              rows.forEach((row,key)=>{
+                con.query("SELECT * FROM `"+code+"full` WHERE `ma` LIKE '"+row.ma+"'", function(err2, r2s){
+                  if(err2)console.log(err2);
+                  else {
+                    let tin1=[];
+                    r2s.forEach((r2,key2)=>{
+                      tin1.push({time:r2.time,doi1:strencode(r2.doi1),doi2:strencode(r2.doi2),setnumber:r2.setnumber,diem11:r2.diem11,diem12:r2.diem12,diem13:r2.diem13,diem14:r2.diem14,diem15:r2.diem15,diem21:r2.diem21,diem22:r2.diem22,diem23:r2.diem23,diem24:r2.diem24,diem25:r2.diem25});
+                      if(key2==(r2s.length-1)){
+                        tin.push({ten:strencode(row.ten),tran:tin1});
+                        if(key==(rows.length-1))socket.emit("S_send_trandau_b",tin);
+                      }
+                    });
+                  }
+                });
+              });
             }
           }
         });
