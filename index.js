@@ -173,6 +173,7 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_reg_trandau',(code,type)=>{
+    console.log(code +":"+type);
     con.query("SELECT * FROM `"+code+"`", function(err, rows){
         if(err)console.log(err);
         else {
