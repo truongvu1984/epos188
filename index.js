@@ -76,7 +76,6 @@ kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
   console.log(socket.id);
-
   socket.emit('truy_cap_moi_hoithao');
   socket.on('hoithao',(tin)=>{
     if(tin.toandoan != null){
