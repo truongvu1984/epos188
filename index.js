@@ -177,7 +177,7 @@ io.on('connection',(socket)=>
     con.query("SELECT * FROM `"+code+"`", function(err, rows){
         if(err)console.log(err);
         else {
-            if(type=="a" && code=="a8"){
+            if(type=="a"){
               let tin=[];
               rows.forEach((row,key)=>{
                 con.query("SELECT * FROM `"+code+"loi` WHERE `maso` LIKE '"+row.tt+"'", function(err2, r2s){
