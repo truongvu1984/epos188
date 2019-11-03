@@ -569,6 +569,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login1',(user1, pass1)=>{
+    console.log('có nhận login 1');
     if(user1&&pass1){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
