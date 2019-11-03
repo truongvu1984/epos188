@@ -592,7 +592,7 @@ io.on('connection',(socket)=>
     return abc;
   }
 socket.on('login2',(data)=>{
-  console.log('Có nhận yêu cầu 2');
+  console.log('Có nhận yêu cầu 2:'+data.send);
   if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -625,7 +625,6 @@ socket.on('login2',(data)=>{
                    if (err1){console.log(err1);}
                    else if(a1s.length >0)
                      {
-
                        a1s.forEach(function(a1,key){
                          let nhomnguoinhan =[];
                           con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"'", function(err2, a2s){
