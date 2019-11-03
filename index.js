@@ -76,204 +76,204 @@ kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
   console.log(socket.id);
-  socket.emit('truy_cap_moi_hoithao');
-  socket.on('hoithao',(tin)=>{
-    if(tin.toandoan != null){
-
-      con.query("SELECT * FROM `thoigian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
-          if(err10)console.log(err10);
-          else {
-            if(row10s[0].time>tin.toandoan)
-            {
-              con.query("SELECT * FROM `toandoan` ", function(err, rows){
-                if (err){console.log('co loi 1:'+err);}
-                else{
-                  let tin=[];
-                  rows.forEach((row,key)=>{
-                    tin.push({donvi:strencode(row.donvi),tongdiem:row.tongdiem,bonmon:row.bonmon,chiensikhoe:row.chiensikhoe,boivutrang:row.boivutrang,chayvutrang:row.chayvutrang,k16:row.k16,bongchuyen:row.bongchuyen,keoco:row.keoco,chay10000m:row.chay10000m,caulong:row.caulong,bongban:row.bongban});
-                    if(key===(rows.length-1)){
-                      con.query("SELECT * FROM `danhsach_monthi` ", function(err3, row3s){
-                       if (err3){console.log('co loi 2:'+err3);}
-                       else {
-                         let monthi=[];
-                         row3s.forEach((row3,key3)=>{
-                           monthi.push(strencode(row3.ten));
-                           if(key3===(row3s.length-1)){
-                             con.query("SELECT * FROM information_schema.columns WHERE table_name = 'toandoan'", function(err1, row1s){
-                               if (err1){console.log('co loi 2:'+err1);}
-                               else {
-                                   let noidung=[];
-                                   row1s.forEach((row1,key1)=>{
-                                     noidung.push(row1.COLUMN_NAME);
-                                     if(key1===(row1s.length-2)){
-                                       con.query("UPDATE `thoigian` SET `time` = "+time.getTime()+" WHERE `ma_so` LIKE 'A1' ",function(err11,res11)
-                                           {if(err11){console.log(err11);}
-                                       });
-                                        socket.emit('toan_doan',monthi,noidung,tin, time.getTime());
-
-                                        return false;
-                                     }
-                                   });
-                               }
-                             });
-
-                           }
-                         });
-                       }
-                      });
-                    }
-                  });
-
-
-                }
-                });
-              // có nghĩa là một trong những bảng từng môn có sự thay đổi, bây giờ bắt đầu đi lấy từng bảng gửi về
-
-            }
-            else {
-              socket.emit('ketqua_toandan_ok');
-            }
-          }
-      });
-      // con.query("SELECT * FROM `bongchuyen` WHERE `ma_doi` IS NOT NULL ", function(err, rows){
-
-    }
-  });
-  socket.on('reg_monthi',()=>{
-    con.query("SELECT * FROM `danhsach_monthi`", function(err, rows){
-        if(err)console.log(err);
-        else {
-            let tin=[];
-            rows.forEach((row,key)=>{
-              tin.push({monthi:strencode(row.ten),code:row.code,type:row.type});
-              if(key===(rows.length-1))socket.emit('S_send_monthi',tin);
-            });
-          }
-        });
-        con.query("SELECT * FROM `list_donvi`", function(err1, row1s){
-            if(err1)console.log(err1);
-            else {
-              let tin1=[];
-              row1s.forEach((row1,key)=>{
-                tin1.push({ten:strencode(row1.donvi),code:row1.code});
-                if(key==(row1s.length-1))socket.emit('S_list_donvi',tin1);
-              });
-            }
-        });
-        con.query("SELECT * FROM `list_loi`", function(err, rows){
-            if(err)console.log(err);
-            else {
-                let tin=[];
-                rows.forEach((row,key)=>{
-                  tin.push({monthi:strencode(row.ten),code_monthi:row.code_monthi,type:row.type,loi:strencode(row.ten_loi), code_loi:row.code_loi, diem:row.diem});
-                  if(key===(rows.length-1))socket.emit('S_send_list_loi',tin);
-                });
-              }
-            });
-
-  });
-  socket.on('C_reg_trandau',(code,type)=>{
-    console.log(code +":"+type);
-    con.query("SELECT * FROM `"+code+"`", function(err, rows){
-        if(err)console.log(err);
-        else {
-            if(type=="a" && code=="a8"){
-              let tin=[];
-              rows.forEach((row,key)=>{
-                con.query("SELECT * FROM `"+code+"loi` WHERE `maso` LIKE '"+row.tt+"'", function(err2, r2s){
-                    if(err2)console.log(err2);
-                    else {
-                      if(r2s.length>0){
-                      let loi1=[];
-                      r2s.forEach((r2,key2)=>{
-                        loi1.push({code_monthi:code, ten:strencode(r2.ten),code:r2.code,type:r2.type,diem:r2.diem,solan:r2.solan,tong:r2.tong});
-                        if(key2===(r2s.length-1)){
-                          tin.push({code_monthi:code,ten:strencode(row.ten),donvi:strencode(row.donvi),code:row.code,thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
-                          if(key===(rows.length-1)){socket.emit('S_send_trandau','a',tin);console.log('Đã send trận đấu');}
-                        }
-                      });
-                    }
-                    else {
-                      let loi1=[];
-                      tin.push({code_monthi:code,ten:strencode(row.ten),donvi:strencode(row.donvi),code:row.code,thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
-                      if(key===(rows.length-1)){socket.emit('S_send_trandau',tin);console.log('Đã send trận đấu');}
-
-                    }
-                  }
-                });
-              });
-            }
-            else if(code=="a6") {
-
-              let tin=[];
-              rows.forEach((row,key)=>{
-                con.query("SELECT * FROM `"+code+"full` WHERE `ma` LIKE '"+row.ma+"'", function(err2, r2s){
-                  if(err2)console.log(err2);
-                  else {
-                    let tin1=[];
-                    r2s.forEach((r2,key2)=>{
-                      tin1.push({time:r2.time,doi1:strencode(r2.doi1),doi2:strencode(r2.doi2),setnumber:r2.setnumber,diem11:r2.diem11,diem12:r2.diem12,diem13:r2.diem13,diem14:r2.diem14,diem15:r2.diem15,diem21:r2.diem21,diem22:r2.diem22,diem23:r2.diem23,diem24:r2.diem24,diem25:r2.diem25});
-                      if(key2==(r2s.length-1)){
-                        tin.push({ten:strencode(row.ten),tran:tin1});
-                        if(key==(rows.length-1)){socket.emit("S_send_trandau_b",tin);
-                        console.log("đã gửi tin b đi");
-                      }
-                      }
-                    });
-                  }
-                });
-              });
-            }
-          }
-        });
-  });
-  socket.on('trongtai_bongchuyen',(tin,number)=>{
-    console.log(tin);
-    console.log(number);
-    con.query("SELECT * FROM `bongchuyen` ", function(err, rows){
-        if(err)console.log(err);
-        else {
-          rows.forEach((row,key)=>{
-            if(number==0) socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});
-            else {
-              let test = true;
-              tin.forEach((tin1,key1)=>{
-              if(row.matran===tin1.matran){
-                console.log(tin1.matran);
-                  if(row.time > tin1.time){
-                    console.log('tim thay');
-                    socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});
-                    test = false;
-                    return false;
-                  }
-                }
-              if(key1===(tin.length-1)){if(test)socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});}
-              });
-            }
-          });
-      }
-    });
-  });
-  socket.on('C_ketqua_bongchuyen',(tin)=>{
-    let time1  =new Date().getTime();
-    if(tin.setnumber==3){
-      con.query("UPDATE `bongchuyen` SET `time`= "+time1+",`diem11` = "+tin.doi1.set1+",`diem12` = "+tin.doi1.set2+",`diem13` = "+tin.doi1.set3+ ",`diem21` = "+tin.doi2.set1+" ,`diem22` = "+tin.doi2.set2+",`diem23` = "+tin.doi2.set3+" WHERE `matran` LIKE '"+tin.matran+"'",function(err,res)
-        {if(err){console.log(err);}
-        else {
-          socket.emit('send_ketqua_bongchuyen_ok',{time:time1, matran:tin.matran,setnumber:3,diem11:tin.doi1.set1,diem12:tin.doi1.set2,diem13:tin.doi1.set3,diem21:tin.doi2.set1,diem22:tin.doi2.set2,diem23:tin.doi2.set3});
-        }
-    });
-  }
-  else {
-    con.query("UPDATE `bongchuyen` SET `time`="+time1+",`diem11` = "+tin.doi1.set1+",`diem12` = "+tin.doi1.set2+",`diem13` = "+tin.doi1.set3+ ",`diem14` = "+tin.doi1.set4+ ",`diem15` = "+tin.doi1.set5+ ",`diem21` = "+tin.doi2.set1+" ,`diem22` = "+tin.doi2.set2+",`diem23` = "+tin.doi2.set3+",`diem24` = "+tin.doi2.set4+ ",`diem25` = "+tin.doi2.set5+ " WHERE `matran` LIKE '"+tin.matran+"'",function(err1,res1)
-        {if(err1){console.log(err1);}
-        else {
-          socket.emit('send_ketqua_bongchuyen_ok',{time:time1,matran:row.matran,setnumber:5,diem11:tin.doi1.set1,diem12:tin.doi1.set2,diem13:tin.doi1.set3,diem14:tin.doi1.set4,diem15:tin.doi1.set5,diem21:tin.doi2.set1,diem22:tin.doi2.set2,diem23:tin.doi2.set3,diem24:tin.doi2.set4,diem25:tin.doi2.set5});
-        }
-
-    });
-  }
-  });
+  // socket.emit('truy_cap_moi_hoithao');
+  // socket.on('hoithao',(tin)=>{
+  //   if(tin.toandoan != null){
+  //
+  //     con.query("SELECT * FROM `thoigian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
+  //         if(err10)console.log(err10);
+  //         else {
+  //           if(row10s[0].time>tin.toandoan)
+  //           {
+  //             con.query("SELECT * FROM `toandoan` ", function(err, rows){
+  //               if (err){console.log('co loi 1:'+err);}
+  //               else{
+  //                 let tin=[];
+  //                 rows.forEach((row,key)=>{
+  //                   tin.push({donvi:strencode(row.donvi),tongdiem:row.tongdiem,bonmon:row.bonmon,chiensikhoe:row.chiensikhoe,boivutrang:row.boivutrang,chayvutrang:row.chayvutrang,k16:row.k16,bongchuyen:row.bongchuyen,keoco:row.keoco,chay10000m:row.chay10000m,caulong:row.caulong,bongban:row.bongban});
+  //                   if(key===(rows.length-1)){
+  //                     con.query("SELECT * FROM `danhsach_monthi` ", function(err3, row3s){
+  //                      if (err3){console.log('co loi 2:'+err3);}
+  //                      else {
+  //                        let monthi=[];
+  //                        row3s.forEach((row3,key3)=>{
+  //                          monthi.push(strencode(row3.ten));
+  //                          if(key3===(row3s.length-1)){
+  //                            con.query("SELECT * FROM information_schema.columns WHERE table_name = 'toandoan'", function(err1, row1s){
+  //                              if (err1){console.log('co loi 2:'+err1);}
+  //                              else {
+  //                                  let noidung=[];
+  //                                  row1s.forEach((row1,key1)=>{
+  //                                    noidung.push(row1.COLUMN_NAME);
+  //                                    if(key1===(row1s.length-2)){
+  //                                      con.query("UPDATE `thoigian` SET `time` = "+time.getTime()+" WHERE `ma_so` LIKE 'A1' ",function(err11,res11)
+  //                                          {if(err11){console.log(err11);}
+  //                                      });
+  //                                       socket.emit('toan_doan',monthi,noidung,tin, time.getTime());
+  //
+  //                                       return false;
+  //                                    }
+  //                                  });
+  //                              }
+  //                            });
+  //
+  //                          }
+  //                        });
+  //                      }
+  //                     });
+  //                   }
+  //                 });
+  //
+  //
+  //               }
+  //               });
+  //             // có nghĩa là một trong những bảng từng môn có sự thay đổi, bây giờ bắt đầu đi lấy từng bảng gửi về
+  //
+  //           }
+  //           else {
+  //             socket.emit('ketqua_toandan_ok');
+  //           }
+  //         }
+  //     });
+  //     // con.query("SELECT * FROM `bongchuyen` WHERE `ma_doi` IS NOT NULL ", function(err, rows){
+  //
+  //   }
+  // });
+  // socket.on('reg_monthi',()=>{
+  //   con.query("SELECT * FROM `danhsach_monthi`", function(err, rows){
+  //       if(err)console.log(err);
+  //       else {
+  //           let tin=[];
+  //           rows.forEach((row,key)=>{
+  //             tin.push({monthi:strencode(row.ten),code:row.code,type:row.type});
+  //             if(key===(rows.length-1))socket.emit('S_send_monthi',tin);
+  //           });
+  //         }
+  //       });
+  //       con.query("SELECT * FROM `list_donvi`", function(err1, row1s){
+  //           if(err1)console.log(err1);
+  //           else {
+  //             let tin1=[];
+  //             row1s.forEach((row1,key)=>{
+  //               tin1.push({ten:strencode(row1.donvi),code:row1.code});
+  //               if(key==(row1s.length-1))socket.emit('S_list_donvi',tin1);
+  //             });
+  //           }
+  //       });
+  //       con.query("SELECT * FROM `list_loi`", function(err, rows){
+  //           if(err)console.log(err);
+  //           else {
+  //               let tin=[];
+  //               rows.forEach((row,key)=>{
+  //                 tin.push({monthi:strencode(row.ten),code_monthi:row.code_monthi,type:row.type,loi:strencode(row.ten_loi), code_loi:row.code_loi, diem:row.diem});
+  //                 if(key===(rows.length-1))socket.emit('S_send_list_loi',tin);
+  //               });
+  //             }
+  //           });
+  //
+  // });
+  // socket.on('C_reg_trandau',(code,type)=>{
+  //   console.log(code +":"+type);
+  //   con.query("SELECT * FROM `"+code+"`", function(err, rows){
+  //       if(err)console.log(err);
+  //       else {
+  //           if(type=="a" && code=="a8"){
+  //             let tin=[];
+  //             rows.forEach((row,key)=>{
+  //               con.query("SELECT * FROM `"+code+"loi` WHERE `maso` LIKE '"+row.tt+"'", function(err2, r2s){
+  //                   if(err2)console.log(err2);
+  //                   else {
+  //                     if(r2s.length>0){
+  //                     let loi1=[];
+  //                     r2s.forEach((r2,key2)=>{
+  //                       loi1.push({code_monthi:code, ten:strencode(r2.ten),code:r2.code,type:r2.type,diem:r2.diem,solan:r2.solan,tong:r2.tong});
+  //                       if(key2===(r2s.length-1)){
+  //                         tin.push({code_monthi:code,ten:strencode(row.ten),donvi:strencode(row.donvi),code:row.code,thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
+  //                         if(key===(rows.length-1)){socket.emit('S_send_trandau','a',tin);console.log('Đã send trận đấu');}
+  //                       }
+  //                     });
+  //                   }
+  //                   else {
+  //                     let loi1=[];
+  //                     tin.push({code_monthi:code,ten:strencode(row.ten),donvi:strencode(row.donvi),code:row.code,thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
+  //                     if(key===(rows.length-1)){socket.emit('S_send_trandau',tin);console.log('Đã send trận đấu');}
+  //
+  //                   }
+  //                 }
+  //               });
+  //             });
+  //           }
+  //           else if(code=="a6") {
+  //
+  //             let tin=[];
+  //             rows.forEach((row,key)=>{
+  //               con.query("SELECT * FROM `"+code+"full` WHERE `ma` LIKE '"+row.ma+"'", function(err2, r2s){
+  //                 if(err2)console.log(err2);
+  //                 else {
+  //                   let tin1=[];
+  //                   r2s.forEach((r2,key2)=>{
+  //                     tin1.push({time:r2.time,doi1:strencode(r2.doi1),doi2:strencode(r2.doi2),setnumber:r2.setnumber,diem11:r2.diem11,diem12:r2.diem12,diem13:r2.diem13,diem14:r2.diem14,diem15:r2.diem15,diem21:r2.diem21,diem22:r2.diem22,diem23:r2.diem23,diem24:r2.diem24,diem25:r2.diem25});
+  //                     if(key2==(r2s.length-1)){
+  //                       tin.push({ten:strencode(row.ten),tran:tin1});
+  //                       if(key==(rows.length-1)){socket.emit("S_send_trandau_b",tin);
+  //                       console.log("đã gửi tin b đi");
+  //                     }
+  //                     }
+  //                   });
+  //                 }
+  //               });
+  //             });
+  //           }
+  //         }
+  //       });
+  // });
+  // socket.on('trongtai_bongchuyen',(tin,number)=>{
+  //   console.log(tin);
+  //   console.log(number);
+  //   con.query("SELECT * FROM `bongchuyen` ", function(err, rows){
+  //       if(err)console.log(err);
+  //       else {
+  //         rows.forEach((row,key)=>{
+  //           if(number==0) socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});
+  //           else {
+  //             let test = true;
+  //             tin.forEach((tin1,key1)=>{
+  //             if(row.matran===tin1.matran){
+  //               console.log(tin1.matran);
+  //                 if(row.time > tin1.time){
+  //                   console.log('tim thay');
+  //                   socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});
+  //                   test = false;
+  //                   return false;
+  //                 }
+  //               }
+  //             if(key1===(tin.length-1)){if(test)socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});}
+  //             });
+  //           }
+  //         });
+  //     }
+  //   });
+  // });
+  // socket.on('C_ketqua_bongchuyen',(tin)=>{
+  //   let time1  =new Date().getTime();
+  //   if(tin.setnumber==3){
+  //     con.query("UPDATE `bongchuyen` SET `time`= "+time1+",`diem11` = "+tin.doi1.set1+",`diem12` = "+tin.doi1.set2+",`diem13` = "+tin.doi1.set3+ ",`diem21` = "+tin.doi2.set1+" ,`diem22` = "+tin.doi2.set2+",`diem23` = "+tin.doi2.set3+" WHERE `matran` LIKE '"+tin.matran+"'",function(err,res)
+  //       {if(err){console.log(err);}
+  //       else {
+  //         socket.emit('send_ketqua_bongchuyen_ok',{time:time1, matran:tin.matran,setnumber:3,diem11:tin.doi1.set1,diem12:tin.doi1.set2,diem13:tin.doi1.set3,diem21:tin.doi2.set1,diem22:tin.doi2.set2,diem23:tin.doi2.set3});
+  //       }
+  //   });
+  // }
+  // else {
+  //   con.query("UPDATE `bongchuyen` SET `time`="+time1+",`diem11` = "+tin.doi1.set1+",`diem12` = "+tin.doi1.set2+",`diem13` = "+tin.doi1.set3+ ",`diem14` = "+tin.doi1.set4+ ",`diem15` = "+tin.doi1.set5+ ",`diem21` = "+tin.doi2.set1+" ,`diem22` = "+tin.doi2.set2+",`diem23` = "+tin.doi2.set3+",`diem24` = "+tin.doi2.set4+ ",`diem25` = "+tin.doi2.set5+ " WHERE `matran` LIKE '"+tin.matran+"'",function(err1,res1)
+  //       {if(err1){console.log(err1);}
+  //       else {
+  //         socket.emit('send_ketqua_bongchuyen_ok',{time:time1,matran:row.matran,setnumber:5,diem11:tin.doi1.set1,diem12:tin.doi1.set2,diem13:tin.doi1.set3,diem14:tin.doi1.set4,diem15:tin.doi1.set5,diem21:tin.doi2.set1,diem22:tin.doi2.set2,diem23:tin.doi2.set3,diem24:tin.doi2.set4,diem25:tin.doi2.set5});
+  //       }
+  //
+  //   });
+  // }
+  // });
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
     if(idphone&&num){
