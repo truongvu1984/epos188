@@ -596,6 +596,7 @@ socket.on('login2',(data)=>{
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
           if (passwordHash.verify(data.right_pass, rows[0].pass)){
+            console.log('có yêu cầu mới');
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
@@ -632,7 +633,7 @@ socket.on('login2',(data)=>{
                                 nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
                                 if(key2 === (a2s.length-1)){
                                   socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
-console.log('đã đẩy send đi');
+                                    console.log('đã đẩy send đi:'+);
                                 }
                               });
                             }
