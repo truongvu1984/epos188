@@ -634,7 +634,7 @@ socket.on('login2',(data)=>{
                                 nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
                                 if(key2 === (a2s.length-1)){
                                   socket.emit('hahaha');
-                                  socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
+                                  socket.emit('S_send_send_1',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
                                     console.log('đã đẩy send đi:');
                                 }
                               });
