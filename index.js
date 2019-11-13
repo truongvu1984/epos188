@@ -615,7 +615,7 @@ socket.on('login2',(data)=>{
                        if(err2){console.log(err2);}
                        else {
                          socket.emit('S_guitinnhan_2',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
-                         console.log('có gửi inbox');
+
                        }
                      });
                   });
@@ -637,7 +637,7 @@ socket.on('login2',(data)=>{
                                 if(key2 === (a2s.length-1)){
 
                                   socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
-                                    console.log('đã đẩy send đi:');
+
                                 }
                               });
                             }
@@ -686,7 +686,7 @@ socket.on('login2',(data)=>{
                              if(key2===(a2s.length-1)){
                                tinfull={ids:a1.id,idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact};
                                socket.emit('S_send_group',tinfull);
-                               console.log(tinfull);
+                               
                              }
                            });
                          }
