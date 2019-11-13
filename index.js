@@ -36,7 +36,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
-
+let abc=1;
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
@@ -592,7 +592,8 @@ io.on('connection',(socket)=>
     return abc;
   }
 socket.on('login2',(data)=>{
-  console.log('Có nhận yêu cầu 2:'+data.send);
+  abc++;
+  console.log('Có nhận yêu cầu 2:'+abc);
   socket.emit('hahaha');
 
   if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
@@ -686,7 +687,7 @@ socket.on('login2',(data)=>{
                              if(key2===(a2s.length-1)){
                                tinfull={ids:a1.id,idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact};
                                socket.emit('S_send_group',tinfull);
-                               
+
                              }
                            });
                          }
