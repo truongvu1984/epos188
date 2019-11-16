@@ -600,7 +600,7 @@ socket.on('login2',(data)=>{
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
           if (passwordHash.verify(data.right_pass, rows[0].pass)){
-            socket.emit('hehe');
+
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
@@ -615,8 +615,8 @@ socket.on('login2',(data)=>{
                      con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                        if(err2){console.log(err2);}
                        else {
-
-                        socket.emit('huhu',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
+                        socket.emit('kiki');
+                        socket.emit('kaka',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
                          console.log('có gửi inbox đi');
                        }
                      });
