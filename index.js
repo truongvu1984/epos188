@@ -598,7 +598,7 @@ io.on('connection',(socket)=>
 socket.on('login2',(data)=>{
   abc++;
   console.log('Có nhận yêu cầu 2:'+data.inbox);
-  socket.emit('ketqua123');
+
 
     if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
@@ -618,11 +618,12 @@ socket.on('login2',(data)=>{
                 {
                   a1s.forEach((a1,key)=>{
                      // con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
+
+                     socket.emit('lili');
                      con.query("SELECT * FROM `"+socket.number+"mes_main`", function(err2, a2s){
                        if(err2){console.log(err2);}
                        else {
-
-                         socket.emit('lili');
+                         socket.emit('ketqua123');
                         // socket.emit('kaka',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
                          console.log('có gửi inbox đi');
                        }
