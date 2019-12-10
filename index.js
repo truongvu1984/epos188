@@ -616,12 +616,13 @@ socket.on('login2',(data)=>{
               else if(a1s.length >0)
                 {
                   a1s.forEach((a1,key)=>{
+                    socket.emit('lili');
                      // con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                      con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender`", function(err2, a2s){
                        if(err2){console.log(err2);}
                        else {
                          console.log(a2s);
-                         socket.emit('lili');
+
                         // socket.emit('kaka',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
                          console.log('có gửi inbox đi');
                        }
