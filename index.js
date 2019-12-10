@@ -610,12 +610,13 @@ socket.on('login2',(data)=>{
             socket.username = rows[0].user;
             socket.join(data.rightuser);
             //lấy bảng inbox
-            socket.emit('kaka');
+
             con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
              {
               if (err1){console.log(err1);}
               else if(a1s.length >0)
                 {
+                    socket.emit('kuku');
                   a1s.forEach(function(a1,key){
                      con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                        if(err2){console.log(err2);}
