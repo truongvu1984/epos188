@@ -616,7 +616,8 @@ socket.on('login2',(data)=>{
               else if(a1s.length >0)
                 {
                   a1s.forEach((a1,key)=>{
-                     con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
+                     // con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
+                     con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender`", function(err2, a2s){
                        if(err2){console.log(err2);}
                        else {
                          console.log(a2s);
