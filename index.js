@@ -599,7 +599,7 @@ socket.on('login2',(data)=>{
   abc++;
   console.log('Có nhận yêu cầu 2:'+data.inbox);
   socket.emit('ketqua123');
-  socket.emit('kiki');
+
     if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -610,6 +610,7 @@ socket.on('login2',(data)=>{
             socket.username = rows[0].user;
             socket.join(data.rightuser);
             //lấy bảng inbox
+            socket.emit('kaka');
             con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
              {
               if (err1){console.log(err1);}
