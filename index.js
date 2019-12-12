@@ -722,6 +722,7 @@ socket.on('login2',(data)=>{
      }
 	});
   socket.on('test',(data)=>{
+    console.log('Có yêu cầu test');
     con.query("SELECT * FROM `account` WHERE LIMIT 1", function(err, rows){
     	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
           else{
