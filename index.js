@@ -591,10 +591,6 @@ io.on('connection',(socket)=>
     else abc=true;
     return abc;
   }
-  socket.on('abcd',()=>{
-    console.log('Có kiểm tra');
-
-  });
 socket.on('login2',(data)=>{
   abc++;
   console.log('Có nhận yêu cầu 2:'+data.inbox);
@@ -725,6 +721,36 @@ socket.on('login2',(data)=>{
      	 });
      }
 	});
+  socket.on('test',(data)=>{
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
+    	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
+          else{
+          // con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
+              con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` ASC", function(err1, a1s)
+               {
+                if (err1){console.log(err1);}
+                else if(a1s.length >0)
+                  {
+                    a1s.forEach((a1,key)=>{
+                       // con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
+
+                       socket.emit('hoho');
+                       con.query("SELECT * FROM `"+socket.number+"mes_main`", function(err2, a2s){
+                         if(err2){console.log(err2);}
+                         else {
+                           socket.emit('hehe');
+                          // socket.emit('kaka',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
+                           console.log('có gửi inbox đi');
+                         }
+                       });
+                    });
+                  }
+                });
+
+          }
+       	 });
+
+  	});
   socket.on('C_del_inbox',(mes)=>{
     if(socket.number&&isArray(mes)){
       mes.forEach((mes1,key)=>{
