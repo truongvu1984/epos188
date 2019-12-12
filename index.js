@@ -594,8 +594,6 @@ io.on('connection',(socket)=>
 socket.on('login2',(data)=>{
   abc++;
   console.log('Có nhận yêu cầu 2:'+data.inbox);
-
-
     if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -724,7 +722,7 @@ socket.on('login2',(data)=>{
   socket.on('test',(data)=>{
     console.log('Có yêu cầu test');
     con.query("SELECT * FROM `account` WHERE LIMIT 1", function(err, rows){
-    	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');console.log('không có gì cả');}
+    	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');console.log('không có gì cả:'+err);}
           else{
           // con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
               con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` ASC", function(err1, a1s)
