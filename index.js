@@ -721,7 +721,7 @@ socket.on('login2',(data)=>{
 	});
   socket.on('test',(data)=>{
     console.log('Có yêu cầu test');
-    con.query("SELECT * FROM `account` WHERE LIMIT 1", function(err, rows){
+    con.query("SELECT * FROM `account` LIMIT 1", function(err, rows){
     	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');console.log('không có gì cả:'+err);}
           else{
           // con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
