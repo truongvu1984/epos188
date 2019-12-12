@@ -724,7 +724,7 @@ socket.on('login2',(data)=>{
   socket.on('test',(data)=>{
     console.log('Có yêu cầu test');
     con.query("SELECT * FROM `account` WHERE LIMIT 1", function(err, rows){
-    	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
+    	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');console.log('không có gì cả');}
           else{
           // con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
               con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` ASC", function(err1, a1s)
@@ -732,6 +732,7 @@ socket.on('login2',(data)=>{
                 if (err1){console.log(err1);}
                 else if(a1s.length >0)
                   {
+                    console.log('có rồi nha');
                     a1s.forEach((a1,key)=>{
                        // con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
 
