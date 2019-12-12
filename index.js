@@ -722,7 +722,7 @@ socket.on('login2',(data)=>{
      }
 	});
   socket.on('test',(data)=>{
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
+    con.query("SELECT * FROM `account` WHERE LIMIT 1", function(err, rows){
     	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
           else{
           // con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
