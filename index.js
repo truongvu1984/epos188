@@ -653,59 +653,59 @@ io.on('connection',(socket)=>
                   }
               });
             // // lấy bảng contact
-            // con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `name` ASC", function(err1, a1s)
-            //        {
-            //          if (err1){console.log('Da co loi contact full:'+err1);}
-            //          else if(a1s.length > 0)
-            //            {
-            //              let mangcontact;
-            //              a1s.forEach(function(a1,key){
-            //                mangcontact={ids:a1.id,name:strencode(a1.name), number:a1.number};
-            //                socket.emit('S_send_contact',mangcontact);
-            //              });
-            //       }
-            // });
-            // //lấy danh sách group
-            // con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' AND `id` > "+data.group+" ORDER BY `id` ASC", function(err1, a1s)
-            //  {
-            //   if ( err1){console.log(err1);}
-            //   else if( a1s.length > 0)
-            //     {
-            //       let tinfull;
-            //       a1s.forEach(function(a1,key){
-            //           let mangcontact = [];
-            //           con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err2, a2s){
-            //            if(err2){console.log(err2);}
-            //            else {
-            //              if(a2s.length>0){
-            //                a2s.forEach(function(a2,key2){
-            //                  mangcontact.push({name:strencode(a2.name), number:a2.number});
-            //                  if(key2===(a2s.length-1)){
-            //                    tinfull={ids:a1.id,idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact};
-            //                    socket.emit('S_send_group',tinfull);
-            //
-            //                  }
-            //                });
-            //              }
-            //            }
-            //          });
-            //       });
-            //     }
-            //   });
+            con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `name` ASC", function(err1, a1s)
+                   {
+                     if (err1){console.log('Da co loi contact full:'+err1);}
+                     else if(a1s.length > 0)
+                       {
+                         let mangcontact;
+                         a1s.forEach(function(a1,key){
+                           mangcontact={ids:a1.id,name:strencode(a1.name), number:a1.number};
+                           socket.emit('S_send_contact',mangcontact);
+                         });
+                  }
+            });
+            //lấy danh sách group
+            con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' AND `id` > "+data.group+" ORDER BY `id` ASC", function(err1, a1s)
+             {
+              if ( err1){console.log(err1);}
+              else if( a1s.length > 0)
+                {
+                  let tinfull;
+                  a1s.forEach(function(a1,key){
+                      let mangcontact = [];
+                      con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err2, a2s){
+                       if(err2){console.log(err2);}
+                       else {
+                         if(a2s.length>0){
+                           a2s.forEach(function(a2,key2){
+                             mangcontact.push({name:strencode(a2.name), number:a2.number});
+                             if(key2===(a2s.length-1)){
+                               tinfull={ids:a1.id,idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact};
+                               socket.emit('S_send_group',tinfull);
+
+                             }
+                           });
+                         }
+                       }
+                     });
+                  });
+                }
+              });
             // // Lấy danh sách room
-            // con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' AND `id` > "+data.online+" ORDER BY `id` ASC", function(err1, a1s){
-            //     if (err1){console.log('Da co loi room full:'+err1);}
-            //     else if(a1s.length>0)
-            //       {
-            //          a1s.forEach(function(a1,key){
-            //           con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
-            //             {
-            //               if ( err5 ){console.log(err5);}
-            //               else  {if(a5s.length>0){socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt});}}
-            //             });
-            //         });
-            //     }
-            // });
+            con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' AND `id` > "+data.online+" ORDER BY `id` ASC", function(err1, a1s){
+                if (err1){console.log('Da co loi room full:'+err1);}
+                else if(a1s.length>0)
+                  {
+                     a1s.forEach(function(a1,key){
+                      con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
+                        {
+                          if ( err5 ){console.log(err5);}
+                          else  {if(a5s.length>0){socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt});}}
+                        });
+                    });
+                }
+            });
 
             }
           else {socket.emit('login2_sai');}
