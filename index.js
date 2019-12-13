@@ -603,20 +603,18 @@ io.on('connection',(socket)=>
             socket.username = rows[0].user;
             socket.join(data.rightuser);
             //lấy bảng inbox
-            // con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
-            con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` ASC", function(err1, a1s)
+             con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
+            // con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` ASC", function(err1, a1s)
              {
               if (err1){console.log(err1);}
               else if(a1s.length >0)
                 {
                   a1s.forEach((a1,key)=>{
-                    socket.emit('lilulu');
                     con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                        if(err2){console.log(err2);}
                        else {
-                         socket.emit('huhuhu');
                          socket.emit('S_send_tinnhan',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
-                         console.log('có gửi inbox đi');
+
                        }
                      });
                   });
