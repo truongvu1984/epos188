@@ -653,18 +653,18 @@ io.on('connection',(socket)=>
                   }
               });
             // // lấy bảng contact
-            con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `name` ASC", function(err1, a1s)
-                   {
-                     if (err1){console.log('Da co loi contact full:'+err1);}
-                     else if(a1s.length > 0)
-                       {
-                         let mangcontact;
-                         a1s.forEach(function(a1,key){
-                           mangcontact={ids:a1.id,name:strencode(a1.name), number:a1.number};
-                           socket.emit('S_send_contact',mangcontact);
-                         });
-                  }
-            });
+            // con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `name` ASC", function(err1, a1s)
+            //        {
+            //          if (err1){console.log('Da co loi contact full:'+err1);}
+            //          else if(a1s.length > 0)
+            //            {
+            //              let mangcontact;
+            //              a1s.forEach(function(a1,key){
+            //                mangcontact={ids:a1.id,name:strencode(a1.name), number:a1.number};
+            //                socket.emit('S_send_contact',mangcontact);
+            //              });
+            //       }
+            // });
             //lấy danh sách group
             // con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' AND `id` > "+data.group+" ORDER BY `id` ASC", function(err1, a1s)
             //  {
