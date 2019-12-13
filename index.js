@@ -36,7 +36,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
-let abc=1;
+
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
@@ -592,8 +592,6 @@ io.on('connection',(socket)=>
     return abc;
   }
   socket.on('login2',(data)=>{
-  abc++;
-  console.log('Có nhận yêu cầu 2:'+data.inbox);
     if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -604,7 +602,7 @@ io.on('connection',(socket)=>
             socket.join(data.rightuser);
             //lấy bảng inbox
              con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
-           {
+             {
               if (err1){console.log(err1);}
               else if(a1s.length >0)
                 {
@@ -653,18 +651,18 @@ io.on('connection',(socket)=>
                   }
               });
             // // lấy bảng contact
-            // con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `name` ASC", function(err1, a1s)
-            //        {
-            //          if (err1){console.log('Da co loi contact full:'+err1);}
-            //          else if(a1s.length > 0)
-            //            {
-            //              let mangcontact;
-            //              a1s.forEach(function(a1,key){
-            //                mangcontact={ids:a1.id,name:strencode(a1.name), number:a1.number};
-            //                socket.emit('S_send_contact',mangcontact);
-            //              });
-            //       }
-            // });
+            con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `name` ASC", function(err1, a1s)
+              {
+                if (err1){console.log('Da co loi contact full:'+err1);}
+                else if(a1s.length > 0)
+                  {
+                         let mangcontact;
+                         a1s.forEach(function(a1,key){
+                           mangcontact={ids:a1.id,name:strencode(a1.name), number:a1.number};
+                           socket.emit('S_send_contact',mangcontact);
+                         });
+                  }
+            });
             //lấy danh sách group
             con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' AND `id` > "+data.group+" ORDER BY `id` ASC", function(err1, a1s)
              {
