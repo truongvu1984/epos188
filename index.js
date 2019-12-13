@@ -615,7 +615,7 @@ io.on('connection',(socket)=>
                        if(err2){console.log(err2);}
                        else {
                          socket.emit('huhuhu');
-                         // socket.emit('kaka',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
+                         socket.emit('kaka',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
                          console.log('có gửi inbox đi');
                        }
                      });
