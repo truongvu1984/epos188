@@ -626,7 +626,7 @@ io.on('connection',(socket)=>
                    else if(a1s.length >0)
                      {
                        a1s.forEach(function(a1,key){
-                         console.log('Send:'+a1s.length);
+
                          let nhomnguoinhan =[];
                           con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"'", function(err2, a2s){
                             if(err2){console.log(err2);}
@@ -634,6 +634,7 @@ io.on('connection',(socket)=>
                               a2s.forEach(function(a2,key2){
                                 nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
                                 if(key2 === (a2s.length-1)){
+                                  console.log('Có gửi send đi:'+nhomnguoinhan.length);
                                   socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
                                 }
                               });
