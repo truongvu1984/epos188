@@ -621,7 +621,6 @@ io.on('connection',(socket)=>
               });
             // lấy bảng send
              con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `id` > "+data.send+" ORDER BY `id` ASC", function(err1, a1s)
-
               {
                    if (err1){console.log(err1);}
                    else if(a1s.length >0)
@@ -634,7 +633,6 @@ io.on('connection',(socket)=>
                               a2s.forEach(function(a2,key2){
                                 nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
                                 if(key2 === (a2s.length-1)){
-                                  console.log('Có gửi send đi:'+nhomnguoinhan.length);
                                   socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
                                 }
                               });
@@ -644,15 +642,16 @@ io.on('connection',(socket)=>
                      }
             });
             // lấy bảng save
-            // con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' AND `id` > "+data.save+" ORDER BY `id` ASC", function(err1, a1s)
-            //   {
-            //       if (err1){console.log(err1);}
-            //       else if(a1s.length >0){
-            //         a1s.forEach(function(a1,key){
-            //           socket.emit('S_send_save',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)});
-            //         });
-            //       }
-            //   });
+            con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' AND `id` > "+data.save+" ORDER BY `id` ASC", function(err1, a1s)
+              {
+                  if (err1){console.log(err1);}
+                  else if(a1s.length >0){
+                    a1s.forEach(function(a1,key){
+                      console.log('có gửi save đi:');
+                      socket.emit('S_send_save',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)});
+                    });
+                  }
+              });
             // // lấy bảng contact
             // con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `name` ASC", function(err1, a1s)
             //        {
