@@ -701,7 +701,13 @@ io.on('connection',(socket)=>
                           if ( err5 ){console.log(err5);}
                           else  {if(a5s.length>0){
                             socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt});
-                            console.log('có gửi room đi:'+{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt});
+                            console.log('có gửi room đi:'+strencode(a1.subject));
+                            console.log('có gửi room đi:'+a1.idcs[0].number);
+                            console.log('có gửi room đi:'+strencode(a5s[0].name);
+                            console.log('có gửi room đi:'+a5s[0].number);
+                            console.log('có gửi room đi:'+get_time(a1.time));
+                            console.log('có gửi room đi:'+a1.stt);
+
                           }
                         }
                         });
