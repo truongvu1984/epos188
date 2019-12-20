@@ -631,7 +631,8 @@ io.on('connection',(socket)=>
                               a2s.forEach(function(a2,key2){
                                 nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
                                 if(key2 === (a2s.length-1)){
-                                  socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
+                                  // socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
+                                  socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject)});
                                 }
                               });
                             }
