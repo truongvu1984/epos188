@@ -600,45 +600,45 @@ io.on('connection',(socket)=>
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
-            //lấy bảng inbox
-            //  con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
-            //  {
-            //   if (err1){console.log(err1);}
-            //   else if(a1s.length >0)
-            //     {
-            //       a1s.forEach((a1,key)=>{
-            //         con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
-            //            if(err2){console.log(err2);}
-            //            else {
-            //              socket.emit('S_send_tinnhan',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
-            //
-            //            }
-            //          });
-            //       });
-            //     }
-            //   });
-            // // lấy bảng send
-            //  con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `id` > "+data.send+" ORDER BY `id` ASC", function(err1, a1s)
-            //   {
-            //        if (err1){console.log(err1);}
-            //        else if(a1s.length >0)
-            //          {
-            //            a1s.forEach(function(a1,key){
-            //              let nhomnguoinhan =[];
-            //               con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"'", function(err2, a2s){
-            //                 if(err2){console.log(err2);}
-            //                 else {
-            //                   a2s.forEach(function(a2,key2){
-            //                     nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
-            //                     if(key2 === (a2s.length-1)){
-            //                       socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
-            //                     }
-            //                   });
-            //                 }
-            //               });
-            //            });
-            //          }
-            // });
+            lấy bảng inbox
+             con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
+             {
+              if (err1){console.log(err1);}
+              else if(a1s.length >0)
+                {
+                  a1s.forEach((a1,key)=>{
+                    con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
+                       if(err2){console.log(err2);}
+                       else {
+                         socket.emit('S_send_tinnhan',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
+
+                       }
+                     });
+                  });
+                }
+              });
+            // lấy bảng send
+             con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `id` > "+data.send+" ORDER BY `id` ASC", function(err1, a1s)
+              {
+                   if (err1){console.log(err1);}
+                   else if(a1s.length >0)
+                     {
+                       a1s.forEach(function(a1,key){
+                         let nhomnguoinhan =[];
+                          con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"'", function(err2, a2s){
+                            if(err2){console.log(err2);}
+                            else {
+                              a2s.forEach(function(a2,key2){
+                                nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
+                                if(key2 === (a2s.length-1)){
+                                  socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
+                                }
+                              });
+                            }
+                          });
+                       });
+                     }
+            });
             // // lấy bảng save
             // con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' AND `id` > "+data.save+" ORDER BY `id` ASC", function(err1, a1s)
             //   {
