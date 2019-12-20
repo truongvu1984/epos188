@@ -600,7 +600,7 @@ io.on('connection',(socket)=>
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
-            lấy bảng inbox
+            // lấy bảng inbox
              con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
              {
               if (err1){console.log(err1);}
