@@ -625,17 +625,20 @@ io.on('connection',(socket)=>
                      {
                        a1s.forEach(function(a1,key){
                          let nhomnguoinhan =[];
-                          con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1.id+"'", function(err2, a2s){
+                          con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` = "+a1.id, function(err2, a2s){
                             if(err2){console.log(err2);}
                             else {
+                              if(a2s.length >0){
                               a2s.forEach(function(a2,key2){
                                 nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
                                 if(key2 === (a2s.length-1)){
                                   // socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
-                                  socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)});
+                                  socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
                                 }
                               });
                             }
+                          }
+
                           });
                        });
                      }
