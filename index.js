@@ -319,7 +319,7 @@ io.on('connection',(socket)=>
     con.query("SELECT * FROM `dangky` WHERE `phone_id` LIKE '"+idphone+"'", function(err1, rows1){
       if(err1){console.log(err1);}
       else {
-        if(rows1.length >2){socket.emit('regis1_quasolan_number');console.log('qua so lan dang ky');}
+        if(rows1.length >2){socket.emit('verify_loi','A1');}
         else {
           var sql = "INSERT INTO `dangky`(phone_id,time1, time2) VALUES ?";
           var values = [[idphone,date,date]];
@@ -332,12 +332,13 @@ io.on('connection',(socket)=>
                   con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err2, rows2){
                     if(err2){console.log(err2);}
                     else {
-                      if (rows2.length ==0 ){socket.emit('taikhoankhongco');}
+                      if (rows2.length ==0 ){socket.emit('verify_loi','A2');}
                       else {
                         cb.phoneInformation(num,(error3,ketqua) => {
-                          if(error3){socket.emit('sodienthoaikhongdung');}
-                          else if (!ketqua.is_mobile){socket.emit('sodienthoaikhongdung');}
-                          else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');}
+                          if(error3){socket.emit('verify_loi','sdt_ko_dung');}
+                          else if (!ketqua.is_mobile){socket.emit('verify_loi','A3');}
+                          // else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');}
+                          else {socket.emit('verify_ok');}
                         });
                       }
                     }
