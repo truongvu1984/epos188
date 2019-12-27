@@ -161,11 +161,11 @@ io.on('connection',(socket)=>
     });
     }
   });
-  socket.on("test_id",(id,abc)=>{
+  socket.on("test_id",(id,a1,a2)=>{
     cb.getValidateStatus(id, (error, response) => {
       if(error)console.log(error);
       else {
-        console.log(abc);
+        console.log(""+a1+":"+a2);
         console.log(response);
       }
     });
