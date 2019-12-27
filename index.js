@@ -161,30 +161,39 @@ io.on('connection',(socket)=>
     });
     }
   });
-  socket.on('C_revify_number_ok',(idphone, number)=>{
-    if(idphone&&number){
-      con.query("UPDATE `real_number` SET `number` = '"+number+"' WHERE `id_phone` LIKE '"+idphone+"'",function(err5, ok){
-        if (err5){console.log('update bị loi'+err5);}
-        else {
-          if(ok.insertId==0){
-          var sql = "INSERT INTO `real_number`(id_phone,number) VALUES ?";
-          var values = [[idphone,number]];
-          con.query(sql, [values], function (err4, result) {
-            if (err4){console.log(err4);}
-            else {
-              socket.emit('S_save_real_number_ok');
-            }
-          });
-        }
-        else {
-          socket.emit('S_save_real_number_ok');
-
-        }
-        }
-      });
-
-    }
+  socket.on("test_id",(id)=>{
+    cb.getValidateStatus(id, (error, response) => {
+      if(error)console.log(error);
+      else {
+        console.log(response);
+      }
+    });
   });
+
+  // socket.on('C_revify_number_ok',(idphone, number)=>{
+  //   if(idphone&&number){
+  //     con.query("UPDATE `real_number` SET `number` = '"+number+"' WHERE `id_phone` LIKE '"+idphone+"'",function(err5, ok){
+  //       if (err5){console.log('update bị loi'+err5);}
+  //       else {
+  //         if(ok.insertId==0){
+  //         var sql = "INSERT INTO `real_number`(id_phone,number) VALUES ?";
+  //         var values = [[idphone,number]];
+  //         con.query(sql, [values], function (err4, result) {
+  //           if (err4){console.log(err4);}
+  //           else {
+  //             socket.emit('S_save_real_number_ok');
+  //           }
+  //         });
+  //       }
+  //       else {
+  //         socket.emit('S_save_real_number_ok');
+  //
+  //       }
+  //       }
+  //     });
+  //
+  //   }
+  // });
   socket.on('regis', function (user_info){
     if(user_info.number&&user_info.user&&user_info.code&&user_info.pass){
     socket.emit('dangky_thanhcong');
