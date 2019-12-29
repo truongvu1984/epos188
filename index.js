@@ -365,8 +365,9 @@ io.on('connection',(socket)=>
   //   }
   // });
   socket.on('C_change_pass_admin',function(key,id,num,pass){
+    console.log(key,num);
     if(key&&num&&id&&pass){
-      cb.getValidateStatus(id, (error, response) => {
+      cb.getValidateStatus(key, (error, response) => {
         if(error)socket.emit('S_doipass_thatbai','A1');
         else {
           if(response.number==num && response.validated)
