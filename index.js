@@ -144,7 +144,7 @@ io.on('connection',(socket)=>
                       if (rows2.length ==0 ){socket.emit('verify_loi','A2');}
                       else {
                         cb.phoneInformation(num,(error3,ketqua) => {
-                          if(error3){socket.emit('verify_loi','sdt_ko_dung');}
+                          if(error3){socket.emit('verify_loi','A4');}
                           else if (!ketqua.is_mobile){socket.emit('verify_loi','A3');}
                            else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');}
                           // else {socket.emit('verify_ok');}
@@ -352,41 +352,34 @@ io.on('connection',(socket)=>
         });
     }
   });
-  socket.on('C_send_chuoi_forgot',function(num,chuoi,pass){
-    if(num&&chuoi&&pass){
-      con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"' AND `chuoi` LIKE '"+chuoi+"' AND `status` LIKE 'Y'", function(err1, row1s) {
-          if((err1)|| (row1s.length==0)) {socket.emit('S_chuoikhongdung');}
-          else {
-            con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
-            socket.emit('S_doipass_thanhcong');
-          });
-          }
-      });
-    }
-  });
-  socket.on('C_change_pass_admin',function(id,num,pass){
-    if(num&&id&&pass){
-      con.query("SELECT * FROM `real_number` WHERE `id_phone` LIKE '"+id+"' LIMIT 1", function(err1, rows1){
-        if(err1){console.log(err1);}
+  // socket.on('C_send_chuoi_forgot',function(num,chuoi,pass){
+  //   if(num&&chuoi&&pass){
+  //     con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"' AND `chuoi` LIKE '"+chuoi+"' AND `status` LIKE 'Y'", function(err1, row1s) {
+  //         if((err1)|| (row1s.length==0)) {socket.emit('S_chuoikhongdung');}
+  //         else {
+  //           con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
+  //           socket.emit('S_doipass_thanhcong');
+  //         });
+  //         }
+  //     });
+  //   }
+  // });
+  socket.on('C_change_pass_admin',function(key,id,num,pass){
+    if(key&&num&&id&&pass){
+      cb.getValidateStatus(id, (error, response) => {
+        if(error)socket.emit('S_doipass_thatbai','A1');
         else {
-          if(rows1[0].number==num){
-            con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
-              socket.emit('S_doipass_thanhcong');
-
-              con.query("DELETE FROM `real_number` WHERE `id_phone` LIKE '"+id+"'", function(err2,kq)
-                    {
-                      if (err2){console.log(err2);}
-
-
-                    });
-              });
+          if(response.number==num && response.validated)
+          {
+            con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(err){
+              if(err)socket.emit('S_doipass_thatbai','A2');
+              else socket.emit('S_doipass_thanhcong');
+            });
           }
-          else {
-            socket.emit('doi_pass_ko_ok');
-          }
+          else socket.emit('S_doipass_thatbai','A3');
         }
       });
-    }
+  }
   });
   socket.on('login1',(user1, pass1)=>{
     console.log('có nhận login 1');
