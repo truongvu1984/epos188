@@ -23,21 +23,6 @@ function strdecode( data ){
 }
 var passwordHash = require('password-hash');
 let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
-
-// cb.validatePhone('+84982025401','reverse_cli',(a1,a2)=>{
-//   if(a1){console.log(a1);}
-//   else {
-//     console.log(a2);
-//   }
-// });
-// cb.sendMessage({"to": '+84982025401', "text": 'Ha ha Vu yeu Van'}, (error, response) => {
-//   if(error)console.log(error);
-//   else {
-//     console.log(response);
-//   }
-//
-// });
-
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
@@ -84,7 +69,6 @@ io.on('connection',(socket)=>
 {
   console.log(socket.id);
   socket.emit('check_pass');
-
   socket.on('C_check_phone',(idphone,num,abc)=>{
     if(idphone&&num){
     var date = Math.floor(Date.now() / 1000);
@@ -207,7 +191,6 @@ io.on('connection',(socket)=>
 
   }
   socket.on('C_change_pass_admin',function(key,id,num,pass){
-    console.log(key,num);
     if(key&&num&&id&&pass){
       cb.getValidateStatus(key, (error, response) => {
         if(error)socket.emit('S_doipass_thatbai','A1');
@@ -752,7 +735,6 @@ io.on('connection',(socket)=>
       }
     }
   }); //ok
-
   socket.on('C_save_pos',(mess)=>{
 
     if(socket.number&&mess.idc&&mess.subject&&mess.vitri&&isArray(mess.vitri)){
@@ -962,12 +944,12 @@ io.on('connection',(socket)=>
              else
                {
                  if(a1s.length===0){
-                  var sql2 = "INSERT INTO `"+socket.number+"contact` (name,number) VALUES ?";
-                  var values2 = [[contact.name,contact.number]];
+                  var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
+                  var values2 = [[contact.id,contact.name,contact.number]];
                   con.query(sql2, [values2], function (err, res)
                     {
                       if ( err){console.log(err);}
-                      else {socket.emit('S_add_contact_ok');}
+                      
                   });
                 }
                }
