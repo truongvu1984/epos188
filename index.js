@@ -61,9 +61,9 @@ function kiemtra_taikhoan(){
     // mở khóa cho số điện thoại hoặc phoneid bị khóa
     con.query(" DELETE FROM `dangky` WHERE `time2` < "+date2, function(err){if(err){console.log('co loi HA HA HA:'+err);}});
     kiemtra_taikhoan();
-  }, 5000);
+  }, 60000);
 }
-kiemtra_taikhoan();
+// kiemtra_taikhoan();
 
 io.on('connection',(socket)=>
 {
@@ -937,6 +937,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_contact', function (contact){
+    console.log(contact);
       if (socket.number&&contact.number){
         con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
            {
