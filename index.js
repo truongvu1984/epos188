@@ -29,8 +29,32 @@ isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
 
-// con.connect(function(err) {
-    function kiemtra_taikhoan(){
+con.connect(function(err) {
+    if (err) { console.log(" da co loi:" + err);}
+    else {
+      app.get('/', (req, res) => res.render('dangnhap3'));
+      app.post('/', urlencodedParser, function (req, res){
+        if (!req.body) return res.sendStatus(400)
+        else {
+          if(req.body.number&&req.body.code&&req.body.pass){
+            var full_number = "+"+req.body.code + req.body.number.replace('0','');
+            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
+              if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
+              else{
+                if (passwordHash.verify(req.body.pass, rows[0].pass)){
+                  res.render('home2');
+                  // req.session.number = full_number;
+                }
+                else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
+              }
+            });
+          }
+          else {
+            res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});
+          }
+        }
+      })
+function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
     var date2 = Math.floor(Date.now() / 1000) - 600;
@@ -1156,4 +1180,4 @@ io.on('connection',(socket)=>
       }
     });
 });
-// }});
+}});
