@@ -63,7 +63,7 @@ function kiemtra_taikhoan(){
     kiemtra_taikhoan();
   }, 60000);
 }
-// kiemtra_taikhoan();
+kiemtra_taikhoan();
 
 io.on('connection',(socket)=>
 {
