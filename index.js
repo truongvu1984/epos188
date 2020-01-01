@@ -32,6 +32,7 @@ isArray = function(a) {
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
+      console.log('CSDL ok');
       app.get('/', (req, res) => res.render('dangnhap3'));
       app.post('/', urlencodedParser, function (req, res){
         if (!req.body) return res.sendStatus(400)
