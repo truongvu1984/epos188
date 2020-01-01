@@ -62,7 +62,7 @@ function kiemtra_taikhoan(){
     // mở khóa cho số điện thoại hoặc phoneid bị khóa
     con.query(" DELETE FROM `dangky` WHERE `time2` < "+date2, function(err){if(err){console.log('co loi HA HA HA:'+err);}});
     kiemtra_taikhoan();
-  }, 60000);
+  }, 5000);
 }
 kiemtra_taikhoan();
 
