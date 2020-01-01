@@ -290,8 +290,7 @@ io.on('connection',(socket)=>
                   if (err1){console.log(err1);}
                   else if(a1s.length >0){
                     a1s.forEach(function(a1,key){
-                      console.log('có gửi save đi:');
-                      socket.emit('S_send_save',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)});
+                        socket.emit('S_send_save',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)});
                     });
                   }
               });
@@ -345,14 +344,7 @@ io.on('connection',(socket)=>
                         {
                           if ( err5 ){console.log(err5);}
                           else  {if(a5s.length>0){
-                            console.log(a5s);
-                            socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt});
-                            console.log('có gửi room đi:'+strencode(a1.subject));
-                            console.log('có gửi room đi:'+a1.idc);
-                            console.log('có gửi room đi:'+strencode(a5s[0].name));
-                            console.log('có gửi room đi:'+a5s[0].number);
-                            console.log('có gửi room đi:'+get_time(a1.time));
-                            console.log('có gửi room đi:'+a1.stt);
+                                  socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt});
 
                           }
                         }
@@ -367,7 +359,6 @@ io.on('connection',(socket)=>
      	 });
      }
 	});
-
   socket.on('C_del_inbox',(mes)=>{
     if(socket.number&&isArray(mes)){
       mes.forEach((mes1,key)=>{
