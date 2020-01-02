@@ -32,29 +32,20 @@ isArray = function(a) {
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      console.log('CSDL ok');
-      app.get('/', (req, res) => res.render('dangnhap3'));
-      app.post('/', urlencodedParser, function (req, res){
-        if (!req.body) return res.sendStatus(400)
-        else {
-          if(req.body.number&&req.body.code&&req.body.pass){
-            var full_number = "+"+req.body.code + req.body.number.replace('0','');
-            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
-              if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
-              else{
-                if (passwordHash.verify(req.body.pass, rows[0].pass)){
-                  res.render('home2');
-                  // req.session.number = full_number;
-                }
-                else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
-              }
-            });
-          }
-          else {
-            res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});
-          }
-        }
-      })
+
+    // var sql2 = "INSERT INTO `+84982025401contact` (idc,name,number) VALUES ?";
+    // var values2 = [['123','vu1','123423312']];
+    // values2.push(['1234','vu2','123423312']);
+    // values2.push(['12356','vu1','125553312']);
+    // con.query(sql2, [values2], function (err, res)
+    //   {
+    //     if ( err){console.log(err);}
+    //     else {
+    //       console.log('insert ok');
+    //     }
+    //
+    // });
+
 function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
@@ -69,6 +60,7 @@ kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
   console.log(socket.id);
+
   socket.emit('check_pass');
   socket.on('C_check_phone',(idphone,num,abc)=>{
     if(idphone&&num){
@@ -938,14 +930,21 @@ io.on('connection',(socket)=>
                {
                  if(a1s.length===0){
                   var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
-                  var values2 = [[contact.id,contact.name,contact.number]];
-                  con.query(sql2, [values2], function (err, res)
-                    {
-                      if ( err){console.log(err);}
+                  var values2 = [];
+                  contact.forEach((sdt,key1)=>{
+                    values2.push([sdt.id,sdt.name,sdt.number]);
+                    if(key1==(contact.length-1)){
+                      con.query(sql2, [values2], function (err, res)
+                        {
+                          if ( err){console.log(err);}
 
+                      });
+                    }
                   });
+
+
                 }
-               }
+              }
           });
       }
   });
