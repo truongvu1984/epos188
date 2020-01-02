@@ -921,14 +921,13 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_contact', function (contact){
-    console.log(contact);
-      if (socket.number&&contact.number){
-        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
-           {
-             if ( err){console.log(err);}
-             else
-               {
-                 if(a1s.length===0){
+        //
+        // con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
+        //    {
+        //      if ( err){console.log(err);}
+        //      else
+        //        {
+        //          if(a1s.length===0){
                   var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
                   var values2 = [];
                   contact.forEach((sdt,key1)=>{
@@ -943,10 +942,8 @@ io.on('connection',(socket)=>
                   });
 
 
-                }
-              }
-          });
-      }
+
+
   });
   socket.on('C_leave_off', function () {
       if (socket.number){
