@@ -910,29 +910,22 @@ io.on('connection',(socket)=>
 
     }
   });
-  // socket.on('C_send_contact', function (contact){
-  //   if(isArray(contact)){
-  //       //
-  //       // con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
-  //       //    {
-  //       //      if ( err){console.log(err);}
-  //       //      else
-  //       //        {
-  //       //          if(a1s.length===0){
-  //                 var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
-  //                 var values2 = [];
-  //                 contact.forEach((sdt,key1)=>{
-  //                   values2.push([sdt.id,sdt.name,sdt.number]);
-  //                   if(key1==(contact.length-1)){
-  //                     con.query(sql2, [values2], function (err, res)
-  //                       {
-  //                         if ( err){console.log(err);}
-  //
-  //               });
-  //             }
-  //       });
-  //   }
-  // });
+  socket.on('C_send_contact', function (contact){
+    if(isArray(contact)){
+      var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
+      var values2 = [];
+      contact.forEach((sdt,key1)=>{
+        values2.push([sdt.id,sdt.name,sdt.number]);
+                    if(key1==(contact.length-1)){
+                      con.query(sql2, [values2], function (err, res)
+                        {
+                          if ( err){console.log(err);}
+                });
+              }
+        });
+      }
+    });
+
   socket.on('C_leave_off', function () {
       if (socket.number){
       socket.leave(socket.number);
