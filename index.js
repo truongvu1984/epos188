@@ -33,18 +33,6 @@ con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
 
-    // var sql2 = "INSERT INTO `+84982025401contact` (idc,name,number) VALUES ?";
-    // var values2 = [['123','vu1','123423312']];
-    // values2.push(['1234','vu2','123423312']);
-    // values2.push(['12356','vu1','125553312']);
-    // con.query(sql2, [values2], function (err, res)
-    //   {
-    //     if ( err){console.log(err);}
-    //     else {
-    //       console.log('insert ok');
-    //     }
-    //
-    // });
 
 function kiemtra_taikhoan(){
   setTimeout(function() {
@@ -326,7 +314,7 @@ io.on('connection',(socket)=>
                   });
                 }
               });
-            // // Lấy danh sách room
+            //  Lấy danh sách room
             con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' AND `id` > "+data.online+" ORDER BY `id` ASC", function(err1, a1s){
                 if (err1){console.log('Da co loi room full:'+err1);}
                 else if(a1s.length>0)
@@ -344,6 +332,8 @@ io.on('connection',(socket)=>
                     });
                 }
             });
+            // Lấy id lớn nhất của contact để cập nhật contact mới
+
 
             }
           else {socket.emit('login2_sai');}
@@ -853,33 +843,33 @@ io.on('connection',(socket)=>
     });
     }
   });
-  socket.on('C_check_contact', function (string){
-    if (socket.number&&string){
-      con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
-      if ( err){console.log(err);}
-      else
-      {
-        let s=true;
-        let ketqua=[];
-        a1.forEach(function (row1,key)
-          {
-            if (row1.number.indexOf(string) !== -1 || row1.user.indexOf(string) !== -1)
-            {
-              ketqua.push({user:strencode(row1.user), number: row1.number});
-              s=false;
-            }
-            if(key === (a1.length-1)){
-              if (s){socket.emit('S_kq_check_contact_zero');}
-              else {socket.emit('S_kq_check_contact',ketqua);}
-            }
-
-
-          });
-
-      }
-    });
-    }
-  });
+  // socket.on('C_check_contact', function (string){
+  //   if (socket.number&&string){
+  //     con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
+  //     if ( err){console.log(err);}
+  //     else
+  //     {
+  //       let s=true;
+  //       let ketqua=[];
+  //       a1.forEach(function (row1,key)
+  //         {
+  //           if (row1.number.indexOf(string) !== -1 || row1.user.indexOf(string) !== -1)
+  //           {
+  //             ketqua.push({user:strencode(row1.user), number: row1.number});
+  //             s=false;
+  //           }
+  //           if(key === (a1.length-1)){
+  //             if (s){socket.emit('S_kq_check_contact_zero');}
+  //             else {socket.emit('S_kq_check_contact',ketqua);}
+  //           }
+  //
+  //
+  //         });
+  //
+  //     }
+  //   });
+  //   }
+  // });
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
         socket.emit('S_get_join');
@@ -920,31 +910,29 @@ io.on('connection',(socket)=>
 
     }
   });
-  socket.on('C_send_contact', function (contact){
-        //
-        // con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
-        //    {
-        //      if ( err){console.log(err);}
-        //      else
-        //        {
-        //          if(a1s.length===0){
-                  var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
-                  var values2 = [];
-                  contact.forEach((sdt,key1)=>{
-                    values2.push([sdt.id,sdt.name,sdt.number]);
-                    if(key1==(contact.length-1)){
-                      con.query(sql2, [values2], function (err, res)
-                        {
-                          if ( err){console.log(err);}
-
-                      });
-                    }
-                  });
-
-
-
-
-  });
+  // socket.on('C_send_contact', function (contact){
+  //   if(isArray(contact)){
+  //       //
+  //       // con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
+  //       //    {
+  //       //      if ( err){console.log(err);}
+  //       //      else
+  //       //        {
+  //       //          if(a1s.length===0){
+  //                 var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
+  //                 var values2 = [];
+  //                 contact.forEach((sdt,key1)=>{
+  //                   values2.push([sdt.id,sdt.name,sdt.number]);
+  //                   if(key1==(contact.length-1)){
+  //                     con.query(sql2, [values2], function (err, res)
+  //                       {
+  //                         if ( err){console.log(err);}
+  //
+  //               });
+  //             }
+  //       });
+  //   }
+  // });
   socket.on('C_leave_off', function () {
       if (socket.number){
       socket.leave(socket.number);
