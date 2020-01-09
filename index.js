@@ -826,18 +826,19 @@ io.on('connection',(socket)=>
   socket.on('search_contact', function (string){
     if (socket.number&&string){
       con.query("SELECT `number`, `user` FROM `account` WHERE `number ` LIKE `"+string+"%`", function(err, a1){
-      if (!( err))
+      if(err)console.log(err);
+      else
       {
-        var s=true;
-        a1.forEach(function (row1)
+        if(a1.length>0){
+          let noidung = [];
+          a1.forEach(function (row1,key)
           {
-            if (row1.number.indexOf(string) !== -1 )
-            {
-              socket.emit('S_kq_check_contact_2',{user:strencode(row1.user), number: row1.number});console.log("Da tim thay:"+row1.user);
-              s=false;
-            }
+              let contact = {user:strencode(row1.user), number: row1.number};
+              noidung.push(contact);
+              if(key==(a1.length-1))socket.emit('S_kq_check_contact_2',noidung);
           });
-        if (s){socket.emit('S_kq_check_contact_zero_2');}
+        }
+        else {socket.emit('S_kq_check_contact_zero_2');}
       }
     });
     }
