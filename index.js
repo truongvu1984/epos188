@@ -825,7 +825,7 @@ io.on('connection',(socket)=>
   });
   socket.on('search_contact', function (string){
     if (socket.number&&string){
-      con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
+      con.query("SELECT `number`, `user` FROM `account` WHERE `number ` LIKE `"+string+"%`", function(err, a1){
       if (!( err))
       {
         var s=true;
@@ -940,7 +940,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_contact', function (contact){
-    if(isArray(contact)){
+    if(socket.number && isArray(contact)){
       var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number,) VALUES ?";
       var values2 = [];
       contact.forEach((sdt,key1)=>{
@@ -954,6 +954,19 @@ io.on('connection',(socket)=>
         });
       }
     });
+  socket.on('C_add_contact',(contact)=>{
+    if(socket.number&&contact){
+      var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number,) VALUES ?";
+      var values2 = [[contact.idc,contact.name,contact.number]];
+      con.query(sql2, [values2], function (err, res)
+        {
+          if ( err){console.log(err);}
+          else {
+            socket.emit('S_add_contact_ok');
+          }
+      });
+    }
+  });
   socket.on('C_leave_off', function () {
       if (socket.number){
       socket.leave(socket.number);
