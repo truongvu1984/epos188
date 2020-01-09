@@ -33,7 +33,6 @@ con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
 
-
 function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
@@ -775,7 +774,7 @@ io.on('connection',(socket)=>
         {
           if ( err){console.log(err);}
           else {
-            var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
+            var sql4 = "INSERT INTO `"+socket.number+"contact` (ids,number, name, send_receive) VALUES ?";
             mess.contact_list.forEach(function(contact)
               {
                 if(contact.contact_number&&contact.contact_name){
@@ -841,6 +840,36 @@ io.on('connection',(socket)=>
         if (s){socket.emit('S_kq_check_contact_zero_2');}
       }
     });
+    }
+  });
+  // Xử lý tiếp cái phần search contact \, khi mà người dùng tìm kiếm xe số điện thoại đó có tồn tại hay không
+  socket.on('C_del_group',(list)=>{
+    if(isArray(list)){
+      list.forEach((number,key)=>{
+        //xóa cái chi tiết trước rồi mới xóa tại bảng chính
+        if(number.idc){
+          con.query("SELECT `idc` FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+ number.idc +"' LIMIT 1", function(err, res)
+            {
+              if(err)console.log(err);
+              else {
+                if(res.length>0){
+                  con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res[0].id+"'", function(err2){
+                     if (err2){console.log(err2);}
+                     else {
+                       con.query("DELETE FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+number.idc +"' LIMIT 1", function(err3){
+                          if (err3){console.log(err3);}
+                          else {
+                            socket.emit('S_del_group_ok','A',number.idc);
+                          }
+                        });
+                     }
+                   });
+                }
+              }
+            });
+        }
+      });
+
     }
   });
   // socket.on('C_check_contact', function (string){
@@ -912,7 +941,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_send_contact', function (contact){
     if(isArray(contact)){
-      var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
+      var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number,) VALUES ?";
       var values2 = [];
       contact.forEach((sdt,key1)=>{
         values2.push([sdt.id,sdt.name,sdt.number]);
@@ -925,7 +954,6 @@ io.on('connection',(socket)=>
         });
       }
     });
-
   socket.on('C_leave_off', function () {
       if (socket.number){
       socket.leave(socket.number);
