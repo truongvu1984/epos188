@@ -944,7 +944,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_send_contact', function (contact){
     if(socket.number && isArray(contact)){
-      var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number,) VALUES ?";
+      var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
       var values2 = [];
       contact.forEach((sdt,key1)=>{
         values2.push([sdt.id,sdt.name,sdt.number]);
@@ -959,7 +959,7 @@ io.on('connection',(socket)=>
     });
   socket.on('C_add_contact',(contact)=>{
     if(socket.number&&contact){
-      var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number,) VALUES ?";
+      var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
       var values2 = [[contact.idc,contact.name,contact.number]];
       con.query(sql2, [values2], function (err, res)
         {
