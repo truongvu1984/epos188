@@ -959,6 +959,7 @@ io.on('connection',(socket)=>
     });
   socket.on('C_add_contact',(contact)=>{
     if(socket.number&&contact){
+      console.log(contact);
       var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
       var values2 = [[contact.idc,contact.name,contact.number]];
       con.query(sql2, [values2], function (err, res)
