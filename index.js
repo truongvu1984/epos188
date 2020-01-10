@@ -831,6 +831,7 @@ io.on('connection',(socket)=>
       else
       {
         if(a1.length>0){
+          console.log('có rồi nha:'+a1.length);
           let noidung = [];
           a1.forEach(function (row1,key)
           {
@@ -839,7 +840,7 @@ io.on('connection',(socket)=>
               if(key==(a1.length-1))socket.emit('S_kq_check_contact_2',noidung);
           });
         }
-        else {socket.emit('S_kq_check_contact_zero_2');}
+        else {socket.emit('S_kq_check_contact_zero_2');console.log('không có');}
       }
     });
     }
