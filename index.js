@@ -826,7 +826,7 @@ io.on('connection',(socket)=>
   socket.on('search_contact', function (string){
     if (socket.number&&string){
       console.log(string);
-      con.query("SELECT `number`, `user` FROM `account` WHERE `number` LIKE '"+string+"%'", function(err, a1){
+      con.query("SELECT `number`, `user` FROM `account` WHERE `number` LIKE CONCAT('%',"+string+",'%')", function(err, a1){
       if(err)console.log(err);
       else
       {
