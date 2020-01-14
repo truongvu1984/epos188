@@ -965,7 +965,7 @@ io.on('connection',(socket)=>
         {
           if ( err){console.log(err);}
           else {
-            socket.emit('S_add_contact_ok',{idc:contact.idc,name:strencode(contact.name),number:contact.number});
+            socket.emit('S_add_contact_ok',{ids:res.insertId,idc:contact.idc,name:strencode(contact.name),number:contact.number});
           }
       });
     }
