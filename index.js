@@ -118,31 +118,6 @@ io.on('connection',(socket)=>
                               //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
                               con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"mes_sender` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NULL,`send_receive` VARCHAR(5), `stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
                               con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`fr` VARCHAR(5) NULL,`code` VARCHAR(10) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(err){console.log(err)});
-                              // con.query("SELECT `number` FROM `account` ", function(err, row3s)
-                              //   {
-                              //     if (err) {console.log('select loi '+ err);}
-                              //     else if ( row3s.length >0)
-                              //       {
-                              //         row3s.forEach(function (row3)
-                              //           {
-                              //             con.query("SELECT * FROM `"+row3.number+"contact` WHERE `number` LIKE '"+user_info.number+"'", function(err, row4s)
-                              //               {
-                              //
-                              //                 if ( err) {console.log('có loi select');}
-                              //                 else if (row4s.length >0)
-                              //                   {
-                              //                     con.query("UPDATE `"+row3.number+"contact` SET `fr` = 'Y' WHERE `number` LIKE '"+user_info.number+"'",function(err3, ok)
-                              //                     {
-                              //                       //gửi thông báo cho ngươi kia biết là ông này đã tham gia ePos
-                              //                       if ( err3 ){console.log('update bị loi'+err3);}
-                              //                       else{io.sockets.in(row3.number).emit('contact_joined', {number:user_info.number,name:user_info.user, code:user_info.code});}
-                              //                     });
-                              //                   }
-                              //               });
-                              //           });
-                              //       }
-                              //
-                              //   });
                               // lưu tài khoản vào db
                               var sql = "INSERT INTO `account` (number,user, pass, code ) VALUES ?";
                               var matkhau = passwordHash.generate(user_info.pass);
@@ -875,33 +850,6 @@ io.on('connection',(socket)=>
 
     }
   });
-  // socket.on('C_check_contact', function (string){
-  //   if (socket.number&&string){
-  //     con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
-  //     if ( err){console.log(err);}
-  //     else
-  //     {
-  //       let s=true;
-  //       let ketqua=[];
-  //       a1.forEach(function (row1,key)
-  //         {
-  //           if (row1.number.indexOf(string) !== -1 || row1.user.indexOf(string) !== -1)
-  //           {
-  //             ketqua.push({user:strencode(row1.user), number: row1.number});
-  //             s=false;
-  //           }
-  //           if(key === (a1.length-1)){
-  //             if (s){socket.emit('S_kq_check_contact_zero');}
-  //             else {socket.emit('S_kq_check_contact',ketqua);}
-  //           }
-  //
-  //
-  //         });
-  //
-  //     }
-  //   });
-  //   }
-  // });
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
         socket.emit('S_get_join');
