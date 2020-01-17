@@ -1080,7 +1080,9 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_change_pass', function(oldpass,newpass){
+
    if (socket.number&&oldpass&&newpass){
+     console.log(oldpass);
      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
         if (err || rows.length ==0){ socket.emit('change_pass_thatbai');}
        else{
