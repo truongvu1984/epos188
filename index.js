@@ -850,6 +850,23 @@ io.on('connection',(socket)=>
 
     }
   });
+  socket.on('C_del_acc',(pass)=>{
+    if(socket.number&&pass){
+      if (passwordHash.verify(pass, rows[0].pass)){
+        socket.emit('S_del_acc_kq','OK');
+        con.query("DROP TABLE IF EXISTS `"+socket.number+"mes_main`",(err)=>{if(err)console.log(err);});
+        con.query("DROP TABLE IF EXISTS `"+socket.number+"mes_detail`",(err)=>{if(err)console.log(err);});
+        con.query("DROP TABLE IF EXISTS `"+socket.number+"mes_sender`",(err)=>{if(err)console.log(err);});
+        con.query("DROP TABLE IF EXISTS `"+socket.number+"contact`",(err)=>{if(err)console.log(err);});
+        con.query("DELETE FROM `account` WHERE `number` LIKE '"+socket.number+"'", function(err1)
+          {
+            if(err1){console.log(err1);}
+            else {socket.number = undefined;socket.roomabc = undefined;}
+        });
+      }
+      else {socket.emit('S_del_acc_kq','Password is incorrect');}
+    }
+  });
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
         socket.emit('S_get_join');
