@@ -852,6 +852,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_del_acc',(pass)=>{
     if(socket.number&&pass){
+      console.log('Có nhận:'+pass);
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err1, rows){
   	    if (err1 || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
