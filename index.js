@@ -851,6 +851,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_del_acc',(pass)=>{
+    console.log(pass);
     if(socket.number&&pass){
       console.log('Có nhận:'+pass);
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err1, rows){
@@ -865,7 +866,7 @@ io.on('connection',(socket)=>
             con.query("DELETE FROM `account` WHERE `number` LIKE '"+socket.number+"'", function(err1)
               {
                 if(err1){console.log(err1);}
-                else {socket.number = undefined;socket.roomabc = undefined;}
+                else {socket.number = null;socket.roomabc = null;}
             });
 
           }
