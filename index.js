@@ -684,7 +684,6 @@ io.on('connection',(socket)=>
     }
   }); //ok
   socket.on('C_save_pos',(mess)=>{
-
     if(socket.number&&mess.idc&&mess.subject&&mess.vitri&&isArray(mess.vitri)){
       console.log('có luu');
       let thoigian = new Date();
@@ -695,6 +694,7 @@ io.on('connection',(socket)=>
           if(err){console.log(err);}
           else {
             io.sockets.in(socket.number).emit('S_get_save_pos',mess.imei,{time:get_time(thoigian),subject:strencode(mess.subject),idc:mess.idc});
+console.log('có rồi:'+mess.imei);
             var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
             mess.vitri.forEach((row)=>{
                 var val3 = [[res.insertId, row.id, row.name, row.lat, row.lon]];
