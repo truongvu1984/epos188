@@ -33,4 +33,6 @@ con.connect(function(err) {
     else {
 function kiemtra_taikhoan(){
   setTimeout(function() {
-    //sau mô
+  
+    var date2 = Math.floor(Date.now() / 1000) - 600;
+    // m
