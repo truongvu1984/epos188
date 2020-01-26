@@ -101,11 +101,11 @@ io.on('connection',(socket)=>
     });
     }
   });
-  socket.on('regis', function (key,num,user_info){
+  
+ socket.on('regis', function (key,num,user_info){
     if(key&&num&&user_info.number&&user_info.user&&user_info.code&&user_info.pass){
       cb.getValidateStatus(key, (error, response) => {
         if(error)socket.emit('verify_loi','A5');
         else {
           if(response.number==num && response.validated)
           {
-                // TA
