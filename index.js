@@ -61,4 +61,51 @@ io.on('connection',(socket)=>
             if (err4){console.log(err4);}
             else {
               con.query("UPDATE `dangky` SET `time2` = '"+date+"' WHERE `phone_id` LIKE '"+idphone+"'",function(err5, ok){
-                if (err5){console.log('update b
+                if (err5){console.log('update bi loi');}
+                else {
+                  con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err2, rows2){
+                    if(err2){console.log(err2);}
+                    else {
+                      if (rows2.length ==0 ){
+                        if(abc=="A")socket.emit('verify_loi','A2');
+                        else {
+                          cb.phoneInformation(num,(error3,ketqua) => {
+                            if(error3){socket.emit('verify_loi','A3');}
+                            else if (!ketqua.is_mobile){socket.emit('verify_loi','A3');}
+                             else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');}
+
+                          });
+                        }
+
+                      }
+                      else {
+                        if(abc=="A"){
+                        cb.phoneInformation(num,(error3,ketqua) => {
+                          if(error3){socket.emit('verify_loi','A3');}
+                          else if (!ketqua.is_mobile){socket.emit('verify_loi','A3');}
+                           else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');}
+                        });
+                      }
+                      else {
+                        socket.emit('verify_loi','A4')
+                      }
+                      }
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      }
+    });
+    }
+  });
+  socket.on('regis', function (key,num,user_info){
+    if(key&&num&&user_info.number&&user_info.user&&user_info.code&&user_info.pass){
+      cb.getValidateStatus(key, (error, response) => {
+        if(error)socket.emit('verify_loi','A5');
+        else {
+          if(response.number==num && response.validated)
+          {
+                // TA
