@@ -33,6 +33,32 @@ con.connect(function(err) {
     else {
 function kiemtra_taikhoan(){
   setTimeout(function() {
-  
+
     var date2 = Math.floor(Date.now() / 1000) - 600;
-    // m
+
+    con.query(" DELETE FROM `dangky` WHERE `time2` < "+date2, function(err){if(err){console.log('co loi HA HA HA:'+err);}});
+    kiemtra_taikhoan();
+  }, 5000);
+}
+kiemtra_taikhoan();
+
+io.on('connection',(socket)=>
+{
+  console.log(socket.id);
+
+  socket.emit('check_pass');
+  socket.on('C_check_phone',(idphone,num,abc)=>{
+    if(idphone&&num){
+    var date = Math.floor(Date.now() / 1000);
+    con.query("SELECT * FROM `dangky` WHERE `phone_id` LIKE '"+idphone+"'", function(err1, rows1){
+      if(err1){console.log(err1);}
+      else {
+        if(rows1.length >2){socket.emit('verify_loi','A1');}
+        else {
+          var sql = "INSERT INTO `dangky`(phone_id,time1, time2) VALUES ?";
+          var values = [[idphone,date,date]];
+          con.query(sql, [values], function (err4, result) {
+            if (err4){console.log(err4);}
+            else {
+              con.query("UPDATE `dangky` SET `time2` = '"+date+"' WHERE `phone_id` LIKE '"+idphone+"'",function(err5, ok){
+                if (err5){console.log('update b
