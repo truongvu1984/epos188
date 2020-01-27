@@ -804,10 +804,9 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('danhantinnhan', function (nguoigui, idc){
-    console.log(nguoigui+":"+idc);
+
    	if (socket.number&&nguoigui&&idc){
 
-      console.log('dã nhan tin nhan');
       con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'R'",function(err5,res5)
           {if(err5){console.log(err5);}
 
@@ -993,12 +992,12 @@ io.on('connection',(socket)=>
              else
                {
                  if(a1s.length===0){
-                  var sql2 = "INSERT INTO `"+socket.number+"contact` (name,number) VALUES ?";
-                  var values2 = [[contact.name,contact.number]];
+                  var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
+                  var values2 = [[contact.idc,contact.name,contact.number]];
                   con.query(sql2, [values2], function (err, res)
                     {
                       if ( err){console.log(err);}
-                      else {socket.emit('S_add_contact_ok');}
+                      else {socket.emit('S_add_contact_ok',{ids:res.insertId, idc:contact.idc,name:contact.name,number:contact.number});}
                   });
                 }
                }
