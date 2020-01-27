@@ -803,10 +803,14 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('danhantinnhan', function (nguoigui, idc){
+  socket.on('danhantinnhan', function (nguoigui, idc
+    console.log(+":"+idc);
    	if (socket.number&&nguoigui&&idc){
+
+      console.log('dã nhan tin nhan');
       con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'R'",function(err5,res5)
           {if(err5){console.log(err5);}
+
 
       });
 	     // báo cho người gửi biết là thằng socket.number đã nhận tin nhắn
