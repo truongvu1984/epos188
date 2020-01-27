@@ -906,8 +906,8 @@ io.on('connection',(socket)=>
       if ( err)console.log(err);
       else
       {
-        console.log(a1s);
-        if(a1a.length>0){
+        console.log("có roi"+a1s);
+        if(a1s.length>0){
           a1s.forEach((a1) => {
             socket.emit('S_kq_check_contact_2',{user:strencode(row1.user), number: row1.number});
           });
