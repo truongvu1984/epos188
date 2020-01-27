@@ -803,8 +803,8 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('danhantinnhan', function (nguoigui, idc
-    console.log(+":"+idc);
+  socket.on('danhantinnhan', function (nguoigui, idc)
+    console.log(nguoigui+":"+idc);
    	if (socket.number&&nguoigui&&idc){
 
       console.log('dã nhan tin nhan');
