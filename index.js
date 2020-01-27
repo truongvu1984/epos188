@@ -906,10 +906,10 @@ io.on('connection',(socket)=>
       if ( err)console.log(err);
       else
       {
-        console.log("có roi"+a1s);
+        console.log(a1s);
         if(a1s.length>0){
           a1s.forEach((a1) => {
-            socket.emit('S_kq_check_contact_2',{user:strencode(row1.user), number: row1.number});
+            socket.emit('S_kq_check_contact_2',{user:strencode(a1.user), number: a1.number});
           });
         }
         else {socket.emit('S_kq_check_contact_zero_2'); }
