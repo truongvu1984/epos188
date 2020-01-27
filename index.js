@@ -727,7 +727,7 @@ io.on('connection',(socket)=>
                                               });
                                               io.sockets.in(row5.number).emit('S_send_tinnhan',{ids:res5.insertId,name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
                                                   subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian),read_1:'N', stt:'F'});
-                                            
+
 
                                           } //het else
                                         });
@@ -902,19 +902,17 @@ io.on('connection',(socket)=>
   });
   socket.on('search_contact', function (string){
     if (socket.number&&string){
-      con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
-      if (!( err))
+      con.query("SELECT `number`, `user` FROM `account` WHERE `number` LIKE CONCAT('%',"+string+",'%')", function(err, a1s){
+      if ( err)console.log(err);
+      else
       {
-        var s=true;
-        a1.forEach(function (row1)
-          {
-            if (row1.number.indexOf(string) !== -1 )
-            {
-              socket.emit('S_kq_check_contact_2',{user:strencode(row1.user), number: row1.number});console.log("Da tim thay:"+row1.user);
-              s=false;
-            }
+        console.log(a1s);
+        if(a1a.length>0){
+          a1s.forEach((a1) => {
+            socket.emit('S_kq_check_contact_2',{user:strencode(row1.user), number: row1.number});
           });
-        if (s){socket.emit('S_kq_check_contact_zero_2');}
+        }
+        else {socket.emit('S_kq_check_contact_zero_2'); }
       }
     });
     }
