@@ -24,12 +24,6 @@ function strdecode( data ){
 var passwordHash = require('password-hash');
 let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
 
-// cb.validatePhone('+84982025401','reverse_cli',(a1,a2)=>{
-//   if(a1){console.log(a1);}
-//   else {
-//     console.log(a2);
-//   }
-// });
 
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -40,28 +34,7 @@ isArray = function(a) {
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      app.get('/', (req, res) => res.render('dangnhap3'));
-      app.post('/', urlencodedParser, function (req, res){
-        if (!req.body) return res.sendStatus(400)
-        else {
-          if(req.body.number&&req.body.code&&req.body.pass){
-            var full_number = "+"+req.body.code + req.body.number.replace('0','');
-            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
-              if (err || rows.length ==0){res.render('dangnhap3', {noidung:'Tài khoản này không tồn tại'});}
-              else{
-                if (passwordHash.verify(req.body.pass, rows[0].pass)){
-                  res.render('home2');
-                  // req.session.number = full_number;
-                }
-                else {res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});}
-              }
-            });
-          }
-          else {
-            res.render('dangnhap3', {noidung:'Mật khẩu không đúng'});
-          }
-        }
-      })
+
 function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
@@ -93,187 +66,6 @@ io.on('connection',(socket)=>
   //                   tin.push({donvi:strencode(row.donvi),tongdiem:row.tongdiem,bonmon:row.bonmon,chiensikhoe:row.chiensikhoe,boivutrang:row.boivutrang,chayvutrang:row.chayvutrang,k16:row.k16,bongchuyen:row.bongchuyen,keoco:row.keoco,chay10000m:row.chay10000m,caulong:row.caulong,bongban:row.bongban});
   //                   if(key===(rows.length-1)){
   //                     con.query("SELECT * FROM `danhsach_monthi` ", function(err3, row3s){
-  //                      if (err3){console.log('co loi 2:'+err3);}
-  //                      else {
-  //                        let monthi=[];
-  //                        row3s.forEach((row3,key3)=>{
-  //                          monthi.push(strencode(row3.ten));
-  //                          if(key3===(row3s.length-1)){
-  //                            con.query("SELECT * FROM information_schema.columns WHERE table_name = 'toandoan'", function(err1, row1s){
-  //                              if (err1){console.log('co loi 2:'+err1);}
-  //                              else {
-  //                                  let noidung=[];
-  //                                  row1s.forEach((row1,key1)=>{
-  //                                    noidung.push(row1.COLUMN_NAME);
-  //                                    if(key1===(row1s.length-2)){
-  //                                      con.query("UPDATE `thoigian` SET `time` = "+time.getTime()+" WHERE `ma_so` LIKE 'A1' ",function(err11,res11)
-  //                                          {if(err11){console.log(err11);}
-  //                                      });
-  //                                       socket.emit('toan_doan',monthi,noidung,tin, time.getTime());
-  //
-  //                                       return false;
-  //                                    }
-  //                                  });
-  //                              }
-  //                            });
-  //
-  //                          }
-  //                        });
-  //                      }
-  //                     });
-  //                   }
-  //                 });
-  //
-  //
-  //               }
-  //               });
-  //             // có nghĩa là một trong những bảng từng môn có sự thay đổi, bây giờ bắt đầu đi lấy từng bảng gửi về
-  //
-  //           }
-  //           else {
-  //             socket.emit('ketqua_toandan_ok');
-  //           }
-  //         }
-  //     });
-  //     // con.query("SELECT * FROM `bongchuyen` WHERE `ma_doi` IS NOT NULL ", function(err, rows){
-  //
-  //   }
-  // });
-  // socket.on('reg_monthi',()=>{
-  //   con.query("SELECT * FROM `danhsach_monthi`", function(err, rows){
-  //       if(err)console.log(err);
-  //       else {
-  //           let tin=[];
-  //           rows.forEach((row,key)=>{
-  //             tin.push({monthi:strencode(row.ten),code:row.code,type:row.type});
-  //             if(key===(rows.length-1))socket.emit('S_send_monthi',tin);
-  //           });
-  //         }
-  //       });
-  //       con.query("SELECT * FROM `list_donvi`", function(err1, row1s){
-  //           if(err1)console.log(err1);
-  //           else {
-  //             let tin1=[];
-  //             row1s.forEach((row1,key)=>{
-  //               tin1.push({ten:strencode(row1.donvi),code:row1.code});
-  //               if(key==(row1s.length-1))socket.emit('S_list_donvi',tin1);
-  //             });
-  //           }
-  //       });
-  //       con.query("SELECT * FROM `list_loi`", function(err, rows){
-  //           if(err)console.log(err);
-  //           else {
-  //               let tin=[];
-  //               rows.forEach((row,key)=>{
-  //                 tin.push({monthi:strencode(row.ten),code_monthi:row.code_monthi,type:row.type,loi:strencode(row.ten_loi), code_loi:row.code_loi, diem:row.diem});
-  //                 if(key===(rows.length-1))socket.emit('S_send_list_loi',tin);
-  //               });
-  //             }
-  //           });
-  //
-  // });
-  // socket.on('C_reg_trandau',(code,type)=>{
-  //   console.log(code +":"+type);
-  //   con.query("SELECT * FROM `"+code+"`", function(err, rows){
-  //       if(err)console.log(err);
-  //       else {
-  //           if(type=="a" && code=="a8"){
-  //             let tin=[];
-  //             rows.forEach((row,key)=>{
-  //               con.query("SELECT * FROM `"+code+"loi` WHERE `maso` LIKE '"+row.tt+"'", function(err2, r2s){
-  //                   if(err2)console.log(err2);
-  //                   else {
-  //                     if(r2s.length>0){
-  //                     let loi1=[];
-  //                     r2s.forEach((r2,key2)=>{
-  //                       loi1.push({code_monthi:code, ten:strencode(r2.ten),code:r2.code,type:r2.type,diem:r2.diem,solan:r2.solan,tong:r2.tong});
-  //                       if(key2===(r2s.length-1)){
-  //                         tin.push({code_monthi:code,ten:strencode(row.ten),donvi:strencode(row.donvi),code:row.code,thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
-  //                         if(key===(rows.length-1)){socket.emit('S_send_trandau','a',tin);console.log('Đã send trận đấu');}
-  //                       }
-  //                     });
-  //                   }
-  //                   else {
-  //                     let loi1=[];
-  //                     tin.push({code_monthi:code,ten:strencode(row.ten),donvi:strencode(row.donvi),code:row.code,thoigian:row.thoigian,loi:loi1,ketqua:row.ketqua});
-  //                     if(key===(rows.length-1)){socket.emit('S_send_trandau',tin);console.log('Đã send trận đấu');}
-  //
-  //                   }
-  //                 }
-  //               });
-  //             });
-  //           }
-  //           else if(code=="a6") {
-  //
-  //             let tin=[];
-  //             rows.forEach((row,key)=>{
-  //               con.query("SELECT * FROM `"+code+"full` WHERE `ma` LIKE '"+row.ma+"'", function(err2, r2s){
-  //                 if(err2)console.log(err2);
-  //                 else {
-  //                   let tin1=[];
-  //                   r2s.forEach((r2,key2)=>{
-  //                     tin1.push({time:r2.time,doi1:strencode(r2.doi1),doi2:strencode(r2.doi2),setnumber:r2.setnumber,diem11:r2.diem11,diem12:r2.diem12,diem13:r2.diem13,diem14:r2.diem14,diem15:r2.diem15,diem21:r2.diem21,diem22:r2.diem22,diem23:r2.diem23,diem24:r2.diem24,diem25:r2.diem25});
-  //                     if(key2==(r2s.length-1)){
-  //                       tin.push({ten:strencode(row.ten),tran:tin1});
-  //                       if(key==(rows.length-1)){socket.emit("S_send_trandau_b",tin);
-  //                       console.log("đã gửi tin b đi");
-  //                     }
-  //                     }
-  //                   });
-  //                 }
-  //               });
-  //             });
-  //           }
-  //         }
-  //       });
-  // });
-  // socket.on('trongtai_bongchuyen',(tin,number)=>{
-  //   console.log(tin);
-  //   console.log(number);
-  //   con.query("SELECT * FROM `bongchuyen` ", function(err, rows){
-  //       if(err)console.log(err);
-  //       else {
-  //         rows.forEach((row,key)=>{
-  //           if(number==0) socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});
-  //           else {
-  //             let test = true;
-  //             tin.forEach((tin1,key1)=>{
-  //             if(row.matran===tin1.matran){
-  //               console.log(tin1.matran);
-  //                 if(row.time > tin1.time){
-  //                   console.log('tim thay');
-  //                   socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});
-  //                   test = false;
-  //                   return false;
-  //                 }
-  //               }
-  //             if(key1===(tin.length-1)){if(test)socket.emit('S_trongtai_bongchuyen',{matran:row.matran,tentran:strencode(row.tentran),time:row.time,doi1:strencode(row.doi1),doi2:strencode(row.doi2),setnumber:row.setnumber,diem11:row.diem11,diem12:row.diem12,diem13:row.diem13,diem14:row.diem14,diem15:row.diem15,diem21:row.diem21,diem22:row.diem22,diem23:row.diem23,diem24:row.diem24,diem25:row.diem25});}
-  //             });
-  //           }
-  //         });
-  //     }
-  //   });
-  // });
-  // socket.on('C_ketqua_bongchuyen',(tin)=>{
-  //   let time1  =new Date().getTime();
-  //   if(tin.setnumber==3){
-  //     con.query("UPDATE `bongchuyen` SET `time`= "+time1+",`diem11` = "+tin.doi1.set1+",`diem12` = "+tin.doi1.set2+",`diem13` = "+tin.doi1.set3+ ",`diem21` = "+tin.doi2.set1+" ,`diem22` = "+tin.doi2.set2+",`diem23` = "+tin.doi2.set3+" WHERE `matran` LIKE '"+tin.matran+"'",function(err,res)
-  //       {if(err){console.log(err);}
-  //       else {
-  //         socket.emit('send_ketqua_bongchuyen_ok',{time:time1, matran:tin.matran,setnumber:3,diem11:tin.doi1.set1,diem12:tin.doi1.set2,diem13:tin.doi1.set3,diem21:tin.doi2.set1,diem22:tin.doi2.set2,diem23:tin.doi2.set3});
-  //       }
-  //   });
-  // }
-  // else {
-  //   con.query("UPDATE `bongchuyen` SET `time`="+time1+",`diem11` = "+tin.doi1.set1+",`diem12` = "+tin.doi1.set2+",`diem13` = "+tin.doi1.set3+ ",`diem14` = "+tin.doi1.set4+ ",`diem15` = "+tin.doi1.set5+ ",`diem21` = "+tin.doi2.set1+" ,`diem22` = "+tin.doi2.set2+",`diem23` = "+tin.doi2.set3+",`diem24` = "+tin.doi2.set4+ ",`diem25` = "+tin.doi2.set5+ " WHERE `matran` LIKE '"+tin.matran+"'",function(err1,res1)
-  //       {if(err1){console.log(err1);}
-  //       else {
-  //         socket.emit('send_ketqua_bongchuyen_ok',{time:time1,matran:row.matran,setnumber:5,diem11:tin.doi1.set1,diem12:tin.doi1.set2,diem13:tin.doi1.set3,diem14:tin.doi1.set4,diem15:tin.doi1.set5,diem21:tin.doi2.set1,diem22:tin.doi2.set2,diem23:tin.doi2.set3,diem24:tin.doi2.set4,diem25:tin.doi2.set5});
-  //       }
-  //
-  //   });
-  // }
-  // });
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
     if(idphone&&num){
@@ -444,106 +236,7 @@ io.on('connection',(socket)=>
 
   }
   // lắng nghe sự kiện đăng ký tài khoản mới
-  socket.on('C_yeucau_chuoi_forgotpass',function(idphone, num){
-    if(idphone&&num){
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"'", function(err, rows){
-      if(err){console.log(err);}
-      else {
-        if (rows.length == 0 )	{
-             socket.emit('taikhoankhongco');
-             }
-          else {
-              con.query("SELECT * FROM `danhsachkhoa` WHERE `number` LIKE '"+ num +"' OR `phoneid` LIKE '"+idphone+"' LIMIT 1", function(err4, rows4){
-                if(err4){console.log(err4);}
-                else {
-                  if(rows4.length >0){socket.emit('C_yeucauchuoi_quasolan');}
-                  else {
-                    var date = Math.floor(Date.now()/1000);
-                    var string = Math.floor(Math.random() * (89998)) + 10001;
-                    cb.sendMessage({to:'84982025401', text:'Mesage from ePos'}, (error, response) => {
-                        if(error){console.log(error); socket.emit('sodienthoaikhongtontai');}
-                        else {
-                          console.log(response);
-                          socket.emit('S_guichuoi_xacnhan_forget');// để Client chuyển sang giao diện chờ nhập chuỗi
-                          //kiểm tra xem bảng xác thực đã có số điện thoại đó chưa, nếu có rồi thì update, nếu chưa có thì thêm mới
-                          con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err6, rows6){
-                            if(err6){console.log(err6);}
-                            else {
-                                // cho phép đăng ký liên tục 3 lần, nếu là lần đầu
-                              if(rows6.length==0){
-                                var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid,date,status) VALUES ?";
-                                var values = [[num, string,idphone,date,'Y']];
-                                con.query(sql, [values], function(err, result){
-                                  if(err){console.log(err);}
-                                  else {
-                                    con.query("SELECT * FROM `xacthuc` WHERE `phoneid` LIKE '"+ idphone +"'", function(err9, rows9){
-                                    if(rows9.length >=3){
-                                      var sql = "INSERT INTO `danhsachkhoa` (phoneid,date) VALUES ?";
-                                      var values = [[idphone,date]];
-                                      con.query(sql, [values], function(err, result){ if(err)console.log(err);});
-                                    }
-                                  });
-                                }
-                                });
-                            }
-                                // còn nếu trước đó đã có rồi
-                              else {
-                                console.log('update xac thuc');
-                                con.query("UPDATE `xacthuc` SET `status` = 'N' WHERE `number` LIKE '"+num+"'",function(){
-                                    //sau khi update rồi thì insert vào
-                                    var sql = "INSERT INTO `xacthuc` (number,chuoi,phoneid,date,status) VALUES ?";
-                                    var values = [[num, string,idphone,date,'Y']];
-                                    con.query(sql, [values], function(err, result){
-                                      con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"'", function(err9, rows9){
-                                        console.log('ket qua:'+rows9);
-                                        if(rows9.length >=3){
-                                          var sql = "INSERT INTO `danhsachkhoa` (number,date) VALUES ?";
-                                          var values = [[num, date]];
-                                          con.query(sql, [values], function(err, result){ if(err)console.log(err);});
-                                        }
-                                      });
-                                      con.query("SELECT * FROM `xacthuc` WHERE `phoneid` LIKE '"+ idphone +"'", function(err10, rows10){
-                                        console.log('ket qua:'+rows10);
-                                        if(rows10.length >=3){
-                                          var sql = "INSERT INTO `danhsachkhoa` (phoneid,date) VALUES ?";
-                                          var values = [[idphone,date]];
-                                          con.query(sql, [values], function(err, result){ if(err)console.log(err);});
-                                        }
-                                      });
-                                    });
 
-
-
-                                });
-                              }
-
-                            }
-                          });
-
-                        }
-
-                    });
-
-                  }
-                }
-              });
-            }
-          }
-        });
-    }
-  });
-  socket.on('C_send_chuoi_forgot',function(num,chuoi,pass){
-    if(num&&chuoi&&pass){
-      con.query("SELECT * FROM `xacthuc` WHERE `number` LIKE '"+ num +"' AND `chuoi` LIKE '"+chuoi+"' AND `status` LIKE 'Y'", function(err1, row1s) {
-          if((err1)|| (row1s.length==0)) {socket.emit('S_chuoikhongdung');}
-          else {
-            con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
-            socket.emit('S_doipass_thanhcong');
-          });
-          }
-      });
-    }
-  });
   socket.on('C_change_pass_admin',function(id,num,pass){
     if(num&&id&&pass){
       con.query("SELECT * FROM `real_number` WHERE `id_phone` LIKE '"+id+"' LIMIT 1", function(err1, rows1){
@@ -569,8 +262,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login1',(user1, pass1)=>{
-    console.log('có nhận login 1');
-    if(user1&&pass1){
+      if(user1&&pass1){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
   			 else{
@@ -631,9 +323,9 @@ io.on('connection',(socket)=>
                               if(a2s.length >0){
                               a2s.forEach(function(a2,key2){
                                 nhomnguoinhan.push({number:strencode(a2.number),name:strencode(a2.name),stt:a2.stt});
-                                  // nhomnguoinhan.push({number:a2.number, name:strencode(a2.name),stt:a2.stt});
+
                                 if(key2 === (a2s.length-1)){
-                                  // socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
+
                                   socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
                                 }
                               });
@@ -645,56 +337,55 @@ io.on('connection',(socket)=>
                      }
             });
             // // lấy bảng save
-            // con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' AND `id` > "+data.save+" ORDER BY `id` ASC", function(err1, a1s)
-            //   {
-            //       if (err1){console.log(err1);}
-            //       else if(a1s.length >0){
-            //         a1s.forEach(function(a1,key){
-            //           console.log('có gửi save đi:');
-            //           socket.emit('S_send_save',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)});
-            //         });
-            //       }
-            //   });
+            con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' AND `id` > "+data.save+" ORDER BY `id` ASC", function(err1, a1s)
+              {
+                  if (err1){console.log(err1);}
+                  else if(a1s.length >0){
+                    a1s.forEach(function(a1){
+                      socket.emit('S_send_save',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)});
+                    });
+                  }
+              });
             // // // lấy bảng contact
-            // con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `id` ASC", function(err1, a1s)
-            //   {
-            //     if (err1){console.log('Da co loi contact full:'+err1);}
-            //     else if(a1s.length > 0)
-            //       {
-            //         let mangcontact;
-            //         a1s.forEach(function(a1,key){
-            //           mangcontact={ids:a1.id,name:strencode(a1.name), number:a1.number};
-            //           socket.emit('S_send_contact',mangcontact);
-            //         });
-            //       }
-            // });
+            con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `id` ASC", function(err1, a1s)
+              {
+                if (err1){console.log('Da co loi contact full:'+err1);}
+                else if(a1s.length > 0)
+                  {
+                    let mangcontact;
+                    a1s.forEach(function(a1,key){
+                      mangcontact={ids:a1.id,name:strencode(a1.name), number:a1.number};
+                      socket.emit('S_send_contact',mangcontact);
+                    });
+                  }
+            });
             //lấy danh sách group
-            // con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' AND `id` > "+data.group+" ORDER BY `id` ASC", function(err1, a1s)
-            //  {
-            //   if ( err1){console.log(err1);}
-            //   else if( a1s.length > 0)
-            //     {
-            //       let tinfull;
-            //       a1s.forEach(function(a1,key){
-            //           let mangcontact = [];
-            //           con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err2, a2s){
-            //            if(err2){console.log(err2);}
-            //            else {
-            //              if(a2s.length>0){
-            //                a2s.forEach(function(a2,key2){
-            //                  mangcontact.push({name:strencode(a2.name), number:a2.number});
-            //                  if(key2===(a2s.length-1)){
-            //                    tinfull={ids:a1.id,idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact};
-            //                    socket.emit('S_send_group',tinfull);
-            //
-            //                  }
-            //                });
-            //              }
-            //            }
-            //          });
-            //       });
-            //     }
-            //   });
+            con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' AND `id` > "+data.group+" ORDER BY `id` ASC", function(err1, a1s)
+             {
+              if ( err1){console.log(err1);}
+              else if( a1s.length > 0)
+                {
+                  let tinfull;
+                  a1s.forEach(function(a1,key){
+                      let mangcontact = [];
+                      con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err2, a2s){
+                       if(err2){console.log(err2);}
+                       else {
+                         if(a2s.length>0){
+                           a2s.forEach(function(a2,key2){
+                             mangcontact.push({name:strencode(a2.name), number:a2.number});
+                             if(key2===(a2s.length-1)){
+                               tinfull={ids:a1.id,idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact};
+                               socket.emit('S_send_group',tinfull);
+
+                             }
+                           });
+                         }
+                       }
+                     });
+                  });
+                }
+              });
             // // Lấy danh sách room
             con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' AND `id` > "+data.online+" ORDER BY `id` ASC", function(err1, a1s){
                 if (err1){console.log('Da co loi room full:'+err1);}
@@ -705,14 +396,7 @@ io.on('connection',(socket)=>
                         {
                           if ( err5 ){console.log(err5);}
                           else  {if(a5s.length>0){
-                            console.log(a5s);
-                            socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt});
-                            console.log('có gửi room đi:'+strencode(a1.subject));
-                            console.log('có gửi room đi:'+a1.idc);
-                            console.log('có gửi room đi:'+strencode(a5s[0].name));
-                            console.log('có gửi room đi:'+a5s[0].number);
-                            console.log('có gửi room đi:'+get_time(a1.time));
-                            console.log('có gửi room đi:'+a1.stt);
+                              socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt});
 
                           }
                         }
