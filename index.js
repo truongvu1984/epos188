@@ -551,7 +551,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_del_friend',(numbers)=>{
-    if(socket.number&&isArray(numbers)){
+    if(socket.number&&isArray(numbers)&&(numbers.length>0)){
       numbers.forEach((number)=>{
         console.log(number.idc);
         if(number.idc){
@@ -737,7 +737,7 @@ io.on('connection',(socket)=>
     if(socket.number){
       let list=[];
       let list_full=[];
-      if(isArray(data)){
+      if(isArray(data)&&(data.length>0)){
         data.forEach((tin,key)=>{
           if(tin.number&&tin.idc){
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+tin.idc+"' LIMIT 1", function(err1, a1s){
