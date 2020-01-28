@@ -998,10 +998,10 @@ io.on('connection',(socket)=>
                   con.query(sql2, [values2], function (err, res)
                     {
                       if ( err){console.log(err);}
-                      
+
                       else {
                         console.log('có gui di');
-                        socket.emit('S_add_contact_ok',{ids:res.insertId, idc:contact.idc,name:contact.name,number:contact.number});}
+                        socket.emit('S_add_contact_ok',{ids:res.insertId, idc:contact.idc,name:strencode(contact.name),number:contact.number});}
                   });
                 }
                }
