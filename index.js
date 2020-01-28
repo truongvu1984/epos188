@@ -48,24 +48,7 @@ kiemtra_taikhoan();
 
 io.on('connection',(socket)=>
 {
-  console.log(socket.id);
-  // socket.emit('truy_cap_moi_hoithao');
-  // socket.on('hoithao',(tin)=>{
-  //   if(tin.toandoan != null){
-  //
-  //     con.query("SELECT * FROM `thoigian` WHERE `ma_so` LIKE 'A1' LIMIT 1", function(err10, row10s){
-  //         if(err10)console.log(err10);
-  //         else {
-  //           if(row10s[0].time>tin.toandoan)
-  //           {
-  //             con.query("SELECT * FROM `toandoan` ", function(err, rows){
-  //               if (err){console.log('co loi 1:'+err);}
-  //               else{
-  //                 let tin=[];
-  //                 rows.forEach((row,key)=>{
-  //                   tin.push({donvi:strencode(row.donvi),tongdiem:row.tongdiem,bonmon:row.bonmon,chiensikhoe:row.chiensikhoe,boivutrang:row.boivutrang,chayvutrang:row.chayvutrang,k16:row.k16,bongchuyen:row.bongchuyen,keoco:row.keoco,chay10000m:row.chay10000m,caulong:row.caulong,bongban:row.bongban});
-  //                   if(key===(rows.length-1)){
-  //                     con.query("SELECT * FROM `danhsach_monthi` ", function(err3, row3s){
+
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
     if(idphone&&num){
@@ -986,7 +969,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_send_contact', function (contact){
       if (socket.number&&contact){
-        console.log('có nhận send contact');
+
         con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
            {
              if ( err){console.log(err);}
@@ -1000,7 +983,7 @@ io.on('connection',(socket)=>
                       if ( err){console.log(err);}
 
                       else {
-                        console.log('có gui di');
+
                         socket.emit('S_add_contact_ok',{ids:res.insertId, idc:contact.idc,name:strencode(contact.name),number:contact.number});}
                   });
                 }
