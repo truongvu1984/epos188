@@ -553,7 +553,7 @@ io.on('connection',(socket)=>
   socket.on('C_del_friend',(numbers)=>{
     if(socket.number&&isArray(numbers)&&(numbers.length>0)){
       numbers.forEach((number)=>{
-        console.log(number.idc);
+
         if(number.idc){
         con.query("DELETE FROM `"+socket.number+"contact` WHERE `number` LIKE '"+number.idc+"'", function(err3)
           {
@@ -743,20 +743,22 @@ io.on('connection',(socket)=>
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+tin.idc+"' LIMIT 1", function(err1, a1s){
           if(err1){console.log(err1);}
           else {
-            // con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1s[0].id+"' AND `stt` LIKE 'Y'", function(err2, a2s){
-            //   if(err2){console.log(err2);}
-            //   else {
-            //     if(a2s.length > tin.number){
-            //       a2s.forEach((a2,key2)=>{
-            //         list.push({number:a2.number, name:strencode(a2.name),stt:a2.app});
-            //         if(key2===a2s.length){
-            //           list_full.push({list:list,idc:tin.idc});
-            //           if(key===data.length){socket.emit('S_check_send',list_full);}
-            //         }
-            //       });
-            //     }
-            //   }
-            // });
+            if(a1s.length>0){
+            con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1s[0].id+"' AND `stt` LIKE 'Y'", function(err2, a2s){
+              if(err2){console.log(err2);}
+              else {
+                if(a2s.length > tin.number){
+                  a2s.forEach((a2,key2)=>{
+                    list.push({number:a2.number, name:strencode(a2.name),stt:a2.app});
+                    if(key2===a2s.length){
+                      list_full.push({list:list,idc:tin.idc});
+                      if(key===data.length){socket.emit('S_check_send',list_full);}
+                    }
+                  });
+                }
+              }
+            });
+          }
           }
         });
       }
