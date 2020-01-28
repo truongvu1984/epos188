@@ -551,19 +551,20 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_del_friend',(numbers)=>{
-
     if(socket.number&&isArray(numbers)){
-      socket.emit('S_del_friend');
       numbers.forEach((number)=>{
+        console.log(number.idc);
         if(number.idc){
         con.query("DELETE FROM `"+socket.number+"contact` WHERE `number` LIKE '"+number.idc+"'", function(err3)
           {
-              if (err3){console.log(err3);}
+              if (err3)console.log(err3);
+              else  socket.emit('S_del_friend');
+
         });
       }
       });
-  }
-});//hi
+    }
+  });//hi
   socket.on('C_reques_point_inbox',(idc)=>{
     if(socket.number&&idc){
       if(socket.roomabc){
