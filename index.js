@@ -306,7 +306,6 @@ io.on('connection',(socket)=>
                               if(a2s.length >0){
                               a2s.forEach(function(a2,key2){
                                 nhomnguoinhan.push({number:strencode(a2.number),name:strencode(a2.name),stt:a2.stt});
-
                                 if(key2 === (a2s.length-1)){
 
                                   socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
@@ -396,14 +395,15 @@ io.on('connection',(socket)=>
 	});
 
   socket.on('C_del_inbox',(mes)=>{
-    if(socket.number&&isArray(mes)){
+    if(socket.number&&isArray(mes)&&(mes.length>0)){
       mes.forEach((mes1,key)=>{
         if(mes1.idc){
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'R' LIMIT 1", function(err, res)
           {
-            if ( err|| (res.length ==0) ){console.log(err);}
+            if ( err){console.log(err);}
             else
               {
+                if(res.length>0){
                 con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res[0].id+"'  AND `send_receive` LIKE 'R'", function(err1)
                   {
                     if ( err1){console.log(err1);}
@@ -425,6 +425,7 @@ io.on('connection',(socket)=>
 
                     }
                 });
+              }
 
               }
           });
@@ -433,14 +434,15 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_del_send',(mes)=>{
-    if(socket.number&&isArray(mes)){
+    if(socket.number&&isArray(mes)&&(mes.length>0)){
       mes.forEach((mes1,key)=>{
         if(mes1.idc){
           con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'S' LIMIT 1", function(err, res)
             {
-            if ( err|| (res.length ==0) ){console.log(err);}
+            if ( err ){console.log(err);}
             else
               {
+                if(res.length>0){
                 con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res[0].id+"'  AND `send_receive` LIKE 'S'", function(err1)
                   {
                     if ( err1){console.log(err1);}
@@ -462,7 +464,7 @@ io.on('connection',(socket)=>
 
                     }
                 });
-
+              }
               }
             });
         }
@@ -470,14 +472,15 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_del_save',(mes)=>{
-    if(socket.number&&isArray(mes)){
+    if(socket.number&&isArray(mes)&&(mes.length>0)){
       mes.forEach((mes1,key)=>{
         if(mes1.idc){
           con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'H' LIMIT 1", function(err, res)
           {
-            if ( err|| (res.length ==0) ){console.log(err);}
+            if ( err ){console.log(err);}
             else
               {
+                if(res.length>0){
                   con.query("DELETE FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+res[0].id+"'", function(err2)
                         {
                           if (err2){console.log(err2);}
@@ -494,8 +497,7 @@ io.on('connection',(socket)=>
                           }
                       });
 
-
-
+                  }
               }
         });
         }
@@ -503,15 +505,16 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_del_online',(mes)=>{
-    if(socket.number&&isArray(mes)){
+    if(socket.number&&isArray(mes)&&(mes.length>0)){
       socket.emit('S_del_online');
       mes.forEach((mes1,key)=>{
         if(mes1.idc){
           con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mes1.idc+"'  AND `send_receive` LIKE 'O' LIMIT 1", function(err, res)
           {
-            if ( err|| (res.length ==0) ){console.log('1:'+err);}
+            if ( err ){console.log(err);}
             else
               {
+                if(res.length>0){
                 con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` = "+res[0].id + " AND `number` NOT LIKE '"+socket.number+"'", function(err1, res1)
                   {
                     if ( err1|| (res1.length ==0) ){console.log('2:'+err1);}
@@ -543,7 +546,7 @@ io.on('connection',(socket)=>
                         });
                       }
                 });
-
+              }
               }
             });
         }
