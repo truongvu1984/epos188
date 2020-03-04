@@ -34,6 +34,21 @@ isArray = function(a) {
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
+      app.get('/', (req, res) => res.render('dangnhap3'));
+      app.post('/', urlencodedParser, function (req, res){
+              if (!req.body) return res.sendStatus(400)
+              else {
+                var full_number = "+"+req.body.code + req.body.number.replace('0','');
+                con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
+                  if (err || rows.length ==0){res.render('dangnhap', {noidung:'Tài khoản này không tồn tại'});}
+                  else{
+                    if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });}
+                    else {res.render('dangnhap', {noidung:'Mật khẩu không đúng'});}
+                  }
+                });
+              }
+            })
+
 
 function kiemtra_taikhoan(){
   setTimeout(function() {
@@ -48,7 +63,6 @@ kiemtra_taikhoan();
 
 io.on('connection',(socket)=>
 {
-
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
     if(idphone&&num){
@@ -890,6 +904,7 @@ io.on('connection',(socket)=>
   });
   socket.on('search_contact', function (string){
     if (socket.number&&string){
+      console.log(string);
       con.query("SELECT `number`, `user` FROM `account` WHERE `number` LIKE CONCAT('%',"+string+",'%')", function(err, a1s){
       if ( err)console.log(err);
       else
@@ -901,38 +916,12 @@ io.on('connection',(socket)=>
             if(key===(a1s.length-1))socket.emit('S_kq_check_contact_2',kq1);
           });
         }
-        else {socket.emit('S_kq_check_contact_zero_2'); }
+        else {socket.emit('S_kq_check_contact_zero_2');}
       }
     });
     }
   });
-  socket.on('C_check_contact', function (string){
-    if (socket.number&&string){
-      con.query("SELECT `number`, `user` FROM `account`", function(err, a1){
-      if ( err){console.log(err);}
-      else
-      {
-        let s=true;
-        let ketqua=[];
-        a1.forEach(function (row1,key)
-          {
-            if (row1.number.indexOf(string) !== -1 || row1.user.indexOf(string) !== -1)
-            {
-              ketqua.push({user:strencode(row1.user), number: row1.number});
-              s=false;
-            }
-            if(key === (a1.length-1)){
-              if (s){socket.emit('S_kq_check_contact_zero');}
-              else {socket.emit('S_kq_check_contact',ketqua);}
-            }
 
-
-          });
-
-      }
-    });
-    }
-  });
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
         socket.emit('S_get_join');
