@@ -68,7 +68,6 @@ body {
   top: 5px;
   z-index:2;
 }
-
 .main_line_wrap{
   position: absolute;
   width: 300px;
@@ -131,16 +130,6 @@ body {
   top:3px;
   border: 0px;
 }
-/* .list_contact_wrap{
-  position: absolute;
-  width: 300px;
-  top: 100px;
-  bottom: 0px;
-  display: block;
-  background-color: green;
-  z-index: 2;
-
-} */
 .list_contact{
   position: absolute;
   width: 270px;
@@ -152,7 +141,6 @@ body {
   z-index: 2;
 
 }
-
 .small_window{
   position: absolute;
   background-color: white;
@@ -163,7 +151,6 @@ body {
   display: none;
   z-index: 4
 }
-
 .line_inbox{
   width: 300px;
   height:40px;
@@ -358,7 +345,6 @@ body {
   margin-left: 10px
 
 }
-
 .wrap{
   position: absolute;
   width: 100%;
@@ -367,18 +353,76 @@ body {
   overflow: auto;
 }
 .login{
-  position: absolute;
+  position: relative;
+  float: right;
   width: 645px;
   height: 70px;
-  left:400px;
+  right: 10px;
   background-color: green;
+  z-index: 2
+
+}
+.img_icon{
+  position:relative;
+  float: left;
+  top:5px;
+  width: 60px;
+  height: 60px;
+  left:10px;
+  z-index: 2
 
 }
 .blue{
-  position: absolute;
   width: 100%;
   height: 70px;
   background-color: green;
+  z-index: 2;
+}
+.k1{
+  width: 900px;
+  height: 70px;
+  background-color: green;
+  z-index: 2;
+  margin: 0 auto;
+}
+
+.main_pic{
+  width: 100%;
+  height: 700px;
+  background-color: 	#cfeded;
+  z-index: 2
+}
+
+.white_2{
+  width: 100%;
+  height: 70px;
+  margin: 0 auto;
+  background-color: #dcdbd6;
+  z-index: 2
+}
+
+.main_content{
+  width: 900px;
+  height: 700px;
+  background-color: 	#cfeded;
+  z-index: 2;
+  margin: 0 auto;
+  
+}
+
+.white_2_2{
+  width: 900px;
+  height: 70px;
+  margin: 0 auto;
+
+  background-color: #dcdbd6;
+  z-index: 2
+}
+
+.policy{
+  position: relative;
+  float: left;
+  top:5px;
 }
 .code_name{
   position: absolute;

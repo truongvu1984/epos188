@@ -35,7 +35,7 @@ con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
       app.get('/', (req, res) => res.render('dangnhap3'));
-      app.get('/privacy', (req, res) => res.render('privacy'));
+      app.get('/privacy-policy', (req, res) => res.render('privacy'));
       app.post('/', urlencodedParser, function (req, res){
               if (!req.body) return res.sendStatus(400)
               else {
