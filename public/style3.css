@@ -407,7 +407,7 @@ body {
   background-color: 	#cfeded;
   z-index: 2;
   margin: 0 auto;
-  
+
 }
 
 .white_2_2{
@@ -420,9 +420,8 @@ body {
 }
 
 .policy{
-  position: relative;
-  float: left;
-  top:5px;
+  text-align: center;
+
 }
 .code_name{
   position: absolute;
