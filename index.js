@@ -236,7 +236,10 @@ io.on('connection',(socket)=>
   // lắng nghe sự kiện đăng ký tài khoản mới
 
   socket.on('C_change_pass_admin',function(key,id,num,pass){
-    console.log(key);
+cb.getValidateStatus(key, (ketqua)=>{
+  console.log(ketqua);
+});
+
     // if(num&&id&&pass){
     //   con.query("SELECT * FROM `real_number` WHERE `id_phone` LIKE '"+id+"' LIMIT 1", function(err1, rows1){
     //     if(err1){console.log(err1);}
