@@ -236,8 +236,9 @@ io.on('connection',(socket)=>
   // lắng nghe sự kiện đăng ký tài khoản mới
 
   socket.on('C_change_pass_admin',function(key,id,num,pass){
-cb.getValidateStatus(key, (ketqua)=>{
+cb.getValidateStatus(key, (err,ketqua)=>{
   console.log(ketqua);
+  console.log(err);
 });
 
     // if(num&&id&&pass){
