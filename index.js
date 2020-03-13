@@ -235,34 +235,20 @@ io.on('connection',(socket)=>
   }
   // lắng nghe sự kiện đăng ký tài khoản mới
 
-  socket.on('C_change_pass_admin',function(key,id,num,pass){
-cb.getValidateStatus(key, (err,ketqua)=>{
-  console.log(ketqua);
-  console.log(err);
-});
+  socket.on('C_change_pass_admin',function(key,num,pass){
+    if(key&&num&&pass){
+      cb.getValidateStatus(key, (err,ketqua)=>{
+        if(err)console.log(err);
+        else {
+          if(ketqua.validated){
+            con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
+              socket.emit('S_doipass_thanhcong');
+            });
+          }
+        }
+      });
+    }
 
-    // if(num&&id&&pass){
-    //   con.query("SELECT * FROM `real_number` WHERE `id_phone` LIKE '"+id+"' LIMIT 1", function(err1, rows1){
-    //     if(err1){console.log(err1);}
-    //     else {
-    //       if(rows1[0].number==num){
-    //         con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(){
-    //           socket.emit('S_doipass_thanhcong');
-    //
-    //           con.query("DELETE FROM `real_number` WHERE `id_phone` LIKE '"+id+"'", function(err2,kq)
-    //                 {
-    //                   if (err2){console.log(err2);}
-    //
-    //
-    //                 });
-    //           });
-    //       }
-    //       else {
-    //         socket.emit('doi_pass_ko_ok');
-    //       }
-    //     }
-    //   });
-    // }
   });
   socket.on('login1',(user1, pass1)=>{
       if(user1&&pass1){
