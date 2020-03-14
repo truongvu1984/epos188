@@ -104,6 +104,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_check_forget',(idphone,num,type)=>{
+    console.log('có nhận');
     if(idphone&&num&&type){
     var date = Math.floor(Date.now() / 1000);
     con.query("SELECT * FROM `dangky` WHERE `phone_id` LIKE '"+idphone+"'", function(err1, rows1){
@@ -122,6 +123,7 @@ io.on('connection',(socket)=>
                   con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err2, rows2){
                     if(err2){console.log(err2);}
                     else {
+                      console.log('ha hah hi hi');
                       switch (type) {
                         case 'A':
                         // xác minh khi quên mật khẩu
@@ -130,7 +132,7 @@ io.on('connection',(socket)=>
                           cb.phoneInformation(num,(error3,ketqua) => {
                             if(error3){socket.emit('verify_loi','A3');}
                             else if (!ketqua.is_mobile){socket.emit('verify_loi','A3');}
-                            else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');}
+                            else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');console.log('có gửi đi');}
                           });
                         }
                           break;
