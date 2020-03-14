@@ -219,8 +219,6 @@ io.on('connection',(socket)=>
                       } //end else 1
                     }
               });//end db.account
-
-            });
           }
         }
       });
