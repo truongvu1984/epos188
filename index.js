@@ -104,39 +104,61 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_check_forget',(idphone,num,type)=>{
-    console.log('có nhận');
     if(idphone&&num&&type){
     var date = Math.floor(Date.now() / 1000);
     con.query("SELECT * FROM `dangky` WHERE `phone_id` LIKE '"+idphone+"'", function(err1, rows1){
-      if(err1){console.log(err1);}
+      if(err1){socket.emit('verify_loi','A5');}
       else {
         if(rows1.length >2){socket.emit('verify_loi','A1');}
         else {
           var sql = "INSERT INTO `dangky`(phone_id,time1, time2) VALUES ?";
           var values = [[idphone,date,date]];
           con.query(sql, [values], function (err4, result) {
-            if (err4){console.log(err4);}
+            if (err4){socket.emit('verify_loi','A5');}
             else {
               con.query("UPDATE `dangky` SET `time2` = '"+date+"' WHERE `phone_id` LIKE '"+idphone+"'",function(err5, ok){
-                if (err5){console.log('update bị loi'+err5);}
+                if (err5){socket.emit('verify_loi','A5');}
                 else {
                   con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err2, rows2){
                     if(err2){console.log(err2);}
                     else {
-                      console.log('ha hah hi hi');
                       switch (type) {
-                        case 'A':
+                        case 'B':
                         // xác minh khi quên mật khẩu
-                        if (rows2.length ==0 ){socket.emit('verify_loi','A2');}
+                        if (rows2.length >0 ){socket.emit('verify_loi','A2');}
                         else {
                           cb.phoneInformation(num,(error3,ketqua) => {
                             if(error3){socket.emit('verify_loi','A3');}
                             else if (!ketqua.is_mobile){socket.emit('verify_loi','A3');}
-                            else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');console.log('có gửi đi');}
+                            else {
+                              var string = Math.floor(Math.random() * (89998)) + 10001;
+                              cb.sendMessage({to:'84982025401', text:'Your Windlaxy OTP pass is:'+string}, (error3, response) => {
+                                  if(error3){socket.emit('verify_loi','A3');}
+                                  else {
+                                    var sql = "INSERT INTO `sms-otp`(phone_id,time, string) VALUES ?";
+                                    var values = [[idphone,date,string]];
+                                    con.query(sql, [values], function (err4, result) {
+                                      if (err4){socket.emit('verify_loi','A5');}
+                                      else {
+                                          socket.emit('number_phone_ok');
+                                      }
+                                    });
+
+
+                                  }
+                                });
+
+
+
+
+
+
+
+                            }
                           });
                         }
                           break;
-                        case 'B':
+                        case 'A':
                           // xác minh khi đăng ký mới
                           if (rows2.length > 0 ){socket.emit('verify_loi','A2');}
                           else {
