@@ -975,6 +975,28 @@ io.on('connection',(socket)=>
     });
     }
   });
+  socket.on('search_contact3', function (string){
+    console.log('haha:'+string);
+    if (socket.number&&string){
+      console.log(string);
+    con.query("SELECT `number`,  LOCATE("+string+",number) `FROM `account` WHERE locate("+string+",number)>0", function(err, a1s){
+      if ( err)console.log(err);
+      else
+      {
+        if(a1s.length>0){
+          let kq1 = [];
+          a1s.forEach((a1,key) => {
+            kq1.push({user:strencode(a1.user), number: a1.number});
+            if(key===(a1s.length-1))socket.emit('S_kq_check_contact_2',kq1);
+          });
+        }
+        else {socket.emit('S_kq_check_contact_zero_2');}
+      }
+    });
+    }
+  });
+
+
 
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
