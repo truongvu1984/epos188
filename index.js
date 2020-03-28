@@ -24,12 +24,12 @@ function strdecode( data ){
 var passwordHash = require('password-hash');
 let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
 
-
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
+
 
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
@@ -64,6 +64,7 @@ kiemtra_taikhoan();
 
 io.on('connection',(socket)=>
 {
+  console.log(socket);
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
     if(idphone&&num){
@@ -132,7 +133,7 @@ io.on('connection',(socket)=>
                             else if (!ketqua.is_mobile){socket.emit('verify_loi','A3');}
                             else {
                               var string = Math.floor(Math.random() * (89998)) + 10001;
-                              cb.sendMessage({to:'84982025401', text:'Your Windlaxy OTP pass is:'+string}, (error3, response) => {
+                              cb.sendMessage({to:'84982025401', text:"Your Windlaxy OTP pass is:"+string}, (error3, response) => {
                                   if(error3){socket.emit('verify_loi','A3');}
                                   else {
                                     var sql = "INSERT INTO `sms-otp`(phone_id,time, string) VALUES ?";
@@ -287,7 +288,6 @@ io.on('connection',(socket)=>
           }
           else {
             socket.emit('login1_sai', {name:strencode(rows[0].user)});
-            console.log('login 1 sai');
           }
         }
       });
@@ -426,7 +426,19 @@ io.on('connection',(socket)=>
      	 });
      }
 	});
+  socket.on('ru_choi',(code)=>{
+    if(code){
+      io.sockets.in(code).emit('C_ru_choi',socket.number);
+    }
+  });
+  socket.on('chap_nhan',(code)=>{
+    if(code){
+      let room = 'a'+code+'b'+socket.number;
+      io.sockets.in(code).emit('C_chap_nhan',socket.number,room);
+      socket.emit('C_chap_nhan',code,room);
 
+    }
+  });
   socket.on('C_del_inbox',(mes)=>{
     if(socket.number&&isArray(mes)&&(mes.length>0)){
       mes.forEach((mes1,key)=>{
