@@ -990,7 +990,10 @@ io.on('connection',(socket)=>
             if(key===(a1s.length-1))socket.emit('S_kq_check_contact_2',kq1);
           });
         }
-        else {socket.emit('S_kq_check_contact_zero_2');}
+        else {
+          socket.emit('S_kq_check_contact_zero_2');
+          console.log('khoong cos klet qua');
+        }
       }
     });
     }
