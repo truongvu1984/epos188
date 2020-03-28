@@ -979,7 +979,7 @@ io.on('connection',(socket)=>
     console.log('haha:'+string);
     if (socket.number&&string){
       console.log(string);
-    con.query("SELECT `number`,  LOCATE("+string+",number) `FROM `account` WHERE locate("+string+",number)>0", function(err, a1s){
+    con.query("SELECT `number`,  LOCATE('"+string+"',number) `FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
       if ( err)console.log(err);
       else
       {
