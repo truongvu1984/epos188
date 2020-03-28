@@ -64,7 +64,7 @@ kiemtra_taikhoan();
 
 io.on('connection',(socket)=>
 {
-  console.log(socket);
+  console.log(socket.id);
   socket.emit('check_pass');
   socket.on('C_check_numberphone',(idphone,num)=>{
     if(idphone&&num){
