@@ -448,16 +448,10 @@ io.on('connection',(socket)=>
      	 });
      }
 	});
-  socket.on('ru_choi',(code)=>{
-    if(code){
-      io.sockets.in(code).emit('C_ru_choi',socket.number);
-    }
-  });
-  socket.on('chap_nhan',(code)=>{
-    if(code){
-      let room = 'a'+code+'b'+socket.number;
-      io.sockets.in(code).emit('C_chap_nhan',socket.number,room);
-      socket.emit('C_chap_nhan',code,room);
+  socket.on('C_send_diem',(toado,name)=>{
+    if(socket.number && toado && name){
+      socket.emit('C_send_diem_ok');
+      io.sockets.in(name).emit('S_send_diem',mess.imei,{ids:res.insertId, subject:strencode(mess.subject),nguoinhan:nguoinhans,idc:mess.id,time:get_time(thoigian),stt:'F'});
 
     }
   });
