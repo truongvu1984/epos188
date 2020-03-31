@@ -314,6 +314,25 @@ io.on('connection',(socket)=>
       });
     }
   });
+  socket.on('login4',(user1, pass1)=>{
+      if(user1&&pass1){
+      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
+         if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
+         else{
+          if (passwordHash.verify(pass1, rows[0].pass)){
+            console.log('Login 3 đúng rồi hi hi:'+user1);
+            socket.number = user1;
+            socket.username = user1;
+            socket.join(user1);
+              socket.emit('login1_dung', {name:strencode(rows[0].user)});
+          }
+          else {
+            socket.emit('login1_sai', {name:strencode(rows[0].user)});
+          }
+        }
+      });
+    }
+  });
   function check_data1(data){
     let abc;
     if(data==null||isNaN(data))abc=false;
