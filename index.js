@@ -450,7 +450,7 @@ io.on('connection',(socket)=>
   socket.on('C_send_diem',(toado,name)=>{
     if(socket.number && toado && name){
       socket.emit('C_send_diem_ok');
-      io.sockets.in(name).emit('S_send_diem',mess.imei,{ids:res.insertId, subject:strencode(mess.subject),nguoinhan:nguoinhans,idc:mess.id,time:get_time(thoigian),stt:'F'});
+      io.sockets.in(name).emit('S_send_diem',socket.number,toado);
 
     }
   });
