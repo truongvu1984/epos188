@@ -297,7 +297,6 @@ io.on('connection',(socket)=>
   });
   socket.on('login3',(user1, pass1)=>{
       if(user1&&pass1){
-
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
   			 else{
