@@ -320,7 +320,7 @@ io.on('connection',(socket)=>
          if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
          else{
           if (passwordHash.verify(pass1, rows[0].pass)){
-            console.log('Login 3 đúng rồi hi hi:'+user1);
+            console.log('Login 4 đúng rồi hi hi:'+user1);
             socket.number = user1;
             socket.username = user1;
             socket.join(user1);
