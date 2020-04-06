@@ -30,7 +30,8 @@ isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
 
-
+  var a234 = passwordHash.generate("1234");
+  console.log(a234);
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
@@ -314,25 +315,7 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('login4',(user1, pass1)=>{
-      if(user1&&pass1){
-      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
-         if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
-         else{
-          if (passwordHash.verify(pass1, rows[0].pass)){
-            console.log('Login 4 đúng rồi hi hi:'+user1);
-            socket.number = user1;
-            socket.username = user1;
-            socket.join(user1);
-              socket.emit('login1_dung', {name:strencode(rows[0].user)});
-          }
-          else {
-            socket.emit('login1_sai', {name:strencode(rows[0].user)});
-          }
-        }
-      });
-    }
-  });
+
   function check_data1(data){
     let abc;
     if(data==null||isNaN(data))abc=false;
@@ -1010,9 +993,6 @@ io.on('connection',(socket)=>
     });
     }
   });
-
-
-
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
         socket.emit('S_get_join');
@@ -1054,27 +1034,28 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_contact', function (contact){
-      if (socket.number&&contact){
+      if (socket.number&&isArray(contact)){
+        contact.forEach((row,key)=>{
+          con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+row.number+"' LIMIT 1", function(err, a1s)
+             {
+               if ( err){console.log(err);}
+               else
+                 {
+                   if(a1s.length===0){
+                    var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
+                    var values2 = [[row.idc,row.name,row.number]];
+                    con.query(sql2, [values2], function (err, res)
+                      {
+                        if ( err){console.log(err);}
+                        else {
+                          socket.emit('S_add_contact_ok',{ids:res.insertId, idc:row.idc,name:strencode(row.name),number:row.number});}
+                    });
+                  }
+                 }
+            });
 
-        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
-           {
-             if ( err){console.log(err);}
-             else
-               {
-                 if(a1s.length===0){
-                  var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
-                  var values2 = [[contact.idc,contact.name,contact.number]];
-                  con.query(sql2, [values2], function (err, res)
-                    {
-                      if ( err){console.log(err);}
+        });
 
-                      else {
-
-                        socket.emit('S_add_contact_ok',{ids:res.insertId, idc:contact.idc,name:strencode(contact.name),number:contact.number});}
-                  });
-                }
-               }
-          });
       }
   });
   socket.on('C_leave_off', function () {
