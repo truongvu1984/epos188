@@ -951,9 +951,9 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('search_contact', function (string){
-    console.log('haha:'+string);
+
     if (socket.number&&string){
-      console.log(string);
+
     con.query("SELECT `number`, `user` FROM `account` WHERE `number` LIKE CONCAT('%',"+string+",'%')", function(err, a1s){
       if ( err)console.log(err);
       else
@@ -971,9 +971,9 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('search_contact3', function (string){
-    console.log('haha:'+string);
+
     if (socket.number&&string){
-      console.log(string);
+
     con.query("SELECT `number`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
       if ( err)console.log(err);
       else
@@ -987,7 +987,7 @@ io.on('connection',(socket)=>
         }
         else {
           socket.emit('S_kq_check_contact_zero_2');
-          console.log('khoong cos klet qua');
+
         }
       }
     });
