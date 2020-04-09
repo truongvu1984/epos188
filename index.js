@@ -449,10 +449,10 @@ io.on('connection',(socket)=>
      	 });
      }
 	});
-  socket.on('C_send_diem',(toado,name)=>{
+  socket.on('C_send_diem',(toado,name,stt)=>{
     if(socket.number && toado && name){
       socket.emit('C_send_diem_ok');
-      io.sockets.in(name).emit('S_send_diem',socket.number,toado);
+      io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
 
     }
   });
