@@ -449,14 +449,14 @@ io.on('connection',(socket)=>
 	});
   socket.on('C_send_diem',(toado,name,stt)=>{
     if(socket.number && toado && name){
-      console.log('có nhạn C send diem');
+
         io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
 
     }
   });
   socket.on('C_nhan_toado',(name)=>{
     if(socket.number && name){
-      console.log('có nhạn C nhan toa do');
+    
       io.sockets.in(name).emit('C_send_diem_ok');
     }
   });
