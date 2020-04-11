@@ -449,14 +449,24 @@ io.on('connection',(socket)=>
 	});
   socket.on('C_send_diem',(toado,name,stt)=>{
     if(socket.number && toado && name){
-
         io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
 
     }
   });
+  socket.on('denghi_choi_lai',(name)=>{
+    if(socket.number && name){
+        io.sockets.in(name).emit('S_denghi_choilai',socket.number);
+
+    }
+  });
+  socket.on('ok_choilai',(name,chuoi)=>{
+    if(socket.number && name && chuoi)io.sockets.in(name).emit('ok_choilai',socket.number,chuoi);
+
+
+
+  });
   socket.on('C_nhan_toado',(name)=>{
     if(socket.number && name){
-    
       io.sockets.in(name).emit('C_send_diem_ok');
     }
   });
