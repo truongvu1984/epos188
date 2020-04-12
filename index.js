@@ -459,11 +459,13 @@ io.on('connection',(socket)=>
 
     }
   });
+  socket.on('C_dannhan_denghi_choilai',(string,name)=>{
+    if(socket.number && string && name){
+      io.sockets.in(name).emit('C_danhan_denghi_choilai',string, socket.number);
+    }
+  });
   socket.on('ok_choilai',(name,chuoi)=>{
     if(socket.number && name && chuoi)io.sockets.in(name).emit('ok_choilai',socket.number,chuoi);
-
-
-
   });
   socket.on('C_nhan_toado',(name)=>{
     if(socket.number && name){
