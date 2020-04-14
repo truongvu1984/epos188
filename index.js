@@ -82,7 +82,7 @@ io.on('connection',(socket)=>
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('dangky_thatbai','A');
         else {
-          
+
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('dangky_quasolan','C');
           else {
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
@@ -106,6 +106,8 @@ io.on('connection',(socket)=>
                             if(dem==0){
                               var sql = "INSERT INTO `active` (name,mail,pass, chuoi,dem ) VALUES ?";
                               var matkhau = passwordHash.generate(''+pass);
+                              console.log(matkhau);
+                              console.log(string1);
                               var values = [[name,mail, matkhau, string1,1]];
                               con.query(sql, [values], function (err1, result) {
                                 if ( err1)socket.emit('dangky_thatbai','A');
