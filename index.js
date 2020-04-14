@@ -93,7 +93,7 @@ io.on('connection',(socket)=>
                       else {
                         var string = Math.floor(Math.random() * (899999)) + 100000;
                         var string1 = passwordHash.generate(''+string);
-                        console.log('haha:'+string1);
+
                         var mailOptions = {
                           from: 'windlaxy@gmail.com',
                           to: mail,
@@ -104,10 +104,9 @@ io.on('connection',(socket)=>
                           if (error) socket.emit('mail_ko_dung_dinh_dang');
                           else {
                             var time = Math.floor(Date.now() / 1000);
-                            // let dem = row1[0].dem;
+                            var matkhau = passwordHash.generate(''+pass);
                             if(row1s.length==0){
                               var sql = "INSERT INTO `active` (name,mail,pass, chuoi,time,dem ) VALUES ?";
-                              var matkhau = passwordHash.generate(''+pass);
 
                               var values = [[name,mail, matkhau, string1,time,1]];
                               con.query(sql, [values], function (err1, result) {
@@ -118,6 +117,7 @@ io.on('connection',(socket)=>
                             else {
                               //nếu có rồi thì cập nhật và cộng số đếm lên 1
                               let dem = row1s[0].dem+1;
+                              console.log('Có lên 1');
                               con.query("UPDATE `active` SET `name` = '"+name+"', `pass` ='"+pass+"',`chuoi`='"+chuoi+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
                                 if(err1)socket.emit('dangky_thatbai','A');
                                 else socket.emit('dangky_thanhcong_1');
