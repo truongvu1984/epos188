@@ -92,8 +92,8 @@ io.on('connection',(socket)=>
                     else {
                       console.log('ha ha');
                       var sql = "INSERT INTO `active` (name,mail,pass, chuoi ) VALUES ?";
-                      var matkhau = passwordHash.generate(pass);
-                      var string1 = passwordHash.generate(string);
+                      // var matkhau = passwordHash.generate(pass);
+                      // var string1 = passwordHash.generate(string);
                       var values = [[name,mail, matkhau, string1]];
                       console.log(name);
                       console.log(mail);
