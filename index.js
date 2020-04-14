@@ -118,7 +118,7 @@ io.on('connection',(socket)=>
                               //nếu có rồi thì cập nhật và cộng số đếm lên 1
                               let dem = row1s[0].dem+1;
                               console.log('Có lên 1:'+dem);
-                              socket.emit('dangky_thanhcong_1');
+                        
                               console.log(matkhau);
                               console.log(string1);
                               console.log(time);
