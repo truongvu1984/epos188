@@ -60,8 +60,13 @@ function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
     var date2 = Math.floor(Date.now() / 1000) - 600;
+    var date3=Math.floor(Date.now() / 1000) - 300;
+
     // mở khóa cho số điện thoại hoặc phoneid bị khóa
     con.query(" DELETE FROM `dangky` WHERE `time2` < "+date2, function(err){if(err){console.log('co loi HA HA HA:'+err);}});
+    con.query(" DELETE FROM `active` WHERE `time` < "+date3, function(err){if(err){console.log('co loi HA HA HA:'+err);}});
+    con.query("UPDATE `active` SET `time` = "+date2+" WHERE `dem` > 2",function(err1){if(err1)console.log(err1);
+    });
     kiemtra_taikhoan();
   }, 5000);
 }
@@ -73,39 +78,57 @@ io.on('connection',(socket)=>
   socket.emit('check_pass');
   socket.on('C_regis',(name,mail,pass)=>{
     if(mail &&pass){
-      // kiểm tra xem địa chỉ mail có tài khoản chưa
-      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
-              // nếu tài khoản đã có người đăng ký rồi thì:
-              if(err)socket.emit('dangky_thatbai');
-              else {
-                if (rows.length >0 )	{socket.emit('regis_already_account');}
-                else {
-                  var string = Math.floor(Math.random() * (899999)) + 100000;
-                  var string1 = passwordHash.generate(''+string);
-                  var mailOptions = {
-                    from: 'windlaxy@gmail.com',
-                    to: mail,
-                    subject: 'Active code',
-                    text: 'Your active code:'+string
-                  };
-                  transporter.sendMail(mailOptions, function(error, info){
-                    if (error) socket.emit('mail_ko_dung_dinh_dang');
+      //kiểm tra xem tài khoản này có đủ điều kiện để làm việc tiếp không
+      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
+        if(err3)socket.emit('dangky_thatbai','A');
+        else {
+          if(row1[0].dem>2)socket.emit('dangky_quasolan','C');
+          else {
+            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
+                    // nếu tài khoản đã có người đăng ký rồi thì:
+                    if(err)socket.emit('dangky_thatbai','A');
                     else {
+                      if (rows.length >0 )	{socket.emit('regis_already_account','D');}
+                      else {
+                        var string = Math.floor(Math.random() * (899999)) + 100000;
+                        var string1 = passwordHash.generate(''+string);
+                        var mailOptions = {
+                          from: 'windlaxy@gmail.com',
+                          to: mail,
+                          subject: 'Active code',
+                          text: 'Your active code:'+string
+                        };
+                        transporter.sendMail(mailOptions, function(error, info){
+                          if (error) socket.emit('mail_ko_dung_dinh_dang');
+                          else {
+                            let dem = row1[0].dem;
+                            if(dem==0){
+                              var sql = "INSERT INTO `active` (name,mail,pass, chuoi,dem ) VALUES ?";
+                              var matkhau = passwordHash.generate(''+pass);
+                              var values = [[name,mail, matkhau, string1,1]];
+                              con.query(sql, [values], function (err1, result) {
+                                if ( err1)socket.emit('dangky_thatbai','A');
+                                else  socket.emit('dangky_thanhcong_1');
+                              });
+                            }
+                            else {
+                              //nếu có rồi thì cập nhật và cộng số đếm lên 1
+                              dem++;
+                              con.query("UPDATE `active` SET `name` = '"+name+"', `pass` ='"+pass+"',`chuoi`='"+chuoi+"',`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
+                                if(err1)socket.emit('dangky_thatbai','A');
+                                else socket.emit('dangky_thanhcong_1');
+                              });
 
-                      var sql = "INSERT INTO `active` (name,mail,pass, chuoi ) VALUES ?";
-                      var matkhau = passwordHash.generate(''+pass);
-                     var values = [[name,mail, matkhau, string1]];
-
-                      con.query(sql, [values], function (err1, result) {
-                        if ( err1){socket.emit('dangky_thatbai');console.log('hihi:'+err1);}
-                        else  {socket.emit('dangky_thanhcong_1');console.log('Đã gửi đăng ký thành công');}
-                      });
+                            }
+                          }
+                        });
+                      }
                     }
-                  });
-                }
-              }
-      });
+            });
 
+          }
+        }
+      });
     }
   });
   socket.on('C_kichhoat',(mail,code)=>{
