@@ -91,14 +91,11 @@ io.on('connection',(socket)=>
                   transporter.sendMail(mailOptions, function(error, info){
                     if (error) socket.emit('mail_ko_dung_dinh_dang');
                     else {
-                      console.log('ha ha');
-                      // var sql = "INSERT INTO `active` (name,mail,pass, chuoi ) VALUES ?";
-                      // var matkhau = passwordHash.generate(pass);
-                     // var values = [[name,mail, matkhau, string1]];
-                      console.log(name);
-                      console.log(mail);
-                      // console.log(matkhau);
-                      console.log(string1);
+
+                      var sql = "INSERT INTO `active` (name,mail,pass, chuoi ) VALUES ?";
+                      var matkhau = passwordHash.generate(''+pass);
+                     var values = [[name,mail, matkhau, string1]];
+
                       con.query(sql, [values], function (err1, result) {
                         if ( err1){socket.emit('dangky_thatbai');console.log('hihi:'+err1);}
                         else  {socket.emit('dangky_thanhcong_1');console.log('Đã gửi đăng ký thành công');}
