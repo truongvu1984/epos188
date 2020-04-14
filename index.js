@@ -93,6 +93,7 @@ io.on('connection',(socket)=>
                       else {
                         var string = Math.floor(Math.random() * (899999)) + 100000;
                         var string1 = passwordHash.generate(''+string);
+                        console.log('haha:'+string1);
                         var mailOptions = {
                           from: 'windlaxy@gmail.com',
                           to: mail,
