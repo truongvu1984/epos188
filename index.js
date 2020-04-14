@@ -119,7 +119,10 @@ io.on('connection',(socket)=>
                               let dem = row1s[0].dem+1;
                               console.log('Có lên 1:'+dem);
                               socket.emit('dangky_thanhcong_1');
-                              con.query("UPDATE `active` SET `name` = '"+name+"', `pass` ='"+matkhau+"',`chuoi`='"+chuoi+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
+                              let caulenh="UPDATE `active` SET `name` = '"+name+"', `pass` ='"+matkhau+"',`chuoi`='"+chuoi+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'";
+
+                              console.log(caulenh);
+                              con.query(caulenh,function(err1){
                                 if(err1){console.log(err1);socket.emit('dangky_thatbai','A');}
                                 else {socket.emit('dangky_thanhcong_1');console.log('thành công rồi hihi');}
                               });
