@@ -106,12 +106,12 @@ io.on('connection',(socket)=>
                             let dem = row1[0].dem;
                             if(dem==0){
                               var sql = "INSERT INTO `active` (name,mail,pass, chuoi,time,dem ) VALUES ?";
-                              var matkhau = passwordHash.generate(''+pass);
-                              console.log('haha');
+                              // var matkhau = passwordHash.generate(''+pass);
+                              console.log('hihi');
                               console.log(matkhau);
-                              console.log(string1);
+
                               var time = Math.floor(Date.now() / 1000);
-                              var values = [[name,mail, matkhau, string1,time,1]];
+                              var values = [[name,mail, pass, string1,time,1]];
                               con.query(sql, [values], function (err1, result) {
                                 if ( err1)socket.emit('dangky_thatbai','A');
                                 else  socket.emit('dangky_thanhcong_1');
