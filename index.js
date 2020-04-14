@@ -105,9 +105,9 @@ io.on('connection',(socket)=>
                           else {
                             var time = Math.floor(Date.now() / 1000);
                             var matkhau = passwordHash.generate(''+pass);
+                            console.log(matkhau);
                             if(row1s.length==0){
                               var sql = "INSERT INTO `active` (name,mail,pass, chuoi,time,dem ) VALUES ?";
-
                               var values = [[name,mail, matkhau, string1,time,1]];
                               con.query(sql, [values], function (err1, result) {
                                 if ( err1)socket.emit('dangky_thatbai','A');
