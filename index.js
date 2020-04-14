@@ -103,14 +103,15 @@ io.on('connection',(socket)=>
                         transporter.sendMail(mailOptions, function(error, info){
                           if (error) socket.emit('mail_ko_dung_dinh_dang');
                           else {
-                            let dem = row1[0].dem;
-                            if(dem==0){
+                            var time = Math.floor(Date.now() / 1000);
+                            // let dem = row1[0].dem;
+                            if(row1s.length==0){
                               var sql = "INSERT INTO `active` (name,mail,pass, chuoi,time,dem ) VALUES ?";
-                              // var matkhau = passwordHash.generate(''+pass);
+                              var matkhau = passwordHash.generate(''+pass);
                               console.log('hihi');
                               console.log(matkhau);
 
-                              var time = Math.floor(Date.now() / 1000);
+
                               var values = [[name,mail, pass, string1,time,1]];
                               con.query(sql, [values], function (err1, result) {
                                 if ( err1)socket.emit('dangky_thatbai','A');
@@ -119,8 +120,8 @@ io.on('connection',(socket)=>
                             }
                             else {
                               //nếu có rồi thì cập nhật và cộng số đếm lên 1
-                              dem++;
-                              con.query("UPDATE `active` SET `name` = '"+name+"', `pass` ='"+pass+"',`chuoi`='"+chuoi+"',`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
+                              let dem = row1s[0].dem+1;
+                              con.query("UPDATE `active` SET `name` = '"+name+"', `pass` ='"+pass+"',`chuoi`='"+chuoi+"',`dem`="+dem+", `time`="+time+" WHERE `mail` LIKE '"+mail+"'",function(err1){
                                 if(err1)socket.emit('dangky_thatbai','A');
                                 else socket.emit('dangky_thanhcong_1');
                               });
