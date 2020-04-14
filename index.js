@@ -120,10 +120,10 @@ io.on('connection',(socket)=>
                               console.log('Có lên 1:'+dem);
                               socket.emit('dangky_thanhcong_1');
                               console.log(matkhau);
-                              console.log(chuoi);
+                              console.log(string1);
                               console.log(time);
-                              
-                              let caulenh="UPDATE `active` SET `name` = '"+name+"', `pass` ='"+matkhau+"',`chuoi`='"+chuoi+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'";
+
+                              let caulenh="UPDATE `active` SET `name` = '"+name+"', `pass` ='"+matkhau+"',`chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'";
 
                               console.log(caulenh);
                               con.query(caulenh,function(err1){
