@@ -81,7 +81,7 @@ io.on('connection',(socket)=>
                 if (rows.length >0 )	{socket.emit('regis_already_account');}
                 else {
                   var string = Math.floor(Math.random() * (899999)) + 100000;
-                  var string1 = passwordHash.generate(string);
+                  var string1 = passwordHash.generate(''+string);
                   var mailOptions = {
                     from: 'windlaxy@gmail.com',
                     to: mail,
