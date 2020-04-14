@@ -82,7 +82,7 @@ io.on('connection',(socket)=>
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('dangky_thatbai','A');
         else {
-          if(row1[0].dem>2)socket.emit('dangky_quasolan','C');
+          if(row1s[0].dem>2)socket.emit('dangky_quasolan','C');
           else {
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
                     // nếu tài khoản đã có người đăng ký rồi thì:
