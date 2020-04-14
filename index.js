@@ -81,6 +81,7 @@ io.on('connection',(socket)=>
                 if (rows.length >0 )	{socket.emit('regis_already_account');}
                 else {
                   var string = Math.floor(Math.random() * (899999)) + 100000;
+                  var string1 = passwordHash.generate(string);
                   var mailOptions = {
                     from: 'windlaxy@gmail.com',
                     to: mail,
@@ -93,8 +94,7 @@ io.on('connection',(socket)=>
                       console.log('ha ha');
                       // var sql = "INSERT INTO `active` (name,mail,pass, chuoi ) VALUES ?";
                       // var matkhau = passwordHash.generate(pass);
-                      var string1 = passwordHash.generate(string);
-                      // var values = [[name,mail, matkhau, string1]];
+                     // var values = [[name,mail, matkhau, string1]];
                       console.log(name);
                       console.log(mail);
                       // console.log(matkhau);
