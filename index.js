@@ -90,13 +90,14 @@ io.on('connection',(socket)=>
                   transporter.sendMail(mailOptions, function(error, info){
                     if (error) socket.emit('mail_ko_dung_dinh_dang');
                     else {
+                      console.log('ha ha');
                       var sql = "INSERT INTO `active` (name,mail,pass, chuoi ) VALUES ?";
                       var matkhau = passwordHash.generate(pass);
                       var string1 = passwordHash.generate(string);
                       var values = [[name,mail, matkhau, string1]];
-                      con.query(sql, [values], function (err, result) {
-                        if ( err)socket.emit('dangky_thatbai');
-                        else  socket.emit('dangky_thanhcong_1');
+                      con.query(sql, [values], function (err1, result) {
+                        if ( err1)socket.emit('dangky_thatbai');
+                        else  {socket.emit('dangky_thanhcong_1');console.log('Đã gửi đăng ký thành công');}
                       });
                     }
                   });
