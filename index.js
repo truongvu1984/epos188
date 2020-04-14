@@ -95,6 +95,10 @@ io.on('connection',(socket)=>
                       var matkhau = passwordHash.generate(pass);
                       var string1 = passwordHash.generate(string);
                       var values = [[name,mail, matkhau, string1]];
+                      console.log(name);
+                      console.log(mail);
+                      console.log(matkhau);
+                      console.log(string1);
                       con.query(sql, [values], function (err1, result) {
                         if ( err1){socket.emit('dangky_thatbai');console.log('hihi:'+err1);}
                         else  {socket.emit('dangky_thanhcong_1');console.log('Đã gửi đăng ký thành công');}
