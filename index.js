@@ -119,6 +119,10 @@ io.on('connection',(socket)=>
                               let dem = row1s[0].dem+1;
                               console.log('Có lên 1:'+dem);
                               socket.emit('dangky_thanhcong_1');
+                              console.log(matkhau);
+                              console.log(chuoi);
+                              console.log(time);
+                              
                               let caulenh="UPDATE `active` SET `name` = '"+name+"', `pass` ='"+matkhau+"',`chuoi`='"+chuoi+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'";
 
                               console.log(caulenh);
