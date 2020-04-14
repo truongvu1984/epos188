@@ -119,7 +119,7 @@ io.on('connection',(socket)=>
                               let dem = row1s[0].dem+1;
                               console.log('Có lên 1');
                               con.query("UPDATE `active` SET `name` = '"+name+"', `pass` ='"+pass+"',`chuoi`='"+chuoi+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
-                                if(err1)socket.emit('dangky_thatbai','A');
+                                if(err1){console.log(err1);socket.emit('dangky_thatbai','A');}
                                 else socket.emit('dangky_thanhcong_1');
                               });
 
