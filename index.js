@@ -61,11 +61,11 @@ function kiemtra_taikhoan(){
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
     var date2 = Math.floor(Date.now() / 1000) - 600;
     var date3=Math.floor(Date.now() / 1000) - 300;
-
+    var date4=date3+600;
     // mở khóa cho số điện thoại hoặc phoneid bị khóa
     con.query(" DELETE FROM `dangky` WHERE `time2` < "+date2, function(err){if(err){console.log('co loi HA HA HA:'+err);}});
     con.query(" DELETE FROM `active` WHERE `time` < "+date3, function(err){if(err){console.log('co loi HA HA HA:'+err);}});
-    con.query("UPDATE `active` SET `time` = "+date2+" WHERE `dem` > 2",function(err1){if(err1)console.log(err1);
+    con.query("UPDATE `active` SET `time` = "+date4+" WHERE `dem` > 2",function(err1){if(err1)console.log(err1);
     });
     kiemtra_taikhoan();
   }, 5000);
@@ -110,8 +110,6 @@ io.on('connection',(socket)=>
                               var matkhau = passwordHash.generate(''+pass);
                               console.log('hihi');
                               console.log(matkhau);
-
-
                               var values = [[name,mail, pass, string1,time,1]];
                               con.query(sql, [values], function (err1, result) {
                                 if ( err1)socket.emit('dangky_thatbai','A');
@@ -121,7 +119,7 @@ io.on('connection',(socket)=>
                             else {
                               //nếu có rồi thì cập nhật và cộng số đếm lên 1
                               let dem = row1s[0].dem+1;
-                              con.query("UPDATE `active` SET `name` = '"+name+"', `pass` ='"+pass+"',`chuoi`='"+chuoi+"',`dem`="+dem+", `time`="+time+" WHERE `mail` LIKE '"+mail+"'",function(err1){
+                              con.query("UPDATE `active` SET `name` = '"+name+"', `pass` ='"+pass+"',`chuoi`='"+chuoi+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
                                 if(err1)socket.emit('dangky_thatbai','A');
                                 else socket.emit('dangky_thanhcong_1');
                               });
