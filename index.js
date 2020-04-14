@@ -4,8 +4,8 @@ var http = require("http");
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start")});
-let CheckMobi = require('omrs-checkmobi');
 var mysql = require('mysql');
+var nodemailer = require('nodemailer');
 var con = mysql.createConnection({
   host: "us-cdbr-iron-east-05.cleardb.net",
   user: "b04c2ff40d4e13",
@@ -14,6 +14,14 @@ var con = mysql.createConnection({
  queueLimit: 30,
   acquireTimeout: 1000000,
 });
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'windlaxy@gmail.com',
+    pass: 'Vuyeungan1994'
+  }
+});
+
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
@@ -22,8 +30,6 @@ function strdecode( data ){
   return JSON.parse( decodeURIComponent( escape ( data ) ) );
 }
 var passwordHash = require('password-hash');
-let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
-
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
@@ -65,145 +71,65 @@ io.on('connection',(socket)=>
 {
   console.log(socket.id);
   socket.emit('check_pass');
-  socket.on('C_check_numberphone',(idphone,num)=>{
-    if(idphone&&num){
-    var date = Math.floor(Date.now() / 1000);
-    con.query("SELECT * FROM `dangky` WHERE `phone_id` LIKE '"+idphone+"'", function(err1, rows1){
-      if(err1){console.log(err1);}
-      else {
-        if(rows1.length >2){socket.emit('regis1_quasolan_number');}
-        else {
-          var sql = "INSERT INTO `dangky`(phone_id,time1, time2) VALUES ?";
-          var values = [[idphone,date,date]];
-          con.query(sql, [values], function (err4, result) {
-            if (err4){console.log(err4);}
-            else {
-              con.query("UPDATE `dangky` SET `time2` = '"+date+"' WHERE `phone_id` LIKE '"+idphone+"'",function(err5, ok){
-                if (err5){console.log('update bị loi'+err5);}
+  socket.on('C_regis',(name,mail,pass)=>{
+    if(mail &&pass){
+      // kiểm tra xem địa chỉ mail có tài khoản chưa
+      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
+              // nếu tài khoản đã có người đăng ký rồi thì:
+              if(err)socket.emit('dangky_thatbai');
+              else {
+                if (rows.length >0 )	{socket.emit('regis_already_account');}
                 else {
-                  con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err2, rows2){
-                    if(err2){console.log(err2);}
+                  var string = Math.floor(Math.random() * (899999)) + 100000;
+                  var mailOptions = {
+                    from: 'windlaxy@gmail.com',
+                    to: mail,
+                    subject: 'Active code',
+                    text: 'Your active code:'+string
+                  };
+                  transporter.sendMail(mailOptions, function(error, info){
+                    if (error) socket.emit('mail_ko_dung_dinh_dang');
                     else {
-                      if (rows2.length >0 ){socket.emit('regis_already_account');}
-                      else {
-                        cb.phoneInformation(num,(error3,ketqua) => {
-                          if(error3){socket.emit('sodienthoaikhongdung');}
-                          else if (!ketqua.is_mobile){socket.emit('sodienthoaikhongdung');}
-                          else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');}
-                        });
-                      }
+                      var sql = "INSERT INTO `active` (name,mail,pass, chuoi ) VALUES ?";
+                      var matkhau = passwordHash.generate(pass);
+                      var string1 = passwordHash.generate(string);
+                      var values = [[name,mail, matkhau, string1]];
+                      con.query(sql, [values], function (err, result) {
+                        if ( err)socket.emit('dangky_thatbai');
+                        else  socket.emit('dangky_thanhcong_1');
+                      });
                     }
                   });
                 }
-              });
-            }
-          });
-        }
-      }
-    });
-    }
-  });
-  socket.on('C_check_forget',(idphone,num,type)=>{
-    if(idphone&&num&&type){
-    var date = Math.floor(Date.now() / 1000);
-    con.query("SELECT * FROM `dangky` WHERE `phone_id` LIKE '"+idphone+"'", function(err1, rows1){
-      if(err1){socket.emit('verify_loi','A5');}
-      else {
-        if(rows1.length >2){socket.emit('verify_loi','A1');}
-        else {
-          var sql = "INSERT INTO `dangky`(phone_id,time1, time2) VALUES ?";
-          var values = [[idphone,date,date]];
-          con.query(sql, [values], function (err4, result) {
-            if (err4){socket.emit('verify_loi','A5');}
-            else {
-              con.query("UPDATE `dangky` SET `time2` = '"+date+"' WHERE `phone_id` LIKE '"+idphone+"'",function(err5, ok){
-                if (err5){socket.emit('verify_loi','A5');}
-                else {
-                  con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ num +"' LIMIT 1", function(err2, rows2){
-                    if(err2){console.log(err2);}
-                    else {
-                      switch (type) {
-                        case 'B':
-                        // xác minh khi quên mật khẩu
-                        if (rows2.length >0 ){socket.emit('verify_loi','A2');}
-                        else {
-                          cb.phoneInformation(num,(error3,ketqua) => {
-                            if(error3){socket.emit('verify_loi','A3');}
-                            else if (!ketqua.is_mobile){socket.emit('verify_loi','A3');}
-                            else {
-                              var string = Math.floor(Math.random() * (89998)) + 10001;
-                              cb.sendMessage({to:'84982025401', text:"Your Windlaxy OTP pass is:"+string}, (error3, response) => {
-                                  if(error3){socket.emit('verify_loi','A3');}
-                                  else {
-                                    var sql = "INSERT INTO `sms-otp`(phone_id,time, string) VALUES ?";
-                                    var values = [[idphone,date,string]];
-                                    con.query(sql, [values], function (err4, result) {
-                                      if (err4){socket.emit('verify_loi','A5');}
-                                      else {
-                                          socket.emit('number_phone_ok');
-                                      }
-                                    });
-
-
-                                  }
-                                });
-
-
-
-
-
-
-
-                            }
-                          });
-                        }
-                          break;
-                        case 'A':
-                          // xác minh khi đăng ký mới
-                          if (rows2.length > 0 ){socket.emit('verify_loi','A2');}
-                          else {
-                            cb.phoneInformation(num,(error3,ketqua) => {
-                              if(error3){socket.emit('verify_loi','A3');}
-                              else if (!ketqua.is_mobile){socket.emit('verify_loi','A3');}
-                              else {socket.emit('number_phone_ok',num,'BECCEBC1-DB76-4EE7-B475-29FCF807849C');}
-                            });
-                          }
-                          break;
-                      }
-
-                    }
-                  });
-                }
-              });
-            }
-          });
-        }
-      }
-    });
-    }
-  });
-  socket.on('C_revify_number_ok',(idphone, number)=>{
-    if(idphone&&number){
-      con.query("UPDATE `real_number` SET `number` = '"+number+"' WHERE `id_phone` LIKE '"+idphone+"'",function(err5, ok){
-        if (err5){console.log('update bị loi'+err5);}
-        else {
-          if(ok.insertId==0){
-          var sql = "INSERT INTO `real_number`(id_phone,number) VALUES ?";
-          var values = [[idphone,number]];
-          con.query(sql, [values], function (err4, result) {
-            if (err4){console.log(err4);}
-            else {
-              socket.emit('S_save_real_number_ok');
-            }
-          });
-        }
-        else {
-          socket.emit('S_save_real_number_ok');
-
-        }
-        }
+              }
       });
 
+    }
+  });
+  socket.on('C_kichhoat',(mail,code)=>{
+    if(mail &&code){
+      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+mail+"' LIMIT 1", function(err, rows){
+        if (err)socket.emit('kichhoat_thatbai','A');
+        else{
+          if(rows.length==0)socket.emit('kichhoat_thatbai','B');
+          else {
+            if(passwordHash.verify(code, rows[0].chuoi)){
+                var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
+                var values = [[mail,rows[0].name, rows[0].pass]];
+                con.query(sql, [values], function (err1, result) {if (err1)socket.emit('kichhoat_thatbai','A');
+                  else  {
+                    con.query("DELETE FROM `active` WHERE `mail` LIKE '"+mail+"'", function(err2){
+                       if (err2)socket.emit('kichhoat_thanhcong');
+                      else socket.emit('kichhoat_thanhcong');
+                    });
+                  }
+                });
+              }
+              else socket.emit('kichhoat_thatbai','C');
+            }
+
+        }
+      });
     }
   });
   socket.on('regis', function (key,num,user_info){
@@ -232,6 +158,7 @@ io.on('connection',(socket)=>
                               var sql = "INSERT INTO `account` (number,user, pass, code ) VALUES ?";
                               var matkhau = passwordHash.generate(user_info.pass);
                               var values = [[user_info.number,user_info.user, matkhau, user_info.code]];
+
                               con.query(sql, [values], function (err, result) {if ( err)socket.emit('dangky_thatbai');
                                 else  socket.emit('dangky_thanhcong');
                             });
