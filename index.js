@@ -83,7 +83,7 @@ io.on('connection',(socket)=>
         if(err3)socket.emit('dangky_thatbai','A');
         else {
 
-          if(row1s.length>0 && row1s[0].dem>2)socket.emit('dangky_quasolan','C');
+          if(row1s.length>0 && row1s[0].dem>2){socket.emit('dangky_quasolan','C');console.log('dang ky qua so lan');}
           else {
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
                     // nếu tài khoản đã có người đăng ký rồi thì:
@@ -92,6 +92,7 @@ io.on('connection',(socket)=>
                       if (rows.length >0 )	{socket.emit('regis_already_account','D');}
                       else {
                         var string = Math.floor(Math.random() * (899999)) + 100000;
+                        console.log(string);
                         var string1 = passwordHash.generate(''+string);
 
                         var mailOptions = {
@@ -118,7 +119,7 @@ io.on('connection',(socket)=>
                               //nếu có rồi thì cập nhật và cộng số đếm lên 1
                               let dem = row1s[0].dem+1;
                               console.log('Có lên 1:'+dem);
-                        
+
                               console.log(matkhau);
                               console.log(string1);
                               console.log(time);
