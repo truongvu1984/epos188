@@ -82,19 +82,16 @@ io.on('connection',(socket)=>
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('dangky_thatbai','A');
         else {
-
-          if(row1s.length>0 && row1s[0].dem>2){socket.emit('dangky_quasolan','C');console.log('dang ky qua so lan');}
+          if(row1s.length>0 && row1s[0].dem>2)socket.emit('dangky_thatbai','C');
           else {
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
                     // nếu tài khoản đã có người đăng ký rồi thì:
                     if(err)socket.emit('dangky_thatbai','A');
                     else {
-                      if (rows.length >0 )	{socket.emit('regis_already_account','D');}
+                      if (rows.length >0 )	{socket.emit('dangky_thatbai','D');}
                       else {
                         var string = Math.floor(Math.random() * (899999)) + 100000;
-                        console.log(string);
                         var string1 = passwordHash.generate(''+string);
-
                         var mailOptions = {
                           from: 'windlaxy@gmail.com',
                           to: mail,
@@ -102,11 +99,10 @@ io.on('connection',(socket)=>
                           text: 'Your active code:'+string
                         };
                         transporter.sendMail(mailOptions, function(error, info){
-                          if (error) socket.emit('mail_ko_dung_dinh_dang');
+                          if (error) socket.emit('dangky_thatbai','B');
                           else {
                             var time = Math.floor(Date.now() / 1000);
                             var matkhau = passwordHash.generate(''+pass);
-                            console.log(matkhau);
                             if(row1s.length==0){
                               var sql = "INSERT INTO `active` (name,mail,pass, chuoi,time,dem ) VALUES ?";
                               var values = [[name,mail, matkhau, string1,time,1]];
@@ -118,18 +114,9 @@ io.on('connection',(socket)=>
                             else {
                               //nếu có rồi thì cập nhật và cộng số đếm lên 1
                               let dem = row1s[0].dem+1;
-                              console.log('Có lên 1:'+dem);
-
-                              console.log(matkhau);
-                              console.log(string1);
-                              console.log(time);
-
-                              let caulenh="UPDATE `active` SET `name` = '"+name+"', `pass` ='"+matkhau+"',`chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'";
-
-                              console.log(caulenh);
                               con.query(caulenh,function(err1){
-                                if(err1){console.log(err1);socket.emit('dangky_thatbai','A');}
-                                else {socket.emit('dangky_thanhcong_1');console.log('thành công rồi hihi');}
+                                if(err1)socket.emit('dangky_thatbai','A');
+                                else socket.emit('dangky_thanhcong_1');
                               });
 
                             }
