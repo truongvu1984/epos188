@@ -254,18 +254,20 @@ io.on('connection',(socket)=>
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
   			 else{
           if (passwordHash.verify(pass1, rows[0].pass)){
-            console.log('Login 3 đúng rồi hi hi:'+user1);
             socket.number = user1;
             socket.username = user1;
             socket.join(user1);
-              socket.emit('login1_dung', {name:strencode(rows[0].user)});
+            socket.emit('login1_dung', {name:strencode(rows[0].user)});
           }
           else {
-            socket.emit('login1_sai', {name:strencode(rows[0].user)});
+            socket.emit('login1_sai');
           }
         }
       });
     }
+  });
+  socket.on('nguoinhan_chua_ketban',(mail)=>{
+    if(socket.number && mail)io.sockets.in(mail).emit('nguoinhan_chuaketban',socket.number);
   });
 
   function check_data1(data){
@@ -402,10 +404,9 @@ io.on('connection',(socket)=>
      }
 	});
   socket.on('C_send_diem',(toado,name,stt)=>{
-    if(socket.number && toado && name){
-        io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
+    if(socket.number && toado && name)io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
 
-    }
+
   });
   socket.on('denghi_choi_lai',(name)=>{
     if(socket.number && name){
@@ -944,7 +945,8 @@ io.on('connection',(socket)=>
 
     if (socket.number&&string){
 
-    con.query("SELECT `number`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
+    // con.query("SELECT `number`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
+con.query("SELECT `number`,`user` FROM `account` WHERE `number` LIKE '"+string+"'", function(err, a1s){
       if ( err)console.log(err);
       else
       {
