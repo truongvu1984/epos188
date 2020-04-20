@@ -61,7 +61,7 @@ function kiemtra_taikhoan(){
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
     var date2 = Math.floor(Date.now() / 1000) - 600;
     var date3=Math.floor(Date.now() / 1000) - 300;
-    var date4=date3+600;
+
     // mở khóa cho số điện thoại hoặc phoneid bị khóa
     con.query(" DELETE FROM `dangky` WHERE `time2` < "+date2, function(err){if(err)console.log('co loi HA HA HA:'+err);});
     con.query(" DELETE FROM `active` WHERE `time` < "+date3, function(err){if(err)console.log('co loi HA HA HA:'+err);});
@@ -274,9 +274,11 @@ io.on('connection',(socket)=>
           if(rows.length==0)socket.emit('forget_pass_final_thatbai','B');
           else {
             if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
+              console.log('Cập nhật');
               con.query("UPDATE `account` SET `pass` = '"+tin.pass+"' WHERE `number` LIKE '"+tin.mail+"'", function(err2){
                  if (err2)socket.emit('forget_pass_final_ok');
                 else {
+                  console.log('Cập nhật thành công');
                   con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
                      if (err2)socket.emit('forget_pass_final_ok');
                     });
@@ -908,7 +910,6 @@ io.on('connection',(socket)=>
   socket.on('danhantinnhan', function (nguoigui, idc){
 
    	if (socket.number&&nguoigui&&idc){
-
       con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'R'",function(err5,res5)
           {if(err5){console.log(err5);}
 
