@@ -268,16 +268,16 @@ io.on('connection',(socket)=>
   });
   socket.on('forget_pass_final',(tin)=>{
     if(tin.mail&&tin.chuoi&&tin.pass){
-      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+mail+"' LIMIT 1", function(err, rows){
+      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+tin.mail+"' LIMIT 1", function(err, rows){
         if (err)socket.emit('forget_pass_final_thatbai','A');
         else{
           if(rows.length==0)socket.emit('forget_pass_final_thatbai','B');
           else {
-            if(passwordHash.verify(chuoi, rows[0].chuoi)){
+            if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
               con.query("UPDATE `account` SET `pass` = '"+tin.pass+"' WHERE `number` LIKE '"+tin.mail+"'", function(err2){
                  if (err2)socket.emit('forget_pass_final_ok');
                 else {
-                  con.query("DELETE FROM `active` WHERE `mail` LIKE '"+mail+"'", function(err2){
+                  con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
                      if (err2)socket.emit('forget_pass_final_ok');
                     });
                   socket.emit('forget_pass_final_ok');}
@@ -460,14 +460,11 @@ io.on('connection',(socket)=>
                             var time = Math.floor(Date.now() / 1000);
                             // var matkhau = passwordHash.generate(''+pass);
                             if(row1s.length==0){
-                              console.log('A:'+mail);
-                              console.log('B:'+string1);
-                              console.log('C:'+time);
                               var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
                               var values = [[mail, string1,time,1]];
                               con.query(sql, [values], function (err1, result) {
                                 if (err1)socket.emit('S_forget_thatbai','A');
-                                else  {socket.emit('S_send_pass_forget');console.log('hi hi');}
+                                else  socket.emit('S_send_pass_forget');
                               });
                             }
                             else {
@@ -476,7 +473,7 @@ io.on('connection',(socket)=>
                               if(dem>2)time=time+300;
                               con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
                                 if(err1)socket.emit('S_forget_thatbai','A');
-                                else {socket.emit('S_send_pass_forget');console.log('ha ha');}
+                                else socket.emit('S_send_pass_forget');
                               });
                             }
 
