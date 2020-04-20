@@ -274,11 +274,11 @@ io.on('connection',(socket)=>
           if(rows.length==0)socket.emit('forget_pass_final_thatbai','B');
           else {
             if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
-              console.log('Cập nhật');
+
               con.query("UPDATE `account` SET `pass` = '"+tin.pass+"' WHERE `number` LIKE '"+tin.mail+"'", function(err2){
-                 if (err2)socket.emit('forget_pass_final_ok');
+                 if (err2)socket.emit('forget_pass_final_thatbai','A');
                 else {
-                  console.log('Cập nhật thành công');
+                
                   con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
                      if (err2)socket.emit('forget_pass_final_ok');
                     });
