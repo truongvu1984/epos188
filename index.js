@@ -445,7 +445,7 @@ io.on('connection',(socket)=>
                     else {
                       if (rows.length ==0 )	{socket.emit('S_forget_thatbai','C');}
                       else {
-                        console.log('Có nhận rồi');
+
                         var string = Math.floor(Math.random() * (899999)) + 100000;
                         var string1 = passwordHash.generate(''+string);
                         var mailOptions = {
@@ -464,7 +464,7 @@ io.on('connection',(socket)=>
                               var values = [[mail, string1,time,1]];
                               con.query(sql, [values], function (err1, result) {
                                 if ( err1)socket.emit('S_forget_thatbai','A');
-                                else  socket.emit('S_send_pass_forget');
+                                else  {socket.emit('S_send_pass_forget');console.log('hi hi');}
                               });
                             }
                             else {
@@ -473,7 +473,7 @@ io.on('connection',(socket)=>
                               if(dem>2)time=time+300;
                               con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
                                 if(err1)socket.emit('S_forget_thatbai','A');
-                                else socket.emit('S_send_pass_forget');
+                                else {socket.emit('S_send_pass_forget');console.log('ha ha');}
                               });
                             }
 
