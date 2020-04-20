@@ -445,6 +445,7 @@ io.on('connection',(socket)=>
                     else {
                       if (rows.length ==0 )	{socket.emit('S_forget_thatbai','C');}
                       else {
+                        console.log('Có nhận rồi');
                         var string = Math.floor(Math.random() * (899999)) + 100000;
                         var string1 = passwordHash.generate(''+string);
                         var mailOptions = {
