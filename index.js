@@ -283,7 +283,7 @@ io.on('connection',(socket)=>
                   socket.emit('forget_pass_final_ok');}
               });
             }
-              else socket.emit('forget_pass_final_thatbai','C');
+              else socket.emit('forget_pass_final_thatbai','B');
             }
 
         }
