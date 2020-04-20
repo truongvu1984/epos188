@@ -458,12 +458,15 @@ io.on('connection',(socket)=>
                           if (error) socket.emit('S_forget_thatbai','D');
                           else {
                             var time = Math.floor(Date.now() / 1000);
-                            var matkhau = passwordHash.generate(''+pass);
+                            // var matkhau = passwordHash.generate(''+pass);
                             if(row1s.length==0){
+                              console.log('A:'+mail);
+                              console.log('B:'+string1);
+                              console.log('C:'+time);
                               var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
                               var values = [[mail, string1,time,1]];
                               con.query(sql, [values], function (err1, result) {
-                                if ( err1)socket.emit('S_forget_thatbai','A');
+                                if (err1)socket.emit('S_forget_thatbai','A');
                                 else  {socket.emit('S_send_pass_forget');console.log('hi hi');}
                               });
                             }
