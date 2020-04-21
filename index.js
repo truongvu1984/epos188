@@ -75,20 +75,20 @@ io.on('connection',(socket)=>
 {
   console.log(socket.id);
   socket.emit('check_pass');
-  socket.on('C_regis',(name,mail,pass)=>{
-    if(mail &&pass){
+  socket.on('regis_1',(mail)=>{
+    if(mail){
       //kiểm tra xem tài khoản này có đủ điều kiện để làm việc tiếp không
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
-        if(err3)socket.emit('dangky_thatbai','A');
+        if(err3)socket.emit('regis_1_thatbai','A');
         else {
 
-          if(row1s.length>0 && row1s[0].dem>2)socket.emit('dangky_thatbai','C');
+          if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
           else {
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
                     // nếu tài khoản đã có người đăng ký rồi thì:
-                    if(err)socket.emit('dangky_thatbai','A');
+                    if(err)socket.emit('regis_1_thatbai','A');
                     else {
-                      if (rows.length >0 )	{socket.emit('dangky_thatbai','D');}
+                      if (rows.length >0 )	{socket.emit('regis_1_thatbai','D');}
                       else {
                         var string = Math.floor(Math.random() * (899999)) + 100000;
                         var string1 = passwordHash.generate(''+string);
@@ -99,26 +99,26 @@ io.on('connection',(socket)=>
                           text: 'Your active code:'+string
                         };
                         transporter.sendMail(mailOptions, function(error, info){
-                          if (error) socket.emit('dangky_thatbai','B');
+                          if (error) socket.emit('regis_1_thatbai','B');
                           else {
                             var time = Math.floor(Date.now() / 1000);
-                            var matkhau = passwordHash.generate(''+pass);
+
 
                             if(row1s.length==0){
-                              var sql = "INSERT INTO `active` (name,mail,pass, chuoi,time,dem ) VALUES ?";
-                              var values = [[name,mail, matkhau, string1,time,1]];
+                              var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
+                              var values = [[mail, string1,time,1]];
                               con.query(sql, [values], function (err1, result) {
-                                if ( err1)socket.emit('dangky_thatbai','A');
-                                else  socket.emit('dangky_thanhcong_1');
+                                if ( err1)socket.emit('regis_1_thatbai','A');
+                                else  socket.emit('regis_1_thanhcong');
                               });
                             }
                             else {
                               //nếu có rồi thì cập nhật và cộng số đếm lên 1
                               let dem = row1s[0].dem+1;
                               if(dem>2)time=time+300;
-                              con.query("UPDATE `active` SET `name` = '"+name+"', `pass` ='"+matkhau+"',`chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
-                                if(err1)socket.emit('dangky_thatbai','A');
-                                else socket.emit('dangky_thanhcong_1');
+                              con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
+                                if(err1)socket.emit('regis_1_thatbai','A');
+                                else socket.emit('regis_1_thanhcong');
                               });
 
                             }
@@ -133,74 +133,69 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('C_kichhoat',(mail,code)=>{
-    if(mail &&code){
-      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+mail+"' LIMIT 1", function(err, rows){
-        if (err)socket.emit('kichhoat_thatbai','A');
+  socket.on('regis_2',(tin)=>{
+    if(tin.mail &&tin.name&&tin.chuoi&&tin.pass){
+      con.query("SELECT `chuoi` FROM `active` WHERE `mail` LIKE '"+tin.mail +"' LIMIT 1", function(err, rows){
+        if (err)socket.emit('regis2_thatbai','A');
         else{
-          if(rows.length==0)socket.emit('kichhoat_thatbai','B');
+          if(rows.length==0)socket.emit('regis2_thatbai','B');
           else {
-            if(passwordHash.verify(code, rows[0].chuoi)){
+            if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
                 var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
-                var values = [[mail,rows[0].name, rows[0].pass]];
-                con.query(sql, [values], function (err1, result) {if (err1)socket.emit('kichhoat_thatbai','A');
+                var matkhau = passwordHash.generate(''+tin.pass);
+                var values = [[tin.mail,tin.name, matkhau]];
+                con.query(sql, [values], function (err1, result) {if (err1)socket.emit('regis2_thatbai','A');
                   else  {
-                    con.query("DELETE FROM `active` WHERE `mail` LIKE '"+mail+"'", function(err2){
-                       if (err2)socket.emit('kichhoat_thanhcong');
-                      else socket.emit('kichhoat_thanhcong');
+                    con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
+                       if (err2)socket.emit('regis2_thanhcong');
+                      else socket.emit('regis2_thanhcong');
                     });
                   }
                 });
               }
-              else socket.emit('kichhoat_thatbai','C');
+              else socket.emit('regis2_thatbai','C');
             }
-
         }
       });
     }
   });
-  socket.on('regis', function (key,num,user_info){
-    if(key&&num&&user_info.number&&user_info.user&&user_info.code&&user_info.pass){
-      if(key&&num&&pass){
-      cb.getValidateStatus(key, (err,ketqua)=>{
-        if(err)console.log(err);
-        else {
-          if(ketqua.validated){
-            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ user_info.number +"' LIMIT 1", function(err, rows){
-                    // nếu tài khoản đã có người đăng ký rồi thì:
-                    if(err)socket.emit('dangky_thatbai');
-                    else {
-                      if (rows.length >0 )	{socket.emit('regis_already_account');}
-                      else {
+  socket.on('regis_2_windlaxy',(tin)=>{
+    if(tin.mail &&tin.name&&tin.chuoi&&tin.pass){
+      con.query("SELECT `chuoi` FROM `active` WHERE `mail` LIKE '"+tin.mail +"' LIMIT 1", function(err, rows){
+        if (err)socket.emit('regis2_thatbai','A');
+        else{
+          if(rows.length==0)socket.emit('regis2_thatbai','B');
+          else {
+            if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
+              // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
+                // 1. Bảng chính: lưu id của bản tin đó trên server, id của người dùng, tên tin nhắn, tin nhắn gửi đi hay tin nhắn nhận về, trạng thái gửi đi hay nhận về.
+                con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                //2. Bảng địa điểm: lưu id bản tin đó trên server, tên điểm, tọa độ điểm
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"mes_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"mes_sender` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NULL,`send_receive` VARCHAR(5), `stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`fr` VARCHAR(5) NULL,`code` VARCHAR(10) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
+                var matkhau = passwordHash.generate(''+tin.pass);
+                var values = [[tin.mail,tin.name, matkhau]];
+                con.query(sql, [values], function (err1, result) {
+                  if (err1)socket.emit('regis2_thatbai','A');
+                  else  {
+                    con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
+                      if (err2)socket.emit('regis2_thanhcong');
+                      else socket.emit('regis2_thanhcong');
+                    });
+                  }
+                });
 
-                            // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
-                              // 1. Bảng chính: lưu id của bản tin đó trên server, id của người dùng, tên tin nhắn, tin nhắn gửi đi hay tin nhắn nhận về, trạng thái gửi đi hay nhận về.
-                              con.query("CREATE TABLE IF NOT EXISTS  `"+user_info.number+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                              //2. Bảng địa điểm: lưu id bản tin đó trên server, tên điểm, tọa độ điểm
-                              con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"mes_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                              //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
-                              con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"mes_sender` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NULL,`send_receive` VARCHAR(5), `stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                              con.query("CREATE TABLE IF NOT EXISTS `"+user_info.number+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`fr` VARCHAR(5) NULL,`code` VARCHAR(10) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                                                            // lưu tài khoản vào db
-                              var sql = "INSERT INTO `account` (number,user, pass, code ) VALUES ?";
-                              var matkhau = passwordHash.generate(user_info.pass);
-                              var values = [[user_info.number,user_info.user, matkhau, user_info.code]];
-
-                              con.query(sql, [values], function (err, result) {if ( err)socket.emit('dangky_thatbai');
-                                else  socket.emit('dangky_thanhcong');
-                            });
-
-
-
-                      } //end else 1
-                    }
-              });//end db.account
+              }
+            else socket.emit('regis2_thatbai','B');
+            }
           }
-        }
       });
     }
-  }
-  }); //end socket.on.regis
+  });
+
  function get_time(gio){
     let year1 = gio.getFullYear();
     let month1 = gio.getMonth();
