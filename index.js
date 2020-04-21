@@ -274,11 +274,11 @@ io.on('connection',(socket)=>
           if(rows.length==0)socket.emit('forget_pass_final_thatbai','B');
           else {
             if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
-
-              con.query("UPDATE `account` SET `pass` = '"+tin.pass+"' WHERE `number` LIKE '"+tin.mail+"'", function(err2){
+              let pass1 = passwordHash.generate(''+tin.pass);
+              con.query("UPDATE `account` SET `pass` = '"+pass1+"' WHERE `number` LIKE '"+tin.mail+"'", function(err2){
                  if (err2)socket.emit('forget_pass_final_thatbai','A');
                 else {
-                
+
                   con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
                      if (err2)socket.emit('forget_pass_final_ok');
                     });
