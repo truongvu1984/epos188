@@ -193,7 +193,7 @@ io.on('connection',(socket)=>
     // đăng ký của game caro
     if(tin.mail &&tin.name&&tin.chuoi&&tin.pass){
       con.query("SELECT `chuoi` FROM `active` WHERE `mail` LIKE '"+tin.mail +"' LIMIT 1", function(err, rows){
-        if (err){socket.emit('regis2_thatbai','A');console.log('lỗi 1:'+err);}
+        if (err)socket.emit('regis2_thatbai','A');
         else{
           if(rows.length==0)socket.emit('regis2_thatbai','B');
           else {
@@ -201,11 +201,11 @@ io.on('connection',(socket)=>
                 var sql = "INSERT INTO `account_2` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
                 var values = [[tin.mail,tin.name, matkhau]];
-                con.query(sql, [values], function (err1, result) {if (err1){socket.emit('regis2_thatbai','A');console.log('lỗi 2:'+err1);}
+                con.query(sql, [values], function (err1, result) {if (err1)socket.emit('regis2_thatbai','A');
                   else  {
                     socket.emit('regis2_thanhcong');
                     con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
-                       if (err2){socket.emit('regis2_thanhcong');console.log('lỗi 3:'+err2);}
+                       if (err2)socket.emit('regis2_thanhcong');
 
                     });
                   }
@@ -314,22 +314,24 @@ io.on('connection',(socket)=>
   socket.on('forget_pass_2',(tin)=>{
     if(tin.mail&&tin.chuoi&&tin.pass){
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+tin.mail+"' LIMIT 1", function(err, rows){
-        if (err)socket.emit('forget_pass_2_thatbai','A');
+        if (err){socket.emit('forget_pass_2_thatbai','A');console.log('sai 6:'+err);}
         else{
-          if(rows.length==0)socket.emit('forget_pass_2_thatbai','B');
+          if(rows.length==0){socket.emit('forget_pass_2_thatbai','B');console.log('sai 1:');}
           else {
             if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
               let pass1 = passwordHash.generate(''+tin.pass);
               con.query("UPDATE `account_2` SET `pass` = '"+pass1+"' WHERE `number` LIKE '"+tin.mail+"'", function(err2){
-                 if (err2)socket.emit('forget_pass_2_thatbai','A');
+                 if (err2){socket.emit('forget_pass_2_thatbai','A');console.log('sai 4:'+err2);}
                 else {
-                  con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
-                     if (err2)socket.emit('forget_pass_2_ok');
+                  socket.emit('forget_pass_2_ok');
+                  con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err3){
+                     if (err3){socket.emit('forget_pass_2_ok');console.log('sai 2:'+err3);}
                     });
-                  socket.emit('forget_pass_2_ok');}
+                  }
+
               });
             }
-              else socket.emit('forget_pass_2_thatbai','B');
+              else {socket.emit('forget_pass_2_thatbai','B');console.log('sai 3:');}
             }
 
         }
