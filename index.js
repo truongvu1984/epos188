@@ -63,7 +63,7 @@ function kiemtra_taikhoan(){
     var date3=Math.floor(Date.now() / 1000) - 300;
 
     // mở khóa cho số điện thoại hoặc phoneid bị khóa
-    con.query(" DELETE FROM `dangky` WHERE `time2` < "+date2, function(err){if(err)console.log('co loi HA HA HA:'+err);});
+
     con.query(" DELETE FROM `active` WHERE `time` < "+date3, function(err){if(err)console.log('co loi HA HA HA:'+err);});
 
     kiemtra_taikhoan();
@@ -134,6 +134,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('regis_2',(tin)=>{
+    // đăng ký của game caro
     if(tin.mail &&tin.name&&tin.chuoi&&tin.pass){
       con.query("SELECT `chuoi` FROM `active` WHERE `mail` LIKE '"+tin.mail +"' LIMIT 1", function(err, rows){
         if (err)socket.emit('regis2_thatbai','A');
@@ -141,7 +142,7 @@ io.on('connection',(socket)=>
           if(rows.length==0)socket.emit('regis2_thatbai','B');
           else {
             if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
-                var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
+                var sql = "INSERT INTO `account_2` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
                 var values = [[tin.mail,tin.name, matkhau]];
                 con.query(sql, [values], function (err1, result) {if (err1)socket.emit('regis2_thatbai','A');
@@ -195,6 +196,114 @@ io.on('connection',(socket)=>
       });
     }
   });
+  socket.on('forget_pass_1',(mail)=>{
+    if(mail){
+      //kiểm tra xem tài khoản này có đủ điều kiện để làm việc tiếp không
+      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
+        if(err3)socket.emit('regis_1_thatbai','A');
+        else {
+
+          if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
+          else {
+            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
+                    // nếu tài khoản đã có người đăng ký rồi thì:
+                    if(err)socket.emit('regis_1_thatbai','A');
+                    else {
+                      if (rows.length ==0 )	{socket.emit('regis_1_thatbai','D');}
+                      else {
+                        var string = Math.floor(Math.random() * (899999)) + 100000;
+                        var string1 = passwordHash.generate(''+string);
+                        var mailOptions = {
+                          from: 'windlaxy@gmail.com',
+                          to: mail,
+                          subject: 'Active code',
+                          text: 'Your active code:'+string
+                        };
+                        transporter.sendMail(mailOptions, function(error, info){
+                          if (error) socket.emit('regis_1_thatbai','B');
+                          else {
+                            var time = Math.floor(Date.now() / 1000);
+
+
+                            if(row1s.length==0){
+                              var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
+                              var values = [[mail, string1,time,1]];
+                              con.query(sql, [values], function (err1, result) {
+                                if ( err1)socket.emit('regis_1_thatbai','A');
+                                else  socket.emit('regis_1_thanhcong');
+                              });
+                            }
+                            else {
+                              //nếu có rồi thì cập nhật và cộng số đếm lên 1
+                              let dem = row1s[0].dem+1;
+                              if(dem>2)time=time+300;
+                              con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
+                                if(err1)socket.emit('regis_1_thatbai','A');
+                                else socket.emit('regis_1_thanhcong');
+                              });
+
+                            }
+                          }
+                        });
+                      }
+                    }
+            });
+
+          }
+        }
+      });
+    }
+  });
+  socket.on('forget_pass_2',(tin)=>{
+    if(tin.mail&&tin.chuoi&&tin.pass){
+      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+tin.mail+"' LIMIT 1", function(err, rows){
+        if (err)socket.emit('forget_pass_2_thatbai','A');
+        else{
+          if(rows.length==0)socket.emit('forget_pass_2_thatbai','B');
+          else {
+            if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
+              let pass1 = passwordHash.generate(''+tin.pass);
+              con.query("UPDATE `account_2` SET `pass` = '"+pass1+"' WHERE `number` LIKE '"+tin.mail+"'", function(err2){
+                 if (err2)socket.emit('forget_pass_2_thatbai','A');
+                else {
+                  con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
+                     if (err2)socket.emit('forget_pass_2_ok');
+                    });
+                  socket.emit('forget_pass_2_ok');}
+              });
+            }
+              else socket.emit('forget_pass_2_thatbai','B');
+            }
+
+        }
+      });
+    }
+  });
+  socket.on('forget_pass_2_windlaxy',(tin)=>{
+    if(tin.mail&&tin.chuoi&&tin.pass){
+      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+tin.mail+"' LIMIT 1", function(err, rows){
+        if (err)socket.emit('forget_pass_2_thatbai','A');
+        else{
+          if(rows.length==0)socket.emit('forget_pass_2_thatbai','B');
+          else {
+            if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
+              let pass1 = passwordHash.generate(''+tin.pass);
+              con.query("UPDATE `account` SET `pass` = '"+pass1+"' WHERE `number` LIKE '"+tin.mail+"'", function(err2){
+                 if (err2)socket.emit('forget_pass_2_thatbai','A');
+                else {
+                  con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
+                     if (err2)socket.emit('forget_pass_2_ok');
+                    });
+                  socket.emit('forget_pass_2_ok');}
+              });
+            }
+              else socket.emit('forget_pass_2_thatbai','B');
+            }
+
+        }
+      });
+    }
+  });
 
  function get_time(gio){
     let year1 = gio.getFullYear();
@@ -210,22 +319,7 @@ io.on('connection',(socket)=>
   }
   // lắng nghe sự kiện đăng ký tài khoản mới
 
-  socket.on('C_change_pass_admin',function(key,num,pass){
-    if(key&&num&&pass){
-      cb.getValidateStatus(key, (err,ketqua)=>{
-        if(err)socket.emit('S_doipass_thatbai');
-        else {
-          if(ketqua.validated){
-            con.query("UPDATE `account` SET `pass` = '"+passwordHash.generate(pass)+"' WHERE `number` LIKE '"+num+"'",function(err1){
-              if(err1)socket.emit('S_doipass_thatbai');
-              else socket.emit('S_doipass_thanhcong');
-            });
-          }
-        }
-      });
-    }
 
-  });
   socket.on('login1',(user1, pass1)=>{
       if(user1&&pass1){
 
@@ -243,60 +337,6 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('login3',(user1, pass1)=>{
-      if(user1&&pass1){
-      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
-  	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
-  			 else{
-          if (passwordHash.verify(pass1, rows[0].pass)){
-            socket.number = user1;
-            socket.username = user1;
-            socket.join(user1);
-            socket.emit('login1_dung', {name:strencode(rows[0].user)});
-          }
-          else {
-            socket.emit('login1_sai');
-          }
-        }
-      });
-    }
-  });
-  socket.on('forget_pass_final',(tin)=>{
-    if(tin.mail&&tin.chuoi&&tin.pass){
-      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+tin.mail+"' LIMIT 1", function(err, rows){
-        if (err)socket.emit('forget_pass_final_thatbai','A');
-        else{
-          if(rows.length==0)socket.emit('forget_pass_final_thatbai','B');
-          else {
-            if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
-              let pass1 = passwordHash.generate(''+tin.pass);
-              con.query("UPDATE `account` SET `pass` = '"+pass1+"' WHERE `number` LIKE '"+tin.mail+"'", function(err2){
-                 if (err2)socket.emit('forget_pass_final_thatbai','A');
-                else {
-
-                  con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
-                     if (err2)socket.emit('forget_pass_final_ok');
-                    });
-                  socket.emit('forget_pass_final_ok');}
-              });
-            }
-              else socket.emit('forget_pass_final_thatbai','B');
-            }
-
-        }
-      });
-    }
-  });
-  socket.on('nguoinhan_chua_ketban',(mail)=>{
-    if(socket.number && mail)io.sockets.in(mail).emit('nguoinhan_chuaketban',socket.number);
-  });
-
-  function check_data1(data){
-    let abc;
-    if(data==null||isNaN(data))abc=false;
-    else abc=true;
-    return abc;
-  }
   socket.on('login2',(data)=>{
     if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
@@ -424,67 +464,36 @@ io.on('connection',(socket)=>
      	 });
      }
 	});
+  socket.on('login3',(user1, pass1)=>{
+      if(user1&&pass1){
+      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
+  	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
+  			 else{
+          if (passwordHash.verify(pass1, rows[0].pass)){
+            socket.number = user1;
+            socket.username = user1;
+            socket.join(user1);
+            socket.emit('login1_dung', {name:strencode(rows[0].user)});
+          }
+          else {
+            socket.emit('login1_sai');
+          }
+        }
+      });
+    }
+  });
+  function check_data1(data){
+    let abc;
+    if(data==null||isNaN(data))abc=false;
+    else abc=true;
+    return abc;
+  }
   socket.on('C_send_diem',(toado,name,stt)=>{
     if(socket.number && toado && name)io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
 
 
   });
-  socket.on('forget_pass',(mail)=>{
-    if(mail){
-      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
-        if(err3)socket.emit('S_forget_thatbai','A');
-        else {
-          if(row1s.length>0 && row1s[0].dem>2)socket.emit('S_forget_thatbai','B');
-          else {
-            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
-                    // nếu tài khoản đã có người đăng ký rồi thì:
-                    if(err)socket.emit('S_forget_thatbai','A');
-                    else {
-                      if (rows.length ==0 )	{socket.emit('S_forget_thatbai','C');}
-                      else {
 
-                        var string = Math.floor(Math.random() * (899999)) + 100000;
-                        var string1 = passwordHash.generate(''+string);
-                        var mailOptions = {
-                          from: 'windlaxy@gmail.com',
-                          to: mail,
-                          subject: 'Confirm code',
-                          text: 'Your confirm code:'+string
-                        };
-                        transporter.sendMail(mailOptions, function(error, info){
-                          if (error) socket.emit('S_forget_thatbai','D');
-                          else {
-                            var time = Math.floor(Date.now() / 1000);
-                            // var matkhau = passwordHash.generate(''+pass);
-                            if(row1s.length==0){
-                              var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
-                              var values = [[mail, string1,time,1]];
-                              con.query(sql, [values], function (err1, result) {
-                                if (err1)socket.emit('S_forget_thatbai','A');
-                                else  socket.emit('S_send_pass_forget');
-                              });
-                            }
-                            else {
-                              //nếu có rồi thì cập nhật và cộng số đếm lên 1
-                              let dem = row1s[0].dem+1;
-                              if(dem>2)time=time+300;
-                              con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
-                                if(err1)socket.emit('S_forget_thatbai','A');
-                                else socket.emit('S_send_pass_forget');
-                              });
-                            }
-
-                          }
-                        });
-                      }
-                    }
-                  });
-                }
-              }
-            });
-
-    }
-  });
   socket.on('denghi_choi_lai',(name)=>{
     if(socket.number && name){
         io.sockets.in(name).emit('S_denghi_choilai',socket.number);
@@ -1020,9 +1029,8 @@ io.on('connection',(socket)=>
   socket.on('search_contact3', function (string){
 
     if (socket.number&&string){
-        console.log('Đang tìm kiếm:'+string);
     // con.query("SELECT `number`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
-con.query("SELECT `number`,`user` FROM `account` WHERE `number` LIKE '"+string+"'", function(err, a1s){
+    con.query("SELECT `number`,`user` FROM `account` WHERE `number` LIKE '"+string+"'", function(err, a1s){
       if ( err)console.log(err);
       else
       {
@@ -1030,13 +1038,12 @@ con.query("SELECT `number`,`user` FROM `account` WHERE `number` LIKE '"+string+"
           let kq1 = [];
           a1s.forEach((a1,key) => {
             kq1.push({user:strencode(a1.user), number: a1.number});
-            if(key===(a1s.length-1)){socket.emit('S_kq_check_contact_2',kq1);console.log('Đã gửi kết quả đi:'+kq1.length);}
+            if(key===(a1s.length-1))socket.emit('S_kq_check_contact_2',kq1);
           });
         }
-        else {
-          socket.emit('S_kq_check_contact_zero_2');
+        else socket.emit('S_kq_check_contact_zero_2');
 
-        }
+
       }
     });
     }
