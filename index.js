@@ -281,20 +281,20 @@ io.on('connection',(socket)=>
                           else {
                             var time = Math.floor(Date.now() / 1000);
                             if(row1s.length==0){
-                              var sql = "INSERT INTO `active` (mail,chuoi,time,dem,abc ) VALUES ?";
-                              var values = [[mail, string1,time,1,string]];
+                              var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
+                              var values = [[mail, string1,time,1]];
                               con.query(sql, [values], function (err1, result) {
                                 if ( err1)socket.emit('regis_1_thatbai','A');
-                                else  {socket.emit('regis_1_thanhcong');console.log(string);}
+                                else  socket.emit('regis_1_thanhcong');
                               });
                             }
                             else {
                               //nếu có rồi thì cập nhật và cộng số đếm lên 1
                               let dem = row1s[0].dem+1;
                               if(dem>2)time=time+300;
-                              con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+",`abc` = '"+string+"' WHERE `mail` LIKE '"+mail+"'",function(err1){
+                              con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
                                 if(err1)socket.emit('regis_1_thatbai','A');
-                                else {socket.emit('regis_1_thanhcong');console.log('hi hi:'+string);}
+                                else socket.emit('regis_1_thanhcong');
                               });
 
                             }
@@ -581,7 +581,7 @@ io.on('connection',(socket)=>
 	});
   socket.on('login3',(user1, pass1)=>{
       if(user1&&pass1){
-      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
+      con.query("SELECT * FROM `account_2` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
   			 else{
           if (passwordHash.verify(pass1, rows[0].pass)){
