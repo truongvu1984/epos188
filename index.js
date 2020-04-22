@@ -102,8 +102,6 @@ io.on('connection',(socket)=>
                           if (error) socket.emit('regis_1_thatbai','B');
                           else {
                             var time = Math.floor(Date.now() / 1000);
-
-
                             if(row1s.length==0){
                               var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
                               var values = [[mail, string1,time,1]];
@@ -195,7 +193,7 @@ io.on('connection',(socket)=>
     // đăng ký của game caro
     if(tin.mail &&tin.name&&tin.chuoi&&tin.pass){
       con.query("SELECT `chuoi` FROM `active` WHERE `mail` LIKE '"+tin.mail +"' LIMIT 1", function(err, rows){
-        if (err)socket.emit('regis2_thatbai','A');
+        if (err){socket.emit('regis2_thatbai','A');console.log('lỗi 1:'+err);}
         else{
           if(rows.length==0)socket.emit('regis2_thatbai','B');
           else {
@@ -203,11 +201,11 @@ io.on('connection',(socket)=>
                 var sql = "INSERT INTO `account_2` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
                 var values = [[tin.mail,tin.name, matkhau]];
-                con.query(sql, [values], function (err1, result) {if (err1)socket.emit('regis2_thatbai','A');
+                con.query(sql, [values], function (err1, result) {if (err1){socket.emit('regis2_thatbai','A');console.log('lỗi 2:'+err1);}
                   else  {
                     socket.emit('regis2_thanhcong');
                     con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
-                       if (err2)socket.emit('regis2_thanhcong');
+                       if (err2){socket.emit('regis2_thanhcong');console.log('lỗi 3:'+err2);}
 
                     });
                   }
