@@ -336,7 +336,7 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('forget_pass_1',(mail)=>{
+  socket.on('forget_pass_1_windlaxy',(mail)=>{
     if(mail){
       //kiểm tra xem tài khoản này có đủ điều kiện để làm việc tiếp không
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
