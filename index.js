@@ -205,14 +205,15 @@ io.on('connection',(socket)=>
                 var values = [[tin.mail,tin.name, matkhau]];
                 con.query(sql, [values], function (err1, result) {if (err1)socket.emit('regis2_thatbai','A');
                   else  {
+                    socket.emit('regis2_thanhcong');
                     con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
                        if (err2)socket.emit('regis2_thanhcong');
-                      else socket.emit('regis2_thanhcong');
+
                     });
                   }
                 });
               }
-              else socket.emit('regis2_thatbai','C');
+              else socket.emit('regis2_thatbai','B');
             }
         }
       });
