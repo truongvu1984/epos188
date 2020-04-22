@@ -280,8 +280,6 @@ io.on('connection',(socket)=>
                           if (error) socket.emit('regis_1_thatbai','B');
                           else {
                             var time = Math.floor(Date.now() / 1000);
-
-
                             if(row1s.length==0){
                               var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
                               var values = [[mail, string1,time,1]];
@@ -314,24 +312,24 @@ io.on('connection',(socket)=>
   socket.on('forget_pass_2',(tin)=>{
     if(tin.mail&&tin.chuoi&&tin.pass){
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+tin.mail+"' LIMIT 1", function(err, rows){
-        if (err){socket.emit('forget_pass_2_thatbai','A');console.log('sai 6:'+err);}
+        if (err)socket.emit('forget_pass_2_thatbai','A');
         else{
-          if(rows.length==0){socket.emit('forget_pass_2_thatbai','B');console.log('sai 1:');}
+          if(rows.length==0)socket.emit('forget_pass_2_thatbai','B');
           else {
             if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
               let pass1 = passwordHash.generate(''+tin.pass);
               con.query("UPDATE `account_2` SET `pass` = '"+pass1+"' WHERE `number` LIKE '"+tin.mail+"'", function(err2){
-                 if (err2){socket.emit('forget_pass_2_thatbai','A');console.log('sai 4:'+err2);}
+                 if (err2)socket.emit('forget_pass_2_thatbai','A');
                 else {
                   socket.emit('forget_pass_2_ok');
                   con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err3){
-                     if (err3){socket.emit('forget_pass_2_ok');console.log('sai 2:'+err3);}
+                     if (err3)socket.emit('forget_pass_2_ok');
                     });
                   }
 
               });
             }
-              else {socket.emit('forget_pass_2_thatbai','B');console.log('sai 3:');}
+              else socket.emit('forget_pass_2_thatbai','B');
             }
 
         }
