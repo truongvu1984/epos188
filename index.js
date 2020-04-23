@@ -1124,7 +1124,7 @@ io.on('connection',(socket)=>
   socket.on('search_contact', function (string){
 
     if (socket.number&&string){
-con.query("SELECT `number`,`user`  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
+con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
     // con.query("SELECT `number`, `user` FROM `account` WHERE `number` LIKE CONCAT('%',"+string+",'%')", function(err, a1s){
       if ( err)console.log(err);
       else
