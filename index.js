@@ -1007,7 +1007,7 @@ io.on('connection',(socket)=>
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
   	     if (err || rows.length ==0)socket.emit('del_acc_thatbai','A');
   			 else{
-          if (passwordHash.verify(pass1, rows[0].pass)){
+          if (passwordHash.verify(pass, rows[0].pass)){
             var string = Math.floor(Math.random() * (899999)) + 100000;
             var string1 = passwordHash.generate(''+string);
             var mailOptions = {
