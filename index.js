@@ -1030,7 +1030,7 @@ io.on('connection',(socket)=>
                         var values = [[socket.number, string1,time,1]];
                         con.query(sql, [values], function (err1, result) {
                           if ( err1)socket.emit('del_acc_thatbai','A');
-                          else {socket.emit('del_acc_thanhcong');console.log('có gửi hi hi');}
+                          else socket.emit('del_acc_thanhcong');
                         });
                       }
                       else {
@@ -1039,7 +1039,7 @@ io.on('connection',(socket)=>
                         if(dem>2)time=time+300;
                         con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+socket.number+"'",function(err1){
                           if(err1)socket.emit('del_acc_thatbai','A');
-                          else {socket.emit('del_acc_thanhcong');console.log('có gui ha ha');}
+                          else socket.emit('del_acc_thanhcong');
                         });
                       }
                     }
@@ -1063,10 +1063,14 @@ io.on('connection',(socket)=>
         else{
           if(rows.length==0)socket.emit('del_acc_2_thatbai','B');
           else {
+            console.log('có nhận 1');
+
             if(passwordHash.verify(chuoi, rows[0].chuoi)){
+              console.log('có nhận 2');
               con.query("DELETE FROM `account` WHERE `mail` LIKE '"+socket.number+"'", function(err3){
                 if (err3)socket.emit('del_acc_2_thatbai','A');
                 else {
+                  console.log('có nhận 3');
                   socket.emit('del_acc__2_hanhcong');
                   con.query("DROP TABLE IF EXISTS "+socket.number+"contact", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
 con.query("DROP TABLE IF EXISTS "+socket.number+"mes_main", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
