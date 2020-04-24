@@ -1025,7 +1025,7 @@ io.on('connection',(socket)=>
                   var values = [[socket.number, string1,time,1]];
                   con.query(sql, [values], function (err1, result) {
                     if ( err1)socket.emit('del_acc_thatbai','A');
-                    else  socket.emit('del_acc_thanhcong');
+                    else {socket.emit('del_acc_thanhcong');console.log('có gửi hi hi');}
                   });
                 }
                 else {
@@ -1034,7 +1034,7 @@ io.on('connection',(socket)=>
                   if(dem>2)time=time+300;
                   con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+socket.number+"'",function(err1){
                     if(err1)socket.emit('del_acc_thatbai','A');
-                    else socket.emit('del_acc_thanhcong');
+                    else {socket.emit('del_acc_thanhcong');console.log('có gui ha ha');}
                   });
                 }
               }
