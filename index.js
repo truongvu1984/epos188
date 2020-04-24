@@ -1053,6 +1053,7 @@ io.on('connection',(socket)=>
 
           }
         }
+      });
     }
   });
   socket.on('del_acc_2',(chuoi)=>{
