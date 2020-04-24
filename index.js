@@ -1004,7 +1004,7 @@ io.on('connection',(socket)=>
     }  }); //ok
   socket.on('C_del_acc',(pass)=>{
     if(socket.number && pass){
-      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
+      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ socket.number +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('del_acc_thatbai','A');
         else {
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('del_acc_thatbai','C');
