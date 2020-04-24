@@ -1012,7 +1012,7 @@ io.on('connection',(socket)=>
             var string1 = passwordHash.generate(''+string);
             var mailOptions = {
               from: 'windlaxy@gmail.com',
-              to: mail,
+              to: socket.number,
               subject: 'Confirm code',
               text: 'Your confirm code:'+string
             };
