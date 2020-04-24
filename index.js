@@ -1063,15 +1063,14 @@ io.on('connection',(socket)=>
         else{
           if(rows.length==0)socket.emit('del_acc_2_thatbai','B');
           else {
-            console.log('có nhận 1');
+
 
             if(passwordHash.verify(chuoi, rows[0].chuoi)){
-              console.log('có nhận 2');
-              con.query("DELETE FROM `account` WHERE `mail` LIKE '"+socket.number+"'", function(err3){
+
+              con.query("DELETE FROM `account` WHERE `number` LIKE '"+socket.number+"'", function(err3){
                 if (err3)socket.emit('del_acc_2_thatbai','A');
                 else {
-                  console.log('có nhận 3');
-                  socket.emit('del_acc__2_hanhcong');
+                  socket.emit('del_acc_2_thanhcong');
                   con.query("DROP TABLE IF EXISTS "+socket.number+"contact", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
 con.query("DROP TABLE IF EXISTS "+socket.number+"mes_main", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
 con.query("DROP TABLE IF EXISTS "+socket.number+"mes_sender", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
