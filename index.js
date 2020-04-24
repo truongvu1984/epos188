@@ -1004,45 +1004,55 @@ io.on('connection',(socket)=>
     }  }); //ok
   socket.on('C_del_acc',(pass)=>{
     if(socket.number && pass){
-      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
-  	     if (err || rows.length ==0)socket.emit('del_acc_thatbai','A');
-  			 else{
-          if (passwordHash.verify(pass, rows[0].pass)){
-            var string = Math.floor(Math.random() * (899999)) + 100000;
-            var string1 = passwordHash.generate(''+string);
-            var mailOptions = {
-              from: 'windlaxy@gmail.com',
-              to: socket.number,
-              subject: 'Confirm code',
-              text: 'Your confirm code:'+string
-            };
-            transporter.sendMail(mailOptions, function(error, info){
-              if (error) socket.emit('del_acc_thatbai','A');
-              else {
-                var time = Math.floor(Date.now() / 1000);
-                if(row1s.length==0){
-                  var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
-                  var values = [[socket.number, string1,time,1]];
-                  con.query(sql, [values], function (err1, result) {
-                    if ( err1)socket.emit('del_acc_thatbai','A');
-                    else {socket.emit('del_acc_thanhcong');console.log('có gửi hi hi');}
+      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
+        if(err3)socket.emit('del_acc_thatbai','A');
+        else {
+          if(row1s.length>0 && row1s[0].dem>2)socket.emit('del_acc_thatbai','C');
+          else {
+            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
+               if (err || rows.length ==0)socket.emit('del_acc_thatbai','A');
+               else{
+                if (passwordHash.verify(pass, rows[0].pass)){
+                  var string = Math.floor(Math.random() * (899999)) + 100000;
+                  var string1 = passwordHash.generate(''+string);
+                  var mailOptions = {
+                    from: 'windlaxy@gmail.com',
+                    to: socket.number,
+                    subject: 'Confirm code',
+                    text: 'Your confirm code:'+string
+                  };
+                  transporter.sendMail(mailOptions, function(error, info){
+                    if (error) socket.emit('del_acc_thatbai','A');
+                    else {
+                      var time = Math.floor(Date.now() / 1000);
+                      if(row1s.length==0){
+                        var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
+                        var values = [[socket.number, string1,time,1]];
+                        con.query(sql, [values], function (err1, result) {
+                          if ( err1)socket.emit('del_acc_thatbai','A');
+                          else {socket.emit('del_acc_thanhcong');console.log('có gửi hi hi');}
+                        });
+                      }
+                      else {
+                        //nếu có rồi thì cập nhật và cộng số đếm lên 1
+                        let dem = row1s[0].dem+1;
+                        if(dem>2)time=time+300;
+                        con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+socket.number+"'",function(err1){
+                          if(err1)socket.emit('del_acc_thatbai','A');
+                          else {socket.emit('del_acc_thanhcong');console.log('có gui ha ha');}
+                        });
+                      }
+                    }
                   });
                 }
-                else {
-                  //nếu có rồi thì cập nhật và cộng số đếm lên 1
-                  let dem = row1s[0].dem+1;
-                  if(dem>2)time=time+300;
-                  con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+socket.number+"'",function(err1){
-                    if(err1)socket.emit('del_acc_thatbai','A');
-                    else {socket.emit('del_acc_thanhcong');console.log('có gui ha ha');}
-                  });
-                }
+                else socket.emit('del_acc_thatbai','C');
               }
             });
+
+
+
           }
-          else socket.emit('del_acc_thatbai','C');
         }
-      });
     }
   });
   socket.on('del_acc_2',(chuoi)=>{
