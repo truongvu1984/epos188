@@ -1063,19 +1063,17 @@ io.on('connection',(socket)=>
         else{
           if(rows.length==0)socket.emit('del_acc_2_thatbai','B');
           else {
-
-
             if(passwordHash.verify(chuoi, rows[0].chuoi)){
-
               con.query("DELETE FROM `account` WHERE `number` LIKE '"+socket.number+"'", function(err3){
                 if (err3)socket.emit('del_acc_2_thatbai','A');
                 else {
+                  let abc= socket.number;
                   socket.emit('del_acc_2_thanhcong');
-                  con.query("DROP TABLE IF EXISTS "+socket.number+"contact", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
-con.query("DROP TABLE IF EXISTS "+socket.number+"mes_main", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
-con.query("DROP TABLE IF EXISTS "+socket.number+"mes_sender", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
-con.query("DROP TABLE IF EXISTS "+socket.number+"mes_detail", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
-
+                  socket.number = null;socket.roomabc = undefined;
+              con.query("DROP TABLE IF EXISTS `"+abc+"contact`", function(err4){ if (err4)console.log(err4);});
+              con.query("DROP TABLE IF EXISTS `"+abc+"mes_main`", function(err4){ if (err4)console.log(err4);});
+              con.query("DROP TABLE IF EXISTS `"+abc+"mes_sender`", function(err4){ if (err4)console.log(err4);});
+              con.query("DROP TABLE IF EXISTS `"+abc+"mes_detail`", function(err4){ if (err4)console.log(err4);});
                 }
               });
             }
