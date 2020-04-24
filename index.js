@@ -273,8 +273,8 @@ io.on('connection',(socket)=>
                         var mailOptions = {
                           from: 'windlaxy@gmail.com',
                           to: mail,
-                          subject: 'Active code',
-                          text: 'Your active code:'+string
+                          subject: 'Confirm code',
+                          text: 'Your confirm code:'+string
                         };
                         transporter.sendMail(mailOptions, function(error, info){
                           if (error) socket.emit('regis_1_thatbai','B');
@@ -1001,9 +1001,78 @@ io.on('connection',(socket)=>
       }
       });
       }
+    }  }); //ok
+  socket.on('C_del_acc',(pass)=>{
+    if(socket.number && pass){
+      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
+  	     if (err || rows.length ==0)socket.emit('del_acc_thatbai','A');
+  			 else{
+          if (passwordHash.verify(pass1, rows[0].pass)){
+            var string = Math.floor(Math.random() * (899999)) + 100000;
+            var string1 = passwordHash.generate(''+string);
+            var mailOptions = {
+              from: 'windlaxy@gmail.com',
+              to: mail,
+              subject: 'Confirm code',
+              text: 'Your confirm code:'+string
+            };
+            transporter.sendMail(mailOptions, function(error, info){
+              if (error) socket.emit('del_acc_thatbai','A');
+              else {
+                var time = Math.floor(Date.now() / 1000);
+                if(row1s.length==0){
+                  var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
+                  var values = [[socket.number, string1,time,1]];
+                  con.query(sql, [values], function (err1, result) {
+                    if ( err1)socket.emit('del_acc_thatbai','A');
+                    else  socket.emit('del_acc_thanhcong');
+                  });
+                }
+                else {
+                  //nếu có rồi thì cập nhật và cộng số đếm lên 1
+                  let dem = row1s[0].dem+1;
+                  if(dem>2)time=time+300;
+                  con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+socket.number+"'",function(err1){
+                    if(err1)socket.emit('del_acc_thatbai','A');
+                    else socket.emit('del_acc_thanhcong');
+                  });
+                }
+              }
+            });
+          }
+          else socket.emit('del_acc_thatbai','C');
+        }
+      });
     }
-  }); //ok
+  });
+  socket.on('del_acc_2',(chuoi)=>{
+    if(socket.number && chuoi){
+      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
+        if (err)socket.emit('del_acc_2_thatbai','A');
+        else{
+          if(rows.length==0)socket.emit('del_acc_2_thatbai','B');
+          else {
+            if(passwordHash.verify(chuoi, rows[0].chuoi)){
+              con.query("DELETE FROM `account` WHERE `mail` LIKE '"+socket.number+"'", function(err3){
+                if (err3)socket.emit('del_acc_2_thatbai','A');
+                else {
+                  socket.emit('del_acc__2_hanhcong');
+                  con.query("DROP TABLE IF EXISTS "+socket.number+"contact", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
+con.query("DROP TABLE IF EXISTS "+socket.number+"mes_main", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
+con.query("DROP TABLE IF EXISTS "+socket.number+"mes_sender", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
+con.query("DROP TABLE IF EXISTS "+socket.number+"mes_detail", function(err4){ if (err4)socket.emit('del_acc__2_hanhcong');});
 
+                }
+              });
+            }
+            else socket.emit('del_acc_2_thatbai','B');
+          }
+
+        }
+      });
+
+    }
+  });
   socket.on('C_save_pos',(mess)=>{
 
     if(socket.number&&mess.idc&&mess.subject&&mess.vitri&&isArray(mess.vitri)){
