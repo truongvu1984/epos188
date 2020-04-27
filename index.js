@@ -1223,11 +1223,11 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
     });
     }
   });
+  // tim kiem cho game
   socket.on('search_contact3', function (string){
-
     if (socket.number&&string){
     // con.query("SELECT `number`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
-    con.query("SELECT `number`,`user` FROM `account` WHERE `number` LIKE '"+string+"'", function(err, a1s){
+    con.query("SELECT `number`,`user` FROM `account_2` WHERE `number` LIKE '"+string+"'", function(err, a1s){
       if ( err)console.log(err);
       else
       {
