@@ -1239,8 +1239,6 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
           });
         }
         else socket.emit('S_kq_check_contact_zero_2');
-
-
       }
     });
     }
