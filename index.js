@@ -604,11 +604,9 @@ io.on('connection',(socket)=>
     return abc;
   }
   socket.on('C_send_diem',(toado,name,stt)=>{
-    if(socket.number && toado && name){
-      console.log('C có gui diem:'+name);
-      io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
+    if(socket.number && toado && name)
+            io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
 
-  }
   });
 
   socket.on('denghi_choi_lai',(name)=>{
@@ -626,10 +624,10 @@ io.on('connection',(socket)=>
     if(socket.number && name && chuoi)io.sockets.in(name).emit('ok_choilai',socket.number,chuoi);
   });
   socket.on('C_nhan_toado',(name)=>{
-    if(socket.number && name){
-      console.log('C đã nhận tọa độ:'+name);
+    if(socket.number && name)
+
       io.sockets.in(name).emit('C_send_diem_ok');
-    }
+
   });
   socket.on('C_del_inbox',(mes)=>{
     if(socket.number&&isArray(mes)&&(mes.length>0)){
