@@ -608,20 +608,15 @@ io.on('connection',(socket)=>
             io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
 
   });
-
-  socket.on('denghi_choi_lai',(name)=>{
-    if(socket.number && name){
-        io.sockets.in(name).emit('S_denghi_choilai',socket.number);
-
+  socket.on('reg_old_game',(mail)=>{
+    if(socket.number && mail){
+      io.sockets.in(mail).emit('C_reg_old_game',socket.number);
     }
   });
-  socket.on('C_dannhan_denghi_choilai',(string,name)=>{
-    if(socket.number && string && name){
-      io.sockets.in(name).emit('C_danhan_denghi_choilai',string, socket.number);
+  socket.on('C_send_old_game',(mail,ban,ta)=>{
+    if(socket.number &&mail&&ban&&ta){
+      io.sockets.in(mail).emit('C_reg_old_game',{mail:socket.number,toado_ban:ban,toado_ta:ta});
     }
-  });
-  socket.on('ok_choilai',(name,chuoi)=>{
-    if(socket.number && name && chuoi)io.sockets.in(name).emit('ok_choilai',socket.number,chuoi);
   });
   socket.on('C_nhan_toado',(name)=>{
     if(socket.number && name)
