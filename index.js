@@ -588,6 +588,7 @@ io.on('connection',(socket)=>
             socket.number = user1;
             socket.username = user1;
             socket.join(user1);
+            console.log('login đúng rồi:'+user1);
             socket.emit('login1_dung', {name:strencode(rows[0].user)});
           }
           else {
@@ -606,7 +607,7 @@ io.on('connection',(socket)=>
   socket.on('C_send_diem',(toado,name,stt)=>{
     if(socket.number && toado && name)
     console.log('Có gửi điểm'+socket.number);
-            io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
+    io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
 
   });
   socket.on('reg_old_game',(mail)=>{
