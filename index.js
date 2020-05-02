@@ -605,7 +605,7 @@ io.on('connection',(socket)=>
   }
   socket.on('C_send_diem',(toado,name,stt)=>{
     if(socket.number && toado && name)
-    console.log('Có gửi điểm');
+    console.log('Có gửi điểm'+socket.number);
             io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
 
   });
