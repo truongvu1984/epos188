@@ -605,25 +605,34 @@ io.on('connection',(socket)=>
     return abc;
   }
   socket.on('C_send_diem',(toado,name,stt)=>{
-    if(socket.number && toado && name)
+    if(socket.number != null){
+    if(toado!=null && name !=null)
     console.log('Có gửi điểm'+socket.number);
     io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
+  }
+  else socket.emit('check_pass');
 
   });
   socket.on('reg_old_game',(mail)=>{
-    if(socket.number && mail){
-      io.sockets.in(mail).emit('C_reg_old_game',socket.number);
-    }
+    if(socket.number != null){
+      if(mail!= null) io.sockets.in(mail).emit('C_reg_old_game',socket.number);
+  }
+  else socket.emit('check_pass');
   });
   socket.on('C_send_old_game',(mail,ban,ta)=>{
-    if(socket.number &&mail&&ban&&ta){
-      io.sockets.in(mail).emit('C_reg_old_game',{mail:socket.number,toado_ban:ban,toado_ta:ta});
+    if(socket.number != null){
+      if(mail!= null &&ban!= null&&ta!= null){
+      io.sockets.in(mail).emit('C_send_old_game',{mail:socket.number,toado_ban:ban,toado_ta:ta});
     }
+  }
+  else socket.emit('check_pass');
+
   });
   socket.on('C_nhan_toado',(name)=>{
-    if(socket.number && name)
-
-      io.sockets.in(name).emit('C_send_diem_ok');
+    if(socket.number != null){
+      if(name!= null)io.sockets.in(name).emit('C_send_diem_ok');
+    }
+  else socket.emit('check_pass');
 
   });
   socket.on('C_del_inbox',(mes)=>{
