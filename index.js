@@ -619,10 +619,10 @@ io.on('connection',(socket)=>
   }
   else socket.emit('check_pass');
   });
-  socket.on('C_send_old_game',(mail,ban,ta)=>{
+  socket.on('C_send_old_game',(mail,ten,ban,ta)=>{
     if(socket.number != null){
-      if(mail!= null &&ban!= null&&ta!= null){
-      io.sockets.in(mail).emit('C_send_old_game',{mail:socket.number,toado_ban:ban,toado_ta:ta});
+      if(mail!= null &&ban!= null&&ta!= null &&ten !=null){
+      io.sockets.in(mail).emit('C_send_old_game',{mail:socket.number,name:ten,toado_ban:ban,toado_ta:ta});
     }
   }
   else socket.emit('check_pass');
