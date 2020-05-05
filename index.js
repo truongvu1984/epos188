@@ -623,8 +623,18 @@ io.on('connection',(socket)=>
     if(socket.number != null){
       console.log('ha hah ha ha');
       if(mail!= null &&ban!= null&&ta!= null &&ten !=null){
-  io.sockets.in(mail).emit('C_send_old_game_2');
-      // io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:ten,toado_ban:ban,toado_ta:ta});
+        let a_ta= [];
+        let a_ban=[];
+        ban.forEach((item, key) => {
+          a_ta.push(item);
+        });
+        ta.forEach((item, i) => {
+          a_ban.push(item);
+        });
+
+
+
+       io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:ten,toado_ban:a_ban,toado_ta:a_ta});
       console.log('Có gửi old game:'+mail);
     }
   }
