@@ -624,7 +624,7 @@ io.on('connection',(socket)=>
       console.log('ha hah ha ha');
       if(mail!= null &&ban!= null&&ta!= null &&ten !=null){
 
-      io.sockets.in(mail).emit('C_send_old_game',{mail:socket.number,name:ten,toado_ban:ban,toado_ta:ta});
+      io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:ten,toado_ban:ban,toado_ta:ta});
       console.log('Có gửi old game');
     }
   }
