@@ -625,6 +625,8 @@ io.on('connection',(socket)=>
       if(mail!= null &&ban!= null&&ta!= null &&ten !=null){
         let a_ta= [];
         let a_ban=[];
+        console.log('hihi:'+ban);
+        console.log('hihi:'+ta);
         ban.forEach((item, key) => {
           a_ta.push(item);
         });
