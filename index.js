@@ -631,11 +631,10 @@ io.on('connection',(socket)=>
         ta.forEach((item, i) => {
           a_ban.push(item);
         });
-
-
-
        io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:ten,toado_ban:a_ban,toado_ta:a_ta});
-      console.log('Có gửi old game:'+mail);
+      console.log('Có gửi old game:'+a_ta);
+      console.log('Có gửi old game:'+a_ban);
+      console.log('Có gửi old game:'+ten);
     }
   }
   else socket.emit('check_pass');
