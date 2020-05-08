@@ -625,10 +625,10 @@ io.on('connection',(socket)=>
       if(mail!= null &&ban!= null&&ta!= null &&ten !=null){
         let a_ta= [];
         let a_ban=[];
-        ban.forEach((item, key) => { a_ta.push(item); });
-        ta.forEach((item, i) => { a_ban.push(item); });
-       io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:strencode(ten)});
-
+        ban.forEach((item, key) => { a_ban.push(item); });
+        ta.forEach((item, i) => { a_ta.push(item); });
+       io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:strencode(ten),toado_ban:a_ban});
+ // io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:ten,toado_ban:a_ban,toado_ta:a_ta});
 
     }
   }
