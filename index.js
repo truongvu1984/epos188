@@ -625,19 +625,11 @@ io.on('connection',(socket)=>
       if(mail!= null &&ban!= null&&ta!= null &&ten !=null){
         let a_ta= [];
         let a_ban=[];
-        console.log('hihi:'+ban);
-        console.log('hihi:'+ta);
-        ban.forEach((item, key) => {
-          a_ta.push(item);
-        });
-        ta.forEach((item, i) => {
-          a_ban.push(item);
-        });
-       io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:strencode(ten),toado_ban:a_ban,toado_ta:a_ta});
+        ban.forEach((item, key) => { a_ta.push(item); });
+        ta.forEach((item, i) => { a_ban.push(item); });
+       io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:strencode(ten));
 
-      console.log('Có gửi old game:'+a_ta);
-      console.log('Có gửi old game:'+a_ban);
-      console.log('Có gửi old game:'+ten);
+
     }
   }
   else socket.emit('check_pass');
