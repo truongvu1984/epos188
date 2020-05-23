@@ -588,7 +588,7 @@ io.on('connection',(socket)=>
             socket.number = user1;
             socket.username = user1;
             socket.join(user1);
-            console.log('login đúng rồi:'+user1);
+
             socket.emit('login1_dung', {name:strencode(rows[0].user)});
           }
           else {
@@ -607,7 +607,7 @@ io.on('connection',(socket)=>
   socket.on('C_send_diem',(toado,name,stt)=>{
     if(socket.number != null){
     if(toado!=null && name !=null)
-    console.log('Có gửi điểm'+socket.number);
+
     io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
   }
   else socket.emit('check_pass');
@@ -637,6 +637,7 @@ io.on('connection',(socket)=>
           else
           {
             if(a1s.length>0){
+              console.log('co gui teen di');
               socket.emit('S_send_name',a1s[0].number,a1s[0].user);
               // let kq1 = [];
               // a1s.forEach((a1,key) => {
