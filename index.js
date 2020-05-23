@@ -638,7 +638,7 @@ io.on('connection',(socket)=>
           {
             if(a1s.length>0){
               console.log('co gui teen di');
-              socket.emit('S_send_name',a1s[0].number,a1s[0].user);
+              socket.emit('S_send_name',a1s[0].number,strencode(a1s[0].user));
               // let kq1 = [];
               // a1s.forEach((a1,key) => {
               //   kq1.push({user:strencode(a1.user), number: a1.number});
