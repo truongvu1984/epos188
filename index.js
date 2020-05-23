@@ -629,6 +629,32 @@ io.on('connection',(socket)=>
   else socket.emit('check_pass');
 
   });
+  socket.on('C_reg_name',(mail)=>{
+    if(socket.number != null){
+      if(mail != null){
+        con.query("SELECT `number`,`user` FROM `account_2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, a1s){
+          if ( err)console.log(err);
+          else
+          {
+            if(a1s.length>0){
+              socket.emit('S_send_name',a1s[0].number,a1s[0].user);
+              // let kq1 = [];
+              // a1s.forEach((a1,key) => {
+              //   kq1.push({user:strencode(a1.user), number: a1.number});
+              //   if(key===(a1s.length-1))socket.emit('S_send_name',a1s[0].number,a1s[0].user);
+              // });
+            }
+
+          }
+        });
+
+
+
+
+      }
+    }
+    else socket.emit('check_pass');
+  });
   socket.on('C_nhan_toado',(name)=>{
     if(socket.number != null){
       if(name!= null)io.sockets.in(name).emit('C_send_diem_ok');
