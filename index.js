@@ -41,7 +41,7 @@ con.connect(function(err) {
     else {
       // app.get('/', (req, res) => res.render('dangnhap3'));
       app.get('/privacy-policy', (req, res) => res.render('privacy'));
-      app.get('/caro', (req, res) => res.render('caro3'));
+      app.get('/caro',           (req, res) => res.render('privacy'));
 
 
 function kiemtra_taikhoan(){
