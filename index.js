@@ -39,21 +39,22 @@ isArray = function(a) {
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      app.get('/', (req, res) => res.render('dangnhap3'));
+      // app.get('/', (req, res) => res.render('dangnhap3'));
       app.get('/privacy-policy', (req, res) => res.render('privacy'));
-      app.post('/', urlencodedParser, function (req, res){
-              if (!req.body) return res.sendStatus(400)
-              else {
-                var full_number = "+"+req.body.code + req.body.number.replace('0','');
-                con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
-                  if (err || rows.length ==0){res.render('dangnhap', {noidung:'Tài khoản này không tồn tại'});}
-                  else{
-                    if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });}
-                    else {res.render('dangnhap', {noidung:'Mật khẩu không đúng'});}
-                  }
-                });
-              }
-            })
+      app.get('/caro', (req, res) => res.render('caro'));
+      // app.post('/', urlencodedParser, function (req, res){
+      //         if (!req.body) return res.sendStatus(400)
+      //         else {
+      //           var full_number = "+"+req.body.code + req.body.number.replace('0','');
+      //           con.query("SELECT * FROM `account` WHERE `number` LIKE '"+full_number+"' LIMIT 1", function(err, rows){
+      //             if (err || rows.length ==0){res.render('dangnhap', {noidung:'Tài khoản này không tồn tại'});}
+      //             else{
+      //               if (passwordHash.verify(req.body.pass, rows[0].pass)){res.render('home2', {sodienthoai:full_number, name:rows[0].user, pass:req.body.pass });}
+      //               else {res.render('dangnhap', {noidung:'Mật khẩu không đúng'});}
+      //             }
+      //           });
+      //         }
+      //       })
 
 
 function kiemtra_taikhoan(){
@@ -637,13 +638,8 @@ io.on('connection',(socket)=>
           else
           {
             if(a1s.length>0){
-              console.log('co gui teen di');
               socket.emit('S_send_name',a1s[0].number,strencode(a1s[0].user));
-              // let kq1 = [];
-              // a1s.forEach((a1,key) => {
-              //   kq1.push({user:strencode(a1.user), number: a1.number});
-              //   if(key===(a1s.length-1))socket.emit('S_send_name',a1s[0].number,a1s[0].user);
-              // });
+
             }
 
           }
