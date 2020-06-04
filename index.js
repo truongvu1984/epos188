@@ -40,7 +40,7 @@ con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
       app.get('/car', (req, res) => res.render('privacy2'));
-      app.get('/privacy', (req, res) => res.render('privacy'));
+      app.get('/privacy', (req, res) => res.render('privacy2'));
 
 
 
