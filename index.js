@@ -39,8 +39,8 @@ isArray = function(a) {
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      app.get('/car', (req, res) => res.render('privacy2'));
-      app.get('/privacy', (req, res) => res.render('privacy2'));
+      app.get('/car', (req, res) => res.render('v123'));
+      app.get('/privacy', (req, res) => res.render('adc'));
 
 
 
