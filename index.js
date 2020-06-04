@@ -42,8 +42,6 @@ con.connect(function(err) {
       app.get('/caro', (req, res) => res.render('home2'));
       app.get('/privacy-policy', (req, res) => res.render('privacy'));
 
-      app.get('/car', (req, res) => res.render('home2'));
-      app.get('/privacy', (req, res) => res.render('privacy'));
 function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
