@@ -39,16 +39,11 @@ isArray = function(a) {
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-<<<<<<< HEAD
       app.get('/caro', (req, res) => res.render('home2'));
       app.get('/privacy-policy', (req, res) => res.render('privacy'));
-=======
+
       app.get('/car', (req, res) => res.render('home2'));
       app.get('/privacy', (req, res) => res.render('privacy'));
->>>>>>> f3e3c45b93640964da05aa658c4109554cd176ff
-
-
-
 function kiemtra_taikhoan(){
   setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
