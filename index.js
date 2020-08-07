@@ -1349,7 +1349,7 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
       if (isArray(info.room)){
         info.room.forEach(function(room){
           if(room.room_fullname){
-            io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(socket.username), number:socket.number});
+            io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(socket.username), number:socket.number, room:room.room_fullname});
           }
         });
       }
