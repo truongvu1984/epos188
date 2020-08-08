@@ -22,6 +22,8 @@ var transporter = nodemailer.createTransport({
   }
 });
 
+
+
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
@@ -346,11 +348,9 @@ io.on('connection',(socket)=>
                           text: 'Your active code:'+string
                         };
                         transporter.sendMail(mailOptions, function(error, info){
-                          if (error) socket.emit('regis_1_thatbai','B');
+                          if (error) {socket.emit('regis_1_thatbai','B');console.log('that bai:'+mail);}
                           else {
                             var time = Math.floor(Date.now() / 1000);
-
-
                             if(row1s.length==0){
                               var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
                               var values = [[mail, string1,time,1]];
