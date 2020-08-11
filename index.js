@@ -1219,7 +1219,6 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('search_contact', function (string){
-
     if (socket.number&&string){
 con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
     // con.query("SELECT `number`, `user` FROM `account` WHERE `number` LIKE CONCAT('%',"+string+",'%')", function(err, a1s){
@@ -1229,11 +1228,15 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
         if(a1s.length>0){
           let kq1 = [];
           a1s.forEach((a1,key) => {
-            kq1.push({user:strencode(a1.user), number: a1.number});
-            if(key===(a1s.length-1))socket.emit('S_kq_check_contact_2',kq1);
+            if(a1.number!=socket.number)kq1.push({user:strencode(a1.user), number: a1.number});
+
+            if(key===(a1s.length-1)){
+              if(kq1.length>0)socket.emit('S_kq_check_contact_2',kq1);
+              else socket.emit('S_kq_check_contact_zero_2');
+            }
           });
         }
-        else {socket.emit('S_kq_check_contact_zero_2');}
+        else socket.emit('S_kq_check_contact_zero_2');
       }
     });
     }
