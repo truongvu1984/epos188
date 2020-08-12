@@ -12,7 +12,7 @@ var con = mysql.createConnection({
   password: "0fdaedd4",
  database : "heroku_7790b5956b2a5c2",
  queueLimit: 30,
-  acquireTimeout: 1000000,
+  acquireTimeout: 1000000
 });
 var transporter = nodemailer.createTransport({
   service: 'gmail',
