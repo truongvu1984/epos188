@@ -447,6 +447,19 @@ io.on('connection',(socket)=>
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
+            if(data.room != ""){
+              if(socket.roomabc){
+                socket.leave(socket.roomabc);
+                socket.join(data.room );
+                socket.roomabc = data.room ;
+
+              }
+              else {
+                socket.join(data.room );
+                socket.roomabc = data.room ;
+
+              }
+            }
             // lấy bảng inbox
              con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
              {
@@ -1263,17 +1276,18 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
   });
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
+
         socket.emit('S_get_join');
         if(socket.roomabc){
           socket.leave(socket.roomabc);
           socket.join(room);
           socket.roomabc = room;
-          console.log(socket.roomabc);
+
         }
         else {
           socket.join(room);
           socket.roomabc = room;
-          console.log(socket.roomabc);
+
         }
 
 
