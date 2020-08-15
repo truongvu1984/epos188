@@ -428,7 +428,7 @@ io.on('connection',(socket)=>
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
   			 else{
           if (passwordHash.verify(pass1, rows[0].pass)){
-            console.log('Login 1 đúng rồi hi hi:'+user1);
+
               socket.emit('login1_dung', {name:strencode(rows[0].user)});
           }
           else {
@@ -1268,10 +1268,12 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
           socket.leave(socket.roomabc);
           socket.join(room);
           socket.roomabc = room;
+          console.log(socket.roomabc);
         }
         else {
           socket.join(room);
           socket.roomabc = room;
+          console.log(socket.roomabc);
         }
 
 
