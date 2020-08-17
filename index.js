@@ -603,9 +603,7 @@ io.on('connection',(socket)=>
     else abc=true;
     return abc;
   }
-  socket.on('kiemtra',()=>{
-    console.log(socket);
-  });
+
   socket.on('C_send_diem',(toado,name,stt)=>{
     if(socket.number != null){
     if(toado!=null && name !=null)
@@ -1281,20 +1279,16 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
     if (socket.number&&room){
 
         socket.emit('S_get_join');
-        if(socket.roomabc){
-          if(socket.roomabc!=room){
+        if(socket.roomabc&&socket.roomabc!=room){
             socket.leave(socket.roomabc);
             socket.join(room);
             socket.roomabc = room;
-          }
-
-
 
         }
         else {
           socket.join(room);
           socket.roomabc = room;
-        
+
 
         }
 
