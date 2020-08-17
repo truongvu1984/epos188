@@ -1279,19 +1279,22 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
   });
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
-        console.log('abc:'+room);
+
         socket.emit('S_get_join');
         if(socket.roomabc){
-          socket.leave(socket.roomabc);
-          socket.join(room);
-          socket.roomabc = room;
-          console.log('ha 11111');
+          if(socket.roomabc!=room){
+            socket.leave(socket.roomabc);
+            socket.join(room);
+            socket.roomabc = room;
+          }
+
+
 
         }
         else {
           socket.join(room);
           socket.roomabc = room;
-          console.log('ha 22222');
+        
 
         }
 
