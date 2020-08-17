@@ -603,6 +603,9 @@ io.on('connection',(socket)=>
     else abc=true;
     return abc;
   }
+  socket.on('kiemtra',()=>{
+    console.log('ha ha:'+socket);
+  });
   socket.on('C_send_diem',(toado,name,stt)=>{
     if(socket.number != null){
     if(toado!=null && name !=null)
