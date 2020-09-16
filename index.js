@@ -1135,6 +1135,8 @@ socket.on('C_send_alarm',(data)=>{
               con.query("DROP TABLE IF EXISTS `"+abc+"mes_main`", function(err4){ if (err4)console.log(err4);});
               con.query("DROP TABLE IF EXISTS `"+abc+"mes_sender`", function(err4){ if (err4)console.log(err4);});
               con.query("DROP TABLE IF EXISTS `"+abc+"mes_detail`", function(err4){ if (err4)console.log(err4);});
+              con.query("DROP TABLE IF EXISTS `"+abc+"alarm`", function(err4){ if (err4)console.log(err4);});
+
                 }
               });
             }
