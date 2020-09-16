@@ -219,6 +219,8 @@ io.on('connection',(socket)=>
                 //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"mes_sender` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NULL,`send_receive` VARCHAR(5), `stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`idc` CHAR(15) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"alarm` (`id` BIGINT NOT NULL AUTO_INCREMENT,`maso` CHAR(15) NOT NULL,`name` VARCHAR(45) NOT NULL,`type` CHAR(3) NOT NULL,`time` DATETIME(6) NOT NULL,`culy` INT NOT NULL,`lat` DOUBLE,`lon` DOUBLE,`ring` CHAR(3),`time1` DATETIME(6),`uri` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+
                 var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
                 var values = [[tin.mail,tin.name, matkhau]];
@@ -838,7 +840,7 @@ socket.on('C_send_alarm',(data)=>{
           {
             if ( err1){console.log(err1);}
             else {
-      
+
                 if(key===(list.length-1))socket.emit('S_del_alarm_ok');
             }
           });
