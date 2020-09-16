@@ -831,7 +831,7 @@ socket.on('C_send_alarm',(data)=>{
     }
   });
   socket.on('C_del_alarm',(list)=>{
-    if(socket.number&&isArray(mes)&&(mes.length>0)){
+    if(socket.number&&isArray(list)&&(list.length>0)){
       list.forEach((item,key)=>{
         con.query("DELETE FROM `"+socket.number+"alarm` WHERE `maso` LIKE '"+item.maso+"'", function(err1)
           {
