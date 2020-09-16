@@ -611,7 +611,7 @@ socket.on('C_send_alarm',(data)=>{
         {
           if ( err){console.log(err);}
           else {
-            socket.emit('S_get_alarm',{name:strdecode(data.name),ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,ring:data.ring,uri:data.uri,time:get_time(thoigian)});
+            socket.emit('S_get_alarm',{name:strencode(data.name),ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,ring:data.ring,uri:data.uri,time:get_time(thoigian)});
           }
         });
       }
