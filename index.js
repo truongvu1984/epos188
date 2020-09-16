@@ -22,8 +22,6 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-
-
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
@@ -603,7 +601,22 @@ io.on('connection',(socket)=>
     else abc=true;
     return abc;
   }
-
+socket.on('C_send_alarm',(data)=>{
+  if(socket.number != null){
+    if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&data.ring != null&&data.uri != null){
+      let thoigian = new Date();
+      var sql2 = "INSERT INTO `"+socket.number+"alarm` (maso,name, type, time,culy,lat,lon,ring,uri) VALUES ?";
+      var values2 = [[data.ma, data.name,data.type,thoigian,data.culy,data.lat,data.lon,data.ring,data.uri]];
+      con.query(sql2, [values2], function (err, res)
+        {
+          if ( err){console.log(err);}
+          else {
+            socket.emit('S_get_alarm',{name:strdecode(data.name),ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,ring:data.ring,uri:data.uri,time:get_time(thoigian)});
+          }
+        });
+      }
+    }
+});
   socket.on('C_send_diem',(toado,name,stt)=>{
     if(socket.number != null){
     if(toado!=null && name !=null)
@@ -815,6 +828,20 @@ io.on('connection',(socket)=>
             });
         }
         });
+    }
+  });
+  socket.on('C_del_alarm',(list)=>{
+    if(socket.number&&isArray(mes)&&(mes.length>0)){
+      list.forEach((item,key)=>{
+        con.query("DELETE FROM `"+socket.number+"alarm` WHERE `maso` LIKE '"+item.maso+"'", function(err1)
+          {
+            if ( err1){console.log(err1);}
+            else {
+                if(key===(list.length-1))socket.emit('S_del_alarm_ok');
+            }
+          });
+
+      });
     }
   });
   socket.on('C_del_friend',(numbers)=>{
