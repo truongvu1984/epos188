@@ -833,12 +833,12 @@ socket.on('C_send_alarm',(data)=>{
   socket.on('C_del_alarm',(list)=>{
     if(socket.number&&isArray(list)&&(list.length>0)){
       list.forEach((item,key)=>{
-        console.log('cos nhan del del hi hi:'+item.maso);
+
         con.query("DELETE FROM `"+socket.number+"alarm` WHERE `maso` LIKE '"+item.maso+"'", function(err1)
           {
             if ( err1){console.log(err1);}
             else {
-              console.log('cos gui del hi hi');
+      
                 if(key===(list.length-1))socket.emit('S_del_alarm_ok');
             }
           });
