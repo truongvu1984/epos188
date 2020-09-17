@@ -263,6 +263,7 @@ io.on('connection',(socket)=>
                           to: mail,
                           subject: 'Confirm code',
                           text: 'Your confirm code:'+string
+
                         };
                         transporter.sendMail(mailOptions, function(error, info){
                           if (error) socket.emit('regis_1_thatbai','B');
@@ -439,7 +440,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login2',(data)=>{
-    if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
+    if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.alarm)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
@@ -571,6 +572,17 @@ io.on('connection',(socket)=>
                     });
                 }
             });
+            // // Lấy danh sách alarm
+            con.query("SELECT * FROM `"+socket.number+"alarm`  WHERE `id` > "+data.alarm+" ORDER BY `id` ASC", function(err1, a1s){
+                if (err1){console.log('Da co loi room full:'+err1);}
+                else if(a1s.length>0)
+                  {
+                     a1s.forEach(function(a1,key){
+                       socket.emit('S_get_alarm',{ids:a1.id,name:strencode(data.name),ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,ring:data.ring,uri:data.uri,time:get_time(thoigian)});
+
+                    });
+                }
+            });
 
             }
           else {socket.emit('login2_sai');}
@@ -603,7 +615,7 @@ io.on('connection',(socket)=>
     else abc=true;
     return abc;
   }
-socket.on('C_send_alarm',(data)=>{
+  socket.on('C_send_alarm',(data)=>{
   if(socket.number != null){
     if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&data.ring != null&&data.uri != null){
       let thoigian = new Date();
@@ -613,7 +625,9 @@ socket.on('C_send_alarm',(data)=>{
         {
           if ( err){console.log(err);}
           else {
+
             socket.emit('S_get_alarm',{name:strencode(data.name),ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,ring:data.ring,uri:data.uri,time:get_time(thoigian)});
+
           }
         });
       }
@@ -1159,7 +1173,7 @@ socket.on('C_send_alarm',(data)=>{
         {
           if(err){console.log(err);}
           else {
-            io.sockets.in(socket.number).emit('S_get_save_pos',mess.imei,{time:get_time(thoigian),subject:strencode(mess.subject),idc:mess.idc});
+            io.sockets.in(socket.number).emit('S_get_save_pos',mess.imei,{ids:res.insertId,time:get_time(thoigian),subject:strencode(mess.subject),idc:mess.idc});
             var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
             mess.vitri.forEach((row)=>{
                 var val3 = [[res.insertId, row.id, row.name, row.lat, row.lon]];
