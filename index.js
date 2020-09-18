@@ -580,8 +580,7 @@ io.on('connection',(socket)=>
                      a1s.forEach(function(a1,key){
                        let time=null;
                        if(a1.time1!=null)time=a1.time1;
-
-                       socket.emit('S_send_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.ma,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:time});
+                       socket.emit('S_send_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:time});
 
                     });
                 }
