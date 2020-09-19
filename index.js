@@ -617,7 +617,8 @@ io.on('connection',(socket)=>
     return abc;
   }
   socket.on('C_send_alarm',(data)=>{
-  if(socket.number != null){
+
+  if(socket.number){
     console.log(data);
     if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&data.ring != null&&data.uri != null){
       let thoigian = new Date();
