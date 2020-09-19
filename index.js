@@ -592,6 +592,7 @@ io.on('connection',(socket)=>
      	 });
      }
      else {
+       console.log('sai 123');
        socket.emit('login2_sai');
      }
 	});
