@@ -440,7 +440,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login2',(data)=>{
-    console.log(data);
+
     if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.alarm)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -592,7 +592,6 @@ io.on('connection',(socket)=>
      	 });
      }
      else {
-       console.log('sai 123');
        socket.emit('login2_sai');
      }
 	});
