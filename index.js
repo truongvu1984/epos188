@@ -634,8 +634,8 @@ io.on('connection',(socket)=>
           if ( err){console.log(err);}
           else {
 
-
-            socket.emit('S_get_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time)});
+            socket.emit('S_get_alarm',{ids:res.insertId, name:strencode(data.name),ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,uri:data.uri,time:get_time(thoigian)});
+    
 
           }
         });
