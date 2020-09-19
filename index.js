@@ -619,7 +619,7 @@ io.on('connection',(socket)=>
   socket.on('C_send_alarm',(data)=>{
     console.log(data);
   if(socket.number){
-
+console.log('hi hi');
     if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&data.ring != null&&data.uri != null){
       let thoigian = new Date();
       console.log('Có nhận alarm hi hi');
