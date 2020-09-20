@@ -621,21 +621,21 @@ io.on('connection',(socket)=>
     return abc;
   }
   socket.on('C_send_alarm',(data)=>{
-
+console.log('có nhận ha ha');
   if(socket.number){
 
     if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&data.ring != null&&data.uri != null){
       let thoigian = new Date();
-
+console.log('có nhận hi hi');
       var sql2 = "INSERT INTO `"+socket.number+"alarm` (maso,name, type, time,culy,lat,lon,ring,uri) VALUES ?";
       var values2 = [[data.ma, data.name,data.type,thoigian,data.culy,data.lat,data.lon,data.ring,data.uri]];
       con.query(sql2, [values2], function (err, res)
         {
           if ( err){console.log(err);}
           else {
-
+console.log('có nhận ho ho');
             socket.emit('S_get_alarm',{ids:res.insertId, name:strencode(data.name),ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,uri:data.uri,time:get_time(thoigian)});
-    
+
 
           }
         });
