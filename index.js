@@ -621,22 +621,19 @@ io.on('connection',(socket)=>
     return abc;
   }
   socket.on('C_send_alarm',(data)=>{
-console.log('có nhận ha ha');
+
   if(socket.number){
 
     if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&data.ring != null&&data.uri != null){
       let thoigian = new Date();
-console.log('có nhận hi hi');
+
       var sql2 = "INSERT INTO `"+socket.number+"alarm` (maso,name, type, time,culy,lat,lon,ring,uri) VALUES ?";
       var values2 = [[data.ma, data.name,data.type,thoigian,data.culy,data.lat,data.lon,data.ring,data.uri]];
       con.query(sql2, [values2], function (err, res)
         {
           if ( err){console.log(err);}
           else {
-console.log('có nhận ho ho');
             socket.emit('S_get_alarm',{ids:res.insertId, name:strencode(data.name),ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,uri:data.uri,time:get_time(thoigian)});
-
-
           }
         });
       }
@@ -1457,7 +1454,7 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
                   con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
                   }
                 });
-                io.sockets.in(socket.number).emit('S_send_room',{ids:res.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian)});
+                io.sockets.in(socket.number).emit('S_send_room',{ids:res.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
             }
             }
           });
@@ -1489,7 +1486,7 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
                                     val7 = [[ res5.insertId,mem.number, mem.name,'B']];
                                     con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
                                   });
-                                  io.sockets.in(row.number).emit('S_send_room',{ids:res5.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'N'});
+                                  io.sockets.in(row.number).emit('S_send_room',{ids:res5.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
 
                                 }
                               });
