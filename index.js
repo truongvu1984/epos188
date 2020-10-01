@@ -578,6 +578,7 @@ io.on('connection',(socket)=>
                 if (err1){console.log('Da co loi room full:'+err1);}
                 else if(a1s.length>0)
                   {
+
                      a1s.forEach(function(a1,key){
 
                        socket.emit('S_send_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1});
@@ -855,12 +856,11 @@ io.on('connection',(socket)=>
   socket.on('C_del_alarm',(list)=>{
     if(socket.number&&isArray(list)&&(list.length>0)){
       list.forEach((item,key)=>{
-
+          console.log(item.maso);
         con.query("DELETE FROM `"+socket.number+"alarm` WHERE `maso` LIKE '"+item.maso+"'", function(err1)
           {
             if ( err1){console.log(err1);}
             else {
-
                 if(key===(list.length-1))socket.emit('S_del_alarm_ok');
             }
           });
