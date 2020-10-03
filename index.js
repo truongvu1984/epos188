@@ -440,7 +440,6 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login2',(data)=>{
-
     if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.alarm)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -556,7 +555,7 @@ io.on('connection',(socket)=>
                 }
               });
             // // Lấy danh sách room
-            con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' AND `id` > "+data.online+" ORDER BY `id` ASC", function(err1, a1s){
+            con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' AND `id` > "+data.online+" ORDER BY `id` DESC LIMIT 20", function(err1, a1s){
                 if (err1){console.log('Da co loi room full:'+err1);}
                 else if(a1s.length>0)
                   {
