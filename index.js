@@ -1453,7 +1453,6 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
   socket.on('C_make_room', function (info){
     if (socket.number&&info.room_name&&info.member_list){
       let thoigian = new Date();
-      socket.emit('S_get_room');
       // bắt đầu xử lý cái room
       var room_id = passwordHash.generate(info.room_name);
       // Server tạo ra cái room đầy đủ để lưu hành trên hệ thống
@@ -1463,6 +1462,7 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
       {
         if (err){console.log(err);}
         else{
+          socket.emit('S_get_room',{ids:res.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
           // lưu thành viên vào bảng
           var sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, name, number, send_receive) VALUES ?";
           var abc = [[ res.insertId, socket.username,socket.number,'A']];
@@ -1475,7 +1475,7 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
                   con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
                   }
                 });
-                io.sockets.in(socket.number).emit('S_send_room',{ids:res.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
+                // io.sockets.in(socket.number).emit('S_send_room',{ids:res.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
             }
             }
           });
