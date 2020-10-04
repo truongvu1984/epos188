@@ -620,6 +620,28 @@ io.on('connection',(socket)=>
     else abc=true;
     return abc;
   }
+  socket.on('C_reg_more_online',(id,num)=>{
+    if(socket.number&&id&&num){
+      console.log('C có gửi lên:'+id+":"+num);
+      con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' AND `id` < "+id+" ORDER BY `id` DESC LIMIT "+num, function(err1, a1s){
+          if (err1){console.log('Da co loi room full:'+err1);}
+          else if(a1s.length>0)
+            {
+               a1s.forEach(function(a1,key){
+                con.query("SELECT `name`,`number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
+                  {
+                    if ( err5 ){console.log(err5);}
+                    else  {if(a5s.length>0){
+                        socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt});
+
+                    }
+                  }
+                  });
+              });
+          }
+      });
+    }
+  });
   socket.on('C_send_alarm',(data)=>{
 
   if(socket.number){
