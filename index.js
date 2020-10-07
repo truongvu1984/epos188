@@ -1499,7 +1499,7 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
                                     val7 = [[ res5.insertId,mem.number, mem.name,'B']];
                                     con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
                                   });
-                                  io.sockets.in(row.number).emit('S_send_room',{ids:res5.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
+                                  io.sockets.in(row.number).emit('S_send_new_room',{ids:res5.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
 
                                 }
                               });
