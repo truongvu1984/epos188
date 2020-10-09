@@ -440,7 +440,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login2',(data)=>{
-    if(data.rightuser&&data.right_pass){
+    if(data.rightuser&&data.right_pass&&check_data1(data.alarm)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
@@ -504,7 +504,7 @@ io.on('connection',(socket)=>
             //            });
             //          }
             // });
-            // // // lấy bảng save
+            // // lấy bảng save
             // con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' AND `id` > "+data.save+" ORDER BY `id` ASC", function(err1, a1s)
             //   {
             //       if (err1){console.log(err1);}
@@ -514,7 +514,7 @@ io.on('connection',(socket)=>
             //         });
             //       }
             //   });
-            // // // // lấy bảng contact
+            // // // lấy bảng contact
             // con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `id` ASC", function(err1, a1s)
             //   {
             //     if (err1){console.log('Da co loi contact full:'+err1);}
@@ -527,7 +527,7 @@ io.on('connection',(socket)=>
             //         });
             //       }
             // });
-            // //lấy danh sách group
+            //lấy danh sách group
             // con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' AND `id` > "+data.group+" ORDER BY `id` ASC", function(err1, a1s)
             //  {
             //   if ( err1){console.log(err1);}
@@ -554,23 +554,23 @@ io.on('connection',(socket)=>
             //       });
             //     }
             //   });
+
             //
-            // //
-            // // // Lấy danh sách alarm
+            // // Lấy danh sách alarm
             // con.query("SELECT * FROM `"+socket.number+"alarm`  WHERE `id` > "+data.alarm+" ORDER BY `id` ASC", function(err1, a1s){
-                if (err1){console.log('Da co loi room full:'+err1);}
-                else if(a1s.length>0)
-                  {
+            //     if (err1){console.log('Da co loi room full:'+err1);}
+            //     else if(a1s.length>0)
+            //       {
+            //
+            //          a1s.forEach(function(a1,key){
+            //
+            //            socket.emit('S_send_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1});
+            //
+            //         });
+            //     }
+            // });
 
-                     a1s.forEach(function(a1,key){
-
-                       socket.emit('S_send_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1});
-
-                    });
-                }
-            });
-
-            }
+          }//end
           else {socket.emit('login2_sai');}
         }
      	 });
