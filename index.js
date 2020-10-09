@@ -647,6 +647,7 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_reg_new_online',(num)=>{
+    console.log('hihi:'+num);
     if(socket.number&&num){
       console.log(num);
       if(num==0){
