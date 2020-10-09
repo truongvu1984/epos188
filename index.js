@@ -440,7 +440,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login2',(data)=>{
-    if(data.rightuser&&data.right_pass&&check_data1(data.alarm)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
+    if(data.rightuser&&data.right_pass){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
@@ -462,102 +462,102 @@ io.on('connection',(socket)=>
               }
             }
             // lấy bảng inbox
-             con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
-             {
-              if (err1){console.log(err1);}
-              else if(a1s.length >0)
-                {
-                  a1s.forEach((a1,key)=>{
-                    con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
-                       if(err2){console.log(err2);}
-                       else {
-                         socket.emit('S_send_tinnhan',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
-
-                       }
-                     });
-                  });
-                }
-              });
+             // con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+data.inbox+" ORDER BY `id` ASC", function(err1, a1s)
+             // {
+             //  if (err1){console.log(err1);}
+             //  else if(a1s.length >0)
+             //    {
+             //      a1s.forEach((a1,key)=>{
+             //        con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
+             //           if(err2){console.log(err2);}
+             //           else {
+             //             socket.emit('S_send_tinnhan',{ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time)});
+             //
+             //           }
+             //         });
+             //      });
+             //    }
+             //  });
             // lấy bảng send
-             con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `id` > "+data.send+" ORDER BY `id` ASC", function(err1, a1s)
-              {
-                   if (err1){console.log(err1);}
-                   else if(a1s.length >0)
-                     {
-                       a1s.forEach(function(a1,key){
-                         let nhomnguoinhan =[];
-                          con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` = "+a1.id, function(err2, a2s){
-                            if(err2){console.log(err2);}
-                            else {
-                              if(a2s.length >0){
-                              a2s.forEach(function(a2,key2){
-                                nhomnguoinhan.push({number:strencode(a2.number),name:strencode(a2.name),stt:a2.stt});
-                                if(key2 === (a2s.length-1)){
-
-                                  socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
-                                }
-                              });
-                            }
-                          }
-
-                          });
-                       });
-                     }
-            });
-            // // lấy bảng save
-            con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' AND `id` > "+data.save+" ORDER BY `id` ASC", function(err1, a1s)
-              {
-                  if (err1){console.log(err1);}
-                  else if(a1s.length >0){
-                    a1s.forEach(function(a1){
-                      socket.emit('S_send_save',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)});
-                    });
-                  }
-              });
-            // // // lấy bảng contact
-            con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `id` ASC", function(err1, a1s)
-              {
-                if (err1){console.log('Da co loi contact full:'+err1);}
-                else if(a1s.length > 0)
-                  {
-                    let mangcontact;
-                    a1s.forEach(function(a1,key){
-                      mangcontact={ids:a1.id,name:strencode(a1.name), number:a1.number};
-                      socket.emit('S_send_contact',mangcontact);
-                    });
-                  }
-            });
-            //lấy danh sách group
-            con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' AND `id` > "+data.group+" ORDER BY `id` ASC", function(err1, a1s)
-             {
-              if ( err1){console.log(err1);}
-              else if( a1s.length > 0)
-                {
-                  let tinfull;
-                  a1s.forEach(function(a1,key){
-                      let mangcontact = [];
-                      con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err2, a2s){
-                       if(err2){console.log(err2);}
-                       else {
-                         if(a2s.length>0){
-                           a2s.forEach(function(a2,key2){
-                             mangcontact.push({name:strencode(a2.name), number:a2.number});
-                             if(key2===(a2s.length-1)){
-                               tinfull={ids:a1.id,idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact};
-                               socket.emit('S_send_group',tinfull);
-
-                             }
-                           });
-                         }
-                       }
-                     });
-                  });
-                }
-              });
-
+            //  con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `id` > "+data.send+" ORDER BY `id` ASC", function(err1, a1s)
+            //   {
+            //        if (err1){console.log(err1);}
+            //        else if(a1s.length >0)
+            //          {
+            //            a1s.forEach(function(a1,key){
+            //              let nhomnguoinhan =[];
+            //               con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` = "+a1.id, function(err2, a2s){
+            //                 if(err2){console.log(err2);}
+            //                 else {
+            //                   if(a2s.length >0){
+            //                   a2s.forEach(function(a2,key2){
+            //                     nhomnguoinhan.push({number:strencode(a2.number),name:strencode(a2.name),stt:a2.stt});
+            //                     if(key2 === (a2s.length-1)){
             //
-            // // Lấy danh sách alarm
-            con.query("SELECT * FROM `"+socket.number+"alarm`  WHERE `id` > "+data.alarm+" ORDER BY `id` ASC", function(err1, a1s){
+            //                       socket.emit('S_send_send',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan});
+            //                     }
+            //                   });
+            //                 }
+            //               }
+            //
+            //               });
+            //            });
+            //          }
+            // });
+            // // // lấy bảng save
+            // con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' AND `id` > "+data.save+" ORDER BY `id` ASC", function(err1, a1s)
+            //   {
+            //       if (err1){console.log(err1);}
+            //       else if(a1s.length >0){
+            //         a1s.forEach(function(a1){
+            //           socket.emit('S_send_save',{ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time)});
+            //         });
+            //       }
+            //   });
+            // // // // lấy bảng contact
+            // con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `id` ASC", function(err1, a1s)
+            //   {
+            //     if (err1){console.log('Da co loi contact full:'+err1);}
+            //     else if(a1s.length > 0)
+            //       {
+            //         let mangcontact;
+            //         a1s.forEach(function(a1,key){
+            //           mangcontact={ids:a1.id,name:strencode(a1.name), number:a1.number};
+            //           socket.emit('S_send_contact',mangcontact);
+            //         });
+            //       }
+            // });
+            // //lấy danh sách group
+            // con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'P' AND `id` > "+data.group+" ORDER BY `id` ASC", function(err1, a1s)
+            //  {
+            //   if ( err1){console.log(err1);}
+            //   else if( a1s.length > 0)
+            //     {
+            //       let tinfull;
+            //       a1s.forEach(function(a1,key){
+            //           let mangcontact = [];
+            //           con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"'", function(err2, a2s){
+            //            if(err2){console.log(err2);}
+            //            else {
+            //              if(a2s.length>0){
+            //                a2s.forEach(function(a2,key2){
+            //                  mangcontact.push({name:strencode(a2.name), number:a2.number});
+            //                  if(key2===(a2s.length-1)){
+            //                    tinfull={ids:a1.id,idc:a1.idc,subject:strencode(a1.subject),contact_list:mangcontact};
+            //                    socket.emit('S_send_group',tinfull);
+            //
+            //                  }
+            //                });
+            //              }
+            //            }
+            //          });
+            //       });
+            //     }
+            //   });
+            //
+            // //
+            // // // Lấy danh sách alarm
+            // con.query("SELECT * FROM `"+socket.number+"alarm`  WHERE `id` > "+data.alarm+" ORDER BY `id` ASC", function(err1, a1s){
                 if (err1){console.log('Da co loi room full:'+err1);}
                 else if(a1s.length>0)
                   {
