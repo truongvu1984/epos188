@@ -650,7 +650,7 @@ io.on('connection',(socket)=>
   socket.on('C_reg_new_online',(num)=>{
     console.log('hihi:'+num);
     console.log('ten:'+socket.number);
-    if(socket.number&&num){
+    if(socket.number&&num!=null){
       console.log(num);
       if(num==0){
         con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC LIMIT 20", function(err1, a1s){
