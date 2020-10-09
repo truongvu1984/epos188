@@ -650,7 +650,7 @@ io.on('connection',(socket)=>
   socket.on('C_reg_new_online',(num)=>{
 
     if(socket.number&&num!=null){
-console.log(num);
+console.log('num la'+num);
       if(num==0){
         con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC LIMIT 20", function(err1, a1s){
           if (err1){console.log('Da co loi room full:'+err1);}
