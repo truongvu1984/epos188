@@ -650,7 +650,7 @@ io.on('connection',(socket)=>
   socket.on('C_reg_new_online',(num)=>{
 
     if(socket.number&&num!=null){
-
+console.log(num);
       if(num==0){
         con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC LIMIT 20", function(err1, a1s){
           if (err1){console.log('Da co loi room full:'+err1);}
@@ -682,6 +682,7 @@ io.on('connection',(socket)=>
                   {
                     if ( err5 ){console.log(err5);}
                     else  {if(a5s.length>0){
+                      console.log('hihi'+a1.id);
                         socket.emit('S_send_new_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'B'});
 
                     }
