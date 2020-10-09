@@ -440,7 +440,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login2',(data)=>{
-    if(data.rightuser&&data.right_pass&&check_data1(data.online)&&check_data1(data.alarm)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
+    if(data.rightuser&&data.right_pass&&check_data1(data.alarm)&&check_data1(data.inbox)&&check_data1(data.send)&&check_data1(data.save)&&check_data1(data.contact)&&check_data1(data.group)){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
@@ -554,24 +554,8 @@ io.on('connection',(socket)=>
                   });
                 }
               });
-            // // Lấy danh sách room
-            con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' AND `id` > "+data.online+" ORDER BY `id` DESC LIMIT 20", function(err1, a1s){
-                if (err1){console.log('Da co loi room full:'+err1);}
-                else if(a1s.length>0)
-                  {
-                     a1s.forEach(function(a1,key){
-                      con.query("SELECT `name`,`number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
-                        {
-                          if ( err5 ){console.log(err5);}
-                          else  {if(a5s.length>0){
-                              socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt});
 
-                          }
-                        }
-                        });
-                    });
-                }
-            });
+            //
             // // Lấy danh sách alarm
             con.query("SELECT * FROM `"+socket.number+"alarm`  WHERE `id` > "+data.alarm+" ORDER BY `id` ASC", function(err1, a1s){
                 if (err1){console.log('Da co loi room full:'+err1);}
@@ -628,7 +612,7 @@ io.on('connection',(socket)=>
           else if(a1s.length>0)
             {
                a1s.forEach(function(a1,key){
-                 socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(socket.name), admin_number:socket.number, time:get_time(a1.time), stt:a1.stt});
+                 socket.emit('S_send_more_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(socket.name), admin_number:socket.number, time:get_time(a1.time), stt:a1.stt});
               });
           }
       });
@@ -662,21 +646,47 @@ io.on('connection',(socket)=>
   else socket.emit('check_pass');
 
   });
-  socket.on('reg_old_game',(mail)=>{
-    if(socket.number != null){
-      if(mail!= null) io.sockets.in(mail).emit('C_reg_old_game',socket.number);
-  }
-  else socket.emit('check_pass');
-  });
-  socket.on('C_send_old_game',(mail,ten,ban,ta,luot)=>{
-    if(socket.number != null){
-        if(mail!= null &&ban!= null&&ta!= null &&ten !=null && luot != null){
-       io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:strencode(ten),toado_ban:ban,toado_ta:ta, luotchoi:strencode(luot)});
+  socket.on('C_reg_new_online',(num)=>{
+    if(socket.number&&num){
+      if(num==0){
+        con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC LIMIT 20", function(err1, a1s){
+          if (err1){console.log('Da co loi room full:'+err1);}
+          else if(a1s.length>0)
+            {
+               a1s.forEach(function(a1,key){
+                con.query("SELECT `name`,`number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
+                  {
+                    if ( err5 ){console.log(err5);}
+                    else  {if(a5s.length>0){
+                        socket.emit('S_send_new_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'A'});
 
+                    }
+                  }
+                  });
+              });
+          }
+      });
+      }
+      else {
+        con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' AND `id` > "+num+" ORDER BY `id` ASC LIMIT 20", function(err1, a1s){
+          if (err1){console.log('Da co loi room full:'+err1);}
+          else if(a1s.length>0)
+            {
+               a1s.forEach(function(a1,key){
+                con.query("SELECT `name`,`number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
+                  {
+                    if ( err5 ){console.log(err5);}
+                    else  {if(a5s.length>0){
+                        socket.emit('S_send_new_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'B'});
+
+                    }
+                  }
+                  });
+              });
+          }
+      });
+      }
     }
-  }
-  else socket.emit('check_pass');
-
   });
   socket.on('C_reg_name',(mail)=>{
     if(socket.number != null){
@@ -1499,7 +1509,7 @@ con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` W
                                     val7 = [[ res5.insertId,mem.number, mem.name,'B']];
                                     con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
                                   });
-                                  io.sockets.in(row.number).emit('S_send_new_room',{ids:res5.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
+                                  io.sockets.in(row.number).emit('S_send_new_room',{ids:res5.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F',abc:'B'});
 
                                 }
                               });
