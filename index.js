@@ -440,6 +440,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login2',(data)=>{
+    console.log(data);
     if(data.rightuser&&data.right_pass){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
