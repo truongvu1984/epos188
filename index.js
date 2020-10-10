@@ -692,28 +692,22 @@ io.on('connection',(socket)=>
       }
     }
   });
-  socket.on('C_reg_name',(mail)=>{
-    if(socket.number != null){
-      if(mail != null){
-        con.query("SELECT `number`,`user` FROM `account_2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, a1s){
-          if ( err)console.log(err);
-          else
-          {
-            if(a1s.length>0){
-              socket.emit('S_send_name',a1s[0].number,strencode(a1s[0].user));
-
+  socket.on('C_reg_new_friend',()=>{
+    if(socket.number){
+      con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+data.contact+" ORDER BY `id` ASC", function(err1, a1s){
+          if (err1){console.log('Da co loi contact full:'+err1);}
+          else if(a1s.length > 0)
+            {
+              let mangcontact;
+              a1s.forEach(function(a1,key){
+                mangcontact={ids:a1.id,name:strencode(a1.name), number:a1.number};
+                socket.emit('S_send_new_friend',mangcontact);
+              });
             }
-
-          }
-        });
-
-
-
-
-      }
+      });
     }
-    else socket.emit('check_pass');
   });
+
   socket.on('C_nhan_toado',(name)=>{
     if(socket.number != null){
       if(name!= null)io.sockets.in(name).emit('C_send_diem_ok');
