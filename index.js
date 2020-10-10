@@ -605,6 +605,7 @@ io.on('connection',(socket)=>
     return abc;
   }
   socket.on('C_reg_more_online',(id,num)=>{
+    console.log(id+'AAA'+num);
     if(socket.number&&id!=null&&num!=null){
 console.log('co gui len');
       con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' AND `id` < "+id+" ORDER BY `id` DESC LIMIT "+num, function(err1, a1s){
