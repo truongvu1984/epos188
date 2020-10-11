@@ -1554,7 +1554,8 @@ io.on('connection',(socket)=>
       {
         if(a1s.length>0){
           a1s.forEach((a1,key) => {
-            socket.emit('S_send_search_contact',{ids:a1.id,user:strencode(a1.user), number: a1.number});
+            console.log('Có gửi đi hi hi');
+            socket.emit('S_send_search_contact',{user:strencode(a1.user), number: a1.number});
           });
         }
         else socket.emit('S_kq_check_contact_zero_2');
