@@ -764,7 +764,7 @@ io.on('connection',(socket)=>
 
                 a1s.forEach(function(a1,key){
 
-                  socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), number:a1.number,abc:'B'});
+                  socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'B'});
                 });
               }
         });
@@ -1642,6 +1642,7 @@ io.on('connection',(socket)=>
                       {
                         if ( err){console.log(err);}
                         else {
+                          console.log('Có gửi new firend và hihi');
                           socket.emit('S_add_contact_ok',{ids:res.insertId, idc:row.idc,name:strencode(row.name),number:row.number});}
                     });
                   }
