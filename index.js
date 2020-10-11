@@ -738,8 +738,10 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_reg_friend',(id,num)=>{
+    console.log('có nhận'+id+':'+num);
     if(socket.number&&id!=null&&num!=null){
       if(num==0){
+        console.log('có 1234');
         if(id==0){
         con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `id` DESC LIMIT 20", function(err1, a1s)
           {
@@ -747,6 +749,7 @@ io.on('connection',(socket)=>
             else if(a1s.length > 0)
               {
                   a1s.forEach(function(a1,key){
+                    console.log('có gửi');
                       socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), number:a1.number,abc:'A'});
                 });
               }
