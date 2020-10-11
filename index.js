@@ -771,7 +771,7 @@ io.on('connection',(socket)=>
       }
       }
       else {
-        con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `id` WHERE `id` < "+id+" DESC LIMIT "+num, function(err1, a1s)
+        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` < "+id+" ORDER BY `id` DESC LIMIT "+num, function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact full:'+err1);}
             else if(a1s.length > 0)
@@ -1554,7 +1554,7 @@ io.on('connection',(socket)=>
       {
         if(a1s.length>0){
           a1s.forEach((a1,key) => {
-            console.log('Có gửi đi hi hi');
+
             socket.emit('S_send_search_contact',{user:strencode(a1.user), number: a1.number});
           });
         }
