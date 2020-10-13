@@ -574,7 +574,9 @@ io.on('connection',(socket)=>
             if (err1){console.log('Da co loi contact full:'+err1);}
             else if(a1s.length > 0)
               {
+console.log('ha ha:'+a1s.length);
                 a1s.forEach(function(a1,key){
+
                   socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'B'});
                 });
               }
@@ -587,7 +589,9 @@ io.on('connection',(socket)=>
             if (err1){console.log('Da co loi contact full:'+err1);}
             else if(a1s.length > 0)
               {
+console.log('hi hi:'+a1s.length);
                   a1s.forEach(function(a1,key){
+
                       socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), idc:a1.idc,number:a1.number,abc:'A'});
                 });
               }
