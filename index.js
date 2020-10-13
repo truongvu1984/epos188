@@ -136,7 +136,7 @@ io.on('connection',(socket)=>
                 //3. Bảng  thông tin người gửi hoặc nhận: gồm number, tên, là người gửi hay nhận, trạng thái nhận hay gửi được chưa
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"mes_sender` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NULL,`send_receive` VARCHAR(5), `stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`idc` CHAR(15) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"alarm` (`id` BIGINT NOT NULL AUTO_INCREMENT,`maso` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`type` CHAR(3) NOT NULL,`time` DATETIME(6) NOT NULL,`culy` INT NOT NULL,`lat` DOUBLE,`lon` DOUBLE,`ring` CHAR(3),`time1` CHAR(16),`uri` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"alarm` (`id` BIGINT NOT NULL AUTO_INCREMENT,`maso` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`type` CHAR(3) NOT NULL,`time` DATETIME(6) NOT NULL,`culy` INT NOT NULL,`lat` DOUBLE,`lon` DOUBLE,`ring` CHAR(3),`time1` CHAR(16),`uri` VARCHAR(45),`kieu` CHAR(1),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
 
                 var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
@@ -702,9 +702,8 @@ io.on('connection',(socket)=>
               if (err1){console.log('Da co loi room full:'+err1);}
               else if(a1s.length>0)
                 {
-
                    a1s.forEach(function(a1,key){
-                     socket.emit('S_send_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'A'});
+                     socket.emit('S_send_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'A',kieu:a1.kieu});
                   });
               }
           });
@@ -715,7 +714,7 @@ io.on('connection',(socket)=>
               else if(a1s.length>0)
                 {
                    a1s.forEach(function(a1,key){
-                         socket.emit('S_send_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'B'});
+                         socket.emit('S_send_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'B',kieu:a1.kieu});
                   });
               }
           });
@@ -727,7 +726,7 @@ io.on('connection',(socket)=>
             else if(a1s.length>0)
               {
                  a1s.forEach(function(a1,key){
-                       socket.emit('S_send_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'A'});
+                       socket.emit('S_send_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'A',kieu:a1.kieu});
                 });
             }
         });
@@ -736,15 +735,15 @@ io.on('connection',(socket)=>
   });
   socket.on('C_send_alarm',(data)=>{
   if(socket.number){
-    if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&(!isNaN(data.culy))&&data.ring != null&&data.uri != null){
+    if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&(!isNaN(data.culy))&&data.ring !=null&&data.kieu!= null&&data.uri != null){
       let thoigian = new Date();
-      var sql2 = "INSERT INTO `"+socket.number+"alarm` (maso,name, type, time,culy,lat,lon,ring,uri) VALUES ?";
-      var values2 = [[data.ma, data.name,data.type,thoigian,data.culy,data.lat,data.lon,data.ring,data.uri]];
+      var sql2 = "INSERT INTO `"+socket.number+"alarm` (maso,name, type, time,culy,lat,lon,ring,uri,kieu) VALUES ?";
+      var values2 = [[data.ma, data.name,data.type,thoigian,data.culy,data.lat,data.lon,data.ring,data.uri,data.kieu]];
       con.query(sql2, [values2], function (err, res)
         {
           if ( err){console.log(err);}
           else {
-            socket.emit('S_get_alarm',{ids:res.insertId, name:strencode(data.name),ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,uri:data.uri,time:get_time(thoigian)});
+            socket.emit('S_get_alarm',{ids:res.insertId, name:strencode(data.name),ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,uri:data.uri,kieu:data.kieu,time:get_time(thoigian)});
           }
         });
       }
