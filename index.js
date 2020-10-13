@@ -592,7 +592,7 @@ io.on('connection',(socket)=>
             else if(a1s.length > 0)
               {
                   a1s.forEach(function(a1,key){
-                      socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), number:a1.number,abc:'A'});
+                      socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), idc:a1.idc,number:a1.number,abc:'A'});
                 });
               }
         });
@@ -704,9 +704,7 @@ io.on('connection',(socket)=>
                 {
 
                    a1s.forEach(function(a1,key){
-
                      socket.emit('S_send_alarm',{ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'A'});
-
                   });
               }
           });
@@ -737,12 +735,9 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_alarm',(data)=>{
-
   if(socket.number){
-
-    if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&data.ring != null&&data.uri != null){
+    if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&(!isNaN(data.culy))&&data.ring != null&&data.uri != null){
       let thoigian = new Date();
-
       var sql2 = "INSERT INTO `"+socket.number+"alarm` (maso,name, type, time,culy,lat,lon,ring,uri) VALUES ?";
       var values2 = [[data.ma, data.name,data.type,thoigian,data.culy,data.lat,data.lon,data.ring,data.uri]];
       con.query(sql2, [values2], function (err, res)
