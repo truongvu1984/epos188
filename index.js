@@ -554,7 +554,6 @@ io.on('connection',(socket)=>
   });
   socket.on('C_reg_friend',(id,num)=>{
     if(socket.number&&id!=null&&num!=null){
-      console.log('có liệu là:'+id+':'+num);
       if(num==0){
         if(id==0){
         con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `id` DESC LIMIT 20", function(err1, a1s)
@@ -574,7 +573,7 @@ io.on('connection',(socket)=>
             if (err1){console.log('Da co loi contact full:'+err1);}
             else if(a1s.length > 0)
               {
-console.log('ha ha:'+a1s.length);
+
                 a1s.forEach(function(a1,key){
 
                   socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'B'});
