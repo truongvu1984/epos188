@@ -563,6 +563,8 @@ io.on('connection',(socket)=>
             else if(a1s.length > 0)
               {
                   a1s.forEach(function(a1,key){
+                  console.log('Đã gửi:'+a1.id);
+
                       socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'A'});
                 });
               }
