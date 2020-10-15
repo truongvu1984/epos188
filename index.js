@@ -312,7 +312,7 @@ io.on('connection',(socket)=>
     return abc;
   }
   socket.on('C_reg_online',(id,num)=>{
-    console.log('haha'+id+':'+num);
+  
     if(socket.number&&id!=null&&num!= null){
       if(num==0){
         if(id==0){
@@ -563,8 +563,6 @@ io.on('connection',(socket)=>
             else if(a1s.length > 0)
               {
                   a1s.forEach(function(a1,key){
-                  console.log('Đã gửi:'+a1.id);
-
                       socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'A'});
                 });
               }
@@ -591,7 +589,7 @@ io.on('connection',(socket)=>
             if (err1){console.log('Da co loi contact full:'+err1);}
             else if(a1s.length > 0)
               {
-console.log('hi hi:'+a1s.length);
+
                   a1s.forEach(function(a1,key){
 
                       socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), idc:a1.idc,number:a1.number,abc:'A'});
