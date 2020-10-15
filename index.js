@@ -554,7 +554,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_reg_friend',(id,num)=>{
-    console.log(id+':'+num);
+    console.log('haha'+id+':'+num);
     if(socket.number&&id!=null&&num!=null){
       if(num==0){
         if(id==0){
