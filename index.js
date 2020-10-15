@@ -312,6 +312,7 @@ io.on('connection',(socket)=>
     return abc;
   }
   socket.on('C_reg_online',(id,num)=>{
+    console.log(id+':'+num);
     if(socket.number&&id!=null&&num!= null){
       if(num==0){
         if(id==0){
