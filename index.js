@@ -325,7 +325,7 @@ console.log(id+':'+num);
                     if ( err5 ){console.log(err5);}
                     else  {if(a5s.length>0){
                       noidung.push({ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'A'});
-                        if(key===(a1.length-1))socket.emit('S_send_room',noidung);
+                        if(key===(a1s.length-1))socket.emit('S_send_room',noidung);
 
                     }
                   }
@@ -346,7 +346,7 @@ console.log(id+':'+num);
                     if ( err5 ){console.log(err5);}
                     else  {if(a5s.length>0){
                       noidung.push({ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'B'});
-                        if(key===(a1.length-1))socket.emit('S_send_room',noidung);
+                        if(key===(a1s.length-1))socket.emit('S_send_room',noidung);
                     }
                   }
                   });
@@ -367,7 +367,7 @@ console.log(id+':'+num);
                       if ( err5 ){console.log(err5);}
                       else  {if(a5s.length>0){
                         noidung.push({ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'A'});
-                          if(key===(a1.length-1))socket.emit('S_send_room',noidung);
+                          if(key===(a1s.length-1))socket.emit('S_send_room',noidung);
                       }
                     }
                     });
