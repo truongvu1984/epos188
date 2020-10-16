@@ -318,12 +318,14 @@ console.log(id+':'+num);
           if (err1){console.log('Da co loi room full:'+err1);}
           else if(a1s.length>0)
             {
+              let noidung=[];
                a1s.forEach(function(a1,key){
                 con.query("SELECT `name`,`number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
                   {
                     if ( err5 ){console.log(err5);}
                     else  {if(a5s.length>0){
-                        socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'A'});
+                      noidung.push({ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'A'});
+                        if(key===(a1.length-1))socket.emit('S_send_room',noidung);
 
                     }
                   }
@@ -337,12 +339,14 @@ console.log(id+':'+num);
           if (err1){console.log('Da co loi room full:'+err1);}
           else if(a1s.length>0)
             {
+              let noidung=[];
                a1s.forEach(function(a1,key){
                 con.query("SELECT `name`,`number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
                   {
                     if ( err5 ){console.log(err5);}
                     else  {if(a5s.length>0){
-                        socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'B'});
+                      noidung.push({ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'B'});
+                        if(key===(a1.length-1))socket.emit('S_send_room',noidung);
                     }
                   }
                   });
@@ -356,8 +360,17 @@ console.log(id+':'+num);
             if (err1){console.log('Da co loi room full:'+err1);}
             else if(a1s.length>0)
               {
+                let noidung=[];
                  a1s.forEach(function(a1,key){
-                   socket.emit('S_send_room',{ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(socket.name), admin_number:socket.number, time:get_time(a1.time), stt:a1.stt,abc:'A'});
+                  con.query("SELECT `name`,`number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' AND `send_receive` LIKE 'A' LIMIT 1 ", function(err5, a5s)
+                    {
+                      if ( err5 ){console.log(err5);}
+                      else  {if(a5s.length>0){
+                        noidung.push({ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'A'});
+                          if(key===(a1.length-1))socket.emit('S_send_room',noidung);
+                      }
+                    }
+                    });
                 });
             }
         });
@@ -1498,7 +1511,7 @@ console.log(id+':'+num);
                   con.query(sql2, [val2], function (err2, res2){if ( err2){console.log(err2);}});
                   }
                 });
-                // io.sockets.in(socket.number).emit('S_send_room',{ids:res.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
+
             }
             }
           });
