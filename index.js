@@ -59,9 +59,7 @@ kiemtra_taikhoan();
 
 io.on('connection',(socket)=>
 {
-  console.log(socket.id);
   socket.emit('check_pass');
-
   socket.on('regis_1_windlaxy',(mail)=>{
     if(mail){
       //kiểm tra xem tài khoản này có đủ điều kiện để làm việc tiếp không
@@ -312,7 +310,7 @@ io.on('connection',(socket)=>
     return abc;
   }
   socket.on('C_reg_online',(id,num)=>{
-  
+console.log(id+':'+num);
     if(socket.number&&id!=null&&num!= null){
       if(num==0){
         if(id==0){
