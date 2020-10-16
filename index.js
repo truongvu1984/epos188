@@ -1038,8 +1038,8 @@ io.on('connection',(socket)=>
                                               var val7 = [[res5.insertId, row3.id, row3.name, row3.lat, row3.lon]];
                                               con.query(sql7, [val7], function (err7, result) {if ( err7){console.log(err7);}});
                                               });
-                                              io.sockets.in(row5.number).emit('S_send_tinnhan',{ids:res5.insertId,name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
-                                                  subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian),read_1:'N', stt:'F',abc:'B'});
+                                              io.sockets.in(row5.number).emit('S_send_tinnhan',[{ids:res5.insertId,name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
+                                                  subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian),read_1:'N', stt:'F',abc:'B'}]);
 
 
                                           } //het else
