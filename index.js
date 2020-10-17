@@ -270,7 +270,6 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login2',(data)=>{
-
     if(data.rightuser&&data.right_pass){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -580,47 +579,51 @@ io.on('connection',(socket)=>
       socket.emit('check_pass');
     }
   });
-  socket.on('C_reg_friend',(id,num)=>{
-      if(socket.number&&id!=null&&num!=null&&(!isNaN(id))&&(!isNaN(num))){
+  socket.on('C_reg_friend',(name,num)=>{
+      if(socket.number&&name!=null&&num!=null&&(!isNaN(num))){
       if(num==0){
-        if(id==0){
-        con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `id` DESC LIMIT 20", function(err1, a1s)
+        if(name==0){
+        con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name` ASC LIMIT 20", function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact full:'+err1);}
             else if(a1s.length > 0)
               {
+                  let noidung=[];
                   a1s.forEach(function(a1,key){
-                      socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'A'});
+                    noidung.push({ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'A'});
+                      if(key===(a1s.length-1))socket.emit('S_send_contact',noidung);
                 });
               }
         });
       }
         else {
-        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+id+" ORDER BY `id` ASC", function(err1, a1s)
+        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `name` < '"+name+"' ORDER BY `name` DESC", function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact full:'+err1);}
             else if(a1s.length > 0)
               {
 
+                let noidung=[];
                 a1s.forEach(function(a1,key){
-
-                  socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'B'});
-                });
+                  noidung.push({ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'B'});
+                    if(key===(a1s.length-1))socket.emit('S_send_contact',noidung);
+              });
               }
         });
       }
       }
       else {
-        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` < "+id+" ORDER BY `id` DESC LIMIT "+num, function(err1, a1s)
+        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `name` > "+name+" ORDER BY `id` ASC LIMIT "+num, function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact full:'+err1);}
             else if(a1s.length > 0)
               {
-
-                  a1s.forEach(function(a1,key){
-
-                      socket.emit('S_send_contact',{ids:a1.id,name:strencode(a1.name), idc:a1.idc,number:a1.number,abc:'A'});
+                let noidung=[];
+                a1s.forEach(function(a1,key){
+                  noidung.push({ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'A'});
+                    if(key===(a1s.length-1))socket.emit('S_send_contact',noidung);
                 });
+
               }
         });
       }
