@@ -581,9 +581,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_reg_friend',(name1,num)=>{
-    console.log('ok'+name1+':'+num);
-      if(socket.number&&name1!=null&&num!=null&&(!isNaN(num))){
-
+    if(socket.number&&name1!=null&&num!=null&&(!isNaN(num))){
         if(num==0){
         if(name1==0){
         con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name` ASC LIMIT 20", function(err1, a1s)
@@ -593,10 +591,8 @@ io.on('connection',(socket)=>
               {
                   let noidung=[];
                   a1s.forEach(function(a1,key){
-                    console.log('có gui:'+a1.name);
                     noidung.push({ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'A'});
                       if(key===(a1s.length-1)){
-
                       socket.emit('S_send_contact',noidung);
                     }
 
@@ -613,7 +609,6 @@ io.on('connection',(socket)=>
 
                 let noidung=[];
                 a1s.forEach(function(a1,key){
-                  console.log('có gui nha:'+a1.name);
                   noidung.push({ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'B'});
                     if(key===(a1s.length-1))socket.emit('S_send_contact',noidung);
               });
@@ -629,8 +624,7 @@ io.on('connection',(socket)=>
               {
                 let noidung=[];
                 a1s.forEach(function(a1,key){
-                  console.log('có gui 3:'+a1.name);
-                  noidung.push({ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'A'});
+                      noidung.push({ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'A'});
                     if(key===(a1s.length-1))socket.emit('S_send_contact',noidung);
                 });
 
