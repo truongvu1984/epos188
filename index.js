@@ -580,7 +580,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_reg_friend',(name,num)=>{
-    console.log('hah'+name+':'+num);
+    console.log('ok'+name+':'+num);
       if(socket.number&&name!=null&&num!=null&&(!isNaN(num))){
         console.log(name+':'+num);
         if(num==0){
