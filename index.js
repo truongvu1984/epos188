@@ -309,7 +309,7 @@ io.on('connection',(socket)=>
   }
   socket.on('C_reg_online',(id,num)=>{
     if(socket.number&&id!=null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
-    
+
       if(num==0){
         if(id==0){
         con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC LIMIT 20", function(err1, a1s){
@@ -583,7 +583,7 @@ io.on('connection',(socket)=>
   socket.on('C_reg_friend',(name1,num)=>{
     console.log('ok'+name1+':'+num);
       if(socket.number&&name1!=null&&num!=null&&(!isNaN(num))){
-        console.log('hahah'+name1+':'+num);
+
         if(num==0){
         if(name1==0){
         con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name` ASC LIMIT 20", function(err1, a1s)
@@ -594,7 +594,11 @@ io.on('connection',(socket)=>
                   let noidung=[];
                   a1s.forEach(function(a1,key){
                     noidung.push({ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'A'});
-                      if(key===(a1s.length-1))socket.emit('S_send_contact',noidung);
+                      if(key===(a1s.length-1)){
+                        console.log('có gui:'+noidung.length+':'+noidung[0].name);
+                      socket.emit('S_send_contact',noidung);
+                    }
+
                 });
               }
         });
