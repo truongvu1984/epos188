@@ -309,6 +309,7 @@ io.on('connection',(socket)=>
   }
   socket.on('C_reg_online',(id,num)=>{
     if(socket.number&&id!=null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
+      console.log('hihi'+id+':'+num);
       if(num==0){
         if(id==0){
         con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'O' ORDER BY `id` DESC LIMIT 20", function(err1, a1s){
