@@ -581,7 +581,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_reg_friend',(name,num)=>{
       if(socket.number&&name!=null&&num!=null&&(!isNaN(num))){
-      if(num==0){
+        if(num==0){
         if(name==0){
         con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name` ASC LIMIT 20", function(err1, a1s)
           {
@@ -613,7 +613,7 @@ io.on('connection',(socket)=>
       }
       }
       else {
-        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `name` > "+name+" ORDER BY `id` ASC LIMIT "+num, function(err1, a1s)
+        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `name` > "+name+" ORDER BY `name` ASC LIMIT "+num, function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact full:'+err1);}
             else if(a1s.length > 0)
