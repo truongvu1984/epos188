@@ -1239,66 +1239,6 @@ io.on('connection',(socket)=>
 
     }
   });
-  socket.on('C_send_group',(mess)=>{
-    if(socket.number&&mess.id&&mess.name&&mess.contact_list){
-      if(isArray(mess.contact_list)){
-      socket.emit('S_newgroup_ok');
-      var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive) VALUES ?";
-      var values = [[mess.id, mess.name,'P']];
-      // P là ký hiệu cho biết đây là group
-      con.query(sql, [values], function (err, res)
-        {
-          if ( err){console.log(err);}
-          else {
-            var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
-            mess.contact_list.forEach(function(contact)
-              {
-                if(contact.contact_number&&contact.contact_name){
-                var val4 = [[res.insertId, contact.contact_number, contact.contact_name, 'P']];
-                con.query(sql4, [val4], function (err3, res3) {if ( err3){console.log(err3);}});
-              }
-            });
-          }
-        });
-      }
-    }
-  });
-  socket.on('C_send__edit_group',(mess)=>{
-    if(socket.number&&mess.name&&mess.id&&mess.contact_list){
-      con.query("UPDATE `"+socket.number+"mes_main` SET `subject` = '"+mess.name+"' WHERE `send_receive` LIKE 'P' AND `idc` LIKE '"+mess.id+"'",function()
-      {
-        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+mess.id+"'  AND `send_receive` LIKE 'P' LIMIT 1", function(err11, res11)
-          {
-            if ( err11 || (res11.length ==0) ){console.log(err11);}
-            else
-              {
-                con.query("DELETE FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+res11[0].id+"'  AND `send_receive` LIKE 'P'", function(err12)
-                  {
-                    if ( err12){console.log(err12);}
-                    else {
-                      var sql4 = "INSERT INTO `"+socket.number+"mes_sender` (ids,number, name, send_receive) VALUES ?";
-                      if(isArray(mess.contact_list)){
-                      mess.contact_list.forEach(function(contact)
-                        {
-                          if(contact.contact_number&&contact.contact_name){
-                          var val4 = [[res11[0].id, contact.contact_number, contact.contact_name, 'P']];
-                          con.query(sql4, [val4], function (err3, res3) {if ( err3){console.log(err3);}});
-                        }
-                        });
-                      }
-
-                    }
-                  });
-
-
-              }
-            });
-
-      });
-
-
-    }
-  });
   socket.on('search_contact', function (string){
     if (socket.number&&string!=null){
       con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
