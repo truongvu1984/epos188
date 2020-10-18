@@ -581,6 +581,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_reg_friend',(name,num)=>{
       if(socket.number&&name!=null&&num!=null&&(!isNaN(num))){
+        console.log(name+':'+num);
         if(num==0){
         if(name==0){
         con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name` ASC LIMIT 20", function(err1, a1s)
