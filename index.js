@@ -593,7 +593,7 @@ io.on('connection',(socket)=>
               {
                   let noidung=[];
                   a1s.forEach(function(a1,key){
-                    console.log('có gui:'+a1);
+                    console.log('có gui:'+a1.name);
                     noidung.push({ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'A'});
                       if(key===(a1s.length-1)){
 
