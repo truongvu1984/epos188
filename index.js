@@ -584,7 +584,7 @@ io.on('connection',(socket)=>
     if(socket.number&&name1!=null&&num!=null&&(!isNaN(num))){
         if(num==0){
         if(name1==0){
-        con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name` ASC LIMIT 20", function(err1, a1s)
+        con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name` ASC LIMIT 50", function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact 3:'+err1);}
             else if(a1s.length > 0)
@@ -617,7 +617,7 @@ io.on('connection',(socket)=>
       }
       }
       else {
-        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `name` > '"+name1+"' ORDER BY `name` ASC LIMIT "+num, function(err1, a1s)
+        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `name` > '"+name1+"' ORDER BY `name` ASC LIMIT 50", function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact1:'+err1);}
             else if(a1s.length > 0)
