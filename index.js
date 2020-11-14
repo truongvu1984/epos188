@@ -307,6 +307,17 @@ io.on('connection',(socket)=>
     else abc=true;
     return abc;
   }
+  socket.on('C_off_gps',(rooms)=>{
+    if (socket.number&&rooms!=null){
+      if (isArray(rooms)){
+        rooms.forEach(function(room){
+          if(room.room_fullname){
+            io.sockets.in(room.room_fullname).emit('S_off_gps',{name:strencode(socket.username), number:socket.number});
+          }
+        });
+      }
+    }
+  });
   socket.on('C_reg_online',(id,num)=>{
     if(socket.number&&id!=null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
 
@@ -874,7 +885,6 @@ io.on('connection',(socket)=>
   socket.on('C_del_alarm',(list)=>{
     if(socket.number&&isArray(list)&&(list.length>0)){
       list.forEach((item,key)=>{
-          console.log(item.maso);
         con.query("DELETE FROM `"+socket.number+"alarm` WHERE `maso` LIKE '"+item.maso+"'", function(err1)
           {
             if ( err1){console.log(err1);}
@@ -1263,13 +1273,11 @@ io.on('connection',(socket)=>
 
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
-
-        socket.emit('S_get_join');
+      socket.emit('S_get_join');
         if(socket.roomabc&&socket.roomabc!=room){
             socket.leave(socket.roomabc);
             socket.join(room);
             socket.roomabc = room;
-
         }
         else {
           socket.join(room);
