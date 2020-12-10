@@ -883,14 +883,13 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_del_alarm',(list)=>{
+    socket.emit('S_del_alarm_ok');
     if(socket.number&&isArray(list)&&(list.length>0)){
       list.forEach((item,key)=>{
         con.query("DELETE FROM `"+socket.number+"alarm` WHERE `maso` LIKE '"+item.maso+"'", function(err1)
           {
             if ( err1){console.log(err1);}
-            else {
-                if(key===(list.length-1))socket.emit('S_del_alarm_ok');
-            }
+
           });
 
       });
