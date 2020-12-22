@@ -283,7 +283,6 @@ io.on('connection',(socket)=>
                 socket.leave(socket.roomabc);
                 socket.join(data.room );
                 socket.roomabc = data.room ;
-
               }
               else {
                 socket.join(data.room );
@@ -1055,7 +1054,7 @@ io.on('connection',(socket)=>
                                               con.query(sql7, [val7], function (err7, result) {if ( err7){console.log(err7);}});
                                               });
                                               io.sockets.in(row5.number).emit('S_send_tinnhan',[{ids:res5.insertId,name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
-                                                  subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian),read_1:'N', stt:'F',abc:'B'}]);
+                                                  subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian),read_1:'N', stt:'N',abc:'B'}]);
 
 
                                           } //het else
