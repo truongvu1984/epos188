@@ -59,7 +59,7 @@ kiemtra_taikhoan();
 
 io.on('connection',(socket)=>
 {
-  console.log(socket.id);
+
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy',(mail)=>{
     if(mail){
@@ -127,8 +127,7 @@ io.on('connection',(socket)=>
           if(rows.length==0)socket.emit('regis2_thatbai','B');
           else {
             if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
-              // TẠO RA CACS BẢNG THÔNG TIN CHO NGƯỜI DÙNG
-                // 1. Bảng chính: lưu id của bản tin đó trên server, id của người dùng, tên tin nhắn, tin nhắn gửi đi hay tin nhắn nhận về, trạng thái gửi đi hay nhận về.
+
                 con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 //2. Bảng địa điểm: lưu id bản tin đó trên server, tên điểm, tọa độ điểm
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"mes_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
