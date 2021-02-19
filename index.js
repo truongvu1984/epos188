@@ -7,8 +7,9 @@ server.listen(process.env.PORT || 3000, function(){console.log("server start")})
 var mysql = require('mysql');
 var nodemailer = require('nodemailer');
 // host: "us-cdbr-iron-east-05.cleardb.net",
+// host: "93.188.161.221",
 var con = mysql.createConnection({
-  host: "93.188.161.221",
+  host: "us-cdbr-iron-east-05.cleardb.net",
   user: "root",
   password: "Vuyeungan1995",
  database : "windalxy",
