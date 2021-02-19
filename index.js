@@ -6,11 +6,12 @@ var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start")});
 var mysql = require('mysql');
 var nodemailer = require('nodemailer');
+// host: "us-cdbr-iron-east-05.cleardb.net",
 var con = mysql.createConnection({
-  host: "us-cdbr-iron-east-05.cleardb.net",
-  user: "b04c2ff40d4e13",
-  password: "0fdaedd4",
- database : "heroku_7790b5956b2a5c2",
+  host: "93.188.161.221",
+  user: "root",
+  password: "Vuyeungan1995",
+ database : "windalxy",
  queueLimit: 30,
   acquireTimeout: 1000000
 });
@@ -47,11 +48,8 @@ function kiemtra_taikhoan(){
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
     var date2 = Math.floor(Date.now() / 1000) - 600;
     var date3=Math.floor(Date.now() / 1000) - 300;
-
     // mở khóa cho số điện thoại hoặc phoneid bị khóa
-
     con.query(" DELETE FROM `active` WHERE `time` < "+date3, function(err){if(err)console.log('co loi HA HA HA:'+err);});
-
     kiemtra_taikhoan();
   }, 5000);
 }
