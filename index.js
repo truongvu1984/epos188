@@ -7,12 +7,11 @@ server.listen(process.env.PORT || 3000, function(){console.log("server start")})
 var mysql = require('mysql');
 var nodemailer = require('nodemailer');
 // host: "us-cdbr-iron-east-05.cleardb.net",
-// host: "93.188.161.221",
 var con = mysql.createConnection({
   host: "us-cdbr-iron-east-05.cleardb.net",
-  user: "root",
-  password: "Vuyeungan1995",
- database : "windalxy",
+  user: "b04c2ff40d4e13",
+  password: "0fdaedd4",
+ database : "heroku_7790b5956b2a5c2",
  queueLimit: 30,
   acquireTimeout: 1000000
 });
