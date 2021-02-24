@@ -8,10 +8,10 @@ var mysql = require('mysql');
 var nodemailer = require('nodemailer');
 // host: "us-cdbr-iron-east-05.cleardb.net",
 var con = mysql.createConnection({
-  host: "us-cdbr-iron-east-05.cleardb.net",
-  user: "b04c2ff40d4e13",
-  password: "0fdaedd4",
- database : "heroku_7790b5956b2a5c2",
+  host: "93.188.161.221",
+  user: "root",
+  password: "Vuyeungan1995",
+ database : "windlaxy",
  queueLimit: 30,
   acquireTimeout: 1000000
 });
