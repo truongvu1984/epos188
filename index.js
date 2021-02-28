@@ -10,6 +10,7 @@ var nodemailer = require('nodemailer');
 var con = mysql.createConnection({
   host: "93.188.161.221",
   user: "root",
+  port:3306,
   password: "Vuyeungan1995",
  database : "windlaxy",
  queueLimit: 30,
