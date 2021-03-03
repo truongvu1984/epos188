@@ -8,7 +8,7 @@ var mysql = require('mysql');
 var nodemailer = require('nodemailer');
 // host: "us-cdbr-iron-east-05.cleardb.net",
 var con = mysql.createConnection({
-  host: "93.188.161.221",
+  host: "127.0.0.1",
   user: "root",
   port:3306,
   password: "Vuyeungan1995",
