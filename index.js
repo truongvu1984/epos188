@@ -49,7 +49,6 @@ function kiemtra_taikhoan(){
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
     var date2 = Math.floor(Date.now() / 1000) - 600;
     var date3=Math.floor(Date.now() / 1000) - 300;
-    // mở khóa cho số điện thoại hoặc phoneid bị khóa
     con.query(" DELETE FROM `active` WHERE `time` < "+date3, function(err){if(err)console.log('co loi HA HA HA:'+err);});
     kiemtra_taikhoan();
   }, 5000);
@@ -62,7 +61,7 @@ io.on('connection',(socket)=>
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy',(mail)=>{
     if(mail){
-      //kiểm tra xem tài khoản này có đủ điều kiện để làm việc tiếp không
+    
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
