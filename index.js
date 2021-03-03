@@ -10,7 +10,6 @@ var nodemailer = require('nodemailer');
 var con = mysql.createConnection({
   host: "127.0.0.1",
   user: "root",
-  port:3306,
   password: "Vuyeungan1995",
  database : "windlaxy",
  queueLimit: 30,
@@ -156,7 +155,7 @@ io.on('connection',(socket)=>
   });
   socket.on('forget_pass_1_windlaxy',(mail)=>{
     if(mail){
-      
+
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
