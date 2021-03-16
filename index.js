@@ -55,7 +55,7 @@ kiemtra_taikhoan();
 
 io.on('connection',(socket)=>
 {
-console.log(socket.id);
+
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy',(mail)=>{
     if(mail){
@@ -980,7 +980,7 @@ console.log(socket.id);
                             a3s.forEach(function(a3,key){
                               position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
                               if(key1===(list.length-1) && key===(a3s.length-1)){
-                                socket.emit('S_send_point_import',position);console.log('Da gui tin import đi');
+                                socket.emit('S_send_point_import',position);
                               }
                             });
                           }
@@ -1193,7 +1193,7 @@ console.log(socket.id);
   socket.on('C_save_pos',(mess)=>{
 
     if(socket.number&&mess.idc&&mess.subject&&mess.vitri&&isArray(mess.vitri)){
-      console.log('có luu');
+
       let thoigian = new Date();
       var sql = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time) VALUES ?";
       var val = [[mess.idc, mess.subject,'H',thoigian]];
