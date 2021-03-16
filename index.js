@@ -6,7 +6,6 @@ var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start hi hi")});
 var mysql = require('mysql');
 var nodemailer = require('nodemailer');
-
 var con = mysql.createConnection({
   host: "127.0.0.1",
   user: "root",
@@ -40,7 +39,7 @@ isArray = function(a) {
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      app.get('/caro', (req, res) => res.render('home2'));
+
       app.get('/privacy-policy', (req, res) => res.render('privacy'));
 
 function kiemtra_taikhoan(){
@@ -56,7 +55,7 @@ kiemtra_taikhoan();
 
 io.on('connection',(socket)=>
 {
-console.log(socket);
+
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy',(mail)=>{
     if(mail){
