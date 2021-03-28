@@ -21,7 +21,7 @@ var transporter = nodemailer.createTransport({
     pass: 'spihrtkjqhqnduml'
   }
 });
-
+allowEIO3: true;
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
@@ -35,12 +35,9 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
-
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-
-      app.get('/privacy-policy', (req, res) => res.render('privacy'));
 
 function kiemtra_taikhoan(){
   setTimeout(function() {
@@ -52,18 +49,14 @@ function kiemtra_taikhoan(){
   }, 5000);
 }
 kiemtra_taikhoan();
-
 io.on('connection',(socket)=>
 {
-
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy',(mail)=>{
     if(mail){
-
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
-
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
           else {
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
@@ -154,11 +147,9 @@ io.on('connection',(socket)=>
   });
   socket.on('forget_pass_1_windlaxy',(mail)=>{
     if(mail){
-
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
-
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
           else {
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
@@ -1217,8 +1208,6 @@ io.on('connection',(socket)=>
    	if (socket.number&&nguoigui&&idc){
       con.query("UPDATE `"+socket.number+"mes_main` SET `stt` = 'Y' WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'R'",function(err5,res5)
           {if(err5){console.log(err5);}
-
-
       });
 	     // báo cho người gửi biết là thằng socket.number đã nhận tin nhắn
        con.query("SELECT * FROM `"+nguoigui+"mes_main` WHERE `idc` LIKE '"+idc+"' AND `send_receive` LIKE 'S' LIMIT 1", function(err11, res11)
@@ -1255,7 +1244,6 @@ io.on('connection',(socket)=>
       {
         if(a1s.length>0){
           a1s.forEach((a1,key) => {
-
             socket.emit('S_send_search_contact',{user:strencode(a1.user), number: a1.number});
           });
         }
