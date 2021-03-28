@@ -127,7 +127,7 @@ io.on('connection',(socket)=>
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"mes_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
 
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"mes_sender` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NULL,`send_receive` VARCHAR(5), `stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`idc` CHAR(15) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(45) NOT NULL,`name` VARCHAR(45) NOT NULL,`idc` CHAR(15) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"alarm` (`id` BIGINT NOT NULL AUTO_INCREMENT,`maso` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`type` CHAR(3) NOT NULL,`time` DATETIME(6) NOT NULL,`culy` INT NOT NULL,`lat` DOUBLE,`lon` DOUBLE,`ring` CHAR(3),`time1` CHAR(16),`uri` VARCHAR(45),`kieu` CHAR(1),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
 
                 var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
