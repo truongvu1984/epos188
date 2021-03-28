@@ -36,9 +36,9 @@ isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
 
-// con.connect(function(err) {
-//     if (err) { console.log(" da co loi:" + err);}
-//     else {
+con.connect(function(err) {
+    if (err) { console.log(" da co loi:" + err);}
+    else {
 
 
 
@@ -51,11 +51,11 @@ function kiemtra_taikhoan(){
     kiemtra_taikhoan();
   }, 5000);
 }
-// kiemtra_taikhoan();
+ kiemtra_taikhoan();
 
 io.on('connection',(socket)=>
 {
-console.log(socket.id);
+
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy',(mail)=>{
     if(mail){
@@ -1556,4 +1556,4 @@ console.log(socket.id);
       }
     });
 });
-// }});
+}});
