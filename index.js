@@ -21,7 +21,7 @@ var transporter = nodemailer.createTransport({
     pass: 'spihrtkjqhqnduml'
   }
 });
-allowEIO3: true;
+
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
