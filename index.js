@@ -584,11 +584,11 @@ io.on('connection',(socket)=>
       socket.emit('check_pass');
     }
   });
-  socket.on('C_reg_friend',(name1,num)=>{
+  socket.on('C_reg_friend',(ids,num)=>{
     if(socket.number&&name1!=null&&num!=null&&(!isNaN(num))){
         if(num==0){
-        if(name1==0){
-        con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `name` ASC LIMIT 50", function(err1, a1s)
+
+        con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `id` ASC LIMIT 50", function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact 3:'+err1);}
             else if(a1s.length > 0)
@@ -603,25 +603,10 @@ io.on('connection',(socket)=>
                 });
               }
         });
-      }
-        else {
-        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `name` < '"+name1+"' ORDER BY `name` DESC", function(err1, a1s)
-          {
-            if (err1){console.log('Da co loi contact 2:'+err1);}
-            else if(a1s.length > 0)
-              {
 
-                let noidung=[];
-                a1s.forEach(function(a1,key){
-                  noidung.push({ids:a1.id,name:a1.name, number:a1.number,idc:a1.idc,abc:'B'});
-                    if(key===(a1s.length-1))socket.emit('S_send_contact',noidung);
-              });
-              }
-        });
-      }
       }
       else {
-        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `name` > '"+name1+"' ORDER BY `name` ASC LIMIT 50", function(err1, a1s)
+        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+ids+" ORDER BY `id` ASC LIMIT 50", function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact1:'+err1);}
             else if(a1s.length > 0)
