@@ -254,10 +254,10 @@ io.on('connection',(socket)=>
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
   			 else{
           if (passwordHash.verify(pass1, rows[0].pass)){
-              socket.emit('login1_dung', {name:strencode(rows[0].user)});
+              socket.emit('login1_dung', {name:rows[0].user});
           }
           else {
-            socket.emit('login1_sai', {name:strencode(rows[0].user)});
+            socket.emit('login1_sai', {name:rows[0].user});
           }
         }
       });
@@ -305,7 +305,7 @@ io.on('connection',(socket)=>
       if (isArray(rooms)){
         rooms.forEach(function(room){
           if(room.room_fullname){
-            io.sockets.in(room.room_fullname).emit('S_off_gps',{name:strencode(socket.username), number:socket.number});
+            io.sockets.in(room.room_fullname).emit('S_off_gps',{name:socket.username, number:socket.number});
           }
         });
       }
@@ -326,7 +326,7 @@ io.on('connection',(socket)=>
                   {
                     if ( err5 ){console.log(err5);}
                     else  {if(a5s.length>0){
-                      noidung.push({ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'A'});
+                      noidung.push({ids:a1.id,room_name:a1.subject, room_id_server:a1.idc, admin_name:a5s[0].name, admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'A'});
                         if(key===(a1s.length-1))socket.emit('S_send_room',noidung);
 
                     }
@@ -347,7 +347,7 @@ io.on('connection',(socket)=>
                   {
                     if ( err5 ){console.log(err5);}
                     else  {if(a5s.length>0){
-                      noidung.push({ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'B'});
+                      noidung.push({ids:a1.id,room_name:a1.subject, room_id_server:a1.idc, admin_name:a5s[0].name, admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'B'});
                         if(key===(a1s.length-1))socket.emit('S_send_room',noidung);
                     }
                   }
@@ -368,7 +368,7 @@ io.on('connection',(socket)=>
                     {
                       if ( err5 ){console.log(err5);}
                       else  {if(a5s.length>0){
-                        noidung.push({ids:a1.id,room_name:strencode(a1.subject), room_id_server:a1.idc, admin_name:strencode(a5s[0].name), admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'A'});
+                        noidung.push({ids:a1.id,room_name:a1.subject, room_id_server:a1.idc, admin_name:a5s[0].name, admin_number:a5s[0].number, time:get_time(a1.time), stt:a1.stt,abc:'A'});
                           if(key===(a1s.length-1))socket.emit('S_send_room',noidung);
                       }
                     }
@@ -394,7 +394,7 @@ io.on('connection',(socket)=>
               con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                  if(err2){console.log(err2);}
                  else {
-                   noidung.push({ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time),abc:'A'});
+                   noidung.push({ids:a1.id,name_nguoigui:a2s[0].name,number_nguoigui:a2s[0].number, subject:a1.subject, id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time),abc:'A'});
                     if(key===(a1s.length-1))socket.emit('S_send_tinnhan',noidung);
 
                  }
@@ -414,7 +414,7 @@ io.on('connection',(socket)=>
                con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                   if(err2){console.log(err2);}
                   else {
-                    noidung.push({ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time),abc:'B'});
+                    noidung.push({ids:a1.id,name_nguoigui:a2s[0].name,number_nguoigui:a2s[0].number, subject:a1.subject, id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time),abc:'B'});
                      if(key===(a1s.length-1))socket.emit('S_send_tinnhan',noidung);
 
                   }
@@ -434,7 +434,7 @@ io.on('connection',(socket)=>
                 con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                    if(err2){console.log(err2);}
                    else {
-                     noidung.push({ids:a1.id,name_nguoigui:strencode(a2s[0].name),number_nguoigui:a2s[0].number, subject:strencode(a1.subject), id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time),abc:'A'});
+                     noidung.push({ids:a1.id,name_nguoigui:a2s[0].name,number_nguoigui:a2s[0].number, subject:a1.subject, id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time),abc:'A'});
                       if(key===(a1s.length-1))socket.emit('S_send_tinnhan',noidung);
 
                    }
@@ -462,9 +462,9 @@ io.on('connection',(socket)=>
                       else {
                         if(a2s.length >0){
                         a2s.forEach(function(a2,key2){
-                          nhomnguoinhan.push({number:strencode(a2.number),name:strencode(a2.name),stt:a2.stt});
+                          nhomnguoinhan.push({number:a2.number,name:a2.name,stt:a2.stt});
                           if(key2 === (a2s.length-1)){
-                            noidung.push({ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan,abc:'A'});
+                            noidung.push({ids:a1.id,subject:a1.subject, idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan,abc:'A'});
                             if(key === (a1s.length-1))socket.emit('S_send_send',noidung);
                           }
                         });
@@ -490,9 +490,9 @@ io.on('connection',(socket)=>
                        else {
                          if(a2s.length >0){
                          a2s.forEach(function(a2,key2){
-                           nhomnguoinhan.push({number:strencode(a2.number),name:strencode(a2.name),stt:a2.stt});
+                           nhomnguoinhan.push({number:a2.number,name:a2.name,stt:a2.stt});
                            if(key2 === (a2s.length-1)){
-                             noidung.push({ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan,abc:'B'});
+                             noidung.push({ids:a1.id,subject:a1.subject, idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan,abc:'B'});
                              if(key === (a1s.length-1))socket.emit('S_send_send',noidung);
                            }
                          });
@@ -519,9 +519,9 @@ io.on('connection',(socket)=>
                      else {
                        if(a2s.length >0){
                        a2s.forEach(function(a2,key2){
-                         nhomnguoinhan.push({number:strencode(a2.number),name:strencode(a2.name),stt:a2.stt});
+                         nhomnguoinhan.push({number:a2.number,name:a2.name,stt:a2.stt});
                          if(key2 === (a2s.length-1)){
-                           noidung.push({ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan,abc:'A'});
+                           noidung.push({ids:a1.id,subject:a1.subject, idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan,abc:'A'});
                            if(key === (a1s.length-1))socket.emit('S_send_send',noidung);
                          }
                        });
@@ -546,7 +546,7 @@ io.on('connection',(socket)=>
           else if(a1s.length >0){
             let noidung=[];
                 a1s.forEach(function(a1,key){
-                  noidung.push({ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time),abc:'A'});
+                  noidung.push({ids:a1.id,subject:a1.subject, idc:a1.idc,time:get_time(a1.time),abc:'A'});
                   if(key===(a1s.length-1))socket.emit('S_send_save',noidung);
                 });
               }
@@ -559,7 +559,7 @@ io.on('connection',(socket)=>
               else if(a1s.length >0){
                 let noidung=[];
                     a1s.forEach(function(a1,key){
-                      noidung.push({ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time),abc:'B'});
+                      noidung.push({ids:a1.id,subject:a1.subject, idc:a1.idc,time:get_time(a1.time),abc:'B'});
                       if(key===(a1s.length-1))socket.emit('S_send_save',noidung);
                     });
               }
@@ -573,7 +573,7 @@ io.on('connection',(socket)=>
             else if(a1s.length >0){
               let noidung=[];
                   a1s.forEach(function(a1,key){
-                    noidung.push({ids:a1.id,subject:strencode(a1.subject), idc:a1.idc,time:get_time(a1.time),abc:'A'});
+                    noidung.push({ids:a1.id,subject:a1.subject, idc:a1.idc,time:get_time(a1.time),abc:'A'});
                     if(key===(a1s.length-1))socket.emit('S_send_save',noidung);
                   });
             }
@@ -595,7 +595,7 @@ io.on('connection',(socket)=>
               {
                   let noidung=[];
                   a1s.forEach(function(a1,key){
-                    noidung.push({ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'A'});
+                    noidung.push({ids:a1.id,name:a1.name, number:a1.number,idc:a1.idc,abc:'A'});
                       if(key===(a1s.length-1)){
                       socket.emit('S_send_contact',noidung);
                     }
@@ -613,7 +613,7 @@ io.on('connection',(socket)=>
 
                 let noidung=[];
                 a1s.forEach(function(a1,key){
-                  noidung.push({ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'B'});
+                  noidung.push({ids:a1.id,name:a1.name, number:a1.number,idc:a1.idc,abc:'B'});
                     if(key===(a1s.length-1))socket.emit('S_send_contact',noidung);
               });
               }
@@ -628,7 +628,7 @@ io.on('connection',(socket)=>
               {
                 let noidung=[];
                 a1s.forEach(function(a1,key){
-                      noidung.push({ids:a1.id,name:strencode(a1.name), number:a1.number,idc:a1.idc,abc:'A'});
+                      noidung.push({ids:a1.id,name:a1.name, number:a1.number,idc:a1.idc,abc:'A'});
                     if(key===(a1s.length-1))socket.emit('S_send_contact',noidung);
                 });
 
@@ -650,7 +650,7 @@ io.on('connection',(socket)=>
                 {
                   let noidung=[];
                    a1s.forEach(function(a1,key){
-                     noidung.push({ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'A',kieu:a1.kieu});
+                     noidung.push({ids:a1.id,name:a1.name,ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'A',kieu:a1.kieu});
                      if(key===(a1s.length-1))socket.emit('S_send_alarm',noidung);
                   });
               }
@@ -663,7 +663,7 @@ io.on('connection',(socket)=>
                 {
                   let noidung=[];
                    a1s.forEach(function(a1,key){
-                     noidung.push({ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'B',kieu:a1.kieu});
+                     noidung.push({ids:a1.id,name:a1.name,ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'B',kieu:a1.kieu});
                      if(key===(a1s.length-1))socket.emit('S_send_alarm',noidung);
                   });
               }
@@ -677,7 +677,7 @@ io.on('connection',(socket)=>
               {
                 let noidung=[];
                  a1s.forEach(function(a1,key){
-                   noidung.push({ids:a1.id,name:strencode(a1.name),ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'A',kieu:a1.kieu});
+                   noidung.push({ids:a1.id,name:a1.name,ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'A',kieu:a1.kieu});
                    if(key===(a1s.length-1))socket.emit('S_send_alarm',noidung);
                 });
             }
@@ -695,7 +695,7 @@ io.on('connection',(socket)=>
         {
           if ( err){console.log(err);}
           else {
-            socket.emit('S_get_alarm',{ids:res.insertId, name:strencode(data.name),ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,uri:data.uri,kieu:data.kieu,time:get_time(thoigian)});
+            socket.emit('S_get_alarm',{ids:res.insertId, name:data.name,ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,uri:data.uri,kieu:data.kieu,time:get_time(thoigian)});
           }
         });
       }
@@ -924,7 +924,7 @@ io.on('connection',(socket)=>
                         else {
                           let position=[];
                           a3s.forEach(function(a3,key){
-                            position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
+                            position.push({name:a3.name, lat:a3.lat, lon:a3.lon, id:a3.idp});
                             if(key===(a3s.length-1)){socket.emit('S_send_point',position);}
                           });
                         }
