@@ -1308,6 +1308,7 @@ io.on('connection',(socket)=>
   socket.on('C_send_contact', function (contact){
       if (socket.number&&isArray(contact)){
         contact.forEach((row,key)=>{
+          console.log(row.name);
           con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+row.number+"' LIMIT 1", function(err, a1s)
              {
                if ( err){console.log(err);}
@@ -1320,8 +1321,9 @@ io.on('connection',(socket)=>
                       {
                         if ( err){console.log(err);}
                         else {
-
-                          socket.emit('S_add_contact_ok',{ids:res.insertId, idc:row.idc,name:row.name,number:row.number});}
+                          console.log('Có gửi đi:'+row.name);
+                          socket.emit('S_add_contact_ok',{ids:res.insertId, idc:row.idc,name:row.name,number:row.number});
+                        }
                     });
                   }
                  }
