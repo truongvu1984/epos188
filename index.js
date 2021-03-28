@@ -55,7 +55,7 @@ function kiemtra_taikhoan(){
 
 io.on('connection',(socket)=>
 {
-
+console.log(socket.id);
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy',(mail)=>{
     if(mail){
