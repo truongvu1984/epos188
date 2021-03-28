@@ -2,7 +2,7 @@ var express = require("express");
 var app = express();
 var http = require("http");
 var server = require("http").createServer(app);
-var io = require("socket.io").listen(server);
+var io = require("socket.io")({allowEIO3: true}).listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start hi hi")});
 var mysql = require('mysql');
 var nodemailer = require('nodemailer');
