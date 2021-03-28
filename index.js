@@ -55,7 +55,7 @@ function kiemtra_taikhoan(){
 
 io.on('connection',(socket)=>
 {
-
+console.log(socket.id);
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy',(mail)=>{
     if(mail){
@@ -953,7 +953,7 @@ io.on('connection',(socket)=>
                         else {
                           let position=[];
                           a3s.forEach(function(a3,key){
-                            position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
+                            position.push({name:a3.name, lat:a3.lat, lon:a3.lon, id:a3.idp});
                             if(key===(a3s.length-1)){socket.emit('S_send_point',position);}
                           });
                         }
