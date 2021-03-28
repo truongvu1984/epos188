@@ -22,9 +22,7 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-app.set('view engine', 'ejs');
-app.set('views', './views');
-app.use(express.static('public'));
+
 function strencode( data ){return unescape( encodeURIComponent(data));}
 function strdecode( data ){
   return JSON.parse( decodeURIComponent( escape ( data ) ) );
@@ -55,7 +53,7 @@ function kiemtra_taikhoan(){
 
 io.on('connection',(socket)=>
 {
-console.log(socket.id);
+
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy',(mail)=>{
     if(mail){
@@ -978,7 +976,7 @@ console.log(socket.id);
                           if(err3 || (a3s.length==0)){console.log('ko co:'+err3);}
                           else {
                             a3s.forEach(function(a3,key){
-                              position.push({name:strencode(a3.name), lat:a3.lat, lon:a3.lon, id:a3.idp});
+                              position.push({name:a3.name, lat:a3.lat, lon:a3.lon, id:a3.idp});
                               if(key1===(list.length-1) && key===(a3s.length-1)){
                                 socket.emit('S_send_point_import',position);
                               }
@@ -1000,7 +998,7 @@ console.log(socket.id);
         if(isArray(mess.nguoinhan)){
           mess.nguoinhan.forEach((nguoi, key7)=>{
             if(nguoi.number){
-          nguoinhans.push({number:nguoi.number, name:strencode(nguoi.name), stt:'N'});
+          nguoinhans.push({number:nguoi.number, name:nguoi.name, stt:'N'});
           if(key7===(mess.nguoinhan.length-1)){
             // lưu vào bảng chính của người gửi
             var sql2 = "INSERT INTO `"+socket.number+"mes_main` (idc,subject, send_receive, time,stt) VALUES ?";
@@ -1009,7 +1007,7 @@ console.log(socket.id);
               {
                 if ( err){console.log(err);}
                 else {
-                  socket.emit('S_get_tinnhan',mess.imei,{ids:res.insertId, subject:strencode(mess.subject),nguoinhan:nguoinhans,idc:mess.id,time:get_time(thoigian),stt:'F'});
+                  socket.emit('S_get_tinnhan',mess.imei,{ids:res.insertId, subject:mess.subject,nguoinhan:nguoinhans,idc:mess.id,time:get_time(thoigian),stt:'F'});
                         // lưu vào bảng vị trí của người gửi
                         var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
                         mess.pos.forEach(function(row)
@@ -1049,8 +1047,8 @@ console.log(socket.id);
                                               var val7 = [[res5.insertId, row3.id, row3.name, row3.lat, row3.lon]];
                                               con.query(sql7, [val7], function (err7, result) {if ( err7){console.log(err7);}});
                                               });
-                                              io.sockets.in(row5.number).emit('S_send_tinnhan',[{ids:res5.insertId,name_nguoigui:strencode(socket.username),number_nguoigui:socket.number,
-                                                  subject: strencode(mess.subject), id_tinnha_client:mess.id, time:get_time(thoigian),read_1:'N', stt:'N',abc:'B'}]);
+                                              io.sockets.in(row5.number).emit('S_send_tinnhan',[{ids:res5.insertId,name_nguoigui:socket.username,number_nguoigui:socket.number,
+                                                  subject: mess.subject, id_tinnha_client:mess.id, time:get_time(thoigian),read_1:'N', stt:'N',abc:'B'}]);
 
 
                                           } //het else
@@ -1089,7 +1087,7 @@ console.log(socket.id);
               else {
                 if(a2s.length > tin.number){
                   a2s.forEach((a2,key2)=>{
-                    list.push({number:a2.number, name:strencode(a2.name),stt:a2.app});
+                    list.push({number:a2.number, name:a2.name,stt:a2.app});
                     if(key2===a2s.length){
                       list_full.push({list:list,idc:tin.idc});
                       if(key===data.length){socket.emit('S_check_send',list_full);}
@@ -1201,7 +1199,7 @@ console.log(socket.id);
         {
           if(err){console.log(err);}
           else {
-            io.sockets.in(socket.number).emit('S_get_save_pos',mess.imei,{ids:res.insertId,time:get_time(thoigian),subject:strencode(mess.subject),idc:mess.idc});
+            io.sockets.in(socket.number).emit('S_get_save_pos',mess.imei,{ids:res.insertId,time:get_time(thoigian),subject:mess.subject,idc:mess.idc});
             var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
             mess.vitri.forEach((row)=>{
                 var val3 = [[res.insertId, row.id, row.name, row.lat, row.lon]];
@@ -1230,7 +1228,7 @@ console.log(socket.id);
                 {
                   if(err3){console.log(err3);}
                   else {
-                      io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,tennguoinhan:strencode(socket.username), idc:idc});
+                      io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,tennguoinhan:socket.username, idc:idc});
                   }
                 });
           }
@@ -1256,7 +1254,7 @@ console.log(socket.id);
         if(a1s.length>0){
           a1s.forEach((a1,key) => {
 
-            socket.emit('S_send_search_contact',{user:strencode(a1.user), number: a1.number});
+            socket.emit('S_send_search_contact',{user:a1.user, number: a1.number});
           });
         }
         else socket.emit('S_kq_check_contact_zero_2');
@@ -1295,7 +1293,7 @@ console.log(socket.id);
                     {
                       var tin=[];
                       a2s.forEach((member,key)=>{
-                        tin.push({name:strencode(member.name), number:member.number, admin:member.send_receive});
+                        tin.push({name:member.name, number:member.number, admin:member.send_receive});
                         if(key===(a2s.length-1)){socket.emit('S_send_member',tin);}
                       });
                     }
@@ -1323,7 +1321,7 @@ console.log(socket.id);
                         if ( err){console.log(err);}
                         else {
 
-                          socket.emit('S_add_contact_ok',{ids:res.insertId, idc:row.idc,name:strencode(row.name),number:row.number});}
+                          socket.emit('S_add_contact_ok',{ids:res.insertId, idc:row.idc,name:row.name,number:row.number});}
                     });
                   }
                  }
@@ -1359,7 +1357,7 @@ console.log(socket.id);
       if (isArray(info.room)){
         info.room.forEach(function(room){
           if(room.room_fullname){
-            io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:strencode(socket.username), number:socket.number, room:room.room_fullname});
+            io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:socket.username, number:socket.number, room:room.room_fullname});
           }
         });
       }
@@ -1377,7 +1375,7 @@ console.log(socket.id);
       {
         if (err){console.log(err);}
         else{
-          socket.emit('S_get_room',{ids:res.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F'});
+          socket.emit('S_get_room',{ids:res.insertId,room_name:info.room_name, room_id_server:room_id, admin_name:socket.username, admin_number:socket.number, time:get_time(thoigian),stt:'F'});
           // lưu thành viên vào bảng
           var sql2 = "INSERT INTO `"+socket.number+"mes_sender` (ids, name, number, send_receive) VALUES ?";
           var abc = [[ res.insertId, socket.username,socket.number,'A']];
@@ -1422,7 +1420,7 @@ console.log(socket.id);
                                     val7 = [[ res5.insertId,mem.number, mem.name,'B']];
                                     con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
                                   });
-                                  io.sockets.in(row.number).emit('S_send_room',[{ids:res5.insertId,room_name:strencode(info.room_name), room_id_server:room_id, admin_name:strencode(socket.username), admin_number:socket.number, time:get_time(thoigian),stt:'F',abc:'B'}]);
+                                  io.sockets.in(row.number).emit('S_send_room',[{ids:res5.insertId,room_name:info.room_name, room_id_server:room_id, admin_name:socket.username, admin_number:socket.number, time:get_time(thoigian),stt:'F',abc:'B'}]);
 
                                 }
                               });
@@ -1511,7 +1509,7 @@ console.log(socket.id);
                   info.forEach((mem)=>{
                     let values = [[row3s[0].id, mem.number, mem.name, 'B']];
                     con.query(sql2, [values], function (err4){if (err4){console.log('co loi 3 '+err4);}});
-                    io.sockets.in(socket.roomabc).emit('S_send_member',{ name:strencode(mem.name), number:mem.number});
+                    io.sockets.in(socket.roomabc).emit('S_send_member',{ name:mem.name, number:mem.number});
                     var sql3 = "INSERT INTO `"+mem.number+"mes_main` (idc, subject, send_receive, stt,time ) VALUES ?";
                     var val3 = [[ rows[0].idc, rows[0].subject,'O', 'N','N']];
                     con.query(sql3, [val3], function (err3, res3)
@@ -1534,7 +1532,7 @@ console.log(socket.id);
                           {
                             if ( err5){console.log('loi 6:'+err5);}
                             else {
-                              io.sockets.in(socket.roomabc).emit('S_send_room',{room_name:strencode(info.room_name), room_id_server:rows[0].idc, admin_name:strencode(socket.username), admin_number:socket.number, time:'N'});
+                              io.sockets.in(socket.roomabc).emit('S_send_room',{room_name:info.room_name, room_id_server:rows[0].idc, admin_name:socket.username, admin_number:socket.number, time:'N'});
                             }
                           });
                           });
