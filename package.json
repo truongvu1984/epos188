@@ -19,7 +19,7 @@
   "homepage": "https://github.com/truongvu1984/epos188#readme",
   "dependencies": {
     "connect": "^3.6.5",
-    "ejs": "^1.0.0",
+    "ejs": "^2.5.5",
     "express": "^4.16.2",
     "express-session": "^1.16.2",
     "http": "0.0.0",
