@@ -414,7 +414,7 @@ io.on('connection',(socket)=>
                con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                   if(err2){console.log(err2);}
                   else {
-                    noidung.push({ids:a1.id,name_nguoigui:a2s[0].name,number_nguoigui:a2s[0].number, subject:a1.subject, id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time),abc:'B'});
+                    if(a2s.length>0) noidung.push({ids:a1.id,name_nguoigui:a2s[0].name,number_nguoigui:a2s[0].number, subject:a1.subject, id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time),abc:'B'});
                      if(key===(a1s.length-1))socket.emit('S_send_tinnhan',noidung);
 
                   }
@@ -434,7 +434,7 @@ io.on('connection',(socket)=>
                 con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
                    if(err2){console.log(err2);}
                    else {
-                     noidung.push({ids:a1.id,name_nguoigui:a2s[0].name,number_nguoigui:a2s[0].number, subject:a1.subject, id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time),abc:'A'});
+                     if(a2s.length>0)noidung.push({ids:a1.id,name_nguoigui:a2s[0].name,number_nguoigui:a2s[0].number, subject:a1.subject, id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time),abc:'A'});
                       if(key===(a1s.length-1))socket.emit('S_send_tinnhan',noidung);
 
                    }
