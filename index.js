@@ -58,6 +58,7 @@ io.on('connection',(socket)=>
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy',(mail,code)=>{
     if(mail&&code){
+      console.log(mail+":"+code);
 
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
