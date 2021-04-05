@@ -144,6 +144,7 @@ io.on('connection',(socket)=>
   });
   socket.on('regis_2_windlaxy',(tin)=>{
     if(tin.mail &&tin.name&&tin.chuoi&&tin.pass){
+      console.log(tin.chuoi);
       con.query("SELECT `chuoi` FROM `active` WHERE `mail` LIKE '"+tin.mail +"' LIMIT 1", function(err, rows){
         if (err)socket.emit('regis2_thatbai','A');
         else{
