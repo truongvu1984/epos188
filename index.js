@@ -14,6 +14,7 @@ var con = mysql.createConnection({
  queueLimit: 30,
   acquireTimeout: 1000000
 });
+let CheckMobi = require('omrs-checkmobi');
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -29,6 +30,8 @@ function strdecode( data ){
 }
 var passwordHash = require('password-hash');
 var bodyParser = require('body-parser');
+let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
+
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
     return (!!a) && (a.constructor === Array);
@@ -37,8 +40,6 @@ isArray = function(a) {
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-
-
 
 function kiemtra_taikhoan(){
   setTimeout(function() {
@@ -55,13 +56,12 @@ io.on('connection',(socket)=>
 {
 
   socket.emit('check_pass');
-  socket.on('regis_1_windlaxy',(mail)=>{
-    if(mail){
+  socket.on('regis_1_windlaxy',(mail,code)=>{
+    if(mail&&code){
 
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
-
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
           else {
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
@@ -72,18 +72,17 @@ io.on('connection',(socket)=>
                       else {
                         var string = Math.floor(Math.random() * (899999)) + 100000;
                         var string1 = passwordHash.generate(''+string);
-                        var mailOptions = {
-                          from: 'windlaxy@gmail.com',
-                          to: mail,
-                          subject: 'Active code',
-                          text: 'Your active code:'+string
-                        };
-                        transporter.sendMail(mailOptions, function(error, info){
+                        if(code=="B"){
+                          var mailOptions = {
+                            from: 'windlaxy@gmail.com',
+                            to: mail,
+                            subject: 'Active code',
+                            text: 'Your active code:'+string
+                          };
+                          transporter.sendMail(mailOptions, function(error, info){
                           if (error) socket.emit('regis_1_thatbai','B');
                           else {
                             var time = Math.floor(Date.now() / 1000);
-
-
                             if(row1s.length==0){
                               var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
                               var values = [[mail, string1,time,1]];
@@ -104,6 +103,35 @@ io.on('connection',(socket)=>
                             }
                           }
                         });
+                        }
+                        else {
+                          cb.sendMessage({"to": mail, "text": 'Your active code:'+string}, (error, response) => {
+                              if(error)socket.emit('regis_1_thatbai','E');
+                              else {
+                                var time = Math.floor(Date.now() / 1000);
+                                if(row1s.length==0){
+                                  var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
+                                  var values = [[mail, string1,time,1]];
+                                  con.query(sql, [values], function (err1, result) {
+                                    if ( err1)socket.emit('regis_1_thatbai','A');
+                                    else  socket.emit('regis_1_thanhcong');
+                                  });
+                                }
+                                else {
+                                  //nếu có rồi thì cập nhật và cộng số đếm lên 1
+                                  let dem = row1s[0].dem+1;
+                                  if(dem>2)time=time+300;
+                                  con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
+                                    if(err1)socket.emit('regis_1_thatbai','A');
+                                    else socket.emit('regis_1_thanhcong');
+                                  });
+
+                                }
+                              }
+
+                              });
+
+                        }
                       }
                     }
             });
