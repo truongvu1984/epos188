@@ -261,7 +261,9 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_check_phonenumber',(phone)=>{
+console.log('haha:'+phone);
     if(phone){
+      console.log(phone);
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
