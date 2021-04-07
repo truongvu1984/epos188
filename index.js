@@ -58,8 +58,6 @@ io.on('connection',(socket)=>
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy',(mail,code)=>{
     if(mail&&code){
-      console.log(mail+":"+code);
-
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
@@ -77,8 +75,8 @@ io.on('connection',(socket)=>
                           var mailOptions = {
                             from: 'windlaxy@gmail.com',
                             to: mail,
-                            subject: 'Active code',
-                            text: 'Your active code:'+string
+                            subject: 'Windlaxy OTP',
+                            text: 'Your Windlaxy OTP:'+string
                           };
                           transporter.sendMail(mailOptions, function(error, info){
                           if (error) socket.emit('regis_1_thatbai','B');
@@ -106,7 +104,7 @@ io.on('connection',(socket)=>
                         });
                         }
                         else {
-                          cb.sendMessage({"to": mail, "text": 'Your active code:'+string}, (error, response) => {
+                          cb.sendMessage({"to": mail, "text": 'Windlaxy OTP:'+string}, (error, response) => {
                               if(error)socket.emit('regis_1_thatbai','E');
                               else {
                                 var time = Math.floor(Date.now() / 1000);
@@ -140,11 +138,12 @@ io.on('connection',(socket)=>
           }
         }
       });
+
     }
   });
   socket.on('regis_2_windlaxy',(tin)=>{
     if(tin.mail &&tin.name&&tin.chuoi&&tin.pass){
-      console.log(tin.chuoi);
+
       con.query("SELECT `chuoi` FROM `active` WHERE `mail` LIKE '"+tin.mail +"' LIMIT 1", function(err, rows){
         if (err)socket.emit('regis2_thatbai','A');
         else{
@@ -261,7 +260,35 @@ io.on('connection',(socket)=>
       });
     }
   });
+  socket.on('C_check_phonenumber',(phone)=>{
+    if(phone){
+      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
+        if(err3)socket.emit('regis_1_thatbai','A');
+        else {
+          if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
+          else {
+            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
+                    // nếu tài khoản đã có người đăng ký rồi thì:
+                    if(err)socket.emit('regis_1_thatbai','A');
+                    else {
+                      if (rows.length >0 )	{socket.emit('regis_1_thatbai','D');}
+                      else {
+                        cb.phoneInformation(phone, (error, response) => {
+                          if(error)socket.emit('regis_1_thatbai','E');
+                          else {
+                            socket.emit('checkphone_ok');
+                          }
+                        });
+                      }
+                    }
+            });
 
+          }
+        }
+      });
+
+    }
+});
  function get_time(gio){
     let year1 = gio.getFullYear();
     let month1 = gio.getMonth();
