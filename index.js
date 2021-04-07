@@ -261,15 +261,15 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_check_phonenumber',(phone)=>{
-console.log('haha:'+phone);
+
     if(phone){
-      console.log(phone);
-      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
+  
+      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ phone +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
           else {
-            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
+            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ phone +"' LIMIT 1", function(err, rows){
                     // nếu tài khoản đã có người đăng ký rồi thì:
                     if(err)socket.emit('regis_1_thatbai','A');
                     else {
