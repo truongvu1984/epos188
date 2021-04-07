@@ -260,10 +260,8 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('C_check_phonenumber',(phone)=>{
-
-    if(phone){
-  
+  socket.on('C_check_phonenumber',(phone,code)=>{
+    if(phone,code){
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ phone +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
@@ -275,12 +273,15 @@ io.on('connection',(socket)=>
                     else {
                       if (rows.length >0 )	{socket.emit('regis_1_thatbai','D');}
                       else {
-                        cb.phoneInformation(phone, (error, response) => {
-                          if(error)socket.emit('regis_1_thatbai','E');
-                          else {
-                            socket.emit('checkphone_ok');
-                          }
-                        });
+                        if(code=="A"){
+                          cb.phoneInformation(phone, (error, response) => {
+                            if(error)socket.emit('regis_1_thatbai','E');
+                            else {
+                              socket.emit('checkphone_ok');
+                            }
+                          });
+                        }
+                        else socket.emit('checkphone_ok');
                       }
                     }
             });
