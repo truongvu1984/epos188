@@ -184,7 +184,6 @@ io.on('connection',(socket)=>
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
-
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
           else {
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
@@ -220,7 +219,7 @@ io.on('connection',(socket)=>
                                 }
                               }
 
-                              });
+                            });
                         }
                         else {
                           var mailOptions = {
@@ -269,12 +268,12 @@ io.on('connection',(socket)=>
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+tin.mail+"' LIMIT 1", function(err, rows){
         if (err)socket.emit('forget_pass_2_thatbai','A');
         else{
-          if(rows.length==0)socket.emit('forget_pass_2_thatbai','B');
+          if(rows.length==0)socket.emit('forget_pass_2_thatbai','A');
           else {
             if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
               let pass1 = passwordHash.generate(''+tin.pass);
               con.query("UPDATE `account` SET `pass` = '"+pass1+"' WHERE `number` LIKE '"+tin.mail+"'", function(err2){
-                 if (err2)socket.emit('forget_pass_2_thatbai','A');
+                 if (err2)socket.emit('forget_pass_2_thatbai','B');
                 else {
                   con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
                      if (err2)socket.emit('forget_pass_2_ok');
@@ -289,8 +288,10 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('C_check_phonenumber',(phone,code)=>{
-    if(phone,code){
+  socket.on('C_check_phonenumber',(phone,code,id_phone)=>{
+    console.log('ha ha');
+    if(phone&&code&&id_phone){
+      console.log('hi hi');
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ phone +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
@@ -319,6 +320,9 @@ io.on('connection',(socket)=>
         }
       });
 
+    }
+    else {
+      console.log('OK');
     }
 });
  function get_time(gio){
@@ -1177,8 +1181,8 @@ io.on('connection',(socket)=>
       });
       }
     }  }); //ok
-  socket.on('C_del_acc',(pass)=>{
-    if(socket.number && pass){
+  socket.on('C_del_acc',(pass,code)=>{
+    if(socket.number && pass&&code){
       con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ socket.number +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('del_acc_thatbai','A');
         else {
@@ -1190,13 +1194,41 @@ io.on('connection',(socket)=>
                 if (passwordHash.verify(pass, rows[0].pass)){
                   var string = Math.floor(Math.random() * (899999)) + 100000;
                   var string1 = passwordHash.generate(''+string);
-                  var mailOptions = {
-                    from: 'windlaxy@gmail.com',
-                    to: socket.number,
-                    subject: 'Confirm code',
-                    text: 'Your confirm code:'+string
-                  };
-                  transporter.sendMail(mailOptions, function(error, info){
+                  if(code =="A"){
+                    cb.sendMessage({"to": socket.number, "text": 'Windlaxy OTP:'+string}, (error, response) => {
+                        if(error)socket.emit('del_acc_thatbai','E');
+                        else {
+                          var time = Math.floor(Date.now() / 1000);
+                          if(row1s.length==0){
+                            var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
+                            var values = [[socket.number, string1,time,1]];
+                            con.query(sql, [values], function (err1, result) {
+                              if ( err1)socket.emit('del_acc_thatbai','A');
+                              else  socket.emit('del_acc_thanhcong');
+                            });
+                          }
+                          else {
+                            //nếu có rồi thì cập nhật và cộng số đếm lên 1
+                            let dem = row1s[0].dem+1;
+                            if(dem>2)time=time+300;
+                            con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+socket.number+"'",function(err1){
+                              if(err1)socket.emit('regis_1_thatbai','A');
+                              else socket.emit('regis_1_thanhcong');
+                            });
+
+                          }
+                        }
+
+                        });
+                  }
+                  else {
+                    var mailOptions = {
+                      from: 'windlaxy@gmail.com',
+                      to: socket.number,
+                      subject: 'Windlaxy OTP',
+                      text: 'Your Windlaxy OTP:'+string
+                    };
+                    transporter.sendMail(mailOptions, function(error, info){
                     if (error) socket.emit('del_acc_thatbai','A');
                     else {
                       var time = Math.floor(Date.now() / 1000);
@@ -1219,8 +1251,9 @@ io.on('connection',(socket)=>
                       }
                     }
                   });
+                  }
                 }
-                else socket.emit('del_acc_thatbai','C');
+                else socket.emit('del_acc_thatbai','D');
               }
             });
 
