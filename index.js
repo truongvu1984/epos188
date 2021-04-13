@@ -23,7 +23,6 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-
 function strencode( data ){return unescape( encodeURIComponent(data));}
 function strdecode( data ){
   return JSON.parse( decodeURIComponent( escape ( data ) ) );
@@ -56,9 +55,9 @@ io.on('connection',(socket)=>
 {
 
   socket.emit('check_pass');
-  socket.on('regis_1_windlaxy',(mail,code)=>{
-    if(mail&&code){
-      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
+  socket.on('regis_1_windlaxy',(mail,code,id_phone)=>{
+    if(mail&&code&id_phone){
+      con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
@@ -83,8 +82,8 @@ io.on('connection',(socket)=>
                           else {
                             var time = Math.floor(Date.now() / 1000);
                             if(row1s.length==0){
-                              var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
-                              var values = [[mail, string1,time,1]];
+                              var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
+                              var values = [[mail, string1,time,1,id_phone]];
                               con.query(sql, [values], function (err1, result) {
                                 if ( err1)socket.emit('regis_1_thatbai','A');
                                 else  socket.emit('regis_1_thanhcong');
@@ -94,7 +93,7 @@ io.on('connection',(socket)=>
                               //nếu có rồi thì cập nhật và cộng số đếm lên 1
                               let dem = row1s[0].dem+1;
                               if(dem>2)time=time+300;
-                              con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
+                              con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+id_phone+"'",function(err1){
                                 if(err1)socket.emit('regis_1_thatbai','A');
                                 else socket.emit('regis_1_thanhcong');
                               });
@@ -109,8 +108,8 @@ io.on('connection',(socket)=>
                               else {
                                 var time = Math.floor(Date.now() / 1000);
                                 if(row1s.length==0){
-                                  var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
-                                  var values = [[mail, string1,time,1]];
+                                  var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
+                                  var values = [[mail, string1,time,1,id_phone]];
                                   con.query(sql, [values], function (err1, result) {
                                     if ( err1)socket.emit('regis_1_thatbai','A');
                                     else  socket.emit('regis_1_thanhcong');
@@ -120,7 +119,7 @@ io.on('connection',(socket)=>
                                   //nếu có rồi thì cập nhật và cộng số đếm lên 1
                                   let dem = row1s[0].dem+1;
                                   if(dem>2)time=time+300;
-                                  con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
+                                  con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+id_phone+"'",function(err1){
                                     if(err1)socket.emit('regis_1_thatbai','A');
                                     else socket.emit('regis_1_thanhcong');
                                   });
@@ -179,9 +178,9 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('forget_pass_1_windlaxy',(mail,code)=>{
-    if(mail&&code){
-      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", function(err3, row1s){
+  socket.on('forget_pass_1_windlaxy',(mail,code,phone_id)=>{
+    if(mail&&code&&phone_id){
+      con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ phone_id +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
@@ -200,8 +199,8 @@ io.on('connection',(socket)=>
                               else {
                                 var time = Math.floor(Date.now() / 1000);
                                 if(row1s.length==0){
-                                  var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
-                                  var values = [[mail, string1,time,1]];
+                                  var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
+                                  var values = [[mail, string1,time,1,phone_id]];
                                   con.query(sql, [values], function (err1, result) {
                                     if ( err1)socket.emit('regis_1_thatbai','A');
                                     else  socket.emit('regis_1_thanhcong');
@@ -211,7 +210,7 @@ io.on('connection',(socket)=>
                                   //nếu có rồi thì cập nhật và cộng số đếm lên 1
                                   let dem = row1s[0].dem+1;
                                   if(dem>2)time=time+300;
-                                  con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
+                                  con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+phone_id+"'",function(err1){
                                     if(err1)socket.emit('regis_1_thatbai','A');
                                     else socket.emit('regis_1_thanhcong');
                                   });
@@ -233,8 +232,8 @@ io.on('connection',(socket)=>
                           else {
                             var time = Math.floor(Date.now() / 1000);
                             if(row1s.length==0){
-                              var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
-                              var values = [[mail, string1,time,1]];
+                              var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
+                              var values = [[mail, string1,time,1,phone_id]];
                               con.query(sql, [values], function (err1, result) {
                                 if ( err1)socket.emit('regis_1_thatbai','A');
                                 else  socket.emit('regis_1_thanhcong');
@@ -244,7 +243,7 @@ io.on('connection',(socket)=>
                               //nếu có rồi thì cập nhật và cộng số đếm lên 1
                               let dem = row1s[0].dem+1;
                               if(dem>2)time=time+300;
-                              con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+mail+"'",function(err1){
+                              con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+phone_id+"'",function(err1){
                                 if(err1)socket.emit('regis_1_thatbai','A');
                                 else socket.emit('regis_1_thanhcong');
                               });
@@ -289,10 +288,10 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_check_phonenumber',(phone,code,id_phone)=>{
-    console.log('ha ha');
+
     if(phone&&code&&id_phone){
-      console.log('hi hi');
-      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ phone +"' LIMIT 1", function(err3, row1s){
+
+      con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
@@ -321,9 +320,7 @@ io.on('connection',(socket)=>
       });
 
     }
-    else {
-      console.log('OK');
-    }
+
 });
  function get_time(gio){
     let year1 = gio.getFullYear();
@@ -1181,9 +1178,9 @@ io.on('connection',(socket)=>
       });
       }
     }  }); //ok
-  socket.on('C_del_acc',(pass,code)=>{
+  socket.on('C_del_acc',(pass,code,phone_id)=>{
     if(socket.number && pass&&code){
-      con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ socket.number +"' LIMIT 1", function(err3, row1s){
+      con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ phone_id +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('del_acc_thatbai','A');
         else {
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('del_acc_thatbai','C');
@@ -1200,8 +1197,8 @@ io.on('connection',(socket)=>
                         else {
                           var time = Math.floor(Date.now() / 1000);
                           if(row1s.length==0){
-                            var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
-                            var values = [[socket.number, string1,time,1]];
+                            var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
+                            var values = [[socket.number, string1,time,1,phone_id]];
                             con.query(sql, [values], function (err1, result) {
                               if ( err1)socket.emit('del_acc_thatbai','A');
                               else  socket.emit('del_acc_thanhcong');
@@ -1211,7 +1208,7 @@ io.on('connection',(socket)=>
                             //nếu có rồi thì cập nhật và cộng số đếm lên 1
                             let dem = row1s[0].dem+1;
                             if(dem>2)time=time+300;
-                            con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+socket.number+"'",function(err1){
+                            con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+phone_id+"'",function(err1){
                               if(err1)socket.emit('regis_1_thatbai','A');
                               else socket.emit('regis_1_thanhcong');
                             });
@@ -1233,8 +1230,8 @@ io.on('connection',(socket)=>
                     else {
                       var time = Math.floor(Date.now() / 1000);
                       if(row1s.length==0){
-                        var sql = "INSERT INTO `active` (mail,chuoi,time,dem ) VALUES ?";
-                        var values = [[socket.number, string1,time,1]];
+                        var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
+                        var values = [[socket.number, string1,time,1,phone_id]];
                         con.query(sql, [values], function (err1, result) {
                           if ( err1)socket.emit('del_acc_thatbai','A');
                           else socket.emit('del_acc_thanhcong');
@@ -1244,7 +1241,7 @@ io.on('connection',(socket)=>
                         //nếu có rồi thì cập nhật và cộng số đếm lên 1
                         let dem = row1s[0].dem+1;
                         if(dem>2)time=time+300;
-                        con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+socket.number+"'",function(err1){
+                        con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+phone_id+"'",function(err1){
                           if(err1)socket.emit('del_acc_thatbai','A');
                           else socket.emit('del_acc_thanhcong');
                         });
