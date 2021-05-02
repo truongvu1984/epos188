@@ -339,17 +339,17 @@ io.on('connection',(socket)=>
 
   socket.on('login1',(user1, pass1)=>{
       if(user1&&pass1){
-        console.log(user1+"haha"+pass1);
+
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
   			 else{
           if (passwordHash.verify(pass1, rows[0].pass)){
               socket.emit('login1_dung', {name:rows[0].user});
-              console.log("aaaaaa"+rows[0].user);
+
           }
           else {
             socket.emit('login1_sai', {name:rows[0].user});
-            console.log("bbbbbbbb"+rows[0].user);
+            
           }
         }
       });
@@ -688,9 +688,8 @@ io.on('connection',(socket)=>
                   let noidung=[];
                   a1s.forEach(function(a1,key){
                     noidung.push({ids:a1.id,name:a1.name, number:a1.number,idc:a1.idc,abc:'A'});
-                      if(key===(a1s.length-1)){
-                      socket.emit('S_send_contact',noidung);
-                    }
+                      if(key===(a1s.length-1))    socket.emit('S_send_contact',noidung);
+
 
                 });
               }
@@ -1395,10 +1394,13 @@ io.on('connection',(socket)=>
       else
       {
         if(a1s.length>0){
-          a1s.forEach((a1,key) => {
+          let noidung=[];
+          a1s.forEach(function(a1,key){
+            noidung.push({user:a1.user, number: a1.number});
+              if(key===(a1s.length-1))    socket.emit('S_send_search_contact',noidung);
 
-            socket.emit('S_send_search_contact',{user:a1.user, number: a1.number});
           });
+
         }
         else socket.emit('S_kq_check_contact_zero_2');
       }
