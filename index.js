@@ -793,6 +793,43 @@ io.on('connection',(socket)=>
   else socket.emit('check_pass');
 
   });
+  socket.on('reg_old_game',(mail)=>{
+    if(socket.number != null){
+      if(mail!= null) io.sockets.in(mail).emit('C_reg_old_game',socket.number);
+  }
+  else socket.emit('check_pass');
+  });
+  socket.on('C_send_old_game',(mail,ten,ban,ta,luot)=>{
+    if(socket.number != null){
+        if(mail!= null &&ban!= null&&ta!= null &&ten !=null && luot != null){
+       io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:strencode(ten),toado_ban:ban,toado_ta:ta, luotchoi:strencode(luot)});
+
+    }
+  }
+  else socket.emit('check_pass');
+
+  });
+  socket.on('C_reg_name',(mail)=>{
+    if(socket.number != null){
+      if(mail != null){
+        con.query("SELECT `number`,`user` FROM `account_2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, a1s){
+          if ( err)console.log(err);
+          else
+          {
+            if(a1s.length>0){
+              socket.emit('S_send_name',a1s[0].number,strencode(a1s[0].user));
+
+            }
+
+          }
+        });
+      }
+    }
+    else socket.emit('check_pass');
+  });
+
+
+
   socket.on('C_del_inbox',(mes)=>{
     if(socket.number&&isArray(mes)&&(mes.length>0)){
       mes.forEach((mes1,key)=>{
