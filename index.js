@@ -345,11 +345,11 @@ io.on('connection',(socket)=>
   			 else{
           if (passwordHash.verify(pass1, rows[0].pass)){
               socket.emit('login1_dung', {name:rows[0].user});
-              console.log("aaaaaa"+name:rows[0].user);
+              console.log("aaaaaa"+rows[0].user);
           }
           else {
             socket.emit('login1_sai', {name:rows[0].user});
-            console.log("bbbbbbbb"+name:rows[0].user);
+            console.log("bbbbbbbb"+rows[0].user);
           }
         }
       });
