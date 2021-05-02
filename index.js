@@ -181,7 +181,7 @@ io.on('connection',(socket)=>
   socket.on('forget_pass_1_windlaxy',(mail,code,phone_id)=>{
     if(mail&&code&&phone_id){
       con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ phone_id +"' LIMIT 1", function(err3, row1s){
-        if(err3)socket.emit('regis_1_thatbai','A');
+        if(err3){socket.emit('regis_1_thatbai','A');log}
         else {
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
           else {
@@ -339,15 +339,17 @@ io.on('connection',(socket)=>
 
   socket.on('login1',(user1, pass1)=>{
       if(user1&&pass1){
-
+        console.log(user1+"haha"+pass1);
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
   			 else{
           if (passwordHash.verify(pass1, rows[0].pass)){
               socket.emit('login1_dung', {name:rows[0].user});
+              console.log("aaaaaa"+name:rows[0].user);
           }
           else {
             socket.emit('login1_sai', {name:rows[0].user});
+            console.log("bbbbbbbb"+name:rows[0].user);
           }
         }
       });
