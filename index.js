@@ -349,7 +349,7 @@ io.on('connection',(socket)=>
           }
           else {
             socket.emit('login1_sai', {name:rows[0].user});
-            
+
           }
         }
       });
@@ -1388,7 +1388,9 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('search_contact', function (string){
+    console.log(string);
     if (socket.number&&string!=null){
+      console.log('BBBB');
       con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
       if ( err)console.log(err);
       else
@@ -1397,7 +1399,10 @@ io.on('connection',(socket)=>
           let noidung=[];
           a1s.forEach(function(a1,key){
             noidung.push({user:a1.user, number: a1.number});
-              if(key===(a1s.length-1))    socket.emit('S_send_search_contact',noidung);
+              if(key===(a1s.length-1))  {
+                socket.emit('S_send_search_contact',noidung);
+                console.log('CCCCCC');
+              }
 
           });
 
