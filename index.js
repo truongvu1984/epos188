@@ -1388,7 +1388,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('search_contact', function (string){
-    console.log(string);
+    console.log('AAAAA'+string);
     if (socket.number&&string!=null){
       console.log('BBBB');
       con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
