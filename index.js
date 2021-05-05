@@ -780,7 +780,7 @@ io.on('connection',(socket)=>
   socket.on('C_send_diem',(toado,name,stt)=>{
     if(socket.number != null){
     if(toado!=null && name !=null)
-    io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt);
+    io.sockets.in(name).emit('S_send_diem',socket.number,toado,stt,socket.username);
   }
   else socket.emit('check_pass');
 
@@ -808,24 +808,24 @@ io.on('connection',(socket)=>
   else socket.emit('check_pass');
 
   });
-  socket.on('C_reg_name',(mail)=>{
-    if(socket.number != null){
-      if(mail != null){
-        con.query("SELECT `number`,`user` FROM `account_2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, a1s){
-          if ( err)console.log(err);
-          else
-          {
-            if(a1s.length>0){
-              socket.emit('S_send_name',a1s[0].number,strencode(a1s[0].user));
-
-            }
-
-          }
-        });
-      }
-    }
-    else socket.emit('check_pass');
-  });
+  // socket.on('C_reg_name',(mail)=>{
+  //   if(socket.number != null){
+  //     if(mail != null){
+  //       con.query("SELECT `number`,`user` FROM `account_2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, a1s){
+  //         if ( err)console.log(err);
+  //         else
+  //         {
+  //           if(a1s.length>0){
+  //             socket.emit('S_send_name',a1s[0].number,strencode(a1s[0].user));
+  //
+  //           }
+  //
+  //         }
+  //       });
+  //     }
+  //   }
+  //   else socket.emit('check_pass');
+  // });
 
 
 
@@ -1388,9 +1388,9 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('search_contact', function (string){
-    console.log('AAAAA'+string);
+
     if (socket.number&&string!=null){
-      console.log('BBBB');
+
       con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
       if ( err)console.log(err);
       else
@@ -1401,7 +1401,7 @@ io.on('connection',(socket)=>
             noidung.push({user:a1.user, number: a1.number});
               if(key===(a1s.length-1))  {
                 socket.emit('S_send_search_contact',noidung);
-                console.log('CCCCCC');
+
               }
 
           });
