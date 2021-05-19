@@ -36,12 +36,7 @@ isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
 
-// cb.sendMessage({"to": '+84982025401', "text": 'Caro OTP:'}, (error, response) => {
-//     if(error)socket.emit('regis_1_carothatbai','E');
-//     else {
-//       console.log('OK OK');
-//     }
-//   });
+
 
 
 con.connect(function(err) {
@@ -195,7 +190,7 @@ io.on('connection',(socket)=>
           if(rows.length==0)socket.emit('regis2_carothatbai','B');
           else {
             if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
-                con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(20) NOT NULL,`name` VARCHAR(20)  NULL,`ta` INT(5) NULL , `ban` INT(5) NULL , `loai_ban` CHAR(3),`danhan` CHAR(3), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  NULL,`ta` INT(5) NULL , `ban` INT(5) NULL , `loai_ban` CHAR(3),`danhan` CHAR(3), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 var sql = "INSERT INTO `account2` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
                 var values = [[tin.mail,tin.name, matkhau]];
@@ -250,7 +245,7 @@ io.on('connection',(socket)=>
               else {
                 if(a2s.length>0){
                   a2s.forEach((a2,key)=>{
-                    sockets.emit('S_send_diem',a2.mail,a2.ban,a2.loai_ban,a2.name);
+                    socket.emit('S_send_diem',a2.mail,a2.ban,a2.loai_ban,a2.name);
                   });
 
                 }
