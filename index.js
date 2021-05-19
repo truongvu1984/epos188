@@ -89,19 +89,19 @@ io.on('connection',(socket)=>
 
 });
   socket.on('regis_1_caro',(mail,code,id_phone)=>{
-    console.log('A'+mail+":"+code+":"+id_phone);
+
     if(mail&&code&&id_phone){
       con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
-          console.log('B');
+
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_carothatbai','C');
           else {
             con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
                     // nếu tài khoản đã có người đăng ký rồi thì:
                     if(err)socket.emit('regis_1_carothatbai','A');
                     else {
-                      console.log('C');
+
                       if (rows.length >0 )	{socket.emit('regis_1_carothatbai','D');}
                       else {
                         var string = Math.floor(Math.random() * (899999)) + 100000;
@@ -139,10 +139,11 @@ io.on('connection',(socket)=>
                         });
                         }
                         else {
-                          console.log('D');
+
                           cb.sendMessage({"to": mail, "text": 'Caro OTP:'+string}, (error, response) => {
                               if(error)socket.emit('regis_1_carothatbai','E');
                               else {
+                                console.log('EEEE');
                                 var time = Math.floor(Date.now() / 1000);
                                 if(row1s.length==0){
                                   var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
