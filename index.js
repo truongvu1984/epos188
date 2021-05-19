@@ -36,6 +36,14 @@ isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
 
+// cb.sendMessage({"to": '+84982025401', "text": 'Caro OTP:'}, (error, response) => {
+//     if(error)socket.emit('regis_1_carothatbai','E');
+//     else {
+//       console.log('OK OK');
+//     }
+//   });
+
+
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
@@ -143,7 +151,7 @@ io.on('connection',(socket)=>
                           cb.sendMessage({"to": mail, "text": 'Caro OTP:'+string}, (error, response) => {
                               if(error)socket.emit('regis_1_carothatbai','E');
                               else {
-                                console.log('EEEE');
+
                                 var time = Math.floor(Date.now() / 1000);
                                 if(row1s.length==0){
                                   var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
@@ -187,7 +195,6 @@ io.on('connection',(socket)=>
           if(rows.length==0)socket.emit('regis2_carothatbai','B');
           else {
             if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
-
                 con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(20) NOT NULL,`name` VARCHAR(20)  NULL,`ta` INT(5) NULL , `ban` INT(5) NULL , `loai_ban` CHAR(3),`danhan` CHAR(3), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 var sql = "INSERT INTO `account2` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
@@ -211,16 +218,16 @@ io.on('connection',(socket)=>
   });
   socket.on('login1_Caro',(user1, pass1)=>{
       if(user1&&pass1){
+
       con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
   			 else{
           if (passwordHash.verify(pass1, rows[0].pass)){
-              socket.emit('login1_caro_dung', {name:rows[0].user});
+                  socket.emit('login1_caro_dung', {name:rows[0].user});
           }
-          else {
-            socket.emit('login1_carosai', {name:rows[0].user});
+          else  socket.emit('login1_carosai', {name:rows[0].user});
 
-          }
+
         }
       });
     }
@@ -363,6 +370,31 @@ io.on('connection',(socket)=>
 
         }
       });
+    }
+  });
+  socket.on('search_contact_caro', function (string){
+
+    if (socket.number&&string!=null){
+
+      con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account2` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
+      if ( err)console.log(err);
+      else
+      {
+        if(a1s.length>0){
+          let noidung=[];
+          a1s.forEach(function(a1,key){
+            noidung.push({user:a1.user, number: a1.number});
+              if(key===(a1s.length-1))  {
+                socket.emit('S_send_search_caro',noidung);
+
+              }
+
+          });
+
+        }
+        else socket.emit('S_kq_check_caro_zero_2');
+      }
+    });
     }
   });
 
@@ -1777,7 +1809,6 @@ io.on('connection',(socket)=>
     });
     }
   });
-
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
       socket.emit('S_get_join');
