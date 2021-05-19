@@ -89,8 +89,8 @@ io.on('connection',(socket)=>
 
 });
   socket.on('regis_1_caro',(mail,code,id_phone)=>{
-    console.log('A');
-    if(mail&&code&id_phone){
+    console.log('A'+mail+":"+code+":"+id_phone);
+    if(mail&&code&&id_phone){
       con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
