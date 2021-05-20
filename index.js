@@ -392,7 +392,14 @@ io.on('connection',(socket)=>
     });
     }
   });
-
+  socket.on('C_xoa_banco',(mail)=>{
+    if(socket.number != null&&mail!=null){
+      con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
+        if (err2)console.log(err2);
+        else console.log('xoa thanh cong');
+      });
+    }
+  });
 
   socket.on('C_send_diem',(toado,mail,stt)=>{
     if(socket.number != null){
