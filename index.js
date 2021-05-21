@@ -36,15 +36,12 @@ isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
 
-
-
-
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
 
-function kiemtra_taikhoan(){
-  setTimeout(function() {
+  function kiemtra_taikhoan(){
+    setTimeout(function() {
     //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
     var date2 = Math.floor(Date.now() / 1000) - 600;
     var date3=Math.floor(Date.now() / 1000) - 300;
@@ -396,8 +393,25 @@ io.on('connection',(socket)=>
     if(socket.number != null&&mail!=null){
       con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
         if (err2)console.log(err2);
-        else console.log('xoa thanh cong');
+        else {
+          var sql7 = "INSERT INTO `"+socket.number+"caro` (mail) VALUES ?";
+          var val7 = [[mail]];
+          con.query(sql7, [val7], function (err7, result) {
+              if ( err7){console.log(err7);}
+              else socket.emit('S_del_banco_ok');
+          });
+        }
       });
+    }
+  });
+  socket.on('C_xoa_game',(nhom_mail)=>{
+    if(socket.number != null&&isArray(nhom_mail)){
+        nhom_mail.forEach((mail,key)=>{
+          con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
+            if (err2)console.log(err2);
+          });
+          if(key===(nhom_mail.length-1))socket.emit('S_del_caro_ok');
+        });
     }
   });
 
