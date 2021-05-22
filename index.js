@@ -465,7 +465,7 @@ io.on('connection',(socket)=>
                     if(err4){console.log(err4);}
                     else {
                       if(a4s.length==0){
-                        var sql6 = "INSERT INTO `"+mail+"caro` (mail, ban,name,loai_ban,danhan ) VALUES ?";
+                        var sql6 = "INSERT INTO `"+mail+"caro` (mail, name, ban,loai_ban,danhan ) VALUES ?";
                         var val6 = [[socket.number,socket.username,toado, stt, 'N']];
                         con.query(sql6, [val6], function (err6, result) {
                             if ( err6)console.log(err6);
@@ -511,6 +511,7 @@ io.on('connection',(socket)=>
   socket.on('C_send_old_game',(mail,ten,ban,ta,luot)=>{
     if(socket.number != null){
         if(mail!= null &&ban!= null&&ta!= null &&ten !=null && luot != null){
+
        io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:strencode(ten),toado_ban:ban,toado_ta:ta, luotchoi:luot});
 
     }
