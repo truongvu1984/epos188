@@ -511,7 +511,7 @@ io.on('connection',(socket)=>
   socket.on('C_send_old_game',(mail,ten,ban,ta,luot)=>{
     if(socket.number != null){
         if(mail!= null &&ban!= null&&ta!= null &&ten !=null && luot != null){
-       io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:strencode(ten),toado_ban:ban,toado_ta:ta, luotchoi:strencode(luot)});
+       io.sockets.in(mail).emit('C_send_old_game_2',{mail:socket.number,name:strencode(ten),toado_ban:ban,toado_ta:ta, luotchoi:luot});
 
     }
   }
