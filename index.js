@@ -439,14 +439,20 @@ io.on('connection',(socket)=>
                           var val6 = [[socket.number,socket.username,toado, stt, 'N']];
                           con.query(sql6, [val6], function (err6, result) {
                               if ( err6)console.log(err6);
-                              else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
+                              else {
+                                io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
+                                console.log('Gui di AAA');
+                              }
 
                           });
                         }
                         else {
                           con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='"+stt+"',`danhan`='N' WHERE `mail` LIKE '"+socket.number+"'",function(err6,res6){
                             if(err6)console.log(err6);
-                            else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
+                            else {
+                              io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
+                              console.log('gui di BBBB');
+                            }
 
                           });
                         }
@@ -469,14 +475,14 @@ io.on('connection',(socket)=>
                         var val6 = [[socket.number,socket.username,toado, stt, 'N']];
                         con.query(sql6, [val6], function (err6, result) {
                             if ( err6)console.log(err6);
-                            else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
+                            else {io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);console.log('gui di DDDDD');}
 
                         });
                       }
                       else {
                         con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='"+stt+"',`danhan`='N' WHERE `mail` LIKE '"+socket.number+"'",function(err6,res6){
                           if(err6)console.log(err6);
-                          else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
+                          else {io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);console.log('gui di KKKK');}
 
                         });
                       }
@@ -502,12 +508,12 @@ io.on('connection',(socket)=>
     }
     else socket.emit('check_pass');
   });
-  socket.on('reg_old_game',(mail)=>{
-    if(socket.number != null){
-      if(mail!= null) io.sockets.in(mail).emit('C_reg_old_game',socket.number);
-  }
-  else socket.emit('check_pass');
-  });
+  // socket.on('reg_old_game',(mail)=>{
+  //   if(socket.number != null){
+  //     if(mail!= null) io.sockets.in(mail).emit('C_reg_old_game',socket.number);
+  // }
+  // else socket.emit('check_pass');
+  // });
   socket.on('C_send_old_game',(mail,ten,ban,ta,luot)=>{
     if(socket.number != null){
         if(mail!= null &&ban!= null&&ta!= null &&ten !=null && luot != null){
