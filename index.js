@@ -439,20 +439,16 @@ io.on('connection',(socket)=>
                           var val6 = [[socket.number,socket.username,toado, stt, 'N']];
                           con.query(sql6, [val6], function (err6, result) {
                               if ( err6)console.log(err6);
-                              else {
-                                io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
-                                console.log('Gui di AAA');
-                              }
+                              else  io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
+
+
 
                           });
                         }
                         else {
                           con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='"+stt+"',`danhan`='N' WHERE `mail` LIKE '"+socket.number+"'",function(err6,res6){
                             if(err6)console.log(err6);
-                            else {
-                              io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
-                              console.log('gui di BBBB');
-                            }
+                            else     io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
 
                           });
                         }
@@ -475,14 +471,14 @@ io.on('connection',(socket)=>
                         var val6 = [[socket.number,socket.username,toado, stt, 'N']];
                         con.query(sql6, [val6], function (err6, result) {
                             if ( err6)console.log(err6);
-                            else {io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);console.log('gui di DDDDD');}
+                            else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
 
                         });
                       }
                       else {
                         con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='"+stt+"',`danhan`='N' WHERE `mail` LIKE '"+socket.number+"'",function(err6,res6){
                           if(err6)console.log(err6);
-                          else {io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);console.log('gui di KKKK');}
+                          else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
 
                         });
                       }
