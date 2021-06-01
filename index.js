@@ -521,6 +521,11 @@ io.on('connection',(socket)=>
   else socket.emit('check_pass');
 
   });
+  socket.on('C_nhan_old_game',(mail)=>{
+    if(socket.number != null&&mail!=null){
+      io.sockets.in(mail).emit('C_gui_old_game_ok',socket.number);
+    }
+  });
   socket.on('regis_1_windlaxy',(mail,code,id_phone)=>{
     if(mail&&code&id_phone){
       con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", function(err3, row1s){
