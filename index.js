@@ -505,8 +505,8 @@ io.on('connection',(socket)=>
     else socket.emit('check_pass');
   });
   socket.on('C_reg_old_game',(mail)=>{
-    if(socket.number != null){
-      if(mail!= null) io.sockets.in(mail).emit('S_reg_old_game',socket.number);
+    if(socket.number != null&&mail!=null){
+      io.sockets.in(mail).emit('S_reg_old_game',socket.number);
   }
   else socket.emit('check_pass');
   });
@@ -759,7 +759,6 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_check_phonenumber',(phone,code,id_phone)=>{
-
     if(phone&&code&&id_phone){
 
       con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", function(err3, row1s){
@@ -845,6 +844,7 @@ io.on('connection',(socket)=>
 
               }
             }
+            socket.emit('S_reg_new');
 
           }//end
           else {socket.emit('login2_sai');}
@@ -1611,30 +1611,31 @@ io.on('connection',(socket)=>
       let list_full=[];
       if(isArray(data)&&(data.length>0)){
         data.forEach((tin,key)=>{
-          if(tin.number&&tin.idc){
-        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+tin.idc+"' LIMIT 1", function(err1, a1s){
-          if(err1){console.log(err1);}
-          else {
-            if(a1s.length>0){
-            con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1s[0].id+"' AND `stt` LIKE 'Y'", function(err2, a2s){
-              if(err2){console.log(err2);}
+          if(isArray(tin.number)&&tin.idc){
+            con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+tin.idc+"' LIMIT 1", function(err1, a1s){
+              if(err1){console.log(err1);}
               else {
-                if(a2s.length > tin.number){
-                  a2s.forEach((a2,key2)=>{
-                    list.push({number:a2.number, name:a2.name,stt:a2.app});
-                    if(key2===a2s.length){
-                      list_full.push({list:list,idc:tin.idc});
-                      if(key===data.length){socket.emit('S_check_send',list_full);}
-                    }
+                if(a1s.length>0){
+                  list=[];
+                  tin.number.forEach((tin1,key1)=>{
+                    con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1s[0].id+"' AND `stt` LIKE 'Y' AND `number` LIKE '"+tin1+"' LIMIT 1", function(err2, a2s){
+                      if(err2){console.log(err2);}
+                      else {
+                        if(a2s.length > 0)list.push({number:a2.number});
+                        if(key1 ===(tin.number-1))
+                        {
+                          if(list.length>0) list_full.push({list:list,idc:tin.idc});
+                          if(key===(data.length-1))socket.emit('S_check_send',list_full);
+                        }
+                      }
+                    });
                   });
+
                 }
               }
             });
           }
-          }
         });
-      }
-      });
       }
     }  }); //ok
   socket.on('C_del_acc',(pass,code,phone_id)=>{
