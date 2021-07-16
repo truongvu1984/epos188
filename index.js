@@ -1630,7 +1630,7 @@ io.on('connection',(socket)=>
                         if(key1 ===(tin.number.length-1))
                         {
                           if(list.length>0) list_full.push({list:list,idc:tin.idc});
-                          if(key===(data.length-1)){socket.emit('S_check_send',list_full);console.log('PPPPPP');console.log(list_full);}
+                          if(key===(data.length-1)){socket.emit('S_check_send',list_full);}
                         }
                       }
                     });
