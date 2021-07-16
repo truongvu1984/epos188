@@ -1623,7 +1623,7 @@ io.on('connection',(socket)=>
                     con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1s[0].id+"' AND `stt` LIKE 'Y' AND `number` LIKE '"+tin1+"' LIMIT 1", function(err2, a2s){
                       if(err2){console.log(err2);}
                       else {
-                        if(a2s.length > 0)list.push({number:a2.number});
+                        if(a2s.length > 0){list.push({number:a2s[0].number});console.log(a2s[0].number);}
                         if(key1 ===(tin.number-1))
                         {
                           if(list.length>0) list_full.push({list:list,idc:tin.idc});
