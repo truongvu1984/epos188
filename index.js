@@ -1618,8 +1618,10 @@ io.on('connection',(socket)=>
               if(err1){console.log(err1);}
               else {
                 if(a1s.length>0){
+                  console.log(a1s[0].subject);
                   list=[];
                   tin.number.forEach((tin1,key1)=>{
+                    console.log(tin1);
                     con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1s[0].id+"' AND `stt` LIKE 'Y' AND `number` LIKE '"+tin1+"' LIMIT 1", function(err2, a2s){
                       if(err2){console.log(err2);}
                       else {
