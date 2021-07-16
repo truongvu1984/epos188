@@ -1606,31 +1606,31 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_check_send',(data)=>{
-    console.log(data);
+
     if(socket.number){
       let list=[];
       let list_full=[];
       if(isArray(data)&&(data.length>0)){
-        console.log('AAAA');
+
         data.forEach((tin,key)=>{
           if(isArray(tin.number)&&tin.idc){
-            console.log('KKKKK');
+
             con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+tin.idc+"' LIMIT 1", function(err1, a1s){
               if(err1){console.log(err1);}
               else {
                 if(a1s.length>0){
-                  console.log(a1s[0].subject);
+
                   list=[];
                   tin.number.forEach((tin1,key1)=>{
-                    console.log(tin1);
+
                     con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` LIKE '"+a1s[0].id+"' AND `stt` LIKE 'Y' AND `number` LIKE '"+tin1+"' LIMIT 1", function(err2, a2s){
                       if(err2){console.log(err2);}
                       else {
                         if(a2s.length > 0){list.push({number:a2s[0].number});console.log(a2s[0].number);}
-                        if(key1 ===(tin.number-1))
+                        if(key1 ===(tin.number.length-1))
                         {
                           if(list.length>0) list_full.push({list:list,idc:tin.idc});
-                          if(key===(data.length-1)){socket.emit('S_check_send',list_full);console.log(list_full);}
+                          if(key===(data.length-1)){socket.emit('S_check_send',list_full);console.log('PPPPPP');console.log(list_full);}
                         }
                       }
                     });
