@@ -527,10 +527,12 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('regis_1_windlaxy',(mail,code,id_phone)=>{
+    console.log("AA");
     if(mail&&code&id_phone){
       con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
+            console.log("BBB");
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
           else {
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
@@ -577,13 +579,14 @@ io.on('connection',(socket)=>
                           cb.sendMessage({"to": mail, "text": 'Windlaxy OTP:'+string}, (error, response) => {
                               if(error)socket.emit('regis_1_thatbai','E');
                               else {
+                                  console.log("CCCC");
                                 var time = Math.floor(Date.now() / 1000);
                                 if(row1s.length==0){
                                   var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
                                   var values = [[mail, string1,time,1,id_phone]];
                                   con.query(sql, [values], function (err1, result) {
                                     if ( err1)socket.emit('regis_1_thatbai','A');
-                                    else  socket.emit('regis_1_thanhcong');
+                                    else  {socket.emit('regis_1_thanhcong');console.log("DDD");}
                                   });
                                 }
                                 else {
@@ -592,7 +595,7 @@ io.on('connection',(socket)=>
                                   if(dem>2)time=time+300;
                                   con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+id_phone+"'",function(err1){
                                     if(err1)socket.emit('regis_1_thatbai','A');
-                                    else socket.emit('regis_1_thanhcong');
+                                    else {socket.emit('regis_1_thanhcong');console.log("EEEEE");}
                                   });
 
                                 }
