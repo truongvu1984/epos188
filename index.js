@@ -1606,7 +1606,7 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_check_send',(data)=>{
-    console.log('BBBBB');
+    console.log(data);
     if(socket.number){
       let list=[];
       let list_full=[];
@@ -1614,6 +1614,7 @@ io.on('connection',(socket)=>
         console.log('AAAA');
         data.forEach((tin,key)=>{
           if(isArray(tin.number)&&tin.idc){
+            console.log('KKKKK');
             con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `idc` LIKE '"+tin.idc+"' LIMIT 1", function(err1, a1s){
               if(err1){console.log(err1);}
               else {
