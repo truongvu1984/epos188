@@ -77,8 +77,8 @@ io.on('connection',(socket)=>
                                   var mailOptions = {
                                     from: 'windlaxy@gmail.com',
                                     to: mail,
-                                    subject: 'Windlaxy OTP',
-                                    text: 'Your Windlaxy OTP:'+string
+                                    subject: 'Caro OTP',
+                                    text: 'Your Caro OTP:'+string
                                   };
                                   transporter.sendMail(mailOptions, function(error, info){
                                   if (error) socket.emit('regis_1_thatbai_A','B');
@@ -106,7 +106,7 @@ io.on('connection',(socket)=>
                                 });
                                 }
                                 else {
-                                  cb.sendMessage({"to": mail, "text": 'Windlaxy OTP:'+string}, (error, response) => {
+                                  cb.sendMessage({"to": mail, "text": 'Caro OTP:'+string}, (error, response) => {
                                       if(error)socket.emit('regis_1_thatbai_A','E');
                                       else {
 
@@ -190,7 +190,7 @@ io.on('connection',(socket)=>
                                 var string = Math.floor(Math.random() * (899999)) + 100000;
                                 var string1 = passwordHash.generate(''+string);
                                 if(code=="A"){
-                                  cb.sendMessage({"to": mail, "text": 'Windlaxy OTP:'+string}, (error, response) => {
+                                  cb.sendMessage({"to": mail, "text": 'Caro OTP:'+string}, (error, response) => {
                                       if(error)socket.emit('regis_1_thatbai_A','E');
                                       else {
                                         var time = Math.floor(Date.now() / 1000);
@@ -220,8 +220,8 @@ io.on('connection',(socket)=>
                                   var mailOptions = {
                                   from: 'windlaxy@gmail.com',
                                   to: mail,
-                                  subject: 'Windlaxy OTP',
-                                  text: 'Your Windlaxy OTP:'+string
+                                  subject: 'Caro OTP',
+                                  text: 'Your Caro OTP:'+string
                                 };
                                 transporter.sendMail(mailOptions, function(error, info){
                                   if (error) {socket.emit('regis_1_thatbai_A','B');console.log(error);}
