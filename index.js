@@ -291,7 +291,7 @@ io.on('connection',(socket)=>
                 else {
                   if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai_A','C');
                   else {
-                    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ phone +"' LIMIT 1", function(err, rows){
+                    con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ phone +"' LIMIT 1", function(err, rows){
                             // nếu tài khoản đã có người đăng ký rồi thì:
                             if(err)socket.emit('regis_1_thatbai_A','A');
                             else {
