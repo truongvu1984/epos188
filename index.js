@@ -1488,13 +1488,13 @@ io.on('connection',(socket)=>
                               a3s.forEach(function(a3,key){
                               position.push({name:a3.name, lat:a3.lat, lon:a3.lon, id:a3.idp});
                               if(key===(a3s.length-1)){
-                                con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `code1` LIKE '"+a1s[0].id+"'", function(err4, a4s){
+                                con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err4, a4s){
                                     if(err4)console.log(err4);
                                     else {
                                       let line_full=[];
                                       if(a4s.length>0){
                                         a4s.forEach(function(a4,key4){
-                                          con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `code` LIKE '"+a4.id+"'", function(err5, a5s){
+                                          con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
                                               if(err5)console.log(err5);
                                               else {
                                                 let line=[];
@@ -1523,13 +1523,13 @@ io.on('connection',(socket)=>
                           }
                           else {
                             //cũng tìm xem có line không, đưa line vào luôn.
-                            con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `code1` LIKE '"+a1s[0].id+"'", function(err4, a4s){
+                            con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err4, a4s){
                                 if(err4)console.log(err4);
                                 else {
                                   if(a4s.length>0){
                                     let line_full=[];
                                     a4s.forEach(function(a4,key4){
-                                      con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `code` LIKE '"+a4.id+"'", function(err5, a5s){
+                                      con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
                                           if(err5)console.log(err5);
                                           else {
                                               if(a5s.length>0){
@@ -1836,10 +1836,9 @@ io.on('connection',(socket)=>
         {
           if(err){console.log(err);}
           else {
-            console.log('AAAAA');
             socket.emit('S_get_save_pos',mess.imei,{ids:res.insertId,time:get_time(thoigian),subject:mess.subject,idc:mess.idc});
             if(mess.vitri!=null &&mess.vitri.length>0){
-              console.log('CCCCC');
+
               var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
               mess.vitri.forEach((row)=>{
                 var val3 = [[res.insertId, row.id, row.name, row.lat, row.lon]];
@@ -1847,7 +1846,6 @@ io.on('connection',(socket)=>
               });
             }
             if(mess.line!=null &&mess.line.length>0){
-              console.log('BBBBB');
               var sql4 = "INSERT INTO `"+socket.number+"line_main` (ids, name, culy) VALUES ?";
               mess.line.forEach((row)=>{
                 var val4 = [[res.insertId, row.name, row.culy]];
@@ -1859,9 +1857,7 @@ io.on('connection',(socket)=>
                       var val5 = [[res4.insertId,row1.id, row1.lat, row1.lon,row1.name]];
                       con.query(sql5, [val5], function (err5, res5) {
                         if ( err5)console.log(err5);
-                        else {
-                          console.log('Lưu thành công, hí hí');
-                        }
+
                     });
                   });
                 }
