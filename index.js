@@ -1675,9 +1675,9 @@ io.on('connection',(socket)=>
                                                 });
                                               }
                                             if(mess.line!=null &&mess.line.length>0){
-                                                var sql4 = "INSERT INTO `"+row5.number+"line_main` (ids, name, culy) VALUES ?";
+                                                var sql8 = "INSERT INTO `"+row5.number+"line_main` (ids, name, culy) VALUES ?";
                                                 mess.line.forEach((row)=>{
-                                                  var val4 = [[res5.insertId, row.name, row.culy]];
+                                                  var val8 = [[res5.insertId, row.name, row.culy]];
                                                   con.query(sql8, [val8], function (err8, res8) {
                                                     if ( err8)console.log(err8);
                                                     else {
