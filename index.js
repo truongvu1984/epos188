@@ -1485,7 +1485,7 @@ io.on('connection',(socket)=>
                                                        if(key5===(a5s.length-1)){
                                                          line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
                                                          if(key4===(a4s.length-1)){
-                                                             socket.emit('S_send_line',position,line_full);
+                                                             socket.emit('S_send_point',position,line_full);
                                                          }
                                                        }
                                                      });
@@ -1526,7 +1526,7 @@ io.on('connection',(socket)=>
                                                      line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
                                                      if(key4===(a4s.length-1)){
                                                        console.log('OL');
-                                                         socket.emit('S_send_line',position,line_full);
+                                                         socket.emit('S_send_point',position,line_full);
                                                      }
                                                    }
                                                  });
@@ -1536,7 +1536,7 @@ io.on('connection',(socket)=>
                                        });
                                      });
                                    }
-                                   else socket.emit('S_send_point',position,line_full);
+                                   
 
                                  }
                              });
