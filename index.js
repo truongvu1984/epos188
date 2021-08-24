@@ -1511,17 +1511,21 @@ io.on('connection',(socket)=>
                                  else {
 
                                    if(a4s.length>0){
+                                     console.log('OK');
                                      a4s.forEach(function(a4,key4){
                                        con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
                                            if(err5)console.log(err5);
                                            else {
                                              let line=[];
                                                if(a5s.length>0){
+
                                                  a5s.forEach(function(a5,key5){
+                                                   console.log('V'+a5.name);
                                                    line.push({id:a5.stt, lat:a5.lat, lon:a5.lon, name:a5.name});
                                                    if(key5===(a5s.length-1)){
                                                      line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
                                                      if(key4===(a4s.length-1)){
+                                                       console.log('OL');
                                                          socket.emit('S_send_line',position,line_full);
                                                      }
                                                    }
