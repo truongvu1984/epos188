@@ -1439,6 +1439,7 @@ io.on('connection',(socket)=>
     }
   });//hi
   socket.on('C_reques_point_inbox',(idc)=>{
+    console.log(idc);
     if(socket.number&&idc){
       if(socket.roomabc){
         socket.leave(socket.roomabc);
@@ -1459,6 +1460,7 @@ io.on('connection',(socket)=>
                   if(err3){console.log(err3);}
                         else {
                           if(a3s.length>0){
+                            console.log('G');
                             let position=[];
                             a3s.forEach(function(a3,key){
                               position.push({name:a3.name, lat:a3.lat, lon:a3.lon, id:a3.idp});
@@ -1468,7 +1470,9 @@ io.on('connection',(socket)=>
                                      else {
                                        let line_full=[];
                                        if(a4s.length>0){
+                                         console.log('K');
                                          a4s.forEach(function(a4,key4){
+
                                            con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
                                                if(err5)console.log(err5);
                                                else {
@@ -1504,6 +1508,7 @@ io.on('connection',(socket)=>
                             });
                           }
                           else {
+                            console.log('B');
                             con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err4, a4s){
                                  if(err4)console.log(err4);
                                  else {
