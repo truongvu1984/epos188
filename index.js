@@ -39,6 +39,7 @@ isArray = function(a) {
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
+      
 
   function kiemtra_taikhoan(){
     setTimeout(function() {
