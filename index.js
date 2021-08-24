@@ -146,7 +146,6 @@ io.on('connection',(socket)=>
           });
   socket.on('regis_2_windlaxy_A',(tin)=>{
     if(tin.mail &&tin.name&&tin.chuoi&&tin.pass){
-
               con.query("SELECT `chuoi` FROM `active` WHERE `mail` LIKE '"+tin.mail +"' LIMIT 1", function(err, rows){
                 if (err)socket.emit('regis2_thatbai_A','A');
                 else{
@@ -415,7 +414,6 @@ io.on('connection',(socket)=>
         });
     }
   });
-
   socket.on('C_send_diem',(toado,mail,stt)=>{
     if(socket.number != null){
       if(toado!=null && mail !=null){
@@ -617,21 +615,21 @@ io.on('connection',(socket)=>
   });
   socket.on('regis_2_windlaxy',(tin)=>{
     if(tin.mail &&tin.name&&tin.chuoi&&tin.pass){
-
       con.query("SELECT `chuoi` FROM `active` WHERE `mail` LIKE '"+tin.mail +"' LIMIT 1", function(err, rows){
         if (err)socket.emit('regis2_thatbai','A');
         else{
           if(rows.length==0)socket.emit('regis2_thatbai','B');
           else {
-            if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
-
-                con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60) NOT NULL, `subject` VARCHAR(20) NOT NULL,`send_receive` VARCHAR(5) NOT NULL,`stt` VARCHAR(5) NULL , `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"mes_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idp` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`lat` DOUBLE NULL,`lon` DOUBLE NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"mes_sender` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) NOT NULL,`name` VARCHAR(45) NULL,`send_receive` VARCHAR(5), `stt` VARCHAR(5) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(45) NOT NULL,`name` VARCHAR(45) NOT NULL,`idc` CHAR(15) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"alarm` (`id` BIGINT NOT NULL AUTO_INCREMENT,`maso` CHAR(20) NOT NULL,`name` VARCHAR(45) NOT NULL,`type` CHAR(3) NOT NULL,`time` DATETIME(6) NOT NULL,`culy` INT NOT NULL,`lat` DOUBLE,`lon` DOUBLE,`ring` CHAR(3),`time1` CHAR(16),`uri` VARCHAR(45),`kieu` CHAR(1),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+            let abc=2;
+            // if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
+              if(abc>0){
+                con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60), `subject` VARCHAR(20),`send_receive` VARCHAR(5),`stt` VARCHAR(5), `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"mes_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idp` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"mes_sender` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) ,`name` VARCHAR(45),`send_receive` VARCHAR(5), `stt` VARCHAR(5),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`idc` CHAR(15) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"alarm` (`id` BIGINT NOT NULL AUTO_INCREMENT,`maso` CHAR(20) NOT NULL,`name` VARCHAR(45)  NULL,`type` CHAR(3) NOT NULL,`time` DATETIME(6) NOT NULL,`culy` INT NOT NULL,`lat` DOUBLE,`lon` DOUBLE,`ring` CHAR(3),`time1` CHAR(16),`uri` VARCHAR(45),`kieu` CHAR(1),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULLL,`name` VARCHAR(45),`culy` BIGINT ,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_full` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULLL,`stt` INT,`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
 
                 var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
