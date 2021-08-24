@@ -618,9 +618,11 @@ io.on('connection',(socket)=>
       con.query("SELECT `chuoi` FROM `active` WHERE `mail` LIKE '"+tin.mail +"' LIMIT 1", function(err, rows){
         if (err)socket.emit('regis2_thatbai','A');
         else{
-          if(rows.length==0)socket.emit('regis2_thatbai','B');
-          else {
-            let abc=2;
+          let abc=2;
+          // if(rows.length==0)socket.emit('regis2_thatbai','B');
+            if(abc>0){
+          // else {
+
             // if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
               if(abc>0){
                 con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60), `subject` VARCHAR(20),`send_receive` VARCHAR(5),`stt` VARCHAR(5), `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
@@ -639,7 +641,7 @@ io.on('connection',(socket)=>
                   else  {
                     con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
                       if (err2)socket.emit('regis2_thanhcong');
-                      else socket.emit('regis2_thanhcong');
+                      else {socket.emit('regis2_thanhcong');console.log('dk OK');}
                     });
                   }
                 });
