@@ -2081,29 +2081,29 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_contact', function (contact){
-      if (socket.number&&isArray(contact)){
-        contact.forEach((row,key)=>{
-
-          con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+row.number+"' LIMIT 1", function(err, a1s)
+      if (socket.number&&contact!=null){
+        console.log('ABC');
+        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+row.number+"' LIMIT 1", function(err, a1s)
              {
                if ( err){console.log(err);}
                else
                  {
                    if(a1s.length===0){
                     var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
-                    var values2 = [[row.idc,row.name,row.number]];
+                    var values2 = [[contact.idc,contact.name,contact.number]];
                     con.query(sql2, [values2], function (err, res)
                       {
                         if ( err){console.log(err);}
                         else {
-                          socket.emit('S_add_contact_ok',{ids:res.insertId, idc:row.idc,name:row.name,number:row.number});
+                          console.log('DDDDD');
+                          socket.emit('S_add_contact_ok',{ids:res.insertId, idc:contact.idc,name:contact.name,number:contact.number});
                         }
                     });
                   }
                  }
             });
 
-        });
+
 
       }
   });
