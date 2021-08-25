@@ -2083,7 +2083,7 @@ io.on('connection',(socket)=>
   socket.on('C_send_contact', function (contact){
       if (socket.number&&contact!=null){
         console.log('ABC');
-        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+row.number+"' LIMIT 1", function(err, a1s)
+        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
              {
                if ( err){console.log(err);}
                else
