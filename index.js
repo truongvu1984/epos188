@@ -2082,7 +2082,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_send_contact', function (contact){
       if (socket.number&&contact!=null){
-        console.log('ABC');
+
         con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
              {
                if ( err){console.log(err);}
@@ -2094,12 +2094,12 @@ io.on('connection',(socket)=>
                     con.query(sql2, [values2], function (err, res)
                       {
                         if ( err){console.log(err);}
-                        else {
-                          console.log('DDDDD');
-                          socket.emit('S_add_contact_ok',{ids:res.insertId, idc:contact.idc,name:contact.name,number:contact.number});
-                        }
+                        else socket.emit('S_add_contact_ok',{ids:res.insertId, idc:contact.idc,name:contact.name,number:contact.number});
+
                     });
                   }
+                  else socket.emit('S_add_contact_ok',{ids:a1s[0].id, idc:contact.idc,name:contact.name,number:contact.number});
+
                  }
             });
 
