@@ -406,14 +406,18 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('choi_lai',(mail)=>{
+    console.log('KKKKK');
     if(socket.number != null&&mail!=null){
+      console.log(mail);
           con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
             else {
+              console.log('BBBBB'+mail);
               socket.emit('choi_lai_ok',mail);
               con.query("UPDATE `"+mail+"caro` SET `danhan` = 'N' ADN `loai_ban` = 'B' WHERE `mail` LIKE '"+mail+"'",function(err5,res5){
                 if(err5)console.log(err5);
                 else {
+                  console.log('CCCCC'+mail);
                   io.sockets.in(mail).emit('C_muon_choi_lai',socket.number,socket.username);
                 }
               });
