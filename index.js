@@ -56,7 +56,7 @@ io.on('connection',(socket)=>
 {
 
   socket.emit('check_pass');
-          // con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  NULL,`ta` INT(5) NULL , `ban` INT(5) NULL , `loai_ban` CHAR(3),`danhan` CHAR(3), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
 
             if(mail&&code&&id_phone){
@@ -407,12 +407,20 @@ io.on('connection',(socket)=>
   });
   socket.on('choi_lai',(mail)=>{
     if(socket.number != null&&mail!=null){
-
           con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
-            else socket.emit('choi_lai_ok',mail);
+            else {
+              socket.emit('choi_lai_ok',mail);
+              con.query("UPDATE `"+mail+"caro` SET `danhan` = 'N' ADN `loai_ban` = 'B' WHERE `mail` LIKE '"+mail+"'",function(err5,res5){
+                if(err5)console.log(err5);
+                else {
+                  io.sockets.in(mail).emit('C_muon_choi_lai',socket.number,socket.username);
+                }
+              });
 
+          }
           });
+
 
 
     }
@@ -430,10 +438,8 @@ io.on('connection',(socket)=>
   socket.on('C_send_diem',(toado,mail,stt)=>{
     if(socket.number != null){
       if(toado!=null && mail !=null){
-// `mail` VARCHAR(20) NOT NULL,`name` VARCHAR(20) NOT NULL,`ta` INT(5) NULL , `loai_ta` CHAR(3), `ban` INT(5) NULL , `loai_ban` CHAR(3),`danhan` CHAR(3)
-      // lưu vào mình.
       // xem đã có cái row này hay chưa
-    con.query("SELECT * FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err1, a1s){
+      con.query("SELECT * FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err1, a1s){
         if(err1){console.log(err1);}
         else {
           if(a1s.length==0){
