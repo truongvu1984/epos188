@@ -405,6 +405,18 @@ io.on('connection',(socket)=>
       });
     }
   });
+  socket.on('choi_lai',(mail)=>{
+    if(socket.number != null&&mail!=null){
+
+          con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
+            if (err2)console.log(err2);
+            else socket.emit('choi_lai_ok',mail);
+
+          });
+
+
+    }
+  });
   socket.on('C_xoa_game',(nhom_mail)=>{
     if(socket.number != null&&isArray(nhom_mail)){
         nhom_mail.forEach((mail,key)=>{
@@ -493,6 +505,7 @@ io.on('connection',(socket)=>
   }
   else socket.emit('check_pass');
   });
+
   socket.on('C_nhan_toado',(mail)=>{
     if(socket.number != null && mail != null){
       con.query("UPDATE `"+socket.number+"caro` SET `danhan` = 'Y' WHERE `mail` LIKE '"+mail+"'",function(err5,res5)
