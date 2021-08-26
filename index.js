@@ -430,7 +430,7 @@ io.on('connection',(socket)=>
             con.query(sql7, [val7], function (err7, result) {
                 if ( err7){console.log(err7);}
                 else {
-                  socket.emit('C_send_diem_ok');
+                  socket.emit('C_send_diem_ok',mail,toado);
                   con.query("SELECT * FROM `"+mail+"caro` WHERE `mail` LIKE '"+socket.number+"'", function(err4, a4s){
                       if(err4)console.log(err4);
                       else {
@@ -440,9 +440,6 @@ io.on('connection',(socket)=>
                           con.query(sql6, [val6], function (err6, result) {
                               if ( err6)console.log(err6);
                               else  io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
-
-
-
                           });
                         }
                         else {
@@ -462,7 +459,7 @@ io.on('connection',(socket)=>
             con.query("UPDATE `"+socket.number+"caro` SET `ta` = "+toado+" WHERE `mail` LIKE '"+mail+"'",function(err5,res5){
               if(err5){console.log(err5);}
               else {
-                socket.emit('C_send_diem_ok');
+                socket.emit('C_send_diem_ok',mail,toado);
                 con.query("SELECT * FROM `"+mail+"caro` WHERE `mail` LIKE '"+socket.number+"'", function(err4, a4s){
                     if(err4){console.log(err4);}
                     else {
