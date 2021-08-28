@@ -431,7 +431,7 @@ io.on('connection',(socket)=>
   socket.on('choitruoc',(mail)=>{
       if(socket.number != null&&mail!=null){
           con.query("UPDATE `"+mail+"caro` SET `danhan` = 'N' AND `loai_ban` = 'C' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
-            if(err5){console.log('V4');console.log('V5'err5);}
+            if(err5){console.log('V4');console.log('V5'+err5);}
             else {
                 socket.emit('choi_lai_ok',mail);
                 io.sockets.in(mail).emit('C_nhuong_choitruoc',socket.number,socket.username);
