@@ -457,6 +457,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_diem',(toado,mail,stt)=>{
+    console.log(''+toado+" "+stt);
     if(socket.number != null){
       if(toado!=null && mail !=null&&stt!=null){
       // xem đã có cái row này hay chưa
