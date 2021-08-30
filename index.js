@@ -446,7 +446,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_diem',(toado,mail,stt)=>{
-    console.log(mail+':'+stt);
+
     if(socket.number != null){
       if(toado!=null && mail !=null&&stt!=null){
       // xem đã có cái row này hay chưa
@@ -467,13 +467,13 @@ io.on('connection',(socket)=>
                       var val7 = [[mail,toado,'A']];
                       con.query(sql7, [val7], function (err71, result) {
                         if ( err71){console.log('a51'+err71);}
-                        else {socket.emit('C_send_diem_ok',mail,toado,stt);console.log('K1');}
+                        else socket.emit('C_send_diem_ok',mail,toado,stt);
                       });
                     }
                     else {
                       con.query("UPDATE `"+socket.number+"caro` SET `ta` = "+toado+",`loai_ban`='B',utien='A' WHERE `mail` LIKE '"+mail+"'",function(err5,res5){
                           if(err5){console.log('a13'+err5);}
-                          else {socket.emit('C_send_diem_ok',mail,toado,stt);console.log('K2');}
+                          else socket.emit('C_send_diem_ok',mail,toado,stt);
                       });
                     }
 
@@ -505,7 +505,7 @@ io.on('connection',(socket)=>
               var val7 = [[mail,toado]];
               con.query(sql7, [val7], function (err7, result) {
                 if ( err7){console.log('a5'+err7);}
-                else {socket.emit('C_send_diem_ok',mail,toado,stt);console.log('K4');}
+                else socket.emit('C_send_diem_ok',mail,toado,stt);
               });
               con.query("SELECT * FROM `"+mail+"caro` WHERE `mail` LIKE '"+socket.number+"'", function(err4, a4s){
                   if(err4)console.log('a6'+err4);
@@ -530,7 +530,7 @@ io.on('connection',(socket)=>
             else {
               con.query("UPDATE `"+socket.number+"caro` SET `ta` = "+toado+",`loai_ban`='B' WHERE `mail` LIKE '"+mail+"'",function(err5,res5){
                   if(err5){console.log('a13'+err5);}
-                  else {socket.emit('C_send_diem_ok',mail,toado,stt);console.log('K5');}
+                  else socket.emit('C_send_diem_ok',mail,toado,stt);
               });
               con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='B' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
                 if(err5){console.log('a14'+err5);}
