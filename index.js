@@ -484,7 +484,7 @@ io.on('connection',(socket)=>
                         else  io.sockets.in(mail).emit('S_send_diem',socket.number,toado,'A',socket.username);
 
                     });
-                  } else socket.emit('S_yecau_choisau',mail);
+                  } else {socket.emit('S_yecau_choisau',mail,toado);console.log('A'+toado);}
                 }
                 else {
                   if(a11s[0].utien=='A'){
@@ -493,7 +493,7 @@ io.on('connection',(socket)=>
                       else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,'A',socket.username);
                     });
                   }
-                  else socket.emit('S_yecau_choisau',mail);
+                  else {socket.emit('S_yecau_choisau',mail,toado);console.log('B'+toado);
                 }
               }
             });
