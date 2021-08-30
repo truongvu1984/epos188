@@ -560,7 +560,7 @@ io.on('connection',(socket)=>
                   if(err5){console.log('a13'+err5);}
                   else socket.emit('C_send_diem_ok',mail,toado,stt);
               });
-              con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='B' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
+              con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='B',`danhan`='N' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
                 if(err5){console.log('a14'+err5);}
                 else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
               });
