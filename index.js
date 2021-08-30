@@ -467,13 +467,13 @@ io.on('connection',(socket)=>
                       var val7 = [[mail,toado,'A']];
                       con.query(sql7, [val7], function (err71, result) {
                         if ( err71){console.log('a51'+err71);}
-                        else socket.emit('C_send_diem_ok',mail,toado,stt);
+                        else {socket.emit('C_send_diem_ok',mail,toado,stt);console.log('K1');}
                       });
                     }
                     else {
                       con.query("UPDATE `"+socket.number+"caro` SET `ta` = "+toado+",`loai_ban`='B',utien='A' WHERE `mail` LIKE '"+mail+"'",function(err5,res5){
                           if(err5){console.log('a13'+err5);}
-                          else socket.emit('C_send_diem_ok',mail,toado,stt);
+                          else {socket.emit('C_send_diem_ok',mail,toado,stt);console.log('K2');}
                       });
                     }
 
