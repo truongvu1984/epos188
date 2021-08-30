@@ -446,21 +446,37 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_diem',(toado,mail,stt)=>{
+    console.log(mail+':'+stt);
     if(socket.number != null){
       if(toado!=null && mail !=null&&stt!=null){
       // xem đã có cái row này hay chưa
-      con.query("SELECT * FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err1, a1s){
+      con.query("SELECT * FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' LIMIT 1", function(err1, a1s){
         if(err1){console.log(err1);}
         else {
           if(stt=="D"){
             //nếu game bên B cũng mới luôn thì xét lớn nhỏ
             // nếu B đã có giá trị rồi thì theo B.
             //ok. xet game bên B mới trươc
-            con.query("SELECT * FROM `"+mail+"caro` WHERE `mail` LIKE '"+socket.number+"'", function(err11, a11s){
+            con.query("SELECT * FROM `"+mail+"caro` WHERE `mail` LIKE '"+socket.number+"' LIMIT 1", function(err11, a11s){
               if(err11){console.log(err11);}
               else {
                 if(a11s.length==0){
                   if(socket.number > mail){
+                    if(a1s.length==0){
+                      var sql7 = "INSERT INTO `"+socket.number+"caro` (mail, ta,utien) VALUES ?";
+                      var val7 = [[mail,toado,'A']];
+                      con.query(sql7, [val7], function (err71, result) {
+                        if ( err71){console.log('a51'+err71);}
+                        else socket.emit('C_send_diem_ok',mail,toado,stt);
+                      });
+                    }
+                    else {
+                      con.query("UPDATE `"+socket.number+"caro` SET `ta` = "+toado+",`loai_ban`='B',utien='A' WHERE `mail` LIKE '"+mail+"'",function(err5,res5){
+                          if(err5){console.log('a13'+err5);}
+                          else socket.emit('C_send_diem_ok',mail,toado,stt);
+                      });
+                    }
+
                     var sql6 = "INSERT INTO `"+mail+"caro` (mail,name, ban,loai_ban,danhan,utien ) VALUES ?";
                     var val6 = [[socket.number,socket.username,toado, 'A', 'N','B']];
                     con.query(sql6, [val6], function (err6, result) {
@@ -468,14 +484,13 @@ io.on('connection',(socket)=>
                         else  io.sockets.in(mail).emit('S_send_diem',socket.number,toado,'A',socket.username);
 
                     });
-                  }else socket.emit('S_yecau_choisau',mail);
+                  } else socket.emit('S_yecau_choisau',mail);
                 }
                 else {
                   if(a11s[0].utien=='A'){
                     con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='A',`danhan`='N',`utien`='B' WHERE `mail` LIKE '"+socket.number+"'",function(err6,res6){
                       if(err6)console.log('a8'+err6);
-                      else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
-
+                      else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,'A',socket.username);
                     });
                   }
                   else socket.emit('S_yecau_choisau',mail);
@@ -490,56 +505,38 @@ io.on('connection',(socket)=>
               var val7 = [[mail,toado]];
               con.query(sql7, [val7], function (err7, result) {
                 if ( err7){console.log('a5'+err7);}
-                else {
-                  socket.emit('C_send_diem_ok',mail,toado,stt);
-                  con.query("SELECT * FROM `"+mail+"caro` WHERE `mail` LIKE '"+socket.number+"'", function(err4, a4s){
-                      if(err4)console.log('a6'+err4);
-                      else {
-                        if(a4s.length==0){
-                          console.log('D10');
-                          var sql6 = "INSERT INTO `"+mail+"caro` (mail,name, ban,loai_ban,danhan ) VALUES ?";
-                          var val6 = [[socket.number,socket.username,toado, stt, 'N']];
-                          con.query(sql6, [val6], function (err6, result) {
-                              if ( err6)console.log('a7'+err6);
-                              else  {
-                                io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
-                                console.log('D11');
-                              }
-                          });
-                        }
-                        else {
-                          con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='"+stt+"',`danhan`='N' WHERE `mail` LIKE '"+socket.number+"'",function(err6,res6){
-                            if(err6)console.log('a8'+err6);
-                            else {io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
-                            console.log('D12');
-                            }
-                          });
-                        }
-                      }
-                    });
-
-                }
-            });
-          }
+                else socket.emit('C_send_diem_ok',mail,toado,stt);
+              });
+              con.query("SELECT * FROM `"+mail+"caro` WHERE `mail` LIKE '"+socket.number+"'", function(err4, a4s){
+                  if(err4)console.log('a6'+err4);
+                  else {
+                    if(a4s.length==0){
+                    var sql6 = "INSERT INTO `"+mail+"caro` (mail,name, ban,loai_ban,danhan ) VALUES ?";
+                      var val6 = [[socket.number,socket.username,toado, stt, 'N']];
+                      con.query(sql6, [val6], function (err6, result) {
+                          if ( err6)console.log('a7'+err6);
+                          else  io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
+                      });
+                    }
+                    else {
+                      con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='"+stt+"',`danhan`='N' WHERE `mail` LIKE '"+socket.number+"'",function(err6,res6){
+                        if(err6)console.log('a8'+err6);
+                        else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
+                      });
+                    }
+                  }
+                });
+            }
             else {
               con.query("UPDATE `"+socket.number+"caro` SET `ta` = "+toado+",`loai_ban`='B' WHERE `mail` LIKE '"+mail+"'",function(err5,res5){
                   if(err5){console.log('a13'+err5);}
-                  else {
-                    console.log('D15');
-                    socket.emit('C_send_diem_ok',mail,toado,stt);
-                    con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='B' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
-                      if(err5){console.log('a14'+err5);}
-                      else {
-                        io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
-                        console.log('D12');
-                      }
-                    });
-                  }
-                });
-
-
-
-          }
+                  else socket.emit('C_send_diem_ok',mail,toado,stt);
+              });
+              con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='B' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
+                if(err5){console.log('a14'+err5);}
+                else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
+              });
+            }
           }
         }
       });
@@ -566,7 +563,7 @@ io.on('connection',(socket)=>
                       if(err4)console.log('a6'+err4);
                       else {
                         if(a4s.length==0){
-                        
+
                           var sql6 = "INSERT INTO `"+mail+"caro` (mail,name, ban,loai_ban,danhan ) VALUES ?";
                           var val6 = [[socket.number,socket.username,toado, stt, 'N']];
                           con.query(sql6, [val6], function (err6, result) {
