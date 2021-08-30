@@ -446,7 +446,6 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_diem',(toado,mail,stt)=>{
-
     if(socket.number != null){
       if(toado!=null && mail !=null&&stt!=null){
       // xem đã có cái row này hay chưa
@@ -482,9 +481,18 @@ io.on('connection',(socket)=>
                     con.query(sql6, [val6], function (err6, result) {
                         if ( err6)console.log(err6);
                         else  io.sockets.in(mail).emit('S_send_diem',socket.number,toado,'A',socket.username);
-
                     });
-                  } else {socket.emit('S_yecau_choisau',mail,toado);console.log('A'+toado);}
+                  }
+                  else {
+                    socket.emit('S_yecau_choisau',mail,toado);
+                    var sql6 = "INSERT INTO `"+mail+"caro` (mail,name, loai_ban,danhan,utien ) VALUES ?";
+                    var val6 = [[socket.number,socket.username,'E', 'N','B']];
+                    con.query(sql6, [val6], function (err6, result) {
+                        if ( err6)console.log(err6);
+                        else  io.sockets.in(mail).emit('C_muonchoi',socket.number,socket.username);
+                    });
+                   console.log('A'+toado);
+                  }
                 }
                 else {
                   if(a11s[0].utien=='A'){
@@ -493,16 +501,25 @@ io.on('connection',(socket)=>
                       else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,'A',socket.username);
                     });
                   }
-                  else {socket.emit('S_yecau_choisau',mail,toado);console.log('B'+toado);}
+                  else {
+                    socket.emit('S_yecau_choisau',mail,toado);console.log('B'+toado);
+                    var sql6 = "INSERT INTO `"+mail+"caro` (mail,name, loai_ban,danhan,utien ) VALUES ?";
+                    var val6 = [[socket.number,socket.username,'E', 'N','A']];
+                    con.query(sql6, [val6], function (err6, result) {
+                        if ( err6)console.log(err6);
+                        else  io.sockets.in(mail).emit('C_muonchoi',socket.number,socket.username);
+
+                    });
+                  }
                 }
               }
             });
           }
           else {
           //nếu chưa có trong danh sách, tức mới
-            if(a1s.length==0){
-              var sql7 = "INSERT INTO `"+socket.number+"caro` (mail, ta) VALUES ?";
-              var val7 = [[mail,toado]];
+          if(a1s.length==0){
+              var sql7 = "INSERT INTO `"+socket.number+"caro` (mail, ta,utien) VALUES ?";
+              var val7 = [[mail,toado,'A']];
               con.query(sql7, [val7], function (err7, result) {
                 if ( err7){console.log('a5'+err7);}
                 else socket.emit('C_send_diem_ok',mail,toado,stt);
@@ -511,15 +528,15 @@ io.on('connection',(socket)=>
                   if(err4)console.log('a6'+err4);
                   else {
                     if(a4s.length==0){
-                    var sql6 = "INSERT INTO `"+mail+"caro` (mail,name, ban,loai_ban,danhan ) VALUES ?";
-                      var val6 = [[socket.number,socket.username,toado, stt, 'N']];
+                    var sql6 = "INSERT INTO `"+mail+"caro` (mail,name, ban,loai_ban,danhan,utien ) VALUES ?";
+                      var val6 = [[socket.number,socket.username,toado, stt, 'N','B']];
                       con.query(sql6, [val6], function (err6, result) {
                           if ( err6)console.log('a7'+err6);
                           else  io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
                       });
                     }
                     else {
-                      con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='"+stt+"',`danhan`='N' WHERE `mail` LIKE '"+socket.number+"'",function(err6,res6){
+                      con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='"+stt+"',`danhan`='N', `utien` = 'B' WHERE `mail` LIKE '"+socket.number+"'",function(err6,res6){
                         if(err6)console.log('a8'+err6);
                         else io.sockets.in(mail).emit('S_send_diem',socket.number,toado,stt,socket.username);
                       });
