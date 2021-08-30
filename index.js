@@ -347,6 +347,7 @@ io.on('connection',(socket)=>
               if(err2){console.log(err2);}
               else {
                 if(a2s.length>0){
+                  console.log(a2s.length);
                   a2s.forEach((a2,key)=>{
                     socket.emit('S_send_diem',a2.mail,a2.ban,a2.loai_ban,a2.name);
                   });
@@ -355,10 +356,18 @@ io.on('connection',(socket)=>
               }
             });
           }
+          else {
+            socket.number = null;
+            socket.username = null;
+          }
           }
       });
     }//end
-    else {socket.emit('login2_sai');}
+    else {
+      socket.number = null;
+      socket.username = null;
+      socket.emit('login2_sai');
+    }
 
   });
   socket.on('search_contact_caro', function (string){
@@ -491,7 +500,7 @@ io.on('connection',(socket)=>
                         if ( err6)console.log(err6);
                         else  io.sockets.in(mail).emit('C_muonchoi',socket.number,socket.username);
                     });
-                   
+
                   }
                 }
                 else {
