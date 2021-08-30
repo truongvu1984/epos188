@@ -401,15 +401,15 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('choi_lai',(mail)=>{
+  socket.on('choi_lai',(mail,luot)=>{
       if(socket.number != null&&mail!=null){
             con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
             else {
-              socket.emit('choi_lai_ok',mail);
+              socket.emit('choi_lai_ok',mail,luot);
               con.query("UPDATE `"+mail+"caro` SET `danhan` = 'N', `loai_ban` = 'B' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
                 if(err5)console.log(err5);
-                else  io.sockets.in(mail).emit('C_muon_choi_lai',socket.number,socket.username);
+                else  io.sockets.in(mail).emit('C_muon_choi_lai',socket.number,socket.username,luot);
               });
 
           }
