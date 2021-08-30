@@ -386,21 +386,21 @@ io.on('connection',(socket)=>
     });
     }
   });
-  socket.on('C_xoa_banco',(mail)=>{
-    if(socket.number != null&&mail!=null){
-      con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
-        if (err2)console.log(err2);
-        else {
-          var sql7 = "INSERT INTO `"+socket.number+"caro` (mail) VALUES ?";
-          var val7 = [[mail]];
-          con.query(sql7, [val7], function (err7, result) {
-              if ( err7){console.log(err7);}
-              else socket.emit('S_del_banco_ok');
-          });
-        }
-      });
-    }
-  });
+// socket.on('C_xoa_banco',(mail)=>{
+  //   if(socket.number != null&&mail!=null){
+  //     con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
+  //       if (err2)console.log(err2);
+  //       else {
+  //         var sql7 = "INSERT INTO `"+socket.number+"caro` (mail) VALUES ?";
+  //         var val7 = [[mail]];
+  //         con.query(sql7, [val7], function (err7, result) {
+  //             if ( err7){console.log(err7);}
+  //             else socket.emit('S_del_banco_ok');
+  //         });
+  //       }
+  //     });
+  //   }
+  // });
   socket.on('choi_lai',(mail,luot)=>{
       if(socket.number != null&&mail!=null){
             con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
@@ -416,25 +416,25 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('da_nhan_choitruoc',(mail)=>{
-      if(socket.number != null&&mail!=null){
-          con.query("UPDATE `"+mail+"caro` SET `danhan` = 'Y' AND `loai_ban` = 'A' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
-            if(err5)console.log(err5);
-
-          });
-      }
-  });
-  socket.on('choitruoc',(mail)=>{
-      if(socket.number != null&&mail!=null){
-          con.query("UPDATE `"+mail+"caro` SET `danhan` = 'N' AND `loai_ban` = 'C' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
-            if(err5){console.log('V4');console.log('V5'+err5);}
-            else {
-                socket.emit('choi_lai_ok',mail);
-                io.sockets.in(mail).emit('C_nhuong_choitruoc',socket.number,socket.username);
-             }
-          });
-      }
-  });
+  // socket.on('da_nhan_choitruoc',(mail)=>{
+  //     if(socket.number != null&&mail!=null){
+  //         con.query("UPDATE `"+mail+"caro` SET `danhan` = 'Y' AND `loai_ban` = 'A' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
+  //           if(err5)console.log(err5);
+  //
+  //         });
+  //     }
+  // });
+  // socket.on('choitruoc',(mail)=>{
+  //     if(socket.number != null&&mail!=null){
+  //         con.query("UPDATE `"+mail+"caro` SET `danhan` = 'N' AND `loai_ban` = 'C' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
+  //           if(err5){console.log('V4');console.log('V5'+err5);}
+  //           else {
+  //               socket.emit('choi_lai_ok',mail);
+  //               io.sockets.in(mail).emit('C_nhuong_choitruoc',socket.number,socket.username);
+  //            }
+  //         });
+  //     }
+  // });
   socket.on('C_xoa_game',(nhom_mail)=>{
     if(socket.number != null&&isArray(nhom_mail)){
         nhom_mail.forEach((mail,key)=>{
@@ -491,7 +491,7 @@ io.on('connection',(socket)=>
                         if ( err6)console.log(err6);
                         else  io.sockets.in(mail).emit('C_muonchoi',socket.number,socket.username);
                     });
-                   console.log('A'+toado);
+                   
                   }
                 }
                 else {
@@ -638,28 +638,28 @@ io.on('connection',(socket)=>
     }
     else socket.emit('check_pass');
   });
-  socket.on('C_reg_old_game',(mail)=>{
-    if(socket.number != null&&mail!=null){
-      io.sockets.in(mail).emit('S_reg_old_game',socket.number);
-  }
-  else socket.emit('check_pass');
-  });
-  socket.on('C_send_old_game',(mail,ten,ban,ta,luot)=>{
-    if(socket.number != null){
-        if(mail!= null &&ban!= null&&ta!= null &&ten !=null && luot != null){
-
-       io.sockets.in(mail).emit('S_send_old_game',{mail:socket.number,name:strencode(ten),toado_ban:ban,toado_ta:ta, luotchoi:luot});
-
-    }
-  }
-  else socket.emit('check_pass');
-
-  });
-  socket.on('C_nhan_old_game',(mail)=>{
-    if(socket.number != null&&mail!=null){
-      io.sockets.in(mail).emit('C_gui_old_game_ok',socket.number);
-    }
-  });
+  // socket.on('C_reg_old_game',(mail)=>{
+  //   if(socket.number != null&&mail!=null){
+  //     io.sockets.in(mail).emit('S_reg_old_game',socket.number);
+  // }
+  // else socket.emit('check_pass');
+  // });
+  // socket.on('C_send_old_game',(mail,ten,ban,ta,luot)=>{
+  //   if(socket.number != null){
+  //       if(mail!= null &&ban!= null&&ta!= null &&ten !=null && luot != null){
+  //
+  //      io.sockets.in(mail).emit('S_send_old_game',{mail:socket.number,name:strencode(ten),toado_ban:ban,toado_ta:ta, luotchoi:luot});
+  //
+  //   }
+  // }
+  // else socket.emit('check_pass');
+  //
+  // });
+  // socket.on('C_nhan_old_game',(mail)=>{
+  //   if(socket.number != null&&mail!=null){
+  //     io.sockets.in(mail).emit('C_gui_old_game_ok',socket.number);
+  //   }
+  // });
   socket.on('regis_1_windlaxy',(mail,code,id_phone)=>{
 
     if(mail&&code&&id_phone){
