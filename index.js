@@ -505,7 +505,7 @@ io.on('connection',(socket)=>
               var val7 = [[mail,toado]];
               con.query(sql7, [val7], function (err7, result) {
                 if ( err7){console.log('a5'+err7);}
-                else socket.emit('C_send_diem_ok',mail,toado,stt);
+                else {socket.emit('C_send_diem_ok',mail,toado,stt);console.log('K4');}
               });
               con.query("SELECT * FROM `"+mail+"caro` WHERE `mail` LIKE '"+socket.number+"'", function(err4, a4s){
                   if(err4)console.log('a6'+err4);
@@ -530,7 +530,7 @@ io.on('connection',(socket)=>
             else {
               con.query("UPDATE `"+socket.number+"caro` SET `ta` = "+toado+",`loai_ban`='B' WHERE `mail` LIKE '"+mail+"'",function(err5,res5){
                   if(err5){console.log('a13'+err5);}
-                  else socket.emit('C_send_diem_ok',mail,toado,stt);
+                  else {socket.emit('C_send_diem_ok',mail,toado,stt);console.log('K5');}
               });
               con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='B' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
                 if(err5){console.log('a14'+err5);}
@@ -558,7 +558,7 @@ io.on('connection',(socket)=>
               con.query(sql7, [val7], function (err7, result) {
                 if ( err7){console.log('a5'+err7);}
                 else {
-                  socket.emit('C_send_diem_ok',mail,toado,stt);
+                  socket.emit('C_send_diem_ok',mail,toado,stt);console.log('K6');
                   con.query("SELECT * FROM `"+mail+"caro` WHERE `mail` LIKE '"+socket.number+"'", function(err4, a4s){
                       if(err4)console.log('a6'+err4);
                       else {
@@ -593,7 +593,7 @@ io.on('connection',(socket)=>
                   if(err5){console.log('a13'+err5);}
                   else {
 
-                    socket.emit('C_send_diem_ok',mail,toado,stt);
+                    socket.emit('C_send_diem_ok',mail,toado,stt);console.log('K7');
                     con.query("UPDATE `"+mail+"caro` SET `ban` = "+toado+",`loai_ban`='B' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
                       if(err5){console.log('a14'+err5);}
                       else {
