@@ -52,7 +52,7 @@ con.connect(function(err) {
 
 io.on('connection',(socket)=>
 {
-
+  console.log(socket.id);
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
 
@@ -331,11 +331,13 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login2_caro',(data)=>{
+    console.log('Co nhan login 2');
     if(data.rightuser&&data.right_pass){
       con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
         if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
           if (passwordHash.verify(data.right_pass, rows[0].pass)){
+            console.log('Dung roi');
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
