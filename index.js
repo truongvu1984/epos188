@@ -333,6 +333,9 @@ io.on('connection',(socket)=>
       });
     }
   });
+  socket.on('disconnect', function(socket) {
+      console.log('dis:'+socket.id);
+    });
   socket.on('login2_caro',(data)=>{
     console.log('Co nhan login 2');
     if(data.rightuser&&data.right_pass){
@@ -362,8 +365,8 @@ io.on('connection',(socket)=>
             });
           }
           else {
-            socket.number = null;
-            socket.username = null;
+            socket.number = undefined;
+            socket.username = undefined;
           }
           }
       });
