@@ -54,7 +54,7 @@ io.on('connection',(socket)=>
 {
   console.log(socket.id);
   socket.emit('check_pass');
-  socket.emit('haha',(abc)=>{
+  socket.on('haha',(abc)=>{
     console.log(abc);
   });
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
@@ -283,6 +283,7 @@ io.on('connection',(socket)=>
               });
             }
           });
+
   socket.on('C_check_phonenumber_A',(phone,code,id_phone)=>{
             if(phone&&code&&id_phone){
 
@@ -548,9 +549,9 @@ io.on('connection',(socket)=>
   socket.on('C_nhan_toado',(mail)=>{
     console.log('A1'+mail);
     if(socket.number != null && mail != null){
-      con.query("UPDATE `"+socket.number+"caro` SET `danhan` = 'Y' WHERE `mail` LIKE '"+mail+"'",function(err5,res5)
-          {if(err5){console.log(err5);}
-          else console.log('OK');
+      con.query("UPDATE `"+socket.number+"caro` SET `danhan` = 'Y' WHERE `mail` LIKE '"+mail+"'",function(err5,res5){
+        if(err5)console.log(err5);
+
       });
     }
     else socket.emit('check_pass');
