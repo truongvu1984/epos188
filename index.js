@@ -54,9 +54,6 @@ io.on('connection',(socket)=>
 {
   console.log(socket.id);
   socket.emit('check_pass');
-  socket.on('haha',(abc)=>{
-    console.log(abc);
-  });
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
 
             if(mail&&code&&id_phone){
@@ -283,7 +280,6 @@ io.on('connection',(socket)=>
               });
             }
           });
-
   socket.on('C_check_phonenumber_A',(phone,code,id_phone)=>{
             if(phone&&code&&id_phone){
 
@@ -334,17 +330,14 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('disconnect', function(socket) {
-      console.log('dis:'+socket.id);
-    });
   socket.on('login2_caro',(data)=>{
-    console.log('Co nhan login 2');
+
     if(data.rightuser&&data.right_pass){
       con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
         if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
           if (passwordHash.verify(data.right_pass, rows[0].pass)){
-            console.log('Dung roi');
+
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
@@ -356,7 +349,6 @@ io.on('connection',(socket)=>
               if(err2){console.log(err2);}
               else {
                 if(a2s.length>0){
-                  console.log(a2s.length);
                   a2s.forEach((a2,key)=>{
                     socket.emit('S_send_diem',a2.mail,a2.ban,a2.loai_ban,a2.name);
                   });
@@ -366,8 +358,8 @@ io.on('connection',(socket)=>
             });
           }
           else {
-            socket.number = undefined;
-            socket.username = undefined;
+            socket.number = null;
+            socket.username = null;
           }
           }
       });
@@ -380,9 +372,7 @@ io.on('connection',(socket)=>
 
   });
   socket.on('search_contact_caro', function (string){
-
     if (socket.number&&string!=null){
-
       con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account2` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
       if ( err)console.log(err);
       else
@@ -430,7 +420,6 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_diem',(toado,mail,stt)=>{
-
     if(socket.number != null){
       if(toado!=null && mail !=null&&stt!=null){
       // xem đã có cái row này hay chưa
@@ -487,7 +476,7 @@ io.on('connection',(socket)=>
                     });
                   }
                   else {
-                    socket.emit('S_yecau_choisau',mail,toado);console.log('B'+toado);
+                    socket.emit('S_yecau_choisau',mail,toado);
                     var sql6 = "INSERT INTO `"+mail+"caro` (mail,name, loai_ban,danhan,utien ) VALUES ?";
                     var val6 = [[socket.number,socket.username,'E', 'N','A']];
                     con.query(sql6, [val6], function (err6, result) {
@@ -547,7 +536,7 @@ io.on('connection',(socket)=>
     else socket.emit('check_pass');
   });
   socket.on('C_nhan_toado',(mail)=>{
-    console.log('A1'+mail);
+
     if(socket.number != null && mail != null){
       con.query("UPDATE `"+socket.number+"caro` SET `danhan` = 'Y' WHERE `mail` LIKE '"+mail+"'",function(err5,res5){
         if(err5)console.log(err5);
@@ -561,7 +550,6 @@ io.on('connection',(socket)=>
       con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", function(err3, row1s){
         if(err3)socket.emit('regis_1_thatbai','A');
         else {
-
           if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
           else {
             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
@@ -884,7 +872,6 @@ io.on('connection',(socket)=>
        socket.emit('login2_sai');
      }
 	});
-
   function check_data1(data){
     let abc;
     if(data==null||isNaN(data))abc=false;
