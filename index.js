@@ -423,6 +423,7 @@ io.on('connection',(socket)=>
     if(socket.number != null){
       if(toado!=null && mail !=null&&stt!=null){
       // xem đã có cái row này hay chưa
+      console.log(stt);
       con.query("SELECT * FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' LIMIT 1", function(err1, a1s){
         if(err1){console.log(err1);}
         else {
@@ -434,6 +435,7 @@ io.on('connection',(socket)=>
               if(err11){console.log(err11);}
               else {
                 if(a11s.length==0){
+                  console.log('Không có gì');
                   if(socket.number > mail){
                     if(a1s.length==0){
                       var sql7 = "INSERT INTO `"+socket.number+"caro` (mail, ta,utien) VALUES ?";
