@@ -52,7 +52,6 @@ con.connect(function(err) {
 
 io.on('connection',(socket)=>
 {
-
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
 
@@ -371,6 +370,70 @@ io.on('connection',(socket)=>
     }
 
   });
+  socket.on('ketban_Caro',(mail,name)=>{
+    if(socket.number&&mail&&name){
+      con.query("SELECT * FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' LIMIT 1", function(err, as){
+        if(err)console.log(err);
+        else {
+          if(as.length==0){
+            con.query("SELECT * FROM `"+mail+"caro` WHERE `mail` LIKE '"+socket.number+"' LIMIT 1", function(err1, a1s){
+              if(err1){console.log(err1);}
+              else {
+                if(a1s.length>0){
+                  if(a1s[0].utien=='A'){
+                    var sql2 = "INSERT INTO `"+socket.number+"caro` (mail,name, utien ) VALUES ?";
+                    var val2 = [[mail,name,'B']];
+                    con.query(sql2, [val2], function (err2, result2) {
+                      if ( err2)console.log(err2);
+                      else {
+                        socket.emit('ketban_ok',mail,name,'B');
+                      }
+                    });
+                  }
+                  else {
+                    var sql2 = "INSERT INTO `"+socket.number+"caro` (mail,name, utien ) VALUES ?";
+                    var val2 = [[mail,name,'A']];
+                    con.query(sql2, [val2], function (err2, result2) {
+                      if ( err2)console.log(err2);
+                      else {
+                        socket.emit('ketban_ok',mail,name,'A');
+                      }
+                    });
+                  }
+                }
+                else {
+                  if(socket.number > mail){
+                    var sql2 = "INSERT INTO `"+socket.number+"caro` (mail,name, utien ) VALUES ?";
+                    var val2 = [[mail,name,'A']];
+                    con.query(sql2, [val2], function (err2, result2) {
+                      if ( err2)console.log(err2);
+                      else {
+                        socket.emit('ketban_ok',mail,name,'A');
+                      }
+                    });
+                  }
+                  else {
+                    var sql2 = "INSERT INTO `"+socket.number+"caro` (mail,name, utien ) VALUES ?";
+                    var val2 = [[mail,name,'B']];
+                    con.query(sql2, [val2], function (err2, result2) {
+                      if ( err2)console.log(err2);
+                      else {
+                        socket.emit('ketban_ok',mail,name,'B');
+                      }
+                    });
+                  }
+                }
+              }
+            });
+          }
+          else {
+            if(as[0].utien=='A')socket.emit('ketban_ok',mail,name,'A');
+            else socket.emit('ketban_ok',mail,name,name,'B');
+          }
+        }
+      });
+    }
+  });
   socket.on('search_contact_caro', function (string){
     if (socket.number&&string!=null){
       con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account2` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
@@ -423,7 +486,6 @@ io.on('connection',(socket)=>
     if(socket.number != null){
       if(toado!=null && mail !=null&&stt!=null){
       // xem đã có cái row này hay chưa
-      console.log(stt);
       con.query("SELECT * FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' LIMIT 1", function(err1, a1s){
         if(err1){console.log(err1);}
         else {
@@ -435,7 +497,6 @@ io.on('connection',(socket)=>
               if(err11){console.log(err11);}
               else {
                 if(a11s.length==0){
-                  console.log('Không có gì');
                   if(socket.number > mail){
                     if(a1s.length==0){
                       var sql7 = "INSERT INTO `"+socket.number+"caro` (mail, ta,utien) VALUES ?";
