@@ -51,28 +51,7 @@ con.connect(function(err) {
  kiemtra_taikhoan();
 
 
- con.query("CREATE TABLE IF NOT EXISTS  `+84977825584mes_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60), `subject` VARCHAR(20),`send_receive` VARCHAR(5),`stt` VARCHAR(5), `read_1` CHAR(3), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
- con.query("CREATE TABLE IF NOT EXISTS `+84977825584mes_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idp` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
- con.query("CREATE TABLE IF NOT EXISTS `+84977825584mes_sender` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` INT NOT NULL,`number` VARCHAR(20) ,`name` VARCHAR(45),`send_receive` VARCHAR(5), `stt` VARCHAR(5),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
- con.query("CREATE TABLE IF NOT EXISTS `+84977825584contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`idc` CHAR(15) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
- con.query("CREATE TABLE IF NOT EXISTS `+84977825584alarm` (`id` BIGINT NOT NULL AUTO_INCREMENT,`maso` CHAR(20) NOT NULL,`name` VARCHAR(45)  NULL,`type` CHAR(3) NOT NULL,`time` DATETIME(6) NOT NULL,`culy` INT NOT NULL,`lat` DOUBLE,`lon` DOUBLE,`ring` CHAR(3),`time1` CHAR(16),`uri` VARCHAR(45),`kieu` CHAR(1),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
- con.query("CREATE TABLE IF NOT EXISTS `+84977825584line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`name` VARCHAR(45),`culy` BIGINT ,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
- con.query("CREATE TABLE IF NOT EXISTS `+84977825584line_full` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`stt` INT,`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
- var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
- var matkhau = passwordHash.generate('12345678');
- var values = [['+84977825584','Truong Vu', matkhau]];
- con.query(sql, [values], function (err1, result) {
-   if (err1)socket.emit('regis2_thatbai','A');
-
- });
-
-
-
-
-
-
-
-
+ 
 io.on('connection',(socket)=>
 {
   socket.emit('check_pass');
