@@ -50,38 +50,7 @@ con.connect(function(err) {
 }
  kiemtra_taikhoan();
 
- con.query("CREATE TABLE IF NOT EXISTS  `+84968232836caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`ta` INT(5) , `ban` INT(5) , `loai_ban` CHAR(3),`danhan` CHAR(3),`utien` CHAR(3), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
- var sql = "INSERT INTO `account2` (number,user, pass) VALUES ?";
-   var matkhau = passwordHash.generate('12345678');
-   var values = [['+84968232836','Ngọc Anh', matkhau]];
-   con.query(sql, [values], function (err1, result) {
-     if (err1)console.log('That bai');
-
-   });
-   con.query("CREATE TABLE IF NOT EXISTS  `+84981642662caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`ta` INT(5) , `ban` INT(5) , `loai_ban` CHAR(3),`danhan` CHAR(3),`utien` CHAR(3), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-   var sql = "INSERT INTO `account2` (number,user, pass) VALUES ?";
-     var matkhau = passwordHash.generate('12345678');
-     var values = [['+84981642662','Cẩm Tú', matkhau]];
-     con.query(sql, [values], function (err1, result) {
-       if (err1)console.log('That bai');
-     });
-
-     con.query("CREATE TABLE IF NOT EXISTS  `+84977825584caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`ta` INT(5) , `ban` INT(5) , `loai_ban` CHAR(3),`danhan` CHAR(3),`utien` CHAR(3), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-     var sql = "INSERT INTO `account2` (number,user, pass) VALUES ?";
-       var matkhau = passwordHash.generate('12345678');
-       var values = [['+84977825584','Vũ Trương', matkhau]];
-       con.query(sql, [values], function (err1, result) {
-         if (err1)console.log('That bai');
-       });
-
-
-
-
-
-
-
-
-
+ 
 io.on('connection',(socket)=>
 {
   socket.emit('check_pass');
