@@ -53,7 +53,7 @@ con.connect(function(err) {
 
 io.on('connection',(socket)=>
 {
-
+console.log('connet:'+socket.id);
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
 
@@ -844,6 +844,7 @@ io.on('connection',(socket)=>
   }
   // lắng nghe sự kiện đăng ký tài khoản mới
   socket.on('login1',(user1, pass1)=>{
+    console.log('Login 3:'+user1);
       if(user1&&pass1){
 console.log('Login 1:'+user1);
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
