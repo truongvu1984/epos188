@@ -53,6 +53,7 @@ con.connect(function(err) {
 
 io.on('connection',(socket)=>
 {
+
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
 
@@ -844,13 +845,13 @@ io.on('connection',(socket)=>
   // lắng nghe sự kiện đăng ký tài khoản mới
   socket.on('login1',(user1, pass1)=>{
       if(user1&&pass1){
-
+console.log('Login 1:'+user1);
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
   			 else{
           if (passwordHash.verify(pass1, rows[0].pass)){
               socket.emit('login1_dung', {name:rows[0].user});
-
+              console.log('Login 2:'+rows[0].user);
           }
           else {
             socket.emit('login1_sai', {name:rows[0].user});
@@ -1572,11 +1573,13 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_reques_point',(idc)=>{
+    console.log(idc);
     if(socket.number&&idc){
       if(socket.roomabc){
           socket.leave(socket.roomabc);
           socket.roomabc = undefined;
         }
+        console.log('Da vao trong');
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
          {
            if ( err || ( a1s.length == 0) ){console.log(err);}
