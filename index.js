@@ -1473,7 +1473,7 @@ io.on('connection',(socket)=>
     }
   });//hi
   socket.on('C_reques_point_inbox',(idc)=>{
-console.log('inbox:'_idc);
+console.log('inbox:'+idc);
     if(socket.number&&idc){
       if(socket.roomabc){
         socket.leave(socket.roomabc);
