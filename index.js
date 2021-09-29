@@ -1481,12 +1481,19 @@ console.log('inbox:'+idc);
       }
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
          {
-           if ( err || ( a1s.length == 0) ){console.log(err);}
+           if ( err || ( a1s.length == 0) ){
+             console.log(err);
+             console.log('So luong:'+a1s.length);
+
+           }
            else
              {
                if(a1s[0].read_1 ==="N"){
                  con.query("UPDATE `"+socket.number+"mes_main` SET `read_1` = 'Y' WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1",function(error){
                    if(error){console.log(error);}
+                   else {
+                     console.log('Update OK:');
+                   }
                  });
                }
                   let line_full=[];
