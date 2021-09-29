@@ -34,20 +34,20 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
-
+function kiemtra_taikhoan(){
+  setTimeout(function() {
+  //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
+  // var date2 = Math.floor(Date.now() / 1000) - 600;
+  var date3=Math.floor(Date.now() / 1000) - 300;
+  con.query(" DELETE FROM `active` WHERE `time` < "+date3, function(err){if(err)console.log('co loi HA HA HA:'+err);});
+  kiemtra_taikhoan();
+}, 5000);
+}
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
 
-  function kiemtra_taikhoan(){
-    setTimeout(function() {
-    //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
-    // var date2 = Math.floor(Date.now() / 1000) - 600;
-    var date3=Math.floor(Date.now() / 1000) - 300;
-    con.query(" DELETE FROM `active` WHERE `time` < "+date3, function(err){if(err)console.log('co loi HA HA HA:'+err);});
-    kiemtra_taikhoan();
-  }, 5000);
-}
+
  kiemtra_taikhoan();
 
 
@@ -1473,7 +1473,7 @@ io.on('connection',(socket)=>
     }
   });//hi
   socket.on('C_reques_point_inbox',(idc)=>{
-
+console.log('inbox:'_idc);
     if(socket.number&&idc){
       if(socket.roomabc){
         socket.leave(socket.roomabc);
@@ -1491,6 +1491,7 @@ io.on('connection',(socket)=>
                }
                   let line_full=[];
                   let position=[];
+                  console.log('vao trong:');
                //tìm ds các điểm riêng lẻ
                con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
                   if(err3){console.log(err3);}
