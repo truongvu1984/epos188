@@ -34,6 +34,9 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
+
+let tt=0;
+
 function kiemtra_taikhoan(){
   setTimeout(function() {
   //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
@@ -863,7 +866,6 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login2',(data)=>{
-
     if(data.rightuser&&data.right_pass){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -885,6 +887,8 @@ io.on('connection',(socket)=>
 
               }
             }
+            tt++;
+            console.log('Reg:'+tt);
             socket.emit('S_reg_new');
 
           }//end
