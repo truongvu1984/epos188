@@ -54,6 +54,7 @@ con.connect(function(err) {
 io.on('connection',(socket)=>
 {
 console.log(socket.id);
+
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
 
@@ -1495,7 +1496,7 @@ console.log(socket.id);
                      con.query("UPDATE `"+number+"mes_main` SET `read_1` = 'Y' WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1",function(error){
                        if(error){console.log(error);}
                        else {
-                         console.log('Update OK:');
+                         console.log('Update OK 22222:');
                        }
                      });
                    }
