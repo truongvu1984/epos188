@@ -1187,14 +1187,16 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_reg_friend',(ids,num)=>{
+    console.log('haha:'+ids+":"+num);
     if(socket.number&&ids!=null&&num!=null&&(!isNaN(num))){
-        if(num==0){
-
+      if(num==0){
+        console.log('Vao roi:');
         con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `id` ASC LIMIT 50", function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact 3:'+err1);}
             else if(a1s.length > 0)
               {
+                console.log('Vao roi:'+a1s.length);
                   let noidung=[];
                   a1s.forEach(function(a1,key){
                     noidung.push({ids:a1.id,name:a1.name, number:a1.number,idc:a1.idc,abc:'A'});
