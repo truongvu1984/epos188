@@ -1475,8 +1475,7 @@ console.log(socket.id);
       });
     }
   });//hi
-  socket.on('C_reques_point_inbox_unknow',(idc,number,pass)=>{
-    console.log('inbox_A:'+idc);
+  socket.on('C_reques_point_unknow',(idc,number,pass)=>{
 
     con.query("SELECT * FROM `account` WHERE `number` LIKE '"+number+"' LIMIT 1", function(err, rows){
       if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -1484,25 +1483,18 @@ console.log(socket.id);
         if (passwordHash.verify(pass, rows[0].pass)){
           con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
              {
-               if ( err || ( a1s.length == 0) ){
-                 console.log(err);
-                 console.log('So luong 2:'+a1s.length);
-
-               }
-               else
-
+               if ( err )  console.log(err);
+               else if( a1s.length >0 )
                  {
                    if(a1s[0].read_1 ==="N"){
                      con.query("UPDATE `"+number+"mes_main` SET `read_1` = 'Y' WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1",function(error){
                        if(error){console.log(error);}
-                       else {
-                         console.log('Update OK 22222:');
-                       }
+
                      });
                    }
                       let line_full=[];
                       let position=[];
-                      console.log('vao trong 2:');
+
                    //tìm ds các điểm riêng lẻ
                    con.query("SELECT * FROM `"+number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
                       if(err3){console.log(err3);}
@@ -1606,7 +1598,6 @@ console.log(socket.id);
 
 
   socket.on('C_reques_point_inbox',(idc)=>{
-console.log('inbox:'+idc);
     if(socket.number&&idc){
       if(socket.roomabc){
         socket.leave(socket.roomabc);
@@ -1614,25 +1605,20 @@ console.log('inbox:'+idc);
       }
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
          {
-           if ( err || ( a1s.length == 0) ){
-             console.log(err);
-             console.log('So luong:'+a1s.length);
+           if (err)  console.log(err);
 
-           }
-           else
+           else if(a1s.length > 0)
 
              {
                if(a1s[0].read_1 ==="N"){
                  con.query("UPDATE `"+socket.number+"mes_main` SET `read_1` = 'Y' WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1",function(error){
                    if(error){console.log(error);}
-                   else {
-                     console.log('Update OK:');
-                   }
+
                  });
                }
                   let line_full=[];
                   let position=[];
-                  console.log('vao trong:');
+
                //tìm ds các điểm riêng lẻ
                con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
                   if(err3){console.log(err3);}
@@ -1710,26 +1696,24 @@ console.log('inbox:'+idc);
                         }
                 });
 
-
              }
       });
     }
-    else {
-      console.log('Chua dang ky user');
-    }
+    else socket.emit('check_pass');
+
   });
   socket.on('C_reques_point',(idc)=>{
-    console.log(idc);
+
     if(socket.number&&idc){
       if(socket.roomabc){
           socket.leave(socket.roomabc);
           socket.roomabc = undefined;
         }
-        console.log('Da vao trong');
+
       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
          {
-           if ( err || ( a1s.length == 0) ){console.log(err);}
-           else
+           if ( err ){console.log(err);}
+           else if(a1s.length >0)
              {
                con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
                         if(err3){console.log(err3);}
@@ -1814,6 +1798,8 @@ console.log('inbox:'+idc);
         });
 
   }
+  else socket.emit('check_pass');
+
   });
   socket.on('C_reques_point_import',(list)=>{
     if(socket.number&&isArray(list)){
@@ -1822,8 +1808,8 @@ console.log('inbox:'+idc);
           if(list1.id){
             con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+list1.id+"' LIMIT 1", function(err, a1s)
            {
-             if ( err || ( a1s.length == 0) ){console.log('ha ha ha:'+err);}
-             else
+             if ( err ){console.log(err);}
+             else if(a1s.length >0)
                {
                  con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
                           if(err3 || (a3s.length==0)){console.log('ko co:'+err3);}
@@ -2243,8 +2229,8 @@ console.log('inbox:'+idc);
         // gửi danh sách thành viên cho app
     con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'O' AND `idc` LIKE '"+room+"' LIMIT 1", function(err, a1s)
        {
-         if ( err || ( a1s.length == 0) ){console.log(err);}
-         else
+         if ( err)console.log(err);
+         else if(a1s.length > 0)
            {
              con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err2, a2s)
                 {
