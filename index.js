@@ -557,7 +557,7 @@ io.on('connection',(socket)=>
       });
     }
   }
-    else socket.emit('check_pass');
+
   });
   socket.on('C_nhan_toado',(mail)=>{
 
@@ -567,7 +567,7 @@ io.on('connection',(socket)=>
 
       });
     }
-    else socket.emit('check_pass');
+
   });
   socket.on('regis_1_windlaxy',(mail,code,id_phone)=>{
     if(mail&&code&&id_phone){
@@ -984,7 +984,7 @@ io.on('connection',(socket)=>
         });
       }
     }
-    else socket.emit('check_pass');
+
   });
   socket.on('C_reg_inbox',(id,num)=>{
     if(socket.number&&id != null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
@@ -1140,7 +1140,7 @@ io.on('connection',(socket)=>
        });
     }
     }
-    else socket.emit('check_pass');
+
 
   });
   socket.on('C_reg_save',(id,num)=>{
@@ -1186,9 +1186,7 @@ io.on('connection',(socket)=>
         });
     }
     }
-    else {
-      socket.emit('check_pass');
-    }
+
   });
   socket.on('C_reg_friend',(ids,num)=>{
     console.log('haha:'+ids+":"+num);
@@ -1228,9 +1226,7 @@ io.on('connection',(socket)=>
         });
       }
     }
-    else {
-      socket.emit('check_pass');
-    }
+
   });
   socket.on('C_reg_alarm',(id,num)=>{
     if(socket.number&&id != null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
@@ -1704,7 +1700,7 @@ io.on('connection',(socket)=>
              }
       });
     }
-    else socket.emit('check_pass');
+
 
   });
   socket.on('C_reques_point',(idc)=>{
@@ -1803,7 +1799,7 @@ io.on('connection',(socket)=>
         });
 
   }
-  else socket.emit('check_pass');
+
 
   });
   socket.on('C_reques_point_import',(list)=>{
