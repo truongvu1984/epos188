@@ -1481,7 +1481,7 @@ console.log(socket.id);
       if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
       else{
         if (passwordHash.verify(pass, rows[0].pass)){
-          con.query("SELECT * FROM `"+number+"mes_main` WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
+          con.query("SELECT * FROM `"+number+"mes_main` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, a1s)
              {
                if ( err )  console.log(err);
                else if( a1s.length >0 )
