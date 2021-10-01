@@ -905,7 +905,7 @@ io.on('connection',(socket)=>
 	});
   function check_data1(data){
     let abc;
-    if(data==null||(!isNumeric(data)))abc=false;
+    if(data==null||isNaN(data))abc=false;
     else abc=true;
     return abc;
   }
@@ -921,7 +921,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_reg_online',(id,num)=>{
-    if(socket.number&&id!=null&&num!= null&&(isNumeric(id))&&(isNumeric(num))){
+    if(socket.number&&id!=null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
 
       if(num==0){
         if(id==0){
@@ -990,11 +990,10 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_reg_inbox',(id,num)=>{
-    if(socket.number&&id != null&&num!= null&&(isNumeric(id))&&(isNumeric(num))){
+    if(socket.number&&id != null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
       if(num==0){
-        if(id==0){
-       con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+num+" ORDER BY `id` DESC LIMIT 20", function(err1, a1s)
-       {
+         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' ORDER BY `id` DESC LIMIT 50", function(err1, a1s){
+
         if (err1){console.log(err1);}
         else if(a1s.length >0)
           {
@@ -1011,30 +1010,10 @@ io.on('connection',(socket)=>
             });
           }
         });
-      }
-        else {
-        con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+id+" ORDER BY `id` ASC", function(err1, a1s)
-        {
-         if (err1){console.log(err1);}
-         else if(a1s.length >0)
-           {
-             let noidung=[];
-             a1s.forEach((a1,key)=>{
-               con.query("SELECT `id`,`name`, `number` FROM `"+socket.number+"mes_sender` WHERE `ids` LIKE '"+a1.id+"' LIMIT 1", function(err2, a2s){
-                  if(err2){console.log(err2);}
-                  else {
-                    if(a2s.length>0) noidung.push({ids:a1.id,name_nguoigui:a2s[0].name,number_nguoigui:a2s[0].number, subject:a1.subject, id_tinnha_client:a1.idc,read_1:a1.read_1, stt: a1.stt,time:get_time(a1.time),abc:'B'});
-                     if(key===(a1s.length-1))socket.emit('S_send_tinnhan',noidung);
 
-                  }
-                });
-             });
-           }
-         });
-      }
       }
       else {
-        con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'R' AND `id` < "+id+" ORDER BY `id` DESC LIMIT "+num, function(err1, a1s){
+        con.query("SELECT * FROM `"+socket.number+"mes_main`  WHERE `send_receive` LIKE 'R' AND `id` > "+id+" ORDER BY `id` ASC ", function(err1, a1s){
           if (err1){console.log(err1);}
           else if(a1s.length >0)
             {
@@ -1055,11 +1034,10 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_reg_send',(id,num)=>{
-    if(socket.number&&id!=null&&num!= null&&(isNumeric(id))&&(isNumeric(num))){
+    if(socket.number&&id!=null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
       if(num==0){
-        if(id==0){
-       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `id` > "+num+" ORDER BY `id` DESC LIMIT 20", function(err1, a1s)
-        {
+       con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S'  ORDER BY `id` DESC LIMIT 50", function(err1, a1s)
+          {
              if (err1){console.log(err1);}
              else if(a1s.length >0)
                {
@@ -1084,38 +1062,11 @@ io.on('connection',(socket)=>
                  });
                }
         });
-      }
-        else {
-        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `id` > "+id+" ORDER BY `id` ASC", function(err1, a1s)
-         {
-              if (err1){console.log(err1);}
-              else if(a1s.length >0)
-                {
-                  let noidung=[];
-                  a1s.forEach(function(a1,key){
-                    let nhomnguoinhan =[];
-                     con.query("SELECT * FROM `"+socket.number+"mes_sender` WHERE `send_receive` LIKE 'S' AND `ids` = "+a1.id, function(err2, a2s){
-                       if(err2){console.log(err2);}
-                       else {
-                         if(a2s.length >0){
-                         a2s.forEach(function(a2,key2){
-                           nhomnguoinhan.push({number:a2.number,name:a2.name,stt:a2.stt});
-                           if(key2 === (a2s.length-1)){
-                             noidung.push({ids:a1.id,subject:a1.subject, idc:a1.idc,time:get_time(a1.time), nguoinhan:nhomnguoinhan,abc:'B'});
-                             if(key === (a1s.length-1))socket.emit('S_send_send',noidung);
-                           }
-                         });
-                       }
-                     }
 
-                     });
-                  });
-                }
-       });
-      }
+
     }
     else {
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `id` < "+id+" ORDER BY `id` DESC LIMIT "+num, function(err1, a1s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `id` > "+id+" ORDER BY `id` ASC", function(err1, a1s)
        {
             if (err1){console.log(err1);}
             else if(a1s.length >0)
@@ -1147,10 +1098,9 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_reg_save',(id,num)=>{
-    if(socket.number&&id!=null&&num!= null&&(isNumeric(id))&&(isNumeric(num))){
+    if(socket.number&&id!=null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
       if(num==0){
-        if(id==0){
-        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' ORDER BY `id` DESC LIMIT 20", function(err1, a1s){
+        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' ORDER BY `id` DESC LIMIT 50", function(err1, a1s){
           if (err1){console.log(err1);}
           else if(a1s.length >0){
             let noidung=[];
@@ -1160,23 +1110,11 @@ io.on('connection',(socket)=>
                 });
               }
           });
-      }
-        else {
-        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' AND `id` > "+id+" ORDER BY `id` ASC", function(err1, a1s)
-          {
-              if (err1){console.log(err1);}
-              else if(a1s.length >0){
-                let noidung=[];
-                    a1s.forEach(function(a1,key){
-                      noidung.push({ids:a1.id,subject:a1.subject, idc:a1.idc,time:get_time(a1.time),abc:'B'});
-                      if(key===(a1s.length-1))socket.emit('S_send_save',noidung);
-                    });
-              }
-          });
-      }
+
+
     }
     else {
-      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' AND `id` < "+id+" ORDER BY `id` DESC LIMIT "+num, function(err1, a1s)
+      con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' AND `id` > "+id+" ORDER BY `id` ASC", function(err1, a1s)
         {
             if (err1){console.log(err1);}
             else if(a1s.length >0){
@@ -1192,20 +1130,17 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_reg_friend',(ids,num)=>{
-
-    if(socket.number&&ids!=null&&num!=null&&(isNumeric(ids))&&(isNumeric(num))){
+    if(socket.number&&ids!=null&&num!=null&&&&(!isNaN(ids))&&(!isNaN(num))){
       if(num==0){
-        con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `id` ASC LIMIT 50", function(err1, a1s)
+        con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `id` DESC LIMIT 50", function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact 3:'+err1);}
             else if(a1s.length > 0)
               {
-
                   let noidung=[];
                   a1s.forEach(function(a1,key){
                     noidung.push({ids:a1.id,name:a1.name, number:a1.number,idc:a1.idc,abc:'A'});
                       if(key===(a1s.length-1))    socket.emit('S_send_contact',noidung);
-
 
                 });
               }
@@ -1213,14 +1148,14 @@ io.on('connection',(socket)=>
 
       }
       else {
-        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+ids+" ORDER BY `id` ASC LIMIT 50", function(err1, a1s)
+        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+ids+" ORDER BY `id` ASC", function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact1:'+err1);}
             else if(a1s.length > 0)
               {
                 let noidung=[];
                 a1s.forEach(function(a1,key){
-                      noidung.push({ids:a1.id,name:a1.name, number:a1.number,idc:a1.idc,abc:'A'});
+                      noidung.push({ids:a1.id,name:a1.name, number:a1.number,idc:a1.idc,abc:'B'});
                     if(key===(a1s.length-1))socket.emit('S_send_contact',noidung);
                 });
 
@@ -1231,10 +1166,9 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_reg_alarm',(id,num)=>{
-    if(socket.number&&id != null&&num!= null&&(isNumeric(id))&&(isNumeric(num))){
+    if(socket.number&&id != null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
       if(num==0){
-        if(id==0){
-          con.query("SELECT * FROM `"+socket.number+"alarm` ORDER BY `id` DESC LIMIT 20", function(err1, a1s){
+          con.query("SELECT * FROM `"+socket.number+"alarm` ORDER BY `id` DESC LIMIT 50", function(err1, a1s){
               if (err1){console.log('Da co loi room full:'+err1);}
               else if(a1s.length>0)
                 {
@@ -1245,23 +1179,11 @@ io.on('connection',(socket)=>
                   });
               }
           });
-      }
-        else {
-          con.query("SELECT * FROM `"+socket.number+"alarm`  WHERE `id` > "+id+" ORDER BY `id` ASC", function(err1, a1s){
-              if (err1){console.log('Da co loi room full:'+err1);}
-              else if(a1s.length>0)
-                {
-                  let noidung=[];
-                   a1s.forEach(function(a1,key){
-                     noidung.push({ids:a1.id,name:a1.name,ma:a1.maso,type:a1.type,lat:a1.lat,lon:a1.lon,culy:a1.culy,uri:a1.uri,time:get_time(a1.time),time1:a1.time1,abc:'B',kieu:a1.kieu});
-                     if(key===(a1s.length-1))socket.emit('S_send_alarm',noidung);
-                  });
-              }
-          });
-      }
+
+
       }
       else {
-        con.query("SELECT * FROM `"+socket.number+"alarm`  WHERE `id` < "+id+" ORDER BY `id` DESC LIMIT "+num, function(err1, a1s){
+        con.query("SELECT * FROM `"+socket.number+"alarm`  WHERE `id` > "+id+" ORDER BY `id` ASC", function(err1, a1s){
             if (err1){console.log('Da co loi room full:'+err1);}
             else if(a1s.length>0)
               {
@@ -1277,7 +1199,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_send_alarm',(data)=>{
   if(socket.number){
-    if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&(isNumeric(data.culy))&&data.ring !=null&&data.kieu!= null&&data.uri != null){
+    if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&(!isNaN(data.culy))&&data.ring !=null&&data.kieu!= null&&data.uri != null){
       let thoigian = new Date();
       var sql2 = "INSERT INTO `"+socket.number+"alarm` (maso,name, type, time,culy,lat,lon,ring,uri,kieu) VALUES ?";
       var values2 = [[data.ma, data.name,data.type,thoigian,data.culy,data.lat,data.lon,data.ring,data.uri,data.kieu]];
