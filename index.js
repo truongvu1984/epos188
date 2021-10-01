@@ -1130,7 +1130,7 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_reg_friend',(ids,num)=>{
-    if(socket.number&&ids!=null&&num!=null&&&&(!isNaN(ids))&&(!isNaN(num))){
+    if(socket.number&&ids!=null&&num!=null&&(!isNaN(ids))&&(!isNaN(num))){
       if(num==0){
         con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `id` DESC LIMIT 50", function(err1, a1s)
           {
