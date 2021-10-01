@@ -1041,7 +1041,7 @@ io.on('connection',(socket)=>
         }
       }
       else {
-        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` < "+id+"ORDER BY `id` DESC LIMIT 50", function(err1, a1s){
+        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` < "+id+" ORDER BY `id` DESC LIMIT 50", function(err1, a1s){
 
        if (err1){console.log(err1);}
        else {
