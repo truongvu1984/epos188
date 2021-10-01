@@ -34,7 +34,11 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
     return (!!a) && (a.constructor === Array);
 }
-
+function isNumeric(str) {
+  if (typeof str != "string") return false // we only process strings!
+  return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+}
 
 
 function kiemtra_taikhoan(){
@@ -901,7 +905,7 @@ io.on('connection',(socket)=>
 	});
   function check_data1(data){
     let abc;
-    if(data==null||isNaN(data))abc=false;
+    if(data==null||(!isNumeric(data)))abc=false;
     else abc=true;
     return abc;
   }
@@ -917,7 +921,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_reg_online',(id,num)=>{
-    if(socket.number&&id!=null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
+    if(socket.number&&id!=null&&num!= null&&(isNumeric(id))&&(isNumeric(num))){
 
       if(num==0){
         if(id==0){
@@ -986,7 +990,7 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_reg_inbox',(id,num)=>{
-    if(socket.number&&id != null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
+    if(socket.number&&id != null&&num!= null&&(isNumeric(id))&&(isNumeric(num))){
       if(num==0){
         if(id==0){
        con.query("SELECT *  FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` > "+num+" ORDER BY `id` DESC LIMIT 20", function(err1, a1s)
@@ -1051,7 +1055,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_reg_send',(id,num)=>{
-    if(socket.number&&id!=null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
+    if(socket.number&&id!=null&&num!= null&&(isNumeric(id))&&(isNumeric(num))){
       if(num==0){
         if(id==0){
        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'S' AND `id` > "+num+" ORDER BY `id` DESC LIMIT 20", function(err1, a1s)
@@ -1143,7 +1147,7 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_reg_save',(id,num)=>{
-    if(socket.number&&id!=null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
+    if(socket.number&&id!=null&&num!= null&&(isNumeric(id))&&(isNumeric(num))){
       if(num==0){
         if(id==0){
         con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'H' ORDER BY `id` DESC LIMIT 20", function(err1, a1s){
@@ -1189,9 +1193,8 @@ io.on('connection',(socket)=>
   });
   socket.on('C_reg_friend',(ids,num)=>{
 
-    if(socket.number&&ids!=null&&num!=null&&(!isNaN(num))){
+    if(socket.number&&ids!=null&&num!=null&&(isNumeric(ids))&&(isNumeric(num))){
       if(num==0){
-
         con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `id` ASC LIMIT 50", function(err1, a1s)
           {
             if (err1){console.log('Da co loi contact 3:'+err1);}
@@ -1228,7 +1231,7 @@ io.on('connection',(socket)=>
 
   });
   socket.on('C_reg_alarm',(id,num)=>{
-    if(socket.number&&id != null&&num!= null&&(!isNaN(id))&&(!isNaN(num))){
+    if(socket.number&&id != null&&num!= null&&(isNumeric(id))&&(isNumeric(num))){
       if(num==0){
         if(id==0){
           con.query("SELECT * FROM `"+socket.number+"alarm` ORDER BY `id` DESC LIMIT 20", function(err1, a1s){
@@ -1274,7 +1277,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_send_alarm',(data)=>{
   if(socket.number){
-    if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&(!isNaN(data.culy))&&data.ring !=null&&data.kieu!= null&&data.uri != null){
+    if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&(isNumeric(data.culy))&&data.ring !=null&&data.kieu!= null&&data.uri != null){
       let thoigian = new Date();
       var sql2 = "INSERT INTO `"+socket.number+"alarm` (maso,name, type, time,culy,lat,lon,ring,uri,kieu) VALUES ?";
       var values2 = [[data.ma, data.name,data.type,thoigian,data.culy,data.lat,data.lon,data.ring,data.uri,data.kieu]];
