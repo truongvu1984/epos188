@@ -673,7 +673,7 @@ io.on('connection',(socket)=>
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`idc` CHAR(15) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"alarm` (`id` BIGINT NOT NULL AUTO_INCREMENT,`maso` CHAR(20) NOT NULL,`name` VARCHAR(45)  NULL,`type` CHAR(2) NOT NULL,`time` DATETIME(6) NOT NULL,`culy` INT NOT NULL,`lat` DOUBLE,`lon` DOUBLE,`ring` CHAR(2),`time1` CHAR(16),`uri` VARCHAR(45),`kieu` CHAR(2),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`name` VARCHAR(45),`culy` BIGINT ,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_full` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`stt` INT,`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_full` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
                 var values = [[tin.mail,tin.name, matkhau]];
@@ -682,7 +682,7 @@ io.on('connection',(socket)=>
                   else  {
                     con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
                       if (err2)socket.emit('regis2_thanhcong');
-                      else {socket.emit('regis2_thanhcong');console.log('dk OK');}
+                      else {socket.emit('regis2_thanhcong');}
                     });
                   }
                 });
@@ -1041,7 +1041,7 @@ io.on('connection',(socket)=>
         }
       }
       else {
-        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` < "+id+" ORDER BY `id` DESC LIMIT 50", function(err1, a1s){
+        con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `send_receive` LIKE 'R' AND `id` < "+id+"ORDER BY `id` DESC LIMIT 50", function(err1, a1s){
 
        if (err1){console.log(err1);}
        else {
@@ -1320,7 +1320,7 @@ io.on('connection',(socket)=>
       }
       else {
 
-        con.query("SELECT * FROM `"+socket.number+"alarm` WHERE `id` < "+id+" ORDER BY `id` DESC LIMIT 50", function(err1, a1s){
+        con.query("SELECT * FROM `"+socket.number+"alarm` WHERE `id` > "+id+" ORDER BY `id` DESC LIMIT 50", function(err1, a1s){
             if (err1){console.log('Da co loi room full:'+err1);}
             else {
               if(a1s.length>0)    {
@@ -1580,7 +1580,8 @@ io.on('connection',(socket)=>
                                                      let line=[];
                                                        if(a5s.length>0){
                                                          a5s.forEach(function(a5,key5){
-                                                           line.push({id:a5.stt, lat:a5.lat, lon:a5.lon, name:a5.name});
+                                                           line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
+
                                                            if(key5===(a5s.length-1)){
                                                              line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
                                                              if(key4===(a4s.length-1)){
@@ -1614,7 +1615,8 @@ io.on('connection',(socket)=>
                                                  let line=[];
                                                    if(a5s.length>0){
                                                      a5s.forEach(function(a5,key5){
-                                                       line.push({id:a5.stt, lat:a5.lat, lon:a5.lon, name:a5.name});
+                                                       line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
+
                                                        if(key5===(a5s.length-1)){
                                                          line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
                                                          if(key4===(a4s.length-1)){
@@ -1662,7 +1664,6 @@ io.on('connection',(socket)=>
   });
 
 
-
   socket.on('C_reques_point_inbox',(idc)=>{
     if(socket.number&&idc){
       if(socket.roomabc){
@@ -1704,7 +1705,8 @@ io.on('connection',(socket)=>
                                                  let line=[];
                                                    if(a5s.length>0){
                                                      a5s.forEach(function(a5,key5){
-                                                       line.push({id:a5.stt, lat:a5.lat, lon:a5.lon, name:a5.name});
+                                                       line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
+
                                                        if(key5===(a5s.length-1)){
                                                          line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
                                                          if(key4===(a4s.length-1)){
@@ -1738,7 +1740,8 @@ io.on('connection',(socket)=>
                                              let line=[];
                                                if(a5s.length>0){
                                                  a5s.forEach(function(a5,key5){
-                                                   line.push({id:a5.stt, lat:a5.lat, lon:a5.lon, name:a5.name});
+                                                   line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
+
                                                    if(key5===(a5s.length-1)){
                                                      line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
                                                      if(key4===(a4s.length-1)){
@@ -1802,7 +1805,8 @@ io.on('connection',(socket)=>
                                                 let line=[];
                                                   if(a5s.length>0){
                                                     a5s.forEach(function(a5,key5){
-                                                      line.push({id:a5.stt, lat:a5.lat, lon:a5.lon, name:a5.name});
+                                                      line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
+
                                                       if(key5===(a5s.length-1)){
                                                         line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
                                                         if(key4===(a4s.length-1)){
@@ -1837,7 +1841,8 @@ io.on('connection',(socket)=>
                                               if(a5s.length>0){
                                                 let line=[];
                                                 a5s.forEach(function(a5,key5){
-                                                  line.push({id:a5.stt, lat:a5.lat, lon:a5.lon, name:a5.name});
+                                                  line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
+
                                                   if(key5===(a5s.length-1)){
                                                     line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
                                                     if(key4===(a4s.length-1)){
@@ -1870,27 +1875,96 @@ io.on('connection',(socket)=>
   socket.on('C_reques_point_import',(list)=>{
     if(socket.number&&isArray(list)){
       let position=[];
+      let line_full=[];
         list.forEach((list1,key1)=>{
           if(list1.id){
             con.query("SELECT * FROM `"+socket.number+"mes_main` WHERE `idc` LIKE '"+list1.id+"' LIMIT 1", function(err, a1s)
-           {
-             if ( err ){console.log(err);}
-             else if(a1s.length >0)
-               {
-                 con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
-                          if(err3 || (a3s.length==0)){console.log('ko co:'+err3);}
-                          else {
-                            a3s.forEach(function(a3,key){
-                              position.push({name:a3.name, lat:a3.lat, lon:a3.lon, id:a3.idp});
-                              if(key1===(list.length-1) && key===(a3s.length-1)){
-                                socket.emit('S_send_point_import',position);
+             {
+               if ( err ){console.log(err);}
+               else if(a1s.length >0)
+                 {
+                    con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
+                     if(err3){console.log(err3);}
+                     else {
+                       if(a3s.length>0){
+                         a3s.forEach(function(a3,key){
+                           position.push({name:a3.name, lat:a3.lat, lon:a3.lon, id:a3.idp});
+                           if(key===(a3s.length-1)){
+                             con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err4, a4s){
+                                  if(err4)console.log(err4);
+                                  else {
+                                    if(a4s.length>0){
+                                      a4s.forEach(function(a4,key4){
+                                        con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
+                                            if(err5)console.log(err5);
+                                            else {
+                                              let line=[];
+                                                if(a5s.length>0){
+                                                  a5s.forEach(function(a5,key5){
+                                                    line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
+
+                                                    if(key5===(a5s.length-1)){
+                                                      line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
+                                                      if(key4===(a4s.length-1)){
+                                                          socket.emit('S_send_point_import',position,line_full);
+                                                      }
+                                                    }
+                                                  });
+                                                }
+
+                                            }
+                                        });
+                                      });
+                                    }
+                                    else socket.emit('S_send_point_import',position,line_full);
+                                  }
+                              });
+
+                           }
+                         });
+                       }
+                       else {
+
+                         con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err4, a4s){
+                              if(err4)console.log(err4);
+                              else {
+                                if(a4s.length>0){
+                                  a4s.forEach(function(a4,key4){
+                                    con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
+                                        if(err5)console.log(err5);
+                                        else {
+                                          let line=[];
+                                            if(a5s.length>0){
+                                              a5s.forEach(function(a5,key5){
+                                                line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
+
+                                                if(key5===(a5s.length-1)){
+                                                  line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
+                                                  if(key4===(a4s.length-1)){
+                                                    socket.emit('S_send_point_import',position,line_full);
+                                                  }
+                                                }
+                                              });
+                                            }
+
+                                        }
+                                    });
+                                  });
+                                }
+
                               }
-                            });
-                          }
-                  });
+                          });
+
+
+                       }
+
+                     }
+             });
+
 
                }
-          });
+             });
+
           }
       });
 
@@ -1929,9 +2003,9 @@ io.on('connection',(socket)=>
                             con.query(sql4, [val4], function (err4, res4) {
                               if ( err4)console.log(err4);
                               else {
-                                var sql5 = "INSERT INTO `"+socket.number+"line_full` (ids, stt,lat, lon,name) VALUES ?";
+                                var sql5 = "INSERT INTO `"+socket.number+"line_full` (ids, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
                                 row.tuyen.forEach((row1)=>{
-                                  var val5 = [[res4.insertId,row1.id, row1.lat, row1.lon,row1.name]];
+                                  var val5 = [[res4.insertId,row1.lat, row1.lon,row1.name,row1.color, row1.rieng1_id,row1.stt_rieng1,row1.rieng2_id,row1.stt_rieng2]];
                                   con.query(sql5, [val5], function (err5, res5) {
                                     if ( err5)console.log(err5);
 
@@ -1985,9 +2059,9 @@ io.on('connection',(socket)=>
                                                   con.query(sql8, [val8], function (err8, res8) {
                                                     if ( err8)console.log(err8);
                                                     else {
-                                                      var sql9 = "INSERT INTO `"+row5.number+"line_full` (ids, stt,lat, lon,name) VALUES ?";
+                                                      var sql9 = "INSERT INTO `"+socket.number+"line_full` (ids, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
                                                       row.tuyen.forEach((row1)=>{
-                                                        var val9 = [[res8.insertId,row1.id, row1.lat, row1.lon,row1.name]];
+                                                        var val9 = [[res4.insertId,row1.lat, row1.lon,row1.name,row1.color, row1.rieng1_id,row1.stt_rieng1,row1.rieng2_id,row1.stt_rieng2]];
                                                         con.query(sql9, [val9], function (err9, res9) {
                                                           if ( err9)console.log(err9);
 
@@ -2199,9 +2273,9 @@ io.on('connection',(socket)=>
                 con.query(sql4, [val4], function (err4, res4) {
                   if ( err4)console.log(err4);
                   else {
-                    var sql5 = "INSERT INTO `"+socket.number+"line_full` (ids, stt,lat, lon,name) VALUES ?";
+                    var sql5 = "INSERT INTO `"+socket.number+"line_full` (ids, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
                     row.tuyen.forEach((row1)=>{
-                      var val5 = [[res4.insertId,row1.id, row1.lat, row1.lon,row1.name]];
+                      var val5 = [[res4.insertId,row1.lat, row1.lon,row1.name,row1.color, row1.rieng1_id,row1.stt_rieng1,row1.rieng2_id,row1.stt_rieng2]];
                       con.query(sql5, [val5], function (err5, res5) {
                         if ( err5)console.log(err5);
 
