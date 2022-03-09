@@ -1712,7 +1712,9 @@ io.on('connection',(socket)=>
                                                       if(key5===(a5s.length-1)){
                                                         line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
                                                         if(key4===(a4s.length-1)){
+                                                          console.log('AAA');
                                                             socket.emit('S_send_point',position,line_full);
+                                                            console.log('A1111');
                                                         }
                                                       }
                                                     });
@@ -1722,7 +1724,11 @@ io.on('connection',(socket)=>
                                           });
                                         });
                                       }
-                                      else socket.emit('S_send_point',position,line_full);
+                                      else {
+                                        console.log('BBB');
+                                          socket.emit('S_send_point',position,line_full);
+                                          console.log('B1111');
+                                      }
 
                                     }
                                 });
@@ -1748,7 +1754,9 @@ io.on('connection',(socket)=>
                                                   if(key5===(a5s.length-1)){
                                                     line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
                                                     if(key4===(a4s.length-1)){
+                                                      console.log('CCC');
                                                         socket.emit('S_send_point',position,line_full);
+                                                        console.log('C1111');
                                                     }
                                                   }
                                                 });
