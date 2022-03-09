@@ -1683,81 +1683,84 @@ io.on('connection',(socket)=>
 
                  });
                }
-                  let line_full=[];
-                  let position=[];
+
 
                //tìm ds các điểm riêng lẻ
                con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
                   if(err3){console.log(err3);}
                         else {
+                          let position=[];
+                          let line_full=[];
                           if(a3s.length>0){
-                            a3s.forEach(function(a3,key){
+                              a3s.forEach(function(a3,key){
                               position.push({name:a3.name, lat:a3.lat, lon:a3.lon, id:a3.idp});
                               if(key===(a3s.length-1)){
                                 con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err4, a4s){
-                                     if(err4)console.log(err4);
-                                     else {
-                                       if(a4s.length>0){
-                                         a4s.forEach(function(a4,key4){
-                                           con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
-                                               if(err5)console.log(err5);
-                                               else {
-                                                 let line=[];
-                                                   if(a5s.length>0){
-                                                     a5s.forEach(function(a5,key5){
-                                                       line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
+                                    if(err4)console.log(err4);
+                                    else {
 
-                                                       if(key5===(a5s.length-1)){
-                                                         line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
-                                                         if(key4===(a4s.length-1)){
-                                                             socket.emit('S_send_point',position,line_full);
-                                                         }
-                                                       }
-                                                     });
-                                                   }
+                                      if(a4s.length>0){
+                                        a4s.forEach(function(a4,key4){
+                                          con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
+                                              if(err5)console.log(err5);
+                                              else {
+                                                let line=[];
+                                                  if(a5s.length>0){
+                                                    a5s.forEach(function(a5,key5){
+                                                      line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
 
-                                               }
-                                           });
-                                         });
-                                       }
-                                       else socket.emit('S_send_point',position,line_full);
-                                     }
-                                 });
+                                                      if(key5===(a5s.length-1)){
+                                                        line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
+                                                        if(key4===(a4s.length-1)){
+                                                            socket.emit('S_send_point',position,line_full);
+                                                        }
+                                                      }
+                                                    });
+                                                  }
 
+                                              }
+                                          });
+                                        });
+                                      }
+                                      else socket.emit('S_send_point',position,line_full);
+
+                                    }
+                                });
                               }
                             });
                           }
                           else {
-
+                            //cũng tìm xem có line không, đưa line vào luôn.
                             con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err4, a4s){
-                                 if(err4)console.log(err4);
-                                 else {
-                                   if(a4s.length>0){
-                                     a4s.forEach(function(a4,key4){
-                                       con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
-                                           if(err5)console.log(err5);
-                                           else {
-                                             let line=[];
-                                               if(a5s.length>0){
-                                                 a5s.forEach(function(a5,key5){
-                                                   line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
+                                if(err4)console.log(err4);
+                                else {
+                                  if(a4s.length>0){
 
-                                                   if(key5===(a5s.length-1)){
-                                                     line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
-                                                     if(key4===(a4s.length-1)){
-                                                       socket.emit('S_send_point',position,line_full);
-                                                     }
-                                                   }
-                                                 });
-                                               }
+                                    a4s.forEach(function(a4,key4){
+                                      con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
+                                          if(err5)console.log(err5);
+                                          else {
+                                              if(a5s.length>0){
+                                                let line=[];
+                                                a5s.forEach(function(a5,key5){
+                                                  line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
 
-                                           }
-                                       });
-                                     });
-                                   }
+                                                  if(key5===(a5s.length-1)){
+                                                    line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
+                                                    if(key4===(a4s.length-1)){
+                                                        socket.emit('S_send_point',position,line_full);
+                                                    }
+                                                  }
+                                                });
+                                              }
+                                          }
+                                      });
+                                    });
+                                  }
+                                }
+                            });
 
-                                 }
-                             });
+
 
 
                           }
@@ -1886,74 +1889,79 @@ io.on('connection',(socket)=>
                     con.query("SELECT * FROM `"+socket.number+"mes_detail` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err3, a3s){
                      if(err3){console.log(err3);}
                      else {
+
+                       let position=[];
+                       let line_full=[];
                        if(a3s.length>0){
-                         a3s.forEach(function(a3,key){
+                           a3s.forEach(function(a3,key){
                            position.push({name:a3.name, lat:a3.lat, lon:a3.lon, id:a3.idp});
                            if(key===(a3s.length-1)){
                              con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err4, a4s){
-                                  if(err4)console.log(err4);
-                                  else {
-                                    if(a4s.length>0){
-                                      a4s.forEach(function(a4,key4){
-                                        con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
-                                            if(err5)console.log(err5);
-                                            else {
-                                              let line=[];
-                                                if(a5s.length>0){
-                                                  a5s.forEach(function(a5,key5){
-                                                    line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
+                                 if(err4)console.log(err4);
+                                 else {
 
-                                                    if(key5===(a5s.length-1)){
-                                                      line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
-                                                      if(key4===(a4s.length-1)){
-                                                          socket.emit('S_send_point_import',position,line_full);
-                                                      }
-                                                    }
-                                                  });
-                                                }
+                                   if(a4s.length>0){
+                                     a4s.forEach(function(a4,key4){
+                                       con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
+                                           if(err5)console.log(err5);
+                                           else {
+                                             let line=[];
+                                               if(a5s.length>0){
+                                                 a5s.forEach(function(a5,key5){
+                                                   line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
 
-                                            }
-                                        });
-                                      });
-                                    }
-                                    else socket.emit('S_send_point_import',position,line_full);
-                                  }
-                              });
+                                                   if(key5===(a5s.length-1)){
+                                                     line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
+                                                     if(key4===(a4s.length-1)){
+                                                         socket.emit('S_send_point_import',position,line_full);
+                                                     }
+                                                   }
+                                                 });
+                                               }
 
+                                           }
+                                       });
+                                     });
+                                   }
+                                   else socket.emit('S_send_point_import',position,line_full);
+
+                                 }
+                             });
                            }
                          });
                        }
                        else {
-
+                         //cũng tìm xem có line không, đưa line vào luôn.
                          con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+a1s[0].id+"'", function(err4, a4s){
-                              if(err4)console.log(err4);
-                              else {
-                                if(a4s.length>0){
-                                  a4s.forEach(function(a4,key4){
-                                    con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
-                                        if(err5)console.log(err5);
-                                        else {
-                                          let line=[];
-                                            if(a5s.length>0){
-                                              a5s.forEach(function(a5,key5){
-                                                line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
+                             if(err4)console.log(err4);
+                             else {
+                               if(a4s.length>0){
 
-                                                if(key5===(a5s.length-1)){
-                                                  line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
-                                                  if(key4===(a4s.length-1)){
-                                                    socket.emit('S_send_point_import',position,line_full);
-                                                  }
-                                                }
-                                              });
-                                            }
+                                 a4s.forEach(function(a4,key4){
+                                   con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
+                                       if(err5)console.log(err5);
+                                       else {
+                                           if(a5s.length>0){
+                                             let line=[];
+                                             a5s.forEach(function(a5,key5){
+                                               line.push({lat:a5.lat, lon:a5.lon, name:a5.name,color:a5.color,rieng1_id:a5.rieng1_id,stt_rieng1:a5.stt_rieng1,rieng2_id:a5.rieng2_id,stt_rieng2:a5.stt_rieng2});
 
-                                        }
-                                    });
-                                  });
-                                }
+                                               if(key5===(a5s.length-1)){
+                                                 line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
+                                                 if(key4===(a4s.length-1)){
+                                                     socket.emit('S_send_point_import',position,line_full);
+                                                 }
+                                               }
+                                             });
+                                           }
+                                       }
+                                   });
+                                 });
+                               }
+                             }
+                         });
 
-                              }
-                          });
+
 
 
                        }
