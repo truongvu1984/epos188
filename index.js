@@ -2039,6 +2039,8 @@ io.on('connection',(socket)=>
                           {
                             var val4 = [[res.insertId, row5.number, row5.name, 'S', 'N']];
                             con.query(sql4, [val4], function (err3, res3) {if ( err3){console.log(err3);}});
+
+
                             con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row5.number +"' LIMIT 1", function(err4, res4)
                               {
                                 if ( err4 ){console.log(err4);}
@@ -2064,14 +2066,14 @@ io.on('connection',(socket)=>
                                               if(mess.vitri!=null &&mess.vitri.length>0){
                                                   var sql3 = "INSERT INTO `"+row5.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
                                                   mess.vitri.forEach((row)=>{
-                                                    var val3 = [[res.insertId, row.id, row.name, row.lat, row.lon]];
+                                                    var val3 = [[res5.insertId, row.id, row.name, row.lat, row.lon]];
                                                     con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
                                                   });
                                                 }
                                               if(mess.line!=null &&mess.line.length>0){
                                                   var sql4 = "INSERT INTO `"+row5.number+"line_main` (ids, name, culy) VALUES ?";
                                                   mess.line.forEach((row)=>{
-                                                    var val4 = [[res.insertId, row.name, row.culy]];
+                                                    var val4 = [[res5.insertId, row.name, row.culy]];
                                                     con.query(sql4, [val4], function (err4, res4) {
                                                       if ( err4)console.log(err4);
                                                       else {
