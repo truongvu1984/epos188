@@ -1988,12 +1988,11 @@ io.on('connection',(socket)=>
                 else {
                   socket.emit('S_get_tinnhan',mess.imei,{ids:res.insertId, subject:mess.subject,nguoinhan:nguoinhans,idc:mess.id,time:get_time(thoigian),stt:'F'});
                         // lưu vào bảng vị trí của người gửi
-                        var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
-                        if(mess.pos!=null &&mess.pos.length>0){
-                          mess.pos.forEach(function(row)
-                          {
-                            var val = [[res.insertId, row.id, row.name, row.lat, row.lon]];
-                            con.query(sql3, [val], function (err2, res2) {if ( err2){console.log(err2);}});
+                      if(mess.vitri!=null &&mess.vitri.length>0){
+                          var sql3 = "INSERT INTO `"+socket.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
+                          mess.vitri.forEach((row)=>{
+                            var val3 = [[res.insertId, row.id, row.name, row.lat, row.lon]];
+                            con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
                           });
                         }
                         if(mess.line!=null &&mess.line.length>0){
@@ -2044,33 +2043,32 @@ io.on('connection',(socket)=>
                                           con.query(sql6, [val6], function (err6, res6) {
                                             if ( err6){console.log(err6);}
                                             else {
-                                              if(mess.pos!=null&&mess.pos.length>0){
-                                                mess.pos.forEach(function(row3){
-                                              // lưu vào bảng vị trí của người nhan
-                                                  var sql7 = "INSERT INTO `"+row5.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
-                                                  var val7 = [[res5.insertId, row3.id, row3.name, row3.lat, row3.lon]];
-                                                  con.query(sql7, [val7], function (err7, result) {if ( err7){console.log(err7);}});
-                                                });
-                                              }
-                                            if(mess.line!=null &&mess.line.length>0){
-                                                var sql8 = "INSERT INTO `"+row5.number+"line_main` (ids, name, culy) VALUES ?";
-                                                mess.line.forEach((row)=>{
-                                                  var val8 = [[res5.insertId, row.name, row.culy]];
-                                                  con.query(sql8, [val8], function (err8, res8) {
-                                                    if ( err8)console.log(err8);
-                                                    else {
-                                                      var sql9 = "INSERT INTO `"+socket.number+"line_full` (ids, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
-                                                      row.tuyen.forEach((row1)=>{
-                                                        var val9 = [[res4.insertId,row1.lat, row1.lon,row1.name,row1.color, row1.rieng1_id,row1.stt_rieng1,row1.rieng2_id,row1.stt_rieng2]];
-                                                        con.query(sql9, [val9], function (err9, res9) {
-                                                          if ( err9)console.log(err9);
-
-                                                      });
-                                                    });
-                                                  }
+                                              if(mess.vitri!=null &&mess.vitri.length>0){
+                                                  var sql3 = "INSERT INTO `"+row5.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
+                                                  mess.vitri.forEach((row)=>{
+                                                    var val3 = [[res.insertId, row.id, row.name, row.lat, row.lon]];
+                                                    con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
                                                   });
-                                                });
-                                              }
+                                                }
+                                              if(mess.line!=null &&mess.line.length>0){
+                                                  var sql4 = "INSERT INTO `"+row5.number+"line_main` (ids, name, culy) VALUES ?";
+                                                  mess.line.forEach((row)=>{
+                                                    var val4 = [[res.insertId, row.name, row.culy]];
+                                                    con.query(sql4, [val4], function (err4, res4) {
+                                                      if ( err4)console.log(err4);
+                                                      else {
+                                                        var sql5 = "INSERT INTO `"+row5.number+"line_full` (ids, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
+                                                        row.tuyen.forEach((row1)=>{
+                                                          var val5 = [[res4.insertId,row1.lat, row1.lon,row1.name,row1.color, row1.rieng1_id,row1.stt_rieng1,row1.rieng2_id,row1.stt_rieng2]];
+                                                          con.query(sql5, [val5], function (err5, res5) {
+                                                            if ( err5)console.log(err5);
+
+                                                        });
+                                                      });
+                                                    }
+                                                    });
+                                                  });
+                                                }
 
 
 
