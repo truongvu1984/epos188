@@ -1675,8 +1675,8 @@ io.on('connection',(socket)=>
            if (err)  console.log(err);
 
            else if(a1s.length > 0)
-
              {
+               console.log('a1s da co so luong');
                if(a1s[0].read_1 ==="N"){
                  con.query("UPDATE `"+socket.number+"mes_main` SET `read_1` = 'Y' WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1",function(error){
                    if(error){console.log(error);}
@@ -1692,6 +1692,7 @@ io.on('connection',(socket)=>
                           let position=[];
                           let line_full=[];
                           if(a3s.length>0){
+                            console.log('diem rieng le co');
                               a3s.forEach(function(a3,key){
                               position.push({name:a3.name, lat:a3.lat, lon:a3.lon, id:a3.idp});
                               if(key===(a3s.length-1)){
@@ -1700,6 +1701,7 @@ io.on('connection',(socket)=>
                                     else {
 
                                       if(a4s.length>0){
+                                          console.log('diem line 1 co');
                                         a4s.forEach(function(a4,key4){
                                           con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
                                               if(err5)console.log(err5);
@@ -1741,7 +1743,7 @@ io.on('connection',(socket)=>
                                 if(err4)console.log(err4);
                                 else {
                                   if(a4s.length>0){
-
+                                    console.log('diem line 2 co');
                                     a4s.forEach(function(a4,key4){
                                       con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
                                           if(err5)console.log(err5);
