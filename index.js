@@ -1346,8 +1346,10 @@ io.on('connection',(socket)=>
       var values2 = [[data.ma, data.name,data.type,thoigian,data.culy,data.lat,data.lon,data.ring,data.uri,data.kieu]];
       con.query(sql2, [values2], function (err, res)
         {
-          if ( err){console.log(err);}
+          if ( err){console.log(' Lỗi alarm');
+            console.log(err);}
           else {
+            console.log('OK alarm rồi nhé');
             socket.emit('S_get_alarm',{ids:res.insertId, name:data.name,ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,uri:data.uri,kieu:data.kieu,time:get_time(thoigian)});
           }
         });
@@ -1676,7 +1678,6 @@ io.on('connection',(socket)=>
 
            else if(a1s.length > 0)
              {
-               console.log('a1s da co so luong');
                if(a1s[0].read_1 ==="N"){
                  con.query("UPDATE `"+socket.number+"mes_main` SET `read_1` = 'Y' WHERE `send_receive` LIKE 'R' AND `idc` LIKE '"+idc+"' LIMIT 1",function(error){
                    if(error){console.log(error);}
@@ -1692,7 +1693,7 @@ io.on('connection',(socket)=>
                           let position=[];
                           let line_full=[];
                           if(a3s.length>0){
-                            console.log('diem rieng le co');
+
                               a3s.forEach(function(a3,key){
                               position.push({name:a3.name, lat:a3.lat, lon:a3.lon, id:a3.idp});
                               if(key===(a3s.length-1)){
@@ -1701,7 +1702,7 @@ io.on('connection',(socket)=>
                                     else {
 
                                       if(a4s.length>0){
-                                          console.log('diem line 1 co');
+
                                         a4s.forEach(function(a4,key4){
                                           con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
                                               if(err5)console.log(err5);
@@ -1713,11 +1714,9 @@ io.on('connection',(socket)=>
 
                                                       if(key5===(a5s.length-1)){
                                                         line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
-                                                        if(key4===(a4s.length-1)){
-                                                          console.log('AAA');
-                                                            socket.emit('S_send_point',position,line_full);
-                                                            console.log('A1111');
-                                                        }
+                                                        if(key4===(a4s.length-1))  socket.emit('S_send_point',position,line_full);
+
+
                                                       }
                                                     });
                                                   }
@@ -1726,11 +1725,9 @@ io.on('connection',(socket)=>
                                           });
                                         });
                                       }
-                                      else {
-                                        console.log('BBB');
-                                          socket.emit('S_send_point',position,line_full);
-                                          console.log('B1111');
-                                      }
+                                      else  socket.emit('S_send_point',position,line_full);
+
+
 
                                     }
                                 });
@@ -1743,7 +1740,7 @@ io.on('connection',(socket)=>
                                 if(err4)console.log(err4);
                                 else {
                                   if(a4s.length>0){
-                                    console.log('diem line 2 co');
+
                                     a4s.forEach(function(a4,key4){
                                       con.query("SELECT * FROM `"+socket.number+"line_full` WHERE `ids` LIKE '"+a4.id+"'", function(err5, a5s){
                                           if(err5)console.log(err5);
@@ -1755,11 +1752,9 @@ io.on('connection',(socket)=>
 
                                                   if(key5===(a5s.length-1)){
                                                     line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
-                                                    if(key4===(a4s.length-1)){
-                                                      console.log('CCC');
-                                                        socket.emit('S_send_point',position,line_full);
-                                                        console.log('C1111');
-                                                    }
+                                                    if(key4===(a4s.length-1))   socket.emit('S_send_point',position,line_full);
+
+
                                                   }
                                                 });
                                               }
@@ -1822,9 +1817,8 @@ io.on('connection',(socket)=>
 
                                                       if(key5===(a5s.length-1)){
                                                         line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
-                                                        if(key4===(a4s.length-1)){
-                                                            socket.emit('S_send_point',position,line_full);
-                                                        }
+                                                        if(key4===(a4s.length-1))      socket.emit('S_send_point',position,line_full);
+
                                                       }
                                                     });
                                                   }
@@ -1858,9 +1852,8 @@ io.on('connection',(socket)=>
 
                                                   if(key5===(a5s.length-1)){
                                                     line_full.push({name:a4.name,culy:a4.culy,tuyen:line});
-                                                    if(key4===(a4s.length-1)){
-                                                        socket.emit('S_send_point',position,line_full);
-                                                    }
+                                                    if(key4===(a4s.length-1))     socket.emit('S_send_point',position,line_full);
+
                                                   }
                                                 });
                                               }
@@ -2102,7 +2095,7 @@ io.on('connection',(socket)=>
                                       // gửi tin nhắn đến máy điện thoại người nhận
                                     }
                                     // nếu tìm trong bảng acccount mà không có tên người nhận thì báo lại là không có ai nhận
-                                  else {socket.emit('S_send_mess_no_contact',row5.number);}
+                                  else socket.emit('S_send_mess_no_contact',row5.number);
                                 });
                             });
                   }
