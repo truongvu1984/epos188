@@ -1339,8 +1339,11 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_alarm',(data)=>{
+    console.log(' OK1');
   if(socket.number){
+    console.log(' OK2');
     if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&(!isNaN(data.culy))&&data.ring !=null&&data.kieu!= null&&data.uri != null){
+      console.log(' OK3');
       let thoigian = new Date();
       var sql2 = "INSERT INTO `"+socket.number+"alarm` (maso,name, type, time,culy,lat,lon,ring,uri,kieu) VALUES ?";
       var values2 = [[data.ma, data.name,data.type,thoigian,data.culy,data.lat,data.lon,data.ring,data.uri,data.kieu]];
