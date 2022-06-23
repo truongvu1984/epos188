@@ -1349,10 +1349,9 @@ io.on('connection',(socket)=>
       var values2 = [[data.ma, data.name,data.type,thoigian,data.culy,data.lat,data.lon,data.ring,data.kieu]];
       con.query(sql2, [values2], function (err, res)
         {
-          if ( err){console.log(' Lỗi alarm');
-            console.log(err);}
+          if ( err){  console.log(err);}
           else {
-            console.log('OK alarm rồi nhé');
+
             socket.emit('S_get_alarm',{ids:res.insertId, name:data.name,ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,kieu:data.kieu,time:get_time(thoigian)});
           }
         });
