@@ -1342,7 +1342,7 @@ io.on('connection',(socket)=>
 
   if(socket.number){
 
-    if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&(!isNaN(data.culy))&&data.ring !=null&&data.kieu!= null&&data.uri != null){
+    if(data.name != null&&data.ma != null&&data.type != null&&data.lat != null&&data.lon != null&&data.culy != null&&(!isNaN(data.culy))&&data.ring !=null&&data.kieu!= null){
 
       let thoigian = new Date();
       var sql2 = "INSERT INTO `"+socket.number+"alarm` (maso,name, type, time,culy,lat,lon,ring,kieu) VALUES ?";
@@ -1353,7 +1353,7 @@ io.on('connection',(socket)=>
             console.log(err);}
           else {
             console.log('OK alarm rồi nhé');
-            socket.emit('S_get_alarm',{ids:res.insertId, name:data.name,ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,uri:data.uri,kieu:data.kieu,time:get_time(thoigian)});
+            socket.emit('S_get_alarm',{ids:res.insertId, name:data.name,ma:data.ma,type:data.type,lat:data.lat,lon:data.lon,culy:data.culy,kieu:data.kieu,time:get_time(thoigian)});
           }
         });
       }
