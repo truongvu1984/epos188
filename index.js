@@ -57,32 +57,7 @@ app.get('/privacy-policy', (req, res) => res.render('privacy'));
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      con.query("CREATE TABLE IF NOT EXISTS  `+84982025401main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` VARCHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-      con.query("CREATE TABLE IF NOT EXISTS `+84982025401diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-      con.query("CREATE TABLE IF NOT EXISTS `+84982025401contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`idc` CHAR(15) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-      con.query("CREATE TABLE IF NOT EXISTS `+84982025401line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`name` VARCHAR(45),`culy` BIGINT ,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-      con.query("CREATE TABLE IF NOT EXISTS `+84982025401line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-      con.query("CREATE TABLE IF NOT EXISTS `+84982025401member` (`id` INT NOT NULL AUTO_INCREMENT,`ids`BIGINT NOT NULL, `number` VARCHAR(45) NOT NULL,`name` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-      con.query("CREATE TABLE IF NOT EXISTS  `+84982025402main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` VARCHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-      con.query("CREATE TABLE IF NOT EXISTS `+84982025402diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-      con.query("CREATE TABLE IF NOT EXISTS `+84982025402contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`idc` CHAR(15) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-      con.query("CREATE TABLE IF NOT EXISTS `+84982025402line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`name` VARCHAR(45),`culy` BIGINT ,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-      con.query("CREATE TABLE IF NOT EXISTS `+84982025402line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-      con.query("CREATE TABLE IF NOT EXISTS `+84982025402member` (`id` INT NOT NULL AUTO_INCREMENT,`ids`BIGINT NOT NULL, `number` VARCHAR(45) NOT NULL,`name` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-
-      var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
-      var matkhau = passwordHash.generate('123456');
-      var values = [['+84982025401','Hoàng Vũ', matkhau]];
-      con.query(sql, [values], function (err1, result) {
-        if (err1)console.log('That bai 1');
-
-      });
-      var values = [['+84982025402','Cẩm Vân', matkhau]];
-      con.query(sql, [values], function (err1, result) {
-        if (err1)console.log('That bai 1');
-
-      });
-
+      
  kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
