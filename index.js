@@ -57,7 +57,7 @@ app.get('/privacy-policy', (req, res) => res.render('privacy'));
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      
+
  kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
@@ -1001,7 +1001,9 @@ io.on('connection',(socket)=>
   });//hi
 
   socket.on('C_gui_tinnhan', function(mess){
+    console.log('BBBBB');
     if (socket.number&&mess.nguoinhan&&mess.idc&&mess.subject){
+      console.log('AAAA');
       let thoigian = new Date();
       let idc=Date.now();
         let nguoinhans = [];
@@ -1010,6 +1012,7 @@ io.on('connection',(socket)=>
             if(nguoi.number){
               nguoinhans.push({number:nguoi.number, name:nguoi.name, stt:'N'});
               if(key7===(mess.nguoinhan.length-1)){
+                console.log('CCCCC');
                 socket.emit('S_get_tinnhan',idc);
                   // lưu danh sách người nhận vào bảng của người gửi
 
