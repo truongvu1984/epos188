@@ -1001,8 +1001,8 @@ io.on('connection',(socket)=>
   });//hi
 
   socket.on('C_gui_tinnhan', function(mess){
-    console.log('BBBBB');
-    if (socket.number&&mess.nguoinhan&&mess.idc&&mess.subject){
+    console.log(socket.number);
+    if (socket.number&&mess.nguoinhan&&mess.subject&&mess.subject.vitri&&mess.line){
       console.log('AAAA');
       let thoigian = new Date();
       let idc=Date.now();
