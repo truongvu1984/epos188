@@ -1029,11 +1029,11 @@ io.on('connection',(socket)=>
                                   io.sockets.in(row5.number).emit('S_send_tinnhan',{ids:res5.insertId,name_nguoigui:socket.username,number_nguoigui:socket.number,
                                               subject: mess.subject, idc:idc, time:get_time(thoigian)});
                                   if(mess.vitri!=null &&mess.vitri.length>0){
-                                        var sql3 = "INSERT INTO `"+row5.number+"mes_detail` (ids, idp, name, lat, lon) VALUES ?";
+                                        var sql3 = "INSERT INTO `"+row5.number+"diem` (ids, idc, name, lat, lon) VALUES ?";
                                         mess.vitri.forEach((row)=>{
                                           var val3 = [[res5.insertId, row.id, row.name, row.lat, row.lon]];
                                           con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
-                                            });
+                                      });
                                   }
                                   if(mess.line!=null &&mess.line.length>0){
                                               var sql4 = "INSERT INTO `"+row5.number+"line_main` (ids, name, culy) VALUES ?";
