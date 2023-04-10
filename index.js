@@ -1004,7 +1004,7 @@ io.on('connection',(socket)=>
     if (socket.number&&mess.nguoinhan&&mess.subject&&mess.vitri&&mess.line){
       console.log('AAAA');
       let thoigian = new Date();
-      let idc=Date.now();
+      let idc=''+Date.now();
         let nguoinhans = [];
         if(isArray(mess.nguoinhan)){
           mess.nguoinhan.forEach((nguoi, key7)=>{
@@ -1042,7 +1042,7 @@ io.on('connection',(socket)=>
                                                 con.query(sql4, [val4], function (err4, res4) {
                                                   if ( err4)console.log(err4);
                                                   else {
-                                                      var sql5 = "INSERT INTO `"+row5.number+"line_full` (ids, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
+                                                      var sql5 = "INSERT INTO `"+row5.number+"line_detail` (ids, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
                                                       row.tuyen.forEach((row1)=>{
                                                           var val5 = [[res4.insertId,row1.lat, row1.lon,row1.name,row1.color, row1.rieng1_id,row1.stt_rieng1,row1.rieng2_id,row1.stt_rieng2]];
                                                           con.query(sql5, [val5], function (err5, res5) {if ( err5)console.log(err5);});
@@ -1337,7 +1337,7 @@ io.on('connection',(socket)=>
     if (socket.number&&info.room_name&&info.member_list){
       let thoigian = new Date();
       // bắt đầu xử lý cái room
-      var room_id = Date.now();
+      var room_id = ''+Date.now();
       socket.emit('S_get_room',room_id);
       // gửi room cho các thành viên
       let member=[];
