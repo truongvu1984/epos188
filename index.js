@@ -880,6 +880,7 @@ io.on('connection',(socket)=>
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
+            console.log('Login 2 OK');
             if(data.room != ""){
               if(socket.roomabc){
                 socket.leave(socket.roomabc);
@@ -892,8 +893,6 @@ io.on('connection',(socket)=>
 
               }
             }
-
-            socket.emit('S_reg_new');
 
           }//end
           else {socket.emit('login2_sai');}
