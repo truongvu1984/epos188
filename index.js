@@ -668,12 +668,12 @@ io.on('connection',(socket)=>
            if(rows.length==0)socket.emit('regis2_thatbai','B');
            else {
              if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
-                con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(60), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` VARCHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` CHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`idc` CHAR(15) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`name` VARCHAR(45),`culy` BIGINT ,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`ids` BIGINT NOT NULL,`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"member` (`id` INT NOT NULL AUTO_INCREMENT,`ids`BIGINT NOT NULL, `number` VARCHAR(45) NOT NULL,`name` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` INT,`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"member` (`id` INT NOT NULL AUTO_INCREMENT,`idc`CHAR(20), `number` VARCHAR(45) NOT NULL,`name` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
 
                 var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
@@ -920,7 +920,6 @@ io.on('connection',(socket)=>
       }
     }
   });
-
   socket.on('C_reg_friend',(ids,num)=>{
     if(socket.number&&ids!=null&&num!=null&&(!isNaN(ids))&&(!isNaN(num))){
       if(num==0){
@@ -1000,9 +999,9 @@ io.on('connection',(socket)=>
   });//hi
 
   socket.on('C_gui_tinnhan', function(mess){
-    console.log(socket.number);
+
     if (socket.number&&mess.nguoinhan&&mess.subject&&mess.vitri&&mess.line){
-      console.log('AAAA');
+
       let thoigian = new Date();
       let idc=''+Date.now();
         let nguoinhans = [];
@@ -1011,7 +1010,6 @@ io.on('connection',(socket)=>
             if(nguoi.number){
               nguoinhans.push({number:nguoi.number, name:nguoi.name, stt:'N'});
               if(key7===(mess.nguoinhan.length-1)){
-                console.log('CCCCC');
                 socket.emit('S_get_tinnhan',idc);
                   // lưu danh sách người nhận vào bảng của người gửi
 
@@ -1026,29 +1024,29 @@ io.on('connection',(socket)=>
                               if ( err5){console.log(err5);}
                               else{
                                   //lưu vào bảng người gửi của người nhận
-                                  io.sockets.in(row5.number).emit('S_send_tinnhan',{ids:res5.insertId,name_nguoigui:socket.username,number_nguoigui:socket.number,
+                                  io.sockets.in(row5.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
                                               subject: mess.subject, idc:idc, time:get_time(thoigian)});
                                   if(mess.vitri!=null &&mess.vitri.length>0){
-                                        var sql3 = "INSERT INTO `"+row5.number+"diem` (ids, idc, name, lat, lon) VALUES ?";
+                                        var sql3 = "INSERT INTO `"+row5.number+"diem` (idc, name, lat, lon,idlo) VALUES ?";
                                         mess.vitri.forEach((row)=>{
-                                          var val3 = [[res5.insertId, row.id, row.name, row.lat, row.lon]];
+                                          var val3 = [[idc, row.name, row.lat, row.lo,row.id]];
                                           con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
                                       });
                                   }
                                   if(mess.line!=null &&mess.line.length>0){
-                                              var sql4 = "INSERT INTO `"+row5.number+"line_main` (ids, name, culy) VALUES ?";
+                                              var sql4 = "INSERT INTO `"+row5.number+"line_main` (idc, name, culy,idlo) VALUES ?";
                                               mess.line.forEach((row)=>{
-                                                var val4 = [[res5.insertId, row.name, row.culy]];
+                                                var val4 = [[idc, row.name, row.culy,row.id]];
                                                 con.query(sql4, [val4], function (err4, res4) {
                                                   if ( err4)console.log(err4);
                                                   else {
-                                                      var sql5 = "INSERT INTO `"+row5.number+"line_detail` (ids, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
+                                                      var sql5 = "INSERT INTO `"+row5.number+"line_detail` (idc, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
                                                       row.tuyen.forEach((row1)=>{
-                                                          var val5 = [[res4.insertId,row1.lat, row1.lon,row1.name,row1.color, row1.rieng1_id,row1.stt_rieng1,row1.rieng2_id,row1.stt_rieng2]];
+                                                          var val5 = [[row.id,row1.lat, row1.lon,row1.name,row1.color, row1.rieng1_id,row1.stt_rieng1,row1.rieng2_id,row1.stt_rieng2]];
                                                           con.query(sql5, [val5], function (err5, res5) {if ( err5)console.log(err5);});
                                                       });
-                                                    }
-                                                    });
+                                                  }
+                                                });
                                                   });
                                                 }
 
@@ -1197,43 +1195,38 @@ io.on('connection',(socket)=>
               if ( err5){console.log(err5);}
               else {
                 io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,tennguoinhan:ten_nguoi_nhan,subject:subject, idc:idc});
-                con.query("SELECT * FROM `"+socket.number+"main` WHERE `idc` LIKE '"+ idc +"' LIMIT 1", function(err4, res4){
-                    if ( err4 ){console.log(err4);}
-                    else if ( res4.length >0){
-                      con.query("DELETE FROM `"+socket.number+"diem` WHERE `ids` LIKE '"+res4[0].id+"'", function(err5){if (err5)console.log(err5);});
-                      con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+ res4[0].id +"' LIMIT 1", function(err6, res6){
-                          if ( err6 ){console.log(err6);}
-                          else if ( res6.length >0){
-                            con.query("DELETE FROM `"+socket.number+"line_detail` WHERE `ids` LIKE '"+res6[0].id+"'", function(err7){
-                              if (err7)console.log(err7);
-                              else {
-                                con.query("DELETE FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+res4[0].id+"'", function(err8){
-                                  if (err8)console.log(err8);
-                                  else {
-                                    con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"'", function(err9){
-                                      if (err9)console.log(err9);
+                con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"'", function(err9){
+                  if (err9)console.log(err9);
+                });
+                con.query("DELETE FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err5){if (err5)console.log(err5);});
+                con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `idc` LIKE '"+ idc +"'", function(err6, res6){
+                    if ( err6 ){console.log(err6);}
+                    else if ( res6.length >0){
+                      forEach((re6, i) => {
+                        con.query("DELETE FROM `"+socket.number+"line_detail` WHERE `idc` LIKE '"+re6.idlo+"'", function(err7){
+                            if (err7)console.log(err7);
+                            else {
 
-                                    });
-                                  }
-                                });
-                              }
-                            });
-                          }
-                        });
+                              con.query("DELETE FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+res4[0].id+"'", function(err8){
+                                if (err8)console.log(err8);
+                                else {
+
+                                }
+
+                              });
+                            }
+                          });
+
+                      });
                     }
-                });
-                con.query("DELETE FROM `"+socket.number+"contact` WHERE `number` LIKE '"+number.idc+"'", function(err3)
-                  {
-                      if (err3)console.log(err3);
-                      else  socket.emit('S_del_friend');
-
-                });
-              }
+                  });
+                }
             });
-          }
-        });
 
+            }
+        });
       }
+
   });
   socket.on('search_contact', function (string){
 
