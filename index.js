@@ -874,7 +874,6 @@ io.on('connection',(socket)=>
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
           if (passwordHash.verify(data.right_pass, rows[0].pass)){
-            console.log('AAAAAA');
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
@@ -892,7 +891,6 @@ io.on('connection',(socket)=>
             con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'N'", function(err, rows){
               if (err){socket.emit('login2_khongtaikhoan');console.log(err);}
               else if(rows.length>0){
-                console.log('Da vao day:'+rows.length);
                 rows.forEach((row, i) => {
                     let idc=row.idc;
                     let list_line=[];
@@ -932,6 +930,16 @@ io.on('connection',(socket)=>
                                               subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:list_diem});
 
                 });
+              }
+            });
+            con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'K'", function(err, rows){
+              if(err)console.log(err);
+              else if(rows.length>0){
+                rows.forEach((row, i) => {
+                  io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:row.number,subject:row.subject, idc:row.idc,time:get_time(row.time)});
+                });
+
+
               }
             });
 
@@ -1237,13 +1245,14 @@ io.on('connection',(socket)=>
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ nguoigui +"' LIMIT 1", function(err4, res4){
           if ( err4 ){console.log(err4);}
           else if ( res4.length >0){
-            var sql5= "INSERT INTO `"+nguoigui+"main` (idc,subject,stt ) VALUES ?";
-            var val5 = [[idc,subject, 'K']];
+            var sql5= "INSERT INTO `"+nguoigui+"main` (idc,subject,number,stt,time ) VALUES ?";
+            let thoigian = new Date();
+            var val5 = [[idc,subject, socket.number,'K',thoigian]];
             con.query(sql5, [val5], function (err5, res5) {
               if ( err5){console.log(err5);}
               else {
-                console.log('idc='+idc);
-                io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,tennguoinhan:ten_nguoi_nhan,subject:subject, idc:idc});
+                io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,subject:subject, idc:idc,time:get_time(thoigian)});
+
                 con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"'", function(err9){
                   if (err9)console.log(err9);
                 });
@@ -1257,7 +1266,7 @@ io.on('connection',(socket)=>
                             else {
                               con.query("DELETE FROM `"+socket.number+"line_main` WHERE `id` LIKE '"+re6.id+"'", function(err8){
                                 if (err8)console.log(err8);
-                                
+
 
                               });
                             }
@@ -1273,6 +1282,13 @@ io.on('connection',(socket)=>
         });
       }
 
+  });
+  socket.on('C_nhan_send', function (idc){
+    if(socket.number && idc){
+    con.query("DELETE FROM `"+socket.number+"main` WHERE `stt` LIKE 'K' AND `idc` LIKE '"+idc+"'", function(err){
+        if(err)console.log(err);
+    });
+    }
   });
   socket.on('search_contact', function (string){
 
