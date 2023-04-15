@@ -1255,12 +1255,9 @@ io.on('connection',(socket)=>
                         con.query("DELETE FROM `"+socket.number+"line_detail` WHERE `idc` LIKE '"+re6.idlo+"'", function(err7){
                             if (err7)console.log(err7);
                             else {
-
-                              con.query("DELETE FROM `"+socket.number+"line_main` WHERE `ids` LIKE '"+res4[0].id+"'", function(err8){
+                              con.query("DELETE FROM `"+socket.number+"line_main` WHERE `id` LIKE '"+re6.id+"'", function(err8){
                                 if (err8)console.log(err8);
-                                else {
-
-                                }
+                                
 
                               });
                             }
