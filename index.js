@@ -1079,9 +1079,10 @@ io.on('connection',(socket)=>
   socket.on('C_gui_tinnhan', function(mess){
 
     if (socket.number&&mess.nguoinhan&&mess.subject&&mess.vitri&&mess.line){
-      socket.emit('S_get_tinnhan',idc);
+
       let thoigian = new Date();
       let idc=''+Date.now();
+      socket.emit('S_get_tinnhan',idc);
         let nguoinhans = [];
         if(isArray(mess.nguoinhan)){
           mess.nguoinhan.forEach((nguoi, key7)=>{
