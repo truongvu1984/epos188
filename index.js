@@ -936,7 +936,7 @@ io.on('connection',(socket)=>
               if(err)console.log(err);
               else if(rows.length>0){
                 rows.forEach((row, i) => {
-                  io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:row.number,subject:row.subject, idc:row.idc,time:get_time(row.time)});
+                  io.sockets.in(row.number).emit('C_danhantinnhan',{nguoinhan:socket.number,subject:row.subject, idc:row.idc,time:get_time(row.time)});
                 });
 
 
@@ -1427,7 +1427,7 @@ io.on('connection',(socket)=>
       });
 
     }
-   	});
+  });
   socket.on('danhan_room',(idc)=>{
     if(socket.number&&idc){
       con.query("SELECT * FROM `"+socket.number+"main` WHERE `idc` LIKE '"+ idc +"' LIMIT 1", function(err4, res4){
