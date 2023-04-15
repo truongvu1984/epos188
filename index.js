@@ -1233,7 +1233,6 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('danhantinnhan', function (nguoigui, ten_nguoi_nhan,idc,subject){
-
    	if (socket.number&&nguoigui&&idc){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ nguoigui +"' LIMIT 1", function(err4, res4){
           if ( err4 ){console.log(err4);}
@@ -1243,6 +1242,7 @@ io.on('connection',(socket)=>
             con.query(sql5, [val5], function (err5, res5) {
               if ( err5){console.log(err5);}
               else {
+                console.log('idc='+idc);
                 io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,tennguoinhan:ten_nguoi_nhan,subject:subject, idc:idc});
                 con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"'", function(err9){
                   if (err9)console.log(err9);
