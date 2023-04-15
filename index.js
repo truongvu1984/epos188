@@ -1251,7 +1251,7 @@ io.on('connection',(socket)=>
                 con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `idc` LIKE '"+ idc +"'", function(err6, res6){
                     if ( err6 ){console.log(err6);}
                     else if ( res6.length >0){
-                      forEach((re6, i) => {
+                      res6.forEach((re6, i) => {
                         con.query("DELETE FROM `"+socket.number+"line_detail` WHERE `idc` LIKE '"+re6.idlo+"'", function(err7){
                             if (err7)console.log(err7);
                             else {
