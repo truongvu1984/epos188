@@ -892,10 +892,12 @@ io.on('connection',(socket)=>
             con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'N'", function(err, rows){
               if (err){socket.emit('login2_khongtaikhoan');}
               else if(rows.length>0){
+                console.log('Da vao day:'+rows.length);
                 rows.forEach((row, i) => {
                     let idc=row.idc;
                     let list_line=[];
                     let list_diem=[];
+
                     con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `idc` LIKE '"+idc+"'", function(err1, row1s){
                       if (err1){socket.emit('login2_khongtaikhoan');}
                       else if(row1s.length>0){
