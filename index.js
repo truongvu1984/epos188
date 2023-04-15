@@ -874,7 +874,7 @@ io.on('connection',(socket)=>
   	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
           if (passwordHash.verify(data.right_pass, rows[0].pass)){
-
+            console.log('AAAAAA');
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
@@ -890,7 +890,7 @@ io.on('connection',(socket)=>
                 }
             }
             con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'N'", function(err, rows){
-              if (err){socket.emit('login2_khongtaikhoan');}
+              if (err){socket.emit('login2_khongtaikhoan');console.log(err);}
               else if(rows.length>0){
                 console.log('Da vao day:'+rows.length);
                 rows.forEach((row, i) => {
