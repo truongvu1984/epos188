@@ -909,25 +909,53 @@ io.on('connection',(socket)=>
                                 list_line1.push({up_id:row1.idc,lat:row2.lat,lon:row2.lon,name:row2.name,color:row2.color,rieng1_id:row2.rieng1_id,stt_rieng1:row2.stt_rieng1,rieng2_id:row2.rieng2_id,stt_rieng2:row2.stt_rieng2});
                                 if(i2===(row2s.length-1)){
                                   list_line.push({name:row1.name,culy:row1.culy,up_id:idc,list_line1:list_line1,local_id:row1.idlo});
+                                  if(i1===(row1s.length-1)){
+
+                                    con.query("SELECT * FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err3, row3s){
+                                      if(err3){socket.emit('login2_khongtaikhoan');}
+                                      else if(row3s.length>0){
+                                        row3s.forEach((row3, i3) => {
+                                          list_diem.push({idc:idc,name:row3.name,lat:row3.lat,lon:row3.lon,id:row3.id});
+                                          if(i3===(row3s.length-1)){
+                                            socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
+                                                                      subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:list_diem});
+                                          }
+                                        });
+                                      }
+                                      else {
+                                        socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
+                                                                  subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:list_diem});
+                                      }
+                                    });
+
+                                  }
                                 }
                               });
                             }
                           });
                         });
-
-
                       }
-                    });
-                    con.query("SELECT * FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err1, row1s){
-                      if(err1){socket.emit('login2_khongtaikhoan');}
-                      else if(row1s.length>0){
-                        row1s.forEach((row1, i1) => {
-                          list_diem.push({idc:idc,name:row1.name,lat:row1.lat,lon:row1.lon,id:row1.id});
+                      else {
+                        con.query("SELECT * FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err3, row3s){
+                          if(err3){socket.emit('login2_khongtaikhoan');}
+                          else if(row3s.length>0){
+                            row3s.forEach((row3, i3) => {
+                              list_diem.push({idc:idc,name:row3.name,lat:row3.lat,lon:row3.lon,id:row3.id});
+                              if(i3===(row3s.length-1)){
+                                socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
+                                                          subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:list_diem});
+                              }
+                            });
+                          }
+                          else {
+                            socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
+                                                      subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:list_diem});
+                          }
                         });
+
                       }
                     });
-                    socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
-                                              subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:list_diem});
+
 
                 });
               }
@@ -938,8 +966,6 @@ io.on('connection',(socket)=>
                 rows.forEach((row, i) => {
                   io.sockets.in(row.number).emit('C_danhantinnhan',{nguoinhan:socket.number,subject:row.subject, idc:row.idc,time:get_time(row.time)});
                 });
-
-
               }
             });
 
@@ -1053,6 +1079,7 @@ io.on('connection',(socket)=>
   socket.on('C_gui_tinnhan', function(mess){
 
     if (socket.number&&mess.nguoinhan&&mess.subject&&mess.vitri&&mess.line){
+      socket.emit('S_get_tinnhan',idc);
       let thoigian = new Date();
       let idc=''+Date.now();
         let nguoinhans = [];
@@ -1061,7 +1088,7 @@ io.on('connection',(socket)=>
             if(nguoi.number){
               nguoinhans.push({number:nguoi.number, name:nguoi.name, stt:'N'});
               if(key7===(mess.nguoinhan.length-1)){
-                socket.emit('S_get_tinnhan',idc);
+
                   // lưu danh sách người nhận vào bảng của người gửi
 
                 mess.nguoinhan.forEach(function(row5){
