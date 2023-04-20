@@ -964,7 +964,7 @@ io.on('connection',(socket)=>
               if(err)console.log(err);
               else if(rows.length>0){
                 rows.forEach((row, i) => {
-                  console.log('Gui di:'+row.subject);
+
                   io.sockets.in(socket.number).emit('C_danhantinnhan',{nguoinhan:row.number,subject:row.subject, idc:row.idc,time:get_time(row.time)});
                 });
               }
@@ -1345,7 +1345,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_nhan_send', function (idc){
     if(socket.number && idc){
-      console.log('Da vao xoa');
+
     con.query("DELETE FROM `"+socket.number+"main` WHERE `stt` LIKE 'K' AND `idc` LIKE '"+idc+"'", function(err){
         if(err)console.log(err);
     });
