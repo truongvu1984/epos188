@@ -965,7 +965,7 @@ io.on('connection',(socket)=>
               else if(rows.length>0){
                 rows.forEach((row, i) => {
                   console.log('Gui di:'+row.subject);
-                  io.sockets.in(row.number).emit('C_danhantinnhan',{nguoinhan:socket.number,subject:row.subject, idc:row.idc,time:get_time(row.time)});
+                  io.sockets.in(socket.number).emit('C_danhantinnhan',{nguoinhan:row.number,subject:row.subject, idc:row.idc,time:get_time(row.time)});
                 });
               }
             });
