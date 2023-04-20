@@ -1107,7 +1107,7 @@ io.on('connection',(socket)=>
                                           list_diem.push({idc:idc,name:row.name,lat:row.lat,lon:row.lon,id:row.id});
                                           var val3 = [[idc, row.name, row.lat, row.lon,row.id]];
                                           con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
-                                          if(key===(mes.vitri.length-1)){
+                                          if(key===(mess.vitri.length-1)){
                                             if(mess.line!=null &&mess.line.length>0){
                                                         var sql4 = "INSERT INTO `"+row5.number+"line_main` (idc, name, culy,idlo) VALUES ?";
                                                         mess.line.forEach((row6,key6)=>{
