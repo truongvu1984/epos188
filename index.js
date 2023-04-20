@@ -1087,7 +1087,7 @@ io.on('connection',(socket)=>
             if(nguoi.number){
               nguoinhans.push({number:nguoi.number, name:nguoi.name, stt:'N'});
               if(key7===(mess.nguoinhan.length-1)){
-                mess.nguoinhan.forEach(function(row5){
+                mess.nguoinhan.forEach(function(row5,key5){
                   con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row5.number +"' LIMIT 1", function(err4, res4){
                     if ( err4 ){console.log(err4);}
                     else if ( res4.length >0){
@@ -1099,6 +1099,7 @@ io.on('connection',(socket)=>
                               else{
                                 console.log('Da vaof day roi');
                                   //lưu vào bảng người gửi của người nhận
+
                                   let list_line=[];
                                   let list_diem=[];
                                   if(mess.vitri!=null &&mess.vitri.length>0){
@@ -1135,7 +1136,7 @@ io.on('connection',(socket)=>
                                           }
                                       });
                                   }
-                                  if(mess.line!=null &&mess.line.length>0){
+                                  else if(mess.line!=null &&mess.line.length>0){
                                               var sql4 = "INSERT INTO `"+row5.number+"line_main` (idc, name, culy,idlo) VALUES ?";
                                               mess.line.forEach((row,key)=>{
                                                 var val4 = [[idc, row.name, row.culy,row.id]];
