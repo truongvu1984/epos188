@@ -1077,9 +1077,7 @@ io.on('connection',(socket)=>
   });//hi
 
   socket.on('C_gui_tinnhan', function(mess){
-
     if (socket.number&&mess.nguoinhan&&mess.subject&&mess.vitri&&mess.line){
-
       let thoigian = new Date();
       let idc=''+Date.now();
       socket.emit('S_get_tinnhan',idc);
@@ -1089,9 +1087,6 @@ io.on('connection',(socket)=>
             if(nguoi.number){
               nguoinhans.push({number:nguoi.number, name:nguoi.name, stt:'N'});
               if(key7===(mess.nguoinhan.length-1)){
-
-                  // lưu danh sách người nhận vào bảng của người gửi
-
                 mess.nguoinhan.forEach(function(row5){
                   con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row5.number +"' LIMIT 1", function(err4, res4){
                     if ( err4 ){console.log(err4);}
@@ -1102,6 +1097,7 @@ io.on('connection',(socket)=>
                         con.query(sql5, [val5], function (err5, res5){
                               if ( err5){console.log(err5);}
                               else{
+                                console.log('Da vaof day roi');
                                   //lưu vào bảng người gửi của người nhận
                                   let list_line=[];
                                   let list_diem=[];
@@ -1134,11 +1130,8 @@ io.on('connection',(socket)=>
                                                 }
                                   io.sockets.in(row5.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
                                                             subject: mess.subject, idc:idc, time:get_time(thoigian),list_line:list_line,list_diem:list_diem});
-
-
-
-                                        }
-                                      });
+                              }
+                        });
 
                     }
                       // nếu tìm trong bảng acccount mà không có tên người nhận thì báo lại là không có ai nhận
@@ -1419,7 +1412,7 @@ io.on('connection',(socket)=>
     if (socket.number&&info.room_name&&info.member_list){
       let thoigian = new Date();
       // bắt đầu xử lý cái room
-      var room_id = ''+Date.now();
+      var room_id = 'r'+Date.now();
       socket.emit('S_get_room',room_id);
       // gửi room cho các thành viên
       let member=[];
@@ -1432,15 +1425,15 @@ io.on('connection',(socket)=>
                 {
                   if(err3 || (kq.length ==0)){console.log(err3);}
                   else {
-                      var sql5 = "INSERT INTO `"+row.number+"main` (idc, subject,number,name time,stt ) VALUES ?";
-                      var val5 = [[ room_id, info.room_name,socket.number,socket.username,thoigian,'R']];
+                      var sql5 = "INSERT INTO `"+row.number+"main` (idc, subject,number,name, stt,time ) VALUES ?";
+                      var val5 = [[ room_id, info.room_name,socket.number,socket.username,'R',thoigian]];
                       con.query(sql5, [val5], function (err5, res5){
                           if ( err5){console.log(err5);}
                           else{
                             var val7;
-                            var sql6 = "INSERT INTO `"+row.number+"member` (ids,number,name ) VALUES ?";
+                            var sql6 = "INSERT INTO `"+row.number+"member` (idc,number,name ) VALUES ?";
                               info.member_list.forEach((mem)=>{
-                              val7 = [[ res5.insertId,mem.number, mem.name]];
+                              val7 = [[ room_id,mem.number, mem.name]];
                               con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
                             });
                             io.sockets.in(row.number).emit('S_send_room',[{room_name:info.room_name, room_id_server:room_id, admin_name:socket.username, admin_number:socket.number,member:member, time:get_time(thoigian)}]);
