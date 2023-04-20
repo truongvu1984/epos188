@@ -1156,7 +1156,7 @@ io.on('connection',(socket)=>
                                                                     list_diem.push({idc:idc,name:row8.name,lat:row8.lat,lon:row8.lon,id:row8.id});
                                                                     var val3 = [[idc, row8.name, row8.lat, row8.lon,row8.id]];
                                                                     con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
-                                                                    if(key===(mes.vitri.length-1)){
+                                                                    if(key===(mess.vitri.length-1)){
                                                                       io.sockets.in(row5.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
                                                                                                 subject: mess.subject, idc:idc, time:get_time(thoigian),list_line:list_line,list_diem:list_diem});
 
