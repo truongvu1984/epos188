@@ -968,10 +968,6 @@ io.on('connection',(socket)=>
                 });
               }
             });
-
-
-
-
           }//end
           else {socket.emit('login2_sai');}
         }
@@ -1097,7 +1093,7 @@ io.on('connection',(socket)=>
                         con.query(sql5, [val5], function (err5, res5){
                               if ( err5){console.log(err5);}
                               else{
-                                console.log('Da vaof day roi');
+
                                   //lưu vào bảng người gửi của người nhận
 
                                   let list_line=[];
@@ -1171,7 +1167,7 @@ io.on('connection',(socket)=>
                                                 });
                                                   });
                                                 }
-                                                  console.log('AAAA');
+
                               }
                         });
 
@@ -1348,6 +1344,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_nhan_send', function (idc){
     if(socket.number && idc){
+      console.log('Da vao xoa');
     con.query("DELETE FROM `"+socket.number+"main` WHERE `stt` LIKE 'K' AND `idc` LIKE '"+idc+"'", function(err){
         if(err)console.log(err);
     });
