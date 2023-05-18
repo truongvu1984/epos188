@@ -888,6 +888,7 @@ io.on('connection',(socket)=>
                             socket.roomabc = data.room ;
                 }
             }
+            // bản tin đến
             con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'N'", function(err, rows){
               if (err){socket.emit('login2_khongtaikhoan');console.log(err);}
               else if(rows.length>0){
@@ -960,6 +961,7 @@ io.on('connection',(socket)=>
                 });
               }
             });
+            // những người đã nhận tin của mình
             con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'K'", function(err, rows){
               if(err)console.log(err);
               else if(rows.length>0){
@@ -969,6 +971,31 @@ io.on('connection',(socket)=>
                 });
               }
             });
+            // bản tin room online
+            con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'R'", function(err, rows){
+              if(err)console.log(err);
+              else if(rows.length>0){
+                rows.forEach((row, i) => {
+                  con.query("SELECT * FROM `"+socket.number+"member` WHERE `idc` LIKE '"+row.idc+"'", function(err2, rows2){
+                    if(err2)console.log(err2);
+                    else if(rows2.length>0){
+                      let member=[];
+                      rows2.forEach((row2, i2) => {
+                          member.push({number:row2.number,name:row2.name});
+                          if(i2===(rows2.length-1)){
+                            sockets.emit('S_send_room',[{room_name:row.subject, room_id_server:row.idc, admin_name:row.name, admin_number:row.number,member:member, time:row.time}]);
+                          }
+                      });
+
+
+                    }
+                  });
+                });
+
+
+              }
+            });
+
           }//end
           else {socket.emit('login2_sai');}
         }
@@ -1315,26 +1342,30 @@ io.on('connection',(socket)=>
 
                 con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"'", function(err9){
                   if (err9)console.log(err9);
-                });
-                con.query("DELETE FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err5){if (err5)console.log(err5);});
-                con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `idc` LIKE '"+ idc +"'", function(err6, res6){
-                    if ( err6 ){console.log(err6);}
-                    else if ( res6.length >0){
-                      res6.forEach((re6, i) => {
-                        con.query("DELETE FROM `"+socket.number+"line_detail` WHERE `idc` LIKE '"+re6.idlo+"'", function(err7){
-                            if (err7)console.log(err7);
-                            else {
-                              con.query("DELETE FROM `"+socket.number+"line_main` WHERE `id` LIKE '"+re6.id+"'", function(err8){
+                  else {
+                    con.query("DELETE FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err5){if (err5)console.log(err5);});
+                    con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `idc` LIKE '"+ idc +"'", function(err6, res6){
+                        if ( err6 ){console.log(err6);}
+                        else if ( res6.length >0){
+                          res6.forEach((re6, i) => {
+                            con.query("DELETE FROM `"+socket.number+"line_main` WHERE `id` LIKE '"+re6.id+"'", function(err8){
                                 if (err8)console.log(err8);
+                                else {
+                                    con.query("DELETE FROM `"+socket.number+"line_detail` WHERE `idc` LIKE '"+re6.idlo+"'", function(err7){
+                                        if (err7)console.log(err7);
+                                  });
+                                }
 
 
                               });
-                            }
-                          });
 
+
+                          });
+                        }
                       });
-                    }
-                  });
+                  }
+                });
+
                 }
             });
 
@@ -1485,23 +1516,20 @@ io.on('connection',(socket)=>
             });
         }
       });
-
     }
   });
   socket.on('danhan_room',(idc)=>{
     if(socket.number&&idc){
-      con.query("SELECT * FROM `"+socket.number+"main` WHERE `idc` LIKE '"+ idc +"' LIMIT 1", function(err4, res4){
-          if ( err4 ){console.log(err4);}
-          else if ( res4.length >0){
-            con.query("DELETE FROM `"+socket.number+"member` WHERE `ids` LIKE '"+res4[0].id+"'", function(err9){
-              if (err9)console.log(err9);
-              else {
-                con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"'", function(err8){if (err9)console.log(err8);});
-              }
-            });
-          }
+      con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"'", function(err9){
+        if (err9)console.log(err9);
+        else {
+          con.query("DELETE FROM `"+socket.number+"member` WHERE `ids` LIKE '"+res4[0].id+"'", function(err9){
+            if (err9)console.log(err9);
+          })
+        }
       });
-    }
+
+      }
   });
   socket.on('C_change_pass', function(oldpass,newpass){
    if (socket.number&&oldpass&&newpass){
