@@ -1523,8 +1523,8 @@ io.on('connection',(socket)=>
       con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"'", function(err9){
         if (err9)console.log(err9);
         else {
-          con.query("DELETE FROM `"+socket.number+"member` WHERE `ids` LIKE '"+res4[0].id+"'", function(err9){
-            if (err9)console.log(err9);
+          con.query("DELETE FROM `"+socket.number+"member` WHERE `idc` LIKE '"+idc+"'", function(err7){
+            if (err7)console.log(err7);
           })
         }
       });
