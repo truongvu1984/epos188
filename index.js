@@ -983,7 +983,7 @@ io.on('connection',(socket)=>
                       rows2.forEach((row2, i2) => {
                           member.push({number:row2.number,name:row2.name});
                           if(i2===(rows2.length-1)){
-                            socket.emit('S_send_room',{room_name:row.subject, room_id_server:row.idc, admin_name:row.name, admin_number:row.number,member:member, time:row.time});
+                            socket.emit('S_send_room',{room_name:row.subject, room_id_server:row.idc, admin_name:row.name, admin_number:row.number,member:member, time:get_time(row.time)});
                           }
                       });
 
