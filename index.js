@@ -983,7 +983,7 @@ io.on('connection',(socket)=>
                       rows2.forEach((row2, i2) => {
                           member.push({number:row2.number,name:row2.name});
                           if(i2===(rows2.length-1)){
-                            socket.emit('S_send_room',[{room_name:row.subject, room_id_server:row.idc, admin_name:row.name, admin_number:row.number,member:member, time:row.time}]);
+                            socket.emit('S_send_room',{room_name:row.subject, room_id_server:row.idc, admin_name:row.name, admin_number:row.number,member:member, time:row.time});
                           }
                       });
 
@@ -1507,7 +1507,7 @@ io.on('connection',(socket)=>
                               val7 = [[ room_id,mem.number, mem.name]];
                               con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
                             });
-                            io.sockets.in(row.number).emit('S_send_room',[{room_name:info.room_name, room_id_server:room_id, admin_name:socket.username, admin_number:socket.number,member:member, time:get_time(thoigian)}]);
+                            io.sockets.in(row.number).emit('S_send_room',{room_name:info.room_name, room_id_server:room_id, admin_name:socket.username, admin_number:socket.number,member:member, time:get_time(thoigian)});
                           }
                       });
                   }
