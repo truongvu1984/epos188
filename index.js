@@ -668,11 +668,9 @@ io.on('connection',(socket)=>
              if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
                 con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` CHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"contact` (`id` INT NOT NULL AUTO_INCREMENT,`number` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`idc` CHAR(15) NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(15),`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"member` (`id` INT NOT NULL AUTO_INCREMENT,`idc`CHAR(20), `number` VARCHAR(45) NOT NULL,`name` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-
                 var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
                 var values = [[tin.mail,tin.name, matkhau]];
@@ -1022,83 +1020,6 @@ io.on('connection',(socket)=>
       }
     }
   });
-  socket.on('C_reg_friend',(ids,num)=>{
-    if(socket.number&&ids!=null&&num!=null&&(!isNaN(ids))&&(!isNaN(num))){
-      if(num==0){
-        if(ids==0){
-          con.query("SELECT * FROM `"+socket.number+"contact` ORDER BY `id` DESC LIMIT 50", function(err1, a1s)
-          {
-            if (err1){console.log('Da co loi contact 3:'+err1);}
-            else {
-              if(a1s.length > 0) {
-                let noidung=[];
-                a1s.forEach(function(a1,key){
-                  noidung.push({ids:a1.id,name:a1.name, number:a1.number,idc:a1.idc,abc:'A'});
-                    if(key===(a1s.length-1))    socket.emit('S_send_contact',noidung);
-                  });
-                }
-              else {
-                socket.emit('S_send_contact_full');
-              }
-            }
-        });
-        }
-        else {
-          con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` > "+ids+" ORDER BY `id` ASC", function(err1, a1s)
-            {
-              if (err1){console.log('Da co loi contact1:'+err1);}
-              else if(a1s.length > 0)
-                {
-                  let noidung=[];
-                  a1s.forEach(function(a1,key){
-                        noidung.push({ids:a1.id,name:a1.name, number:a1.number,idc:a1.idc,abc:'B'});
-                      if(key===(a1s.length-1))socket.emit('S_send_contact',noidung);
-                  });
-
-                }
-          });
-
-        }
-      }
-      else {
-        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `id` < "+ids+" ORDER BY `id` DESC LIMIT 50", function(err1, a1s)
-          {
-            if (err1){console.log('Da co loi contact1:'+err1);}
-            else {
-            if(a1s.length > 0)
-              {
-                let noidung=[];
-                a1s.forEach(function(a1,key){
-                      noidung.push({ids:a1.id,name:a1.name, number:a1.number,idc:a1.idc,abc:'A'});
-                    if(key===(a1s.length-1))socket.emit('S_send_contact',noidung);
-                });
-
-              }
-              else socket.emit('S_send_contact_full');
-            }
-        });
-
-
-
-      }
-    }
-
-  });
-  socket.on('C_del_friend',(numbers)=>{
-    if(socket.number&&isArray(numbers)&&(numbers.length>0)){
-      numbers.forEach((number)=>{
-
-        if(number.idc){
-        con.query("DELETE FROM `"+socket.number+"contact` WHERE `number` LIKE '"+number.idc+"'", function(err3)
-          {
-              if (err3)console.log(err3);
-              else  socket.emit('S_del_friend');
-
-        });
-      }
-      });
-    }
-  });//hi
 
   socket.on('C_gui_tinnhan', function(mess){
     if (socket.number&&mess.nguoinhan&&mess.subject&&mess.vitri&&mess.line){
@@ -1386,7 +1307,7 @@ io.on('connection',(socket)=>
 
     if (socket.number&&string!=null){
 
-      con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
+      con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0 LIMIT 50", function(err, a1s){
       if ( err)console.log(err);
       else
       {
@@ -1394,10 +1315,7 @@ io.on('connection',(socket)=>
           let noidung=[];
           a1s.forEach(function(a1,key){
             noidung.push({user:a1.user, number: a1.number});
-              if(key===(a1s.length-1))  {
-                socket.emit('S_send_search_contact',noidung);
-
-              }
+              if(key===(a1s.length-1))  { socket.emit('S_send_search_contact',noidung);}
 
           });
 
@@ -1421,32 +1339,7 @@ io.on('connection',(socket)=>
         }
     }
   });
-  socket.on('C_send_contact', function (contact){
-      if (socket.number&&contact!=null){
-        con.query("SELECT * FROM `"+socket.number+"contact` WHERE `number` LIKE '"+contact.number+"' LIMIT 1", function(err, a1s)
-             {
-               if ( err){console.log(err);}
-               else
-                 {
-                   if(a1s.length===0){
-                    var sql2 = "INSERT INTO `"+socket.number+"contact` (idc,name,number) VALUES ?";
-                    var values2 = [[contact.idc,contact.name,contact.number]];
-                    con.query(sql2, [values2], function (err, res)
-                      {
-                        if ( err){console.log(err);}
 
-
-                    });
-                  }
-                  socket.emit('S_add_contact_ok',{ids:a1s[0].id, idc:contact.idc,name:contact.name,number:contact.number});
-
-                 }
-            });
-
-
-
-      }
-  });
   socket.on('C_leave_off', function () {
       if (socket.number){
       socket.leave(socket.number);
@@ -1462,10 +1355,6 @@ io.on('connection',(socket)=>
       if (socket.number&&room){
       socket.leave(room);
       socket.roomabc = undefined;
-    }
-  });
-  socket.on('C_got_friend', function (number){
-      if (socket.number&&number){con.query("UPDATE `"+socket.number+"contact` SET `fr` = 'OK' WHERE `number` LIKE '"+number+"'",function(err3, ok){ console.log('loi update'+err)});
     }
   });
   socket.on('C_pos_online', function (info){
