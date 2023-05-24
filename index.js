@@ -875,15 +875,15 @@ io.on('connection',(socket)=>
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
-            if(data.room != ""){
+            if(data.room != null && data.room!=""){
                           if(socket.roomabc){
                             socket.leave(socket.roomabc);
                             socket.join(data.room );
-                            socket.roomabc = data.room ;
+                            socket.roomabc = data.room;
                           }
                           else {
                             socket.join(data.room );
-                            socket.roomabc = data.room ;
+                            socket.roomabc = data.room;
                 }
             }
             // bản tin đến
