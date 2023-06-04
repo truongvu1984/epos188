@@ -1516,13 +1516,12 @@ io.on('connection',(socket)=>
               if(rows.length==0){
                 console.log('22222');
                 var sql = "INSERT INTO `list_user` (user, pass,hoten,capbac,chucvu,donvi,type) VALUES ?";
-                  var values = [[tin.user,tin.pass,tin.hoten,tin.capbac,tin.chucvu,tin.donvi,tin.type, tin.pass]];
+                  var values = [[tin.user,tin.pass,tin.hoten,tin.capbac,tin.chucvu,tin.donvi,tin.type]];
                   con.query(sql, [values], function (err1, result) {
                     if (err1)socket.emit("regis_suco_thatbai","A");
                     else  socket.emit("regis_suco_ok",result.insertId);
                   });
-              }
-              else socket.emit("regis_suco_thatbai","B");
+              }  else socket.emit("regis_suco_thatbai","B");
          }
        });
 
