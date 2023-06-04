@@ -338,7 +338,6 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('login2_caro',(data)=>{
-
     if(data.rightuser&&data.right_pass){
       con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
         if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -444,7 +443,7 @@ io.on('connection',(socket)=>
   });
   socket.on('search_contact_caro', function (string){
     if (socket.number&&string!=null){
-      con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account2` WHERE LOCATE('"+string+"',number)>0", function(err, a1s){
+      con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account2` WHERE LOCATE('"+string+"',number)>0 LIMIT 50", function(err, a1s){
       if ( err)console.log(err);
       else
       {
@@ -1339,7 +1338,6 @@ io.on('connection',(socket)=>
         }
     }
   });
-
   socket.on('C_leave_off', function () {
       if (socket.number){
       socket.leave(socket.number);
@@ -1474,5 +1472,61 @@ io.on('connection',(socket)=>
     });
       }
     });
+  socket.on('login1_suco',(user1, pass1)=>{
+      if(user1&&pass1){
+          con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+user1+"' LIMIT 1", function(err, rows){
+            if (err || rows.length ==0){socket.emit('login1_suco_kotaikhoan');}
+            else{
+              if (passwordHash.verify(pass1, rows[0].pass)){
+                socket.user = user1;
+                socket.type = rows[0].type;
+                if(rows[0].type=="A"||rows[0].type=="D"||rows[0].type=="C")socket.join("chung");
+                else socket.join(user1);
+                socket.emit('login1_suco_dung', {name:rows[0].hoten,capbac:rows[0].capbac,chucvu:rows[0].chucvu,donvi:rows[0].donvi,type:rows[0].type});
+              }
+              else  socket.emit('login1_suco_sai', {name:rows[0].user});
+            }
+        });
+      }
+    });
+  socket.on('make_user', function(tin){
+     if (socket.user!=null && socket.type!=null&&socket.type=="A"){
+       con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
+         if (err)socket.emit("regis_suco_thatbai","A");
+         else{
+              if(rows.length==0){
+                var sql = "INSERT INTO `list_user` (user, pass,hoten,capbac,chucvu,donvi,type) VALUES ?";
+                  var values = [[tin.user,tin.pass,tin.hoten,tin.capbac,tin.chucvu,tin.donvi,tin.type, matkhau]];
+                  con.query(sql, [values], function (err1, result) {
+                    if (err1)socket.emit("regis_suco_thatbai","A");
+                    else  socket.emit("regis_suco_ok",result.insertId);
+                  });
+              }
+              else socket.emit("regis_suco_thatbai","B");
+         }
+       });
+
+
+      }
+    });
+  socket.on('giao_nhiemvu', function(tin){
+       if (socket.user!=null && socket.type!=null&&socket.type=="B"){
+         var idc = 'r'+Date.now();
+         let thoigian=new Date();
+         var sql = "INSERT INTO `list_err` (idc,ten, mota,giaonv,chihuy1) VALUES ?";
+           var values = [[idc,tin.ten,tin.mota,thoigian,tin.user]];
+           con.query(sql, [values], function (err1, result) {
+             if (err1)socket.emit("giao_nhiemvu_thatbai","A");
+             else {
+
+               socket.emit("giao_nhiemvu_ok",{tt:result.insertId ,idc:idc,time:get_time(thoigian)});
+               io.sockets.in("chung").emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,chihuy:tin.name,time:get_time(thoigian)});
+               io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,chihuy:tin.name,time:get_time(thoigian)});
+
+             }
+           });
+        }
+      });
+
 });
 }});
