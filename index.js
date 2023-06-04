@@ -1490,11 +1490,13 @@ io.on('connection',(socket)=>
       }
     });
   socket.on('make_user', function(tin){
+    console.log(socket);
      if (socket.user!=null && socket.type!=null&&socket.type=="A"){
        con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
          if (err)socket.emit("regis_suco_thatbai","A");
          else{
               if(rows.length==0){
+                console.log('22222');
                 var sql = "INSERT INTO `list_user` (user, pass,hoten,capbac,chucvu,donvi,type) VALUES ?";
                   var values = [[tin.user,tin.pass,tin.hoten,tin.capbac,tin.chucvu,tin.donvi,tin.type, matkhau]];
                   con.query(sql, [values], function (err1, result) {
