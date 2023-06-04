@@ -1477,7 +1477,7 @@ io.on('connection',(socket)=>
           con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+user1+"' LIMIT 1", function(err, rows){
             if (err || rows.length ==0){socket.emit('login1_suco_kotaikhoan');}
             else{
-              if (passwordHash.verify(pass1, rows[0].pass)){
+              if (rows[0].pass==pass1){
                 socket.user = user1;
                 socket.type = rows[0].type;
                 if(rows[0].type=="A"||rows[0].type=="D"||rows[0].type=="C")socket.join("chung");
