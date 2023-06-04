@@ -1494,14 +1494,14 @@ io.on('connection',(socket)=>
             con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
               if (err || rows.length ==0){socket.emit('login2_suco_thatbai');}
               else{
-                if (rows[0].pass==pass1){
-                  socket.user = user1;
+                if (rows[0].pass==tin.pass){
+                  socket.user = tin.user;
                   socket.type = rows[0].type;
                   if(rows[0].type=="A"||rows[0].type=="D"||rows[0].type=="C")socket.join("chung");
                   else socket.join(user1);
 
                 }
-                else  socket.emit('login1_suco_sai', {name:rows[0].user});
+                else  socket.emit('login2_suco_thatbai');
               }
           });
         }
