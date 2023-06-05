@@ -1541,12 +1541,14 @@ io.on('connection',(socket)=>
                     con.query(lenh, function(err1, row1s){
                       if (err1 || row1s.length ==0){console.log(err1);}
                       else{
+                        console.log('Tong='+row1s.length);
                         row1s.forEach((row1, i) => {
                           let chihuy2=null;if(row1.chihuy2!=null)chihuy=row1.chihuy2;
                           let batdau=null;if(row1.batdau!=null)batdau=get_time(row1.batdau);
                           let dennoi=null;if(row1.dennoi!=null)dennoi=get_time(row1.dennoi);
                           let xong=null;if(row1.xong!=null)xong=get_time(row1.xong);
                           let vedonvi=null;if(row1.vedonvi!=null)vedonvi=get_time(row1.vedonvi);
+                          console.log('Gui di:'+row1.id);
                           socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv:get_time(row1.giaonv),chihuy:row1.chihuy1,
                             chihuy2:chihuy2,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi});
 
