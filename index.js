@@ -1500,7 +1500,7 @@ io.on('connection',(socket)=>
                   if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
                     socket.join("chung");
                     //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
-                    con.query("SELECT * FROM `list_err` WHERE id>"+tin.tt+" DESC", function(err1, row1s){
+                    con.query("SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id DESC", function(err1, row1s){
                       if (err1 || row1s.length ==0){console.log(err1);}
                       else{
                         row1s.forEach((row1, i) => {
@@ -1517,7 +1517,7 @@ io.on('connection',(socket)=>
                       }
                     });
                     // kiểm tra xem có cập nhật mới nào không thì gửi về cho nó
-                    if(tin.bantin.length>0){
+                    if(tin.bantin!=undefined&&tin.bantin.length>0){
                     tin.bantin.forEach((item, i) => {
                       con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1", function(err2, row2s){
                           if (err2){console.log(err2);}
@@ -1536,8 +1536,8 @@ io.on('connection',(socket)=>
                   else {
                     socket.join(user1);
                     let lenh;
-                    if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `chihuy1` LIKE '"+tin.user+"' AND id>"+tin.tt+" DESC";
-                    else lenh="SELECT * FROM `list_err` WHERE `chihuy2` LIKE '"+tin.user+"' AND id>"+tin.tt+" DESC"
+                    if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `chihuy1` LIKE '"+tin.user+"' AND id > "+tin.tt+" ORDER BY id DESC";
+                    else lenh="SELECT * FROM `list_err` WHERE `chihuy2` LIKE '"+tin.user+"' AND id >"+tin.tt+"  ORDER BY DESC"
                     con.query(lenh, function(err1, row1s){
                       if (err1 || row1s.length ==0){console.log(err1);}
                       else{
