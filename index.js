@@ -1497,8 +1497,85 @@ io.on('connection',(socket)=>
                 if (rows[0].pass==tin.pass){
                   socket.user = tin.user;
                   socket.type = rows[0].type;
-                  if(rows[0].type=="A"||rows[0].type=="D"||rows[0].type=="C")socket.join("chung");
-                  else socket.join(user1);
+                  if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
+                    socket.join("chung");
+                    //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
+                    con.query("SELECT * FROM `list_err` WHERE id>"+tin.tt+" DESC", function(err1, row1s){
+                      if (err1 || row1s.length ==0){console.log(err1);}
+                      else{
+                        row1s.forEach((row1, i) => {
+                          let chihuy2=null;if(row1.chihuy2!=null)chihuy=row1.chihuy2;
+                          let batdau=null;if(row1.batdau!=null)batdau=get_time(row1.batdau);
+                          let dennoi=null;if(row1.dennoi!=null)dennoi=get_time(row1.dennoi);
+                          let xong=null;if(row1.xong!=null)xong=get_time(row1.xong);
+                          let vedonvi=null;if(row1.vedonvi!=null)vedonvi=get_time(row1.vedonvi);
+                          socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv:get_time(row1.giaonv),chihuy:row1.chihuy1,
+                            chihuy2:chihuy2,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi});
+
+                        });
+
+                      }
+                    });
+                    // kiểm tra xem có cập nhật mới nào không thì gửi về cho nó
+                    if(tin.bantin.length>0){
+                    tin.bantin.forEach((item, i) => {
+                      con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1", function(err2, row2s){
+                          if (err2){console.log(err2);}
+                          else if(row2s.length>0){
+                            let chihuy2=null;if(row2s[0].chihuy2!=null)chihuy=row2s[0].chihuy2;
+                            let batdau=null;if(row2s[0].batdau!=null)batdau=get_time(row2s[0].batdau);
+                            let dennoi=null;if(row2s[0].dennoi!=null)dennoi=get_time(row2s[0].dennoi);
+                            let xong=null;if(row2s[0].xong!=null)xong=get_time(row2s[0].xong);
+                            let vedonvi=null;if(row2s[0].vedonvi!=null)vedonvi=get_time(row2s[0].vedonvi);
+                            socket.emit("S_capnhat",{idc:item.idc,chihuy2:chihuy2,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi});
+                          }
+                        });
+                      });
+                    }
+                  }
+                  else {
+                    socket.join(user1);
+                    let lenh;
+                    if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `chihuy1` LIKE '"+tin.user+"' AND id>"+tin.tt+" DESC";
+                    else lenh="SELECT * FROM `list_err` WHERE `chihuy2` LIKE '"+tin.user+"' AND id>"+tin.tt+" DESC"
+                    con.query(lenh, function(err1, row1s){
+                      if (err1 || row1s.length ==0){console.log(err1);}
+                      else{
+                        row1s.forEach((row1, i) => {
+                          let chihuy2=null;if(row1.chihuy2!=null)chihuy=row1.chihuy2;
+                          let batdau=null;if(row1.batdau!=null)batdau=get_time(row1.batdau);
+                          let dennoi=null;if(row1.dennoi!=null)dennoi=get_time(row1.dennoi);
+                          let xong=null;if(row1.xong!=null)xong=get_time(row1.xong);
+                          let vedonvi=null;if(row1.vedonvi!=null)vedonvi=get_time(row1.vedonvi);
+                          socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv:get_time(row1.giaonv),chihuy:row1.chihuy1,
+                            chihuy2:chihuy2,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi});
+
+                        });
+
+                      }
+                    });
+                    if(tin.bantin.length>0){
+                    tin.bantin.forEach((item, i) => {
+                      if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `chihuy1` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
+                      else "SELECT * FROM `list_err` WHERE `chihuy2` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
+                      con.query(lenh, function(err2, row2s){
+                          if (err2){console.log(err2);}
+                          else if(row2s.length>0){
+                            let chihuy2=null;if(row2s[0].chihuy2!=null)chihuy=row2s[0].chihuy2;
+                            let batdau=null;if(row2s[0].batdau!=null)batdau=get_time(row2s[0].batdau);
+                            let dennoi=null;if(row2s[0].dennoi!=null)dennoi=get_time(row2s[0].dennoi);
+                            let xong=null;if(row2s[0].xong!=null)xong=get_time(row2s[0].xong);
+                            let vedonvi=null;if(row2s[0].vedonvi!=null)vedonvi=get_time(row2s[0].vedonvi);
+                            socket.emit("S_capnhat",{idc:item.idc,chihuy2:chihuy2,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi});
+                          }
+                        });
+                      });
+                    }
+
+                  }
+
+
+
 
                 }
                 else  socket.emit('login2_suco_thatbai');
@@ -1507,14 +1584,12 @@ io.on('connection',(socket)=>
         }
     });
   socket.on('make_user', function(tin){
-    console.log(tin);
-     if (socket.user!=null && socket.type!=null&&socket.type=="A"){
+    if (socket.user!=null && socket.type!=null&&socket.type=="A"){
 
        con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
          if (err)socket.emit("regis_suco_thatbai","A");
          else{
               if(rows.length==0){
-                console.log('22222');
                 var sql = "INSERT INTO `list_user` (user, pass,hoten,capbac,chucvu,donvi,type) VALUES ?";
                   var values = [[tin.user,tin.pass,tin.hoten,tin.capbac,tin.chucvu,tin.donvi,tin.type]];
                   con.query(sql, [values], function (err1, result) {
@@ -1537,11 +1612,11 @@ io.on('connection',(socket)=>
            con.query(sql, [values], function (err1, result) {
              if (err1)socket.emit("giao_nhiemvu_thatbai","A");
              else {
-
                socket.emit("giao_nhiemvu_ok",{tt:result.insertId ,idc:idc,time:get_time(thoigian)});
-               io.sockets.in("chung").emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,chihuy:tin.name,time:get_time(thoigian)});
-               io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,chihuy:tin.name,time:get_time(thoigian)});
-
+               io.sockets.in("chung").emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,giaonv:get_time(thoigian),
+               chihuy1:tin.name,chihuy2:'',batdau:'',dennoi:'',xong:'',vedonvi:''});
+               io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,giaonv:get_time(thoigian),
+               chihuy1:tin.name,chihuy2:'',batdau:'',dennoi:'',xong:'',vedonvi:''});
              }
            });
         }
