@@ -1347,7 +1347,7 @@ io.on('connection',(socket)=>
         socket.leave(socket.roomabc);
         socket.roomabc = undefined;
       }
-      socket.emit('log_out_ok');
+
   });
   socket.on('C_leave_room', function (room) {
       if (socket.number&&room){
@@ -1534,7 +1534,7 @@ io.on('connection',(socket)=>
                     }
                   }
                   else {
-                    socket.join(user1);
+                    socket.join(tin.user);
                     let lenh;
                     if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `chihuy1` LIKE '"+tin.user+"' AND id > "+tin.tt+" ORDER BY id DESC";
                     else lenh="SELECT * FROM `list_err` WHERE `chihuy2` LIKE '"+tin.user+"' AND id >"+tin.tt+"  ORDER BY DESC"
