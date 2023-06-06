@@ -1019,7 +1019,6 @@ io.on('connection',(socket)=>
       }
     }
   });
-
   socket.on('C_gui_tinnhan', function(mess){
     if (socket.number&&mess.nguoinhan&&mess.subject&&mess.vitri&&mess.line){
       let thoigian = new Date();
@@ -1303,9 +1302,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('search_contact', function (string){
-
     if (socket.number&&string!=null){
-
       con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0 LIMIT 50", function(err, a1s){
       if ( err)console.log(err);
       else
@@ -1541,14 +1538,14 @@ io.on('connection',(socket)=>
                     con.query(lenh, function(err1, row1s){
                       if (err1 || row1s.length ==0){console.log(err1);}
                       else{
-                        console.log('Tong='+row1s.length);
+
                         row1s.forEach((row1, i) => {
                           let chihuy2=null;if(row1.chihuy2!=null)chihuy=row1.chihuy2;
                           let batdau=null;if(row1.batdau!=null)batdau=get_time(row1.batdau);
                           let dennoi=null;if(row1.dennoi!=null)dennoi=get_time(row1.dennoi);
                           let xong=null;if(row1.xong!=null)xong=get_time(row1.xong);
                           let vedonvi=null;if(row1.vedonvi!=null)vedonvi=get_time(row1.vedonvi);
-                          console.log('Gui di:'+row1.id);
+
                           socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv:get_time(row1.giaonv),chihuy:row1.chihuy1,
                             chihuy2:chihuy2,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi});
 
@@ -1557,7 +1554,7 @@ io.on('connection',(socket)=>
                       }
                     });
                     if(tin.bantin.length>0){
-                    tin.bantin.forEach((item, i) => {
+                      tin.bantin.forEach((item, i) => {
                       if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `chihuy1` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
                       else "SELECT * FROM `list_err` WHERE `chihuy2` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
                       con.query(lenh, function(err2, row2s){
@@ -1571,6 +1568,27 @@ io.on('connection',(socket)=>
                             socket.emit("S_capnhat",{idc:item.idc,chihuy2:chihuy2,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi});
                           }
                         });
+                      });
+                    }
+                    if(rows[0].type=="E"){
+                      con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err4, row4s){
+                        if (err4)console.log(err4);
+                        else{
+                          con.query("SELECT * FROM `list_user` WHERE LOCATE('"+row4s[0].donvi+"',donvi)>0 AND `id` > "+tin.tt_list, function(err5, row5s){
+                            if (err5)console.log(err5);
+                            else{
+                              if(row5s.length>0){
+                                row5s.forEach((item, i) => {
+
+                                    socket.emit("S_send_user",{tt:item.id, user:item.user,hoten:item.hoten,capbac:item.capbac,chucvu:item.chucvu,donvi:tem.donvi,type:tem.type});
+
+                                });
+
+
+                              }
+                            }
+                          });
+                        }
                       });
                     }
 
