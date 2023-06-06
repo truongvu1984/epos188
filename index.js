@@ -1534,7 +1534,7 @@ io.on('connection',(socket)=>
                       else{
                         if(row5s.length>0){
                           row5s.forEach((item, i) => {
-                              socket.emit("S_send_user",{tt:item.id, user:item.user,hoten:item.hoten,capbac:item.capbac,chucvu:item.chucvu,donvi:tem.donvi,type:tem.type});
+                              socket.emit("S_send_user",{tt:item.id, user:item.user,hoten:item.hoten,capbac:item.capbac,chucvu:item.chucvu,donvi:item.donvi,type:item.type});
                           });
 
 
