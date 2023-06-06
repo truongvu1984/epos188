@@ -1515,7 +1515,7 @@ io.on('connection',(socket)=>
                     });
                     // kiểm tra xem có cập nhật mới nào không thì gửi về cho nó
                     if(tin.bantin!=undefined&&tin.bantin.length>0){
-                    tin.bantin.forEach((item, i) => {
+                      tin.bantin.forEach((item, i) => {
                       con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1", function(err2, row2s){
                           if (err2){console.log(err2);}
                           else if(row2s.length>0){
@@ -1529,6 +1529,19 @@ io.on('connection',(socket)=>
                         });
                       });
                     }
+                    con.query("SELECT * FROM `list_user` WHERE `id` > "+tin.tt_list, function(err5, row5s){
+                      if (err5)console.log(err5);
+                      else{
+                        if(row5s.length>0){
+                          row5s.forEach((item, i) => {
+                              socket.emit("S_send_user",{tt:item.id, user:item.user,hoten:item.hoten,capbac:item.capbac,chucvu:item.chucvu,donvi:tem.donvi,type:tem.type});
+                          });
+
+
+                        }
+                      }
+                    });
+
                   }
                   else {
                     socket.join(tin.user);
@@ -1588,6 +1601,7 @@ io.on('connection',(socket)=>
                               }
                             }
                           });
+
                         }
                       });
                     }
