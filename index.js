@@ -1487,6 +1487,7 @@ io.on('connection',(socket)=>
       }
     });
   socket.on('login2_suco',(tin)=>{
+    console.log(tin);
         if(tin.user&&tin.pass){
             con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
               if (err || rows.length ==0){socket.emit('login2_suco_thatbai');}
@@ -1496,19 +1497,20 @@ io.on('connection',(socket)=>
                   socket.type = rows[0].type;
                   if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
                     socket.join("chung");
+                    console.log('AAA');
                     //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
                     con.query("SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id DESC", function(err1, row1s){
                       if (err1 || row1s.length ==0){console.log(err1);}
                       else{
+                        console.log('BBBB'+row1s.length);
                         row1s.forEach((row1, i) => {
-                          let chihuy2=null;if(row1.chihuy2!=null)chihuy=row1.chihuy2;
-                          let batdau=null;if(row1.batdau!=null)batdau=get_time(row1.batdau);
-                          let dennoi=null;if(row1.dennoi!=null)dennoi=get_time(row1.dennoi);
-                          let xong=null;if(row1.xong!=null)xong=get_time(row1.xong);
-                          let vedonvi=null;if(row1.vedonvi!=null)vedonvi=get_time(row1.vedonvi);
+                          let chihuy2='';if(row1.chihuy2!=null)chihuy=row1.chihuy2;
+                          let batdau='';if(row1.batdau!=null)batdau=get_time(row1.batdau);
+                          let dennoi='';if(row1.dennoi!=null)dennoi=get_time(row1.dennoi);
+                          let xong='';if(row1.xong!=null)xong=get_time(row1.xong);
+                          let vedonvi='';if(row1.vedonvi!=null)vedonvi=get_time(row1.vedonvi);
                           socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv:get_time(row1.giaonv),chihuy:row1.chihuy1,
                             chihuy2:chihuy2,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi});
-
                         });
 
                       }
@@ -1519,11 +1521,11 @@ io.on('connection',(socket)=>
                       con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1", function(err2, row2s){
                           if (err2){console.log(err2);}
                           else if(row2s.length>0){
-                            let chihuy2=null;if(row2s[0].chihuy2!=null)chihuy=row2s[0].chihuy2;
-                            let batdau=null;if(row2s[0].batdau!=null)batdau=get_time(row2s[0].batdau);
-                            let dennoi=null;if(row2s[0].dennoi!=null)dennoi=get_time(row2s[0].dennoi);
-                            let xong=null;if(row2s[0].xong!=null)xong=get_time(row2s[0].xong);
-                            let vedonvi=null;if(row2s[0].vedonvi!=null)vedonvi=get_time(row2s[0].vedonvi);
+                            let chihuy2='';if(row2s[0].chihuy2!=null)chihuy=row2s[0].chihuy2;
+                            let batdau='';if(row2s[0].batdau!=null)batdau=get_time(row2s[0].batdau);
+                            let dennoi='';if(row2s[0].dennoi!=null)dennoi=get_time(row2s[0].dennoi);
+                            let xong='';if(row2s[0].xong!=null)xong=get_time(row2s[0].xong);
+                            let vedonvi='';if(row2s[0].vedonvi!=null)vedonvi=get_time(row2s[0].vedonvi);
                             socket.emit("S_capnhat",{idc:item.idc,chihuy2:chihuy2,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi});
                           }
                         });
@@ -1553,11 +1555,11 @@ io.on('connection',(socket)=>
                       else{
 
                         row1s.forEach((row1, i) => {
-                          let chihuy2=null;if(row1.chihuy2!=null)chihuy=row1.chihuy2;
-                          let batdau=null;if(row1.batdau!=null)batdau=get_time(row1.batdau);
-                          let dennoi=null;if(row1.dennoi!=null)dennoi=get_time(row1.dennoi);
-                          let xong=null;if(row1.xong!=null)xong=get_time(row1.xong);
-                          let vedonvi=null;if(row1.vedonvi!=null)vedonvi=get_time(row1.vedonvi);
+                          let chihuy2='';if(row1.chihuy2!=null)chihuy=row1.chihuy2;
+                          let batdau='';if(row1.batdau!=null)batdau=get_time(row1.batdau);
+                          let dennoi='';if(row1.dennoi!=null)dennoi=get_time(row1.dennoi);
+                          let xong='';if(row1.xong!=null)xong=get_time(row1.xong);
+                          let vedonvi='';if(row1.vedonvi!=null)vedonvi=get_time(row1.vedonvi);
 
                           socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv:get_time(row1.giaonv),chihuy:row1.chihuy1,
                             chihuy2:chihuy2,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi});
@@ -1573,11 +1575,11 @@ io.on('connection',(socket)=>
                       con.query(lenh, function(err2, row2s){
                           if (err2){console.log(err2);}
                           else if(row2s.length>0){
-                            let chihuy2=null;if(row2s[0].chihuy2!=null)chihuy=row2s[0].chihuy2;
-                            let batdau=null;if(row2s[0].batdau!=null)batdau=get_time(row2s[0].batdau);
-                            let dennoi=null;if(row2s[0].dennoi!=null)dennoi=get_time(row2s[0].dennoi);
-                            let xong=null;if(row2s[0].xong!=null)xong=get_time(row2s[0].xong);
-                            let vedonvi=null;if(row2s[0].vedonvi!=null)vedonvi=get_time(row2s[0].vedonvi);
+                            let chihuy2='';if(row2s[0].chihuy2!=null)chihuy=row2s[0].chihuy2;
+                            let batdau='';if(row2s[0].batdau!=null)batdau=get_time(row2s[0].batdau);
+                            let dennoi='';if(row2s[0].dennoi!=null)dennoi=get_time(row2s[0].dennoi);
+                            let xong='';if(row2s[0].xong!=null)xong=get_time(row2s[0].xong);
+                            let vedonvi='';if(row2s[0].vedonvi!=null)vedonvi=get_time(row2s[0].vedonvi);
                             socket.emit("S_capnhat",{idc:item.idc,chihuy2:chihuy2,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi});
                           }
                         });
