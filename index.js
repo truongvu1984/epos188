@@ -1653,9 +1653,9 @@ io.on('connection',(socket)=>
       if (socket.user!=null){
         let thoigian=new Date();
         let abc='';
-        if(tin=="A")abc='batdau';
-        else if(tin=="B")abc='dennoi';
-        else if(tin=="C")abc='xong';
+        if(nd=="A")abc='batdau';
+        else if(nd=="B")abc='dennoi';
+        else if(nd=="C")abc='xong';
         else abc='vedonvi';
         con.query("UPDATE `list_err` SET `"+abc+"`="+get_time(thoigian)+" WHERE `idc` LIKE '"+idc+"'",function(err1){
           if(err1)socket.emit('gui_thongtin_thatbai',nd);
