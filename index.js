@@ -1488,8 +1488,7 @@ io.on('connection',(socket)=>
       }
     });
   socket.on('login2_suco',(tin)=>{
-    console.log(tin);
-        if(tin.user&&tin.pass){
+    if(tin.user&&tin.pass){
             con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
               if (err || rows.length ==0){socket.emit('login2_suco_thatbai');}
               else{
@@ -1498,7 +1497,7 @@ io.on('connection',(socket)=>
                   socket.type = rows[0].type;
                   if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
                     socket.join("chung");
-                    console.log('AAA');
+
                     //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
                     con.query("SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id ASC", function(err1, row1s){
                       if (err1 || row1s.length ==0){console.log(err1);}
@@ -1653,6 +1652,7 @@ io.on('connection',(socket)=>
   socket.on('C_capnhat', function(idc,nd){
       if (socket.user!=null){
         let ok=new Date();
+        socket.emit('gui_thongtin_ok',nd,idc,{time:get_time(ok)});
         console.log(ok);
         let abc='';
         if(nd=="A")abc='batdau';
@@ -1661,7 +1661,7 @@ io.on('connection',(socket)=>
         else abc='vedonvi';
         con.query("UPDATE `list_err` SET `"+abc+"` = "+ok+" WHERE `idc` LIKE '"+idc+"'",function(err1){
           if(err1){socket.emit('gui_thongtin_thatbai',nd);console.log(err1);}
-          else socket.emit('gui_thongtin_ok',nd,idc,{time:get_time(ok)});
+          // else socket.emit('gui_thongtin_ok',nd,idc,{time:get_time(ok)});
         });
       }
   });
