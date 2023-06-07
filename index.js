@@ -1658,7 +1658,7 @@ io.on('connection',(socket)=>
         else if(nd=="C")abc='xong';
         else abc='vedonvi';
         con.query("UPDATE `list_err` SET `"+abc+"`="+get_time(thoigian)+" WHERE `idc` LIKE '"+idc+"'",function(err1){
-          if(err1)socket.emit('gui_thongtin_thatbai',nd);
+          if(err1){socket.emit('gui_thongtin_thatbai',nd);console.log(err1);}
           else socket.emit('gui_thongtin_ok',nd,idc,{time:get_time(thoigian)});
         });
       }
