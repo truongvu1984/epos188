@@ -1651,18 +1651,26 @@ io.on('connection',(socket)=>
       });
   socket.on('C_capnhat', function(idc,nd){
       if (socket.user!=null){
-        let ok=new Date();
-        socket.emit('gui_thongtin_ok',nd,idc,{time:get_time(ok)});
-        console.log(ok);
+        let thoigian=new Date();
+
+        console.log(thoigian);
         let abc='';
         if(nd=="A")abc='batdau';
         else if(nd=="B")abc='dennoi';
         else if(nd=="C")abc='xong';
         else abc='vedonvi';
-        con.query("UPDATE `list_err` SET `"+abc+"` = "+ok+" WHERE `idc` LIKE '"+idc+"'",function(err1){
-          if(err1){socket.emit('gui_thongtin_thatbai',nd);console.log(err1);}
-          // else socket.emit('gui_thongtin_ok',nd,idc,{time:get_time(ok)});
+        var sql = "INSERT INTO `list_err` (idc,ten, mota,giaonv,chihuy1) VALUES ?";
+          var values = [["1234","abbc","",thoigian,tin.user]];
+          con.query(sql, [values], function (err1, result) {
+            if (err1)console.log(err1);
+            else {
+              socket.emit('gui_thongtin_ok',nd,idc,{time:get_time(thoigian)});
+            }
         });
+        // con.query("UPDATE `list_err` SET `"+abc+"` = "+ok+" WHERE `idc` LIKE '"+idc+"'",function(err1){
+        //   if(err1){socket.emit('gui_thongtin_thatbai',nd);console.log(err1);}
+        //    else socket.emit('gui_thongtin_ok',nd,idc,{time:get_time(ok)});
+        // });
       }
   });
 
