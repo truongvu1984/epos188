@@ -1660,7 +1660,7 @@ io.on('connection',(socket)=>
         else if(nd=="C")abc='xong';
         else abc='vedonvi';
         var sql = "INSERT INTO `list_err` (idc,ten, mota,giaonv,chihuy1) VALUES ?";
-          var values = [["1234","abbc","",thoigian,tin.user]];
+          var values = [["1234","abbc","",thoigian,"dfgh"]];
           con.query(sql, [values], function (err1, result) {
             if (err1)console.log(err1);
             else {
