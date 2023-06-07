@@ -1531,7 +1531,7 @@ io.on('connection',(socket)=>
                         });
                       });
                     }
-                    con.query("SELECT * FROM `list_user` WHERE `id` > "+tin.tt_list" ORDER BY id ASC", function(err5, row5s){
+                    con.query("SELECT * FROM `list_user` WHERE `id` > "+tin.tt_list+" ORDER BY id ASC", function(err5, row5s){
                       if (err5)console.log(err5);
                       else{
                         if(row5s.length>0){
@@ -1589,7 +1589,7 @@ io.on('connection',(socket)=>
                       con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err4, row4s){
                         if (err4)console.log(err4);
                         else{
-                          con.query("SELECT * FROM `list_user` WHERE LOCATE('"+row4s[0].donvi+"',donvi)>0 AND `id` > "+tin.tt_list, function(err5, row5s){
+                          con.query("SELECT * FROM `list_user` WHERE LOCATE('"+row4s[0].donvi+"',donvi)>0 AND `id` > "+tin.tt_list+" ORDER BY id ASC", function(err5, row5s){
                             if (err5)console.log(err5);
                             else{
                               if(row5s.length>0){
