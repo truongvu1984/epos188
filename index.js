@@ -53,6 +53,7 @@ function kiemtra_taikhoan(){
 }
 app.get('/', (req, res) => res.render('privacy'));
 app.get('/privacy-policy', (req, res) => res.render('privacy'));
+
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
@@ -1651,15 +1652,16 @@ io.on('connection',(socket)=>
       });
   socket.on('C_capnhat', function(idc,nd){
       if (socket.user!=null){
-        let thoigian=new Date();
+        let ok=new Date();
+        console.log(ok);
         let abc='';
         if(nd=="A")abc='batdau';
         else if(nd=="B")abc='dennoi';
         else if(nd=="C")abc='xong';
         else abc='vedonvi';
-        con.query("UPDATE `list_err` SET `"+abc+"` = NOW() WHERE `idc` LIKE '"+idc+"'",function(err1){
+        con.query("UPDATE `list_err` SET `"+abc+"` = "+ok+" WHERE `idc` LIKE '"+idc+"'",function(err1){
           if(err1){socket.emit('gui_thongtin_thatbai',nd);console.log(err1);}
-          else socket.emit('gui_thongtin_ok',nd,idc,{time:get_time(thoigian)});
+          else socket.emit('gui_thongtin_ok',nd,idc,{time:get_time(ok)});
         });
       }
   });
