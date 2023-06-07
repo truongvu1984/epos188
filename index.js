@@ -1499,7 +1499,7 @@ io.on('connection',(socket)=>
                     socket.join("chung");
                     console.log('AAA');
                     //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
-                    con.query("SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id DESC", function(err1, row1s){
+                    con.query("SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id ASC", function(err1, row1s){
                       if (err1 || row1s.length ==0){console.log(err1);}
                       else{
                         console.log('BBBB'+row1s.length);
@@ -1531,7 +1531,7 @@ io.on('connection',(socket)=>
                         });
                       });
                     }
-                    con.query("SELECT * FROM `list_user` WHERE `id` > "+tin.tt_list, function(err5, row5s){
+                    con.query("SELECT * FROM `list_user` WHERE `id` > "+tin.tt_list" ORDER BY id ASC", function(err5, row5s){
                       if (err5)console.log(err5);
                       else{
                         if(row5s.length>0){
@@ -1548,8 +1548,8 @@ io.on('connection',(socket)=>
                   else {
                     socket.join(tin.user);
                     let lenh;
-                    if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `chihuy1` LIKE '"+tin.user+"' AND id > "+tin.tt+" ORDER BY id DESC";
-                    else lenh="SELECT * FROM `list_err` WHERE `chihuy2` LIKE '"+tin.user+"' AND id >"+tin.tt+"  ORDER BY DESC"
+                    if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `chihuy1` LIKE '"+tin.user+"' AND id > "+tin.tt+" ORDER BY id ASC";
+                    else lenh="SELECT * FROM `list_err` WHERE `chihuy2` LIKE '"+tin.user+"' AND id >"+tin.tt+"  ORDER BY id ASC";
                     con.query(lenh, function(err1, row1s){
                       if (err1 || row1s.length ==0){console.log(err1);}
                       else{
