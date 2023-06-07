@@ -1660,11 +1660,11 @@ io.on('connection',(socket)=>
         else if(nd=="C")abc='xong';
         else abc='vedonvi';
         var sql = "INSERT INTO `list_err` (idc,ten, mota,giaonv,chihuy1) VALUES ?";
-          var values = [["1234","abbc","",thoigian,"dfgh"]];
+          var values = [["12345","abbc","",thoigian,"dfgh"]];
           con.query(sql, [values], function (err1, result) {
             if (err1)console.log(err1);
             else {
-              socket.emit('gui_thongtin_ok',nd,idc,{time:get_time(thoigian)});
+              socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,time:get_time(thoigian)});
             }
         });
         // con.query("UPDATE `list_err` SET `"+abc+"` = "+ok+" WHERE `idc` LIKE '"+idc+"'",function(err1){
