@@ -60,7 +60,7 @@ con.connect(function(err) {
       let time= Date.now();
       console.log('AAAA'+time);
       console.log(time);
-      con.query("UPDATE `test` SET abcd = "+rows[0].abcd+" WHERE `tt` = 5",function(err2){
+      con.query("UPDATE `test` SET abcd = "+time+" WHERE `tt` = 5",function(err2){
         if(err2){console.log(err2);console.log('DDDD'+time);}
         else console.log('ABC'+time);
 
