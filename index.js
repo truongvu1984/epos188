@@ -57,6 +57,12 @@ app.get('/privacy-policy', (req, res) => res.render('privacy'));
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
+      let time=new Date();
+      var sql = "INSERT INTO `test`(abc) VALUES ?";
+        var values = [[time]];
+        con.query(sql, [values], function (err1, result) {
+          if(err1)console.log(err1);
+        });
 
  kiemtra_taikhoan();
 io.on('connection',(socket)=>
