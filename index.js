@@ -58,12 +58,12 @@ con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
       let time=new Date();
-      var sql = "INSERT INTO `test`(abc,abcd) VALUES ?";
-        var values = [[time,time]];
+      var sql = "INSERT INTO `test`(abc,abcd,tt) VALUES ?";
+        var values = [[time,time,5]];
         con.query(sql,[values], function (err1, result) {
           if(err1)console.log(err1);
           else {
-            con.query("SELECT * FROM `test` WHERE `id` = '1' LIMIT 1", function(err, rows){
+            con.query("SELECT * FROM `test` WHERE `tt` = 5 LIMIT 1", function(err, rows){
               if (err)console.log(err);
               else{
                 con.query("UPDATE `test` SET abcd = "+rows[0].abcd+" WHERE `id` = 1",function(err2){
