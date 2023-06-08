@@ -57,46 +57,23 @@ app.get('/privacy-policy', (req, res) => res.render('privacy'));
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      let time= new Date();
-      console.log('AAAA'+time);
-      console.log(time);
-      let updateQuery = "UPDATE `test` SET abcd = ? WHERE tt = ?";
-      let updateParams = [time, 5];
-      con.query(updateQuery, updateParams, (error, results) => {
-        if (error) {
-          console.error(error);
-          // Handle error
-        } else {
-          console.log('Date column updated successfully');
-          // Handle success
-        }
-
-
-      });
-
-
-      //
-      // con.query("UPDATE `test` SET abcd = "+time+" WHERE `tt` = 5",function(err2){
-      //   if(err2){console.log(err2);console.log('DDDD'+time);}
-      //   else console.log('ABC'+time);
+      // let time= new Date();
+      // console.log('AAAA'+time);
+      // console.log(time);
+      // let updateQuery = "UPDATE `test` SET abcd = ? WHERE tt = ?";
+      // let updateParams = [time, 5];
+      // con.query(updateQuery, updateParams, (error, results) => {
+      //   if (error) {
+      //     console.error(error);
+      //     // Handle error
+      //   } else {
+      //     console.log('Date column updated successfully');
+      //     // Handle success
+      //   }
       //
       //
       // });
 
-      // var sql = "INSERT INTO `test`(abc,abcd,tt) VALUES ?";
-      //   var values = [[time,time,5]];
-      //   con.query(sql,[values], function (err1, result) {
-      //     if(err1)console.log(err1);
-      //     else {
-      //       con.query("SELECT * FROM `test` WHERE `tt` = 5 LIMIT 1", function(err, rows){
-      //         if (err)console.log(err);
-      //         else{
-      //
-      //
-      //         }
-      //       });
-      //     }
-      //   });
 
 
 
@@ -1694,25 +1671,19 @@ io.on('connection',(socket)=>
   socket.on('C_capnhat', function(idc,nd){
       if (socket.user!=null){
         let thoigian=new Date();
-
-        console.log(thoigian);
         let abc='';
         if(nd=="A")abc='batdau';
         else if(nd=="B")abc='dennoi';
         else if(nd=="C")abc='xong';
         else abc='vedonvi';
-        var sql = "INSERT INTO `list_err` (idc,ten, mota,giaonv,chihuy1) VALUES ?";
-          var values = [["12345","abbc","",thoigian,"dfgh"]];
-          con.query(sql, [values], function (err1, result) {
-            if (err1)console.log(err1);
-            else {
-              con.query("UPDATE `list_err` SET giaonv = "+thoigian+" WHERE `idc` LIKE '"+idc+"'",function(err2){
-                if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
-                 else socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,time:get_time(thoigian)});
-              });
-
-            }
+        let sql1 = "UPDATE `list_err` SET `"+abc+"` = ? WHERE `idc` LIKE ?";
+         let val1 = [thoigian, idc];
+        // con.query(updateQuery, updateParams, (error, results) => {
+        con.query(sql1,val1,function(err2){
+          if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
+           else socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,time:get_time(thoigian)});
         });
+
         // con.query("UPDATE `list_err` SET `"+abc+"` = "+ok+" WHERE `idc` LIKE '"+idc+"'",function(err1){
         //   if(err1){socket.emit('gui_thongtin_thatbai',nd);console.log(err1);}
         //    else socket.emit('gui_thongtin_ok',nd,idc,{time:get_time(ok)});
