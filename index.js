@@ -60,13 +60,22 @@ con.connect(function(err) {
       let time=new Date();
       var sql = "INSERT INTO `test`(abc) VALUES ?";
         var values = [[time]];
-        // con.query(sql, [values], function (err1, result) {
-        //   if(err1)console.log(err1);
-        // });
-        con.query("UPDATE `test` SET abc = "+time+" WHERE `id` = 1",function(err2){
-          if(err2){console.log(err2);}
-           
+        con.query(sql, [values], function (err1, result) {
+          if(err1)console.log(err1);
+          else {
+            con.query("SELECT * FROM `test` WHERE `id` = '1' LIMIT 1", function(err, rows){
+              if (err)console.log(err);
+              else{
+                con.query("UPDATE `test` SET abc = "+rows[0].abc+" WHERE `id` = 1",function(err2){
+                  if(err2){console.log(err2);}
+
+                });
+              }
+            });
+          }
         });
+
+
 
  kiemtra_taikhoan();
 io.on('connection',(socket)=>
