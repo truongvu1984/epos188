@@ -57,7 +57,7 @@ app.get('/privacy-policy', (req, res) => res.render('privacy'));
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      let time=CURRENT_TIMESTAMP();
+      let time=NOW();
       console.log('AAAA'+time);
       console.log(time);
       con.query("UPDATE `test` SET abcd = "+rows[0].abcd+" WHERE `tt` = 5",function(err2){
