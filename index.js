@@ -1664,7 +1664,7 @@ io.on('connection',(socket)=>
           con.query(sql, [values], function (err1, result) {
             if (err1)console.log(err1);
             else {
-              con.query("UPDATE `list_err` SET `"+abc+"` = "+thoigian+" WHERE `idc` LIKE '"+idc+"'",function(err2){
+              con.query("UPDATE `list_err` SET giaonv = "+thoigian+" WHERE `idc` LIKE '"+idc+"'",function(err2){
                 if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
                  else socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,time:get_time(thoigian)});
               });
