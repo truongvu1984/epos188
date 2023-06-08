@@ -1670,6 +1670,7 @@ io.on('connection',(socket)=>
       });
   socket.on('C_capnhat', function(idc,nd){
       if (socket.user!=null){
+        console.log('C gui cap nhat');
         let thoigian=new Date();
         let abc='';
         if(nd=="A")abc='batdau';
