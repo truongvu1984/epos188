@@ -57,29 +57,30 @@ app.get('/privacy-policy', (req, res) => res.render('privacy'));
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      let time=new Date();
+      let time=CURRENT_TIMESTAMP ;
       console.log('AAAA'+time);
       console.log(time);
-
-      var sql = "INSERT INTO `test`(abc,abcd,tt) VALUES ?";
-        var values = [[time,time,5]];
-        con.query(sql,[values], function (err1, result) {
-          if(err1)console.log(err1);
-          else {
-            con.query("SELECT * FROM `test` WHERE `tt` = 5 LIMIT 1", function(err, rows){
-              if (err)console.log(err);
-              else{
-                con.query("UPDATE `test` SET abcd = "+rows[0].abcd+" WHERE `tt` = 5",function(err2){
-                  if(err2){console.log(err2);console.log('DDDD'+time);}
-                  else console.log('ABC'+time);
+      con.query("UPDATE `test` SET abcd = "+rows[0].abcd+" WHERE `tt` = 5",function(err2){
+        if(err2){console.log(err2);console.log('DDDD'+time);}
+        else console.log('ABC'+time);
 
 
-                });
+      });
 
-              }
-            });
-          }
-        });
+      // var sql = "INSERT INTO `test`(abc,abcd,tt) VALUES ?";
+      //   var values = [[time,time,5]];
+      //   con.query(sql,[values], function (err1, result) {
+      //     if(err1)console.log(err1);
+      //     else {
+      //       con.query("SELECT * FROM `test` WHERE `tt` = 5 LIMIT 1", function(err, rows){
+      //         if (err)console.log(err);
+      //         else{
+      //
+      //
+      //         }
+      //       });
+      //     }
+      //   });
 
 
 
