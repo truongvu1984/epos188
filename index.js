@@ -57,15 +57,31 @@ app.get('/privacy-policy', (req, res) => res.render('privacy'));
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      let time= Date.now();
+      let time= new Date();
       console.log('AAAA'+time);
       console.log(time);
-      con.query("UPDATE `test` SET abcd = "+time+" WHERE `tt` = 5",function(err2){
-        if(err2){console.log(err2);console.log('DDDD'+time);}
-        else console.log('ABC'+time);
+      let updateQuery = "UPDATE `test` SET abcd = ? WHERE tt = ?";
+      let updateParams = [time, 5];
+      con.query(updateQuery, updateParams, (error, results) => {
+        if (error) {
+          console.error(error);
+          // Handle error
+        } else {
+          console.log('Date column updated successfully');
+          // Handle success
+        }
 
 
       });
+
+
+      //
+      // con.query("UPDATE `test` SET abcd = "+time+" WHERE `tt` = 5",function(err2){
+      //   if(err2){console.log(err2);console.log('DDDD'+time);}
+      //   else console.log('ABC'+time);
+      //
+      //
+      // });
 
       // var sql = "INSERT INTO `test`(abc,abcd,tt) VALUES ?";
       //   var values = [[time,time,5]];
