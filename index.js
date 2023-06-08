@@ -1582,7 +1582,7 @@ io.on('connection',(socket)=>
                           let batdau=null;if(row1.batdau!=null){batdau=get_time(row1.batdau);a1='A';}else a1='B';
                           let dennoi=null;if(row1.dennoi!=null){dennoi=get_time(row1.dennoi);a2='A';}else a2='B';
                           let xong=null;if(row1.xong!=null){xong=get_time(row1.xong);a3='A';}else a3='B';
-                          let vedonvi=null;if(row1.vedonvi!=null){[vedonvi=get_time(row1.vedonvi);a4='A';}else a4='B';
+                          let vedonvi=null;if(row1.vedonvi!=null){vedonvi=get_time(row1.vedonvi);a4='A';}else a4='B';
 
                           socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv:get_time(row1.giaonv),chihuy:row1.chihuy1,
                             chihuy2:chihuy2,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a1:a1,a2:a2,a3:a3,a4:a4});
