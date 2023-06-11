@@ -1520,13 +1520,13 @@ io.on('connection',(socket)=>
                                   con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+row1.chihuy2+"' LIMIT 1", function(err5, row5s){
                                     if (err5 || row5s.length ==0){console.log(err5);}
                                     else{
-                                      socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv),chihuy1:row1.chihuy1,ch1_chucvu:row4s[0].chucvu,ch1_donvi:row4s[0].donvi,
+                                      socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),chihuy1:row1.chihuy1,ch1_chucvu:row4s[0].chucvu,ch1_donvi:row4s[0].donvi,
                                         giaonv2:giaonv2, chihuy2:row1.chihuy2,ch2_chucvu:row5s[0].chucvu,ch2_donvi:row5s[0].donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
                                     }
                                   });
                                 }
                                 else {
-                                  socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv),chihuy1:row1.chihuy1,ch1_chucvu:row4s[0].chucvu,ch1_donvi:row4s[0].donvi,
+                                  socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),chihuy1:row1.chihuy1,ch1_chucvu:row4s[0].chucvu,ch1_donvi:row4s[0].donvi,
                                     chihuy2:'',batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
                                 }
 
@@ -1599,13 +1599,13 @@ io.on('connection',(socket)=>
                                   con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+row1.chihuy2+"' LIMIT 1", function(err5, row5s){
                                     if (err5 || row5s.length ==0){console.log(err5);}
                                     else{
-                                      socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv),chihuy1:row1.chihuy1,ch1_chucvu:row4s[0].chucvu,ch1_donvi:row4s[0].donvi,
+                                      socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),chihuy1:row1.chihuy1,ch1_chucvu:row4s[0].chucvu,ch1_donvi:row4s[0].donvi,
                                         giaonv2:giaonv2, chihuy2:row1.chihuy2,ch2_chucvu:row5s[0].chucvu,ch2_donvi:row5s[0].donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
                                     }
                                   });
                                 }
                                 else {
-                                  socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv),chihuy1:row1.chihuy1,ch1_chucvu:row4s[0].chucvu,ch1_donvi:row4s[0].donvi,
+                                  socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),chihuy1:row1.chihuy1,ch1_chucvu:row4s[0].chucvu,ch1_donvi:row4s[0].donvi,
                                     chihuy2:'',batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
                                 }
 
