@@ -1497,7 +1497,6 @@ io.on('connection',(socket)=>
                   socket.user = tin.user;
                   socket.type = rows[0].type;
                   if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
-                    console.log('Có kết nối mới của:'+tin.user);
                     socket.join("chung");
                     //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
                     con.query("SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id ASC", function(err1, row1s){
@@ -1660,7 +1659,7 @@ io.on('connection',(socket)=>
                    io.sockets.in("chung").emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,giaonv:get_time(thoigian),
                    ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B'});
                    io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,giaonv:get_time(thoigian),
-                   ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'',a1:'B',a2:'B',a3:'B',a4:'B'});
+                   ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B'});
              }
            });
         }
