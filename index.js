@@ -1549,7 +1549,7 @@ io.on('connection',(socket)=>
                             let a3;
                             let a4;
                             let a0;
-                            let giaonv2=null;if(row1.batdau!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';}else a0='B';
+                            let giaonv2=null;if(row1.giaonv2!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';}else a0='B';
                             let chihuy2=null;if(row2s[0].chihuy2!=null)chihuy=row2s[0].chihuy2;
                             let batdau=null;if(row2s[0].batdau!=null){batdau=get_time(row2s[0].batdau);a1='A';}else a1='B';
                             let dennoi=null;if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';}else a2='B';
@@ -1587,7 +1587,7 @@ io.on('connection',(socket)=>
                           let a3;
                           let a4;
                           let a0;
-                          let giaonv2=null;if(row1.batdau!=null){giaonv2=get_time(row1.giaonv2);a0='A';}else a0='B';
+                          let giaonv2=null;if(row1.giaonv2!=null){giaonv2=get_time(row1.giaonv2);a0='A';}else a0='B';
                           let batdau=null;if(row1.batdau!=null){batdau=get_time(row1.batdau);a1='A';}else a1='B';
                           let dennoi=null;if(row1.dennoi!=null){dennoi=get_time(row1.dennoi);a2='A';}else a2='B';
                           let xong=null;if(row1.xong!=null){xong=get_time(row1.xong);a3='A';}else a3='B';
@@ -1629,7 +1629,7 @@ io.on('connection',(socket)=>
                             let a3;
                             let a4;
                             let a0;
-                            let giaonv2=null;if(row1.batdau!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';}else a0='B';
+                            let giaonv2=null;if(row1.giaonv2!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';}else a0='B';
                             let chihuy2=null;if(row2s[0].chihuy2!=null)chihuy=row2s[0].chihuy2;
                             let batdau=null;if(row2s[0].batdau!=null){batdau=get_time(row2s[0].batdau);a1='A';}else a1='B';
                             let dennoi=null;if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';}else a2='B';
