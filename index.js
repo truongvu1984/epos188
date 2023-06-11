@@ -1530,7 +1530,6 @@ io.on('connection',(socket)=>
                             let a4;
                             let a0;
                             let giaonv2=null;if(row1.giaonv2!=null){ giaonv2=get_time(row2s[0].giaonv2);a0='A';}else a0='B';
-                            let chihuy2=null;if(row2s[0].chihuy2!=null)chihuy2=row2s[0].chihuy2;
                             let batdau=null;if(row2s[0].batdau!=null){batdau=get_time(row2s[0].batdau);a1='A';}else a1='B';
                             let dennoi=null;if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';}else a2='B';
                             let xong=null;if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';}else a3='B';
@@ -1556,8 +1555,8 @@ io.on('connection',(socket)=>
                   else {
                     socket.join(tin.user);
                     let lenh;
-                    if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `chihuy1` LIKE '"+tin.user+"' AND id > "+tin.tt+" ORDER BY id ASC";
-                    else lenh="SELECT * FROM `list_err` WHERE `chihuy2` LIKE '"+tin.user+"' AND id >"+tin.tt+"  ORDER BY id ASC";
+                    if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND id > "+tin.tt+" ORDER BY id ASC";
+                    else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+tin.user+"' AND id >"+tin.tt+"  ORDER BY id ASC";
                     con.query(lenh, function(err1, row1s){
                       if (err1 || row1s.length ==0){console.log(err1);}
                       else{
@@ -1580,8 +1579,8 @@ io.on('connection',(socket)=>
                     });
                     if(tin.bantin.length>0){
                       tin.bantin.forEach((item, i) => {
-                      if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `chihuy1` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
-                      else "SELECT * FROM `list_err` WHERE `chihuy2` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
+                      if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
+                      else "SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
                       con.query(lenh, function(err2, row2s){
                           if (err2){console.log(err2);}
                           else if(row2s.length>0){
@@ -1591,7 +1590,6 @@ io.on('connection',(socket)=>
                             let a4;
                             let a0;
                             let giaonv2=null;if(row1.giaonv2!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';}else a0='B';
-                            let chihuy2=null;if(row2s[0].chihuy2!=null)chihuy=row2s[0].chihuy2;
                             let batdau=null;if(row2s[0].batdau!=null){batdau=get_time(row2s[0].batdau);a1='A';}else a1='B';
                             let dennoi=null;if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';}else a2='B';
                             let xong=null;if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';}else a3='B';
@@ -1652,18 +1650,16 @@ io.on('connection',(socket)=>
        if (socket.user!=null && socket.type!=null&&socket.type=="B"){
          var idc = 'r'+Date.now();
          let thoigian=new Date();
-         var sql = "INSERT INTO `list_err` (idc,ten, mota,giaonv,chihuy1) VALUES ?";
-           var values = [[idc,tin.ten,tin.mota,thoigian,tin.user]];
+         var sql = "INSERT INTO `list_err` (idc,ten, mota,giaonv1,ch1_user,ch1_hoten,ch1_chucvu,ch1_donvi) VALUES ?";
+           var values = [[idc,tin.ten,tin.mota,thoigian,tin.user,tin.hoten,tin.chucvu,tin.donvi]];
            con.query(sql, [values], function (err1, result) {
              if (err1)socket.emit("giao_nhiemvu_thatbai","A");
              else {
                    socket.emit("giao_nhiemvu_ok",{tt:result.insertId ,idc:idc,time:get_time(thoigian)});
                    io.sockets.in("chung").emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,giaonv:get_time(thoigian),
-                   chihuy1:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,chihuy2:'',a1:'B',a2:'B',a3:'B',a4:'B'});
+                   ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B'});
                    io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,giaonv:get_time(thoigian),
-                   chihuy1:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,chihuy2:'',a1:'B',a2:'B',a3:'B',a4:'B'});
-
-
+                   ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'',a1:'B',a2:'B',a3:'B',a4:'B'});
              }
            });
         }
@@ -1671,24 +1667,16 @@ io.on('connection',(socket)=>
   socket.on('giao_nhiemvu2', function(tin){
     if (socket.user!=null && socket.type!=null&&socket.type=="E"){
         let thoigian=new Date();
-        let sql1 = "UPDATE `list_err` SET `giaonv2` = ?,`chihuy2` = ? WHERE `idc` LIKE ?";
-        let val1 = [thoigian, tin.user,tin.idc];
+        let sql1 = "UPDATE `list_err` SET `giaonv2` = ?,`ch2_user` = ?,`ch2_hoten` = ?,`ch2_chucvu = ?,`ch2_donvi` = ? WHERE `idc` LIKE ?";
+        let val1 = [thoigian, tin.user,tin.hoten,tin.chucvu,tin.donvi,tin.idc];
         con.query(sql1,val1,function(err2){
             if(err2){socket.emit('giao_nhiemvu2_thatbai');console.log(err2);}
             else {
               con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+tin.idc+"' LIMIT 1", function(err, rows){
                 if (err || rows.length ==0){socket.emit('giao_nhiemvu2_thatbai');}
                 else{
-                  con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err3, row3s){
-                    if (err3 || row3s.length ==0){socket.emit('giao_nhiemvu2_thatbai');}
-                    else{
-                      socket.emit("giao_nhiemvu2_ok",{idc:tin.idc,chihuy2:tin.user,time:get_time(thoigian)});
-                      io.sockets.in("chung").emit("S_giaonv2",{idc:tin.idc,giaonv2:get_time(thoigian), chihuy2:row3s[0].hoten,ch2_chucvu:row3s[0].chucvu,ch2_donvi:row3s[0].donvi});
-                      io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:rows[0].id,idc:tin.idc,ten:rows[0].ten,mota:rows[0].mota,giaonv1:get_time(rows[0].giaonv1),
-                      chihuy1:tin.hoten,ch1_chucvu:tin.chucvu,donvi:tin.donvi,giaonv2:get_time(thoigian)});
-                    }
-                  });
-
+                  io.sockets.in("chung").emit("S_giaonv2",{idc:tin.idc,giaonv2:get_time(thoigian), ch2_hoten:tin.hoten,ch2_chucvu:tin.chucvu,ch2_donvi:tin.donvi});
+                  io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:rows[0].id,idc:tin.idc,ten:rows[0].ten,mota:rows[0].mota,giaonv2:get_time(thoigian)});
                 }
               });
 
