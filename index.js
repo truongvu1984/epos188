@@ -1490,13 +1490,14 @@ io.on('connection',(socket)=>
   socket.on('login2_suco',(tin)=>{
     if(tin.user&&tin.pass){
             con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
-              if (err || rows.length ==0){socket.emit('login2_suco_thatbai');console.log(err);}
+              if (err || rows.length ==0){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
               else{
                 if (rows[0].pass==tin.pass){
                   socket.emit("login2_suco_ok");
                   socket.user = tin.user;
                   socket.type = rows[0].type;
                   if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
+                    console.log('Có kết nối mới của:'+tin.user);
                     socket.join("chung");
                     //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
                     con.query("SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id ASC", function(err1, row1s){
@@ -1540,7 +1541,7 @@ io.on('connection',(socket)=>
                       });
                     }
                     con.query("SELECT * FROM `list_user` WHERE `id` > "+tin.tt_list+" ORDER BY id ASC", function(err5, row5s){
-                      if (err5)console.log(err5);
+                      if (err5)console.log('2222'+err5);
                       else{
                         if(row5s.length>0){
                           row5s.forEach((item, i) => {
@@ -1558,8 +1559,8 @@ io.on('connection',(socket)=>
                     if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND id > "+tin.tt+" ORDER BY id ASC";
                     else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+tin.user+"' AND id >"+tin.tt+"  ORDER BY id ASC";
                     con.query(lenh, function(err1, row1s){
-                      if (err1 || row1s.length ==0){console.log(err1);}
-                      else{
+                      if (err1{console.log('33333'+err1);}
+                      else if(row1s.length>0){
                         row1s.forEach((row1, i) => {
                           let a1;
                           let a2;
@@ -1582,7 +1583,7 @@ io.on('connection',(socket)=>
                       if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
                       else "SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
                       con.query(lenh, function(err2, row2s){
-                          if (err2){console.log(err2);}
+                          if (err2){console.log('4444'+err2);}
                           else if(row2s.length>0){
                             let a1;
                             let a2;
@@ -1602,7 +1603,7 @@ io.on('connection',(socket)=>
                     }
                     if(rows[0].type=="E"){
                       con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err4, row4s){
-                        if (err4)console.log(err4);
+                        if (err4)console.log('5555'+err4);
                         else{
                           con.query("SELECT * FROM `list_user` WHERE LOCATE('"+row4s[0].donvi+"',donvi)>0 AND `id` > "+tin.tt_list+" ORDER BY id ASC", function(err5, row5s){
                             if (err5)console.log(err5);
