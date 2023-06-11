@@ -1559,7 +1559,7 @@ io.on('connection',(socket)=>
                     if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND id > "+tin.tt+" ORDER BY id ASC";
                     else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+tin.user+"' AND id >"+tin.tt+"  ORDER BY id ASC";
                     con.query(lenh, function(err1, row1s){
-                      if (err1{console.log('33333'+err1);}
+                      if (err1){console.log('33333'+err1);}
                       else if(row1s.length>0){
                         row1s.forEach((row1, i) => {
                           let a1;
