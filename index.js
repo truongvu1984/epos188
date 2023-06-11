@@ -1721,7 +1721,7 @@ io.on('connection',(socket)=>
                   con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err3, row3s){
                     if (err3 || row3s.length ==0){socket.emit('giao_nhiemvu2_thatbai');}
                     else{
-                      socket.emit("giao_nhiemvu2_ok",{idc:idc,chihuy2:tin.user,time:get_time(thoigian)});
+                      socket.emit("giao_nhiemvu2_ok",{idc:tin.idc,chihuy2:tin.user,time:get_time(thoigian)});
                       io.sockets.in("chung").emit("S_giaonv2",{idc:idc,giaonv2:get_time(thoigian), chihuy2:row3s[0].hoten,ch2_chucvu:row3s[0].chucvu,ch2_donvi:row3s[0].donvi});
                       io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:rows[0].id,idc:rows[0].idc,ten:rows[0].ten,mota:rows[0].mota,giaonv1:get_time(rows[0].giaonv1),
                       chihuy1:tin.hoten,ch1_chucvu:tin.chucvu,donvi:tin.donvi,giaonv2:get_time(thoigian)});
