@@ -1656,9 +1656,9 @@ io.on('connection',(socket)=>
              if (err1)socket.emit("giao_nhiemvu_thatbai","A");
              else {
                    socket.emit("giao_nhiemvu_ok",{tt:result.insertId ,idc:idc,time:get_time(thoigian)});
-                   io.sockets.in("chung").emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,giaonv:get_time(thoigian),
+                   io.sockets.in("chung").emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,giaonv1:get_time(thoigian),
                    ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B'});
-                   io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,giaonv:get_time(thoigian),
+                   io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,giaonv1:get_time(thoigian),
                    ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B'});
              }
            });
