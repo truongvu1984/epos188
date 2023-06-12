@@ -1519,6 +1519,7 @@ io.on('connection',(socket)=>
                           socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
                             ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,
                             giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
+
                         });
                       }
                     });
@@ -1697,7 +1698,10 @@ io.on('connection',(socket)=>
                 else{
                   socket.emit("giao_nhiemvu2_ok",{idc:tin.idc,time:get_time(thoigian)});
                   io.sockets.in("chung").emit("S_giaonv2",{idc:tin.idc,giaonv2:get_time(thoigian), ch2_hoten:tin.hoten,ch2_chucvu:tin.chucvu,ch2_donvi:tin.donvi});
-                  io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:rows[0].id,idc:tin.idc,ten:rows[0].ten,mota:rows[0].mota,giaonv2:get_time(thoigian)});
+                  io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:rows[0].id,idc:rows[0].idc,ten:rows[0].ten,mota:rows[0].mota,giaonv1:get_time(rows[0].giaonv1),tb_hoten:rows[0].tb_hoten,tb_chucvu:rows[0].tb_chucvu,tb_donvi:rows[0].tb_donvi,
+                    ch1_hoten:rows[0].ch1_hoten,ch1_chucvu:rows[0].ch1_chucvu,ch1_donvi:rows[0].ch1_donvi,
+                    giaonv2:get_time(thoigian),a1:'B',a2:'B',a3:'B',a4:'B'});
+
                 }
               });
 
