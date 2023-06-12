@@ -1488,6 +1488,7 @@ io.on('connection',(socket)=>
       }
     });
   socket.on('login2_suco',(tin)=>{
+    console.log('Có đăng nhập 2');
     if(tin.user&&tin.pass){
             con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
               if (err || rows.length ==0){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
