@@ -1684,7 +1684,7 @@ io.on('connection',(socket)=>
   socket.on('giao_nhiemvu2', function(tin){
     if (socket.user!=null && socket.type!=null&&socket.type=="E"){
         let thoigian=new Date();
-        let sql1 = "UPDATE `list_err` SET `giaonv2` = ?,`ch2_user` = ?,`ch2_hoten` = ?,`ch2_chucvu = ?,`ch2_donvi` = ? WHERE `idc` LIKE ?";
+        let sql1 = "UPDATE `list_err` SET `giaonv2` = ?,`ch2_user` = ?,`ch2_hoten` = ?,`ch2_chucvu` = ?,`ch2_donvi` = ? WHERE `idc` LIKE ?";
         let val1 = [thoigian, tin.user,tin.hoten,tin.chucvu,tin.donvi,tin.idc];
         con.query(sql1,val1,function(err2){
             if(err2){socket.emit('giao_nhiemvu2_thatbai');console.log(err2);}
