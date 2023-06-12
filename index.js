@@ -1692,6 +1692,7 @@ io.on('connection',(socket)=>
               con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+tin.idc+"' LIMIT 1", function(err, rows){
                 if (err || rows.length ==0){socket.emit('giao_nhiemvu2_thatbai');}
                 else{
+                  socket.emit("giao_nhiemvu2_ok",{idc:tin.idc,time:thoigian});
                   io.sockets.in("chung").emit("S_giaonv2",{idc:tin.idc,giaonv2:get_time(thoigian), ch2_hoten:tin.hoten,ch2_chucvu:tin.chucvu,ch2_donvi:tin.donvi});
                   io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:rows[0].id,idc:tin.idc,ten:rows[0].ten,mota:rows[0].mota,giaonv2:get_time(thoigian)});
                 }
