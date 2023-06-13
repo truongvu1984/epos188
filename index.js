@@ -1479,7 +1479,7 @@ io.on('connection',(socket)=>
               if (rows[0].pass==pass1){
                 socket.user = user1;
                 socket.type = rows[0].type;
-                console.log('Co login 1='+user1);
+
                 if(rows[0].type=="A"||rows[0].type=="D"||rows[0].type=="C")socket.join("chung");
                 else socket.join(user1);
                 socket.emit('login1_suco_dung', {name:rows[0].hoten,capbac:rows[0].capbac,chucvu:rows[0].chucvu,donvi:rows[0].donvi,type:rows[0].type});
@@ -1490,7 +1490,7 @@ io.on('connection',(socket)=>
       }
     });
   socket.on('login2_suco',(tin)=>{
-    console.log('Có đăng nhập 2');
+
     if(tin.user&&tin.pass){
             con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
               if (err || rows.length ==0){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
@@ -1499,7 +1499,7 @@ io.on('connection',(socket)=>
                   socket.emit("login2_suco_ok");
                   socket.user = tin.user;
                   socket.type = rows[0].type;
-                  console.log('Có tài khoản mới đăng nhập='+tin.user+' loại='+rows[0].type+' tt='+tin.tt);
+
                   if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
                     socket.join("chung");
                     //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
