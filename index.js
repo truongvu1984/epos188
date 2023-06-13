@@ -1479,6 +1479,7 @@ io.on('connection',(socket)=>
               if (rows[0].pass==pass1){
                 socket.user = user1;
                 socket.type = rows[0].type;
+                console.log('Co login 1='+user1);
                 if(rows[0].type=="A"||rows[0].type=="D"||rows[0].type=="C")socket.join("chung");
                 else socket.join(user1);
                 socket.emit('login1_suco_dung', {name:rows[0].hoten,capbac:rows[0].capbac,chucvu:rows[0].chucvu,donvi:rows[0].donvi,type:rows[0].type});
