@@ -1719,13 +1719,21 @@ io.on('connection',(socket)=>
         else if(nd=="C")abc='xong';
         else abc='vedonvi';
         let sql1 = "UPDATE `list_err` SET `"+abc+"` = ? WHERE `idc` LIKE ?";
-         let val1 = [thoigian, idc];
-        // con.query(updateQuery, updateParams, (error, results) => {
+        let val1 = [thoigian, idc];
         con.query(sql1,val1,function(err2){
           if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
            else {
              socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,time:get_time(thoigian)});
              io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,time:get_time(thoigian)});
+             //gui cho chi huy 1 neu co
+             if(socket.type=="F"){
+               on.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+                 if (err){console.log(err);}
+                 else{
+                   io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,time:get_time(thoigian)});
+                 }
+               });
+             }
 
            }
         });
