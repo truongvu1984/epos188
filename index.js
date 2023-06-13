@@ -1727,7 +1727,7 @@ io.on('connection',(socket)=>
              io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,time:get_time(thoigian)});
              //gui cho chi huy 1 neu co
              if(socket.type=="F"){
-               on.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+               con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
                  if (err){console.log(err);}
                  else{
                    io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,time:get_time(thoigian)});
