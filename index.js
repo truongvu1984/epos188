@@ -61,7 +61,6 @@ con.connect(function(err) {
  kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
-  console.log('Co new socket');
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
 
@@ -1601,6 +1600,8 @@ io.on('connection',(socket)=>
                     });
                     if(tin.bantin.length>0){
                       tin.bantin.forEach((item, i) => {
+                        console.log(item.idc);
+                        console.log(item.cot);
                       if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
                       else "SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
                       con.query(lenh, function(err2, row2s){
