@@ -1539,7 +1539,7 @@ io.on('connection',(socket)=>
                             let dennoi=null;if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';}else a2='B';
                             let xong=null;if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';}else a3='B';
                             let vedonvi=null;if(row2s[0].vedonvi!=null){vedonvi=get_time(row2s[0].vedonvi);a4='A';}else a4='B';
-                            socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
+                            socket.emit("S_capnhat",{idc:item,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
                           }
                         });
                       });
@@ -1616,7 +1616,7 @@ io.on('connection',(socket)=>
                             let dennoi=null;if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';}else a2='B';
                             let xong=null;if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';}else a3='B';
                             let vedonvi=null;if(row2s[0].vedonvi!=null){vedonvi=get_time(row2s[0].vedonvi);a4='A';}else a4='B';
-                          socket.emit("S_capnhat",{idc:tin.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,
+                          socket.emit("S_capnhat",{idc:item,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,
                             batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
                           }
                         });
