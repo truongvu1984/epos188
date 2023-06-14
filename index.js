@@ -1498,7 +1498,7 @@ io.on('connection',(socket)=>
                   socket.emit("login2_suco_ok");
                   socket.user = tin.user;
                   socket.type = rows[0].type;
-
+                  console.log(tin.user+ " type="+rows[0].type);
                   if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
                     socket.join("chung");
                     //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
@@ -1598,6 +1598,7 @@ io.on('connection',(socket)=>
 
                       }
                     });
+                    console.log("tong ban tin:"+tin.bantin.length);
                     if(tin.bantin.length>0){
                       tin.bantin.forEach((item, i) => {
                         console.log(item.idc);
