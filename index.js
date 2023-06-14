@@ -1523,10 +1523,10 @@ io.on('connection',(socket)=>
                         });
                       }
                     });
-                    // kiểm tra xem có cập nhật mới nào không thì gửi về cho nó
+                    console.log('tong ban tin nhom 1='+tin.bantin.length);
                     if(tin.bantin!=undefined&&tin.bantin.length>0){
                       tin.bantin.forEach((item, i) => {
-                      con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1", function(err2, row2s){
+                      con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+item+"' LIMIT 1", function(err2, row2s){
                           if (err2){console.log(err2);}
                           else if(row2s.length>0){
                             let a1;
@@ -1601,11 +1601,9 @@ io.on('connection',(socket)=>
                     console.log("tong ban tin:"+tin.bantin.length);
                     if(tin.bantin.length>0){
                       tin.bantin.forEach((item, i) => {
-                        console.log(item.idc);
-                        console.log(item.cot);
-                      if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
-                      else "SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' AND `"+item.cot+"`NOT LIKE '' LIMIT 1";
-                      con.query(lenh, function(err2, row2s){
+                        if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND `idc` LIKE '"+item+"' LIMIT 1";
+                        else "SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+tin.user+"' AND `idc` LIKE '"+item+"' LIMIT 1";
+                        con.query(lenh, function(err2, row2s){
                           if (err2){console.log('4444'+err2);}
                           else if(row2s.length>0){
                             let a1;
@@ -1618,7 +1616,7 @@ io.on('connection',(socket)=>
                             let dennoi=null;if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';}else a2='B';
                             let xong=null;if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';}else a3='B';
                             let vedonvi=null;if(row2s[0].vedonvi!=null){vedonvi=get_time(row2s[0].vedonvi);a4='A';}else a4='B';
-                          socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,
+                          socket.emit("S_capnhat",{idc:tin.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,
                             batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
                           }
                         });
