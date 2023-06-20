@@ -1479,7 +1479,7 @@ io.on('connection',(socket)=>
                 socket.user = user1;
                 socket.type = rows[0].type;
 
-                if(rows[0].type=="A"||rows[0].type=="D"||rows[0].type=="C")socket.join("chung");
+                if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C")socket.join("chung");
                 else socket.join(user1);
                 socket.emit('login1_suco_dung', {name:rows[0].hoten,capbac:rows[0].capbac,chucvu:rows[0].chucvu,donvi:rows[0].donvi,type:rows[0].type});
               }
@@ -1522,7 +1522,6 @@ io.on('connection',(socket)=>
                         });
                       }
                     });
-
                     if(tin.bantin!=undefined&&tin.bantin.length>0){
                       tin.bantin.forEach((item, i) => {
                       con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+item.idc+"' LIMIT 1", function(err2, row2s){
@@ -1557,7 +1556,7 @@ io.on('connection',(socket)=>
                       });
                     }
                     if(rows[0].type=="A") {
-                      con.query("SELECT * FROM `list_user` WHERE `id` > "+tin.tt_list+" ORDER BY id ASC", function(err5, row5s){
+                      con.query("SELECT * FROM `list_user` WHERE `id` > "+tin.tt_list+" AND `id`>5 ORDER BY id ASC", function(err5, row5s){
                         if (err5)console.log('2222'+err5);
                         else{
                           if(row5s.length>0){
@@ -1569,7 +1568,7 @@ io.on('connection',(socket)=>
                       });
                     }
                     else if(rows[0].type=="B") {
-                      con.query("SELECT * FROM `list_user` WHERE `type` LIKE 'E' AND `id` > "+tin.tt_list+" ORDER BY id ASC", function(err5, row5s){
+                      con.query("SELECT * FROM `list_user` WHERE `type` LIKE 'E' AND `id` > "+tin.tt_list+" AND `id`>5 ORDER BY id ASC", function(err5, row5s){
                         if (err5)console.log('2222'+err5);
                         else{
                           if(row5s.length>0){
@@ -1650,7 +1649,7 @@ io.on('connection',(socket)=>
                       con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err4, row4s){
                         if (err4)console.log('5555'+err4);
                         else{
-                          con.query("SELECT * FROM `list_user` WHERE LOCATE('"+row4s[0].donvi+"',donvi)>0 AND `id` > "+tin.tt_list+" ORDER BY id ASC", function(err5, row5s){
+                          con.query("SELECT * FROM `list_user` WHERE LOCATE('"+row4s[0].donvi+"',donvi)>0 AND `id` > "+tin.tt_list+" AND `id` > 5 ORDER BY id ASC", function(err5, row5s){
                             if (err5)console.log(err5);
                             else{
                               if(row5s.length>0){
