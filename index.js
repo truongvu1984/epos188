@@ -1765,8 +1765,10 @@ io.on('connection',(socket)=>
       }
   });
   socket.on('C_xoa_suco',(stt,list)=>{
+
     if(socket.user != null&&socket.type=='A'&&isArray(list)){
       if(stt=='A'){
+
         list.forEach((mail,key)=>{
           con.query("DELETE FROM `list_user` WHERE `user` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
@@ -1775,6 +1777,7 @@ io.on('connection',(socket)=>
         });
       }
       else {
+
         list.forEach((mail,key)=>{
           con.query("DELETE FROM `list_err` WHERE `idc` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
