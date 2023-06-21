@@ -1766,6 +1766,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_xoa_user_suco',(list)=>{
     console.log('co xoa:'+list);
+    console.log('AAAAtai khoan='+socket.type+ ' user='+socket.user);
     if(socket.user != null&&socket.type=='A'&&isArray(list)){
       console.log('tai khoan='+socket.type+ ' user='+socket.user);
         list.forEach((mail,key)=>{
