@@ -1765,8 +1765,10 @@ io.on('connection',(socket)=>
       }
   });
   socket.on('C_xoa_user_suco',(list)=>{
+    console.log('co xoa:'+list);
     if(socket.number != null&&socket.type=='A'&&isArray(list)){
         list.forEach((mail,key)=>{
+          console.log(mail);
           con.query("DELETE FROM `list_user` WHERE `user` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
           });
