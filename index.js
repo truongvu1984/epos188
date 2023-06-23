@@ -378,6 +378,33 @@ io.on('connection',(socket)=>
     }
 
   });
+  socket.on('C_caro_del_acc',(pass)=>{
+    if(socket.number && pass){
+      con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
+        if (err)socket.emit('S_caro_del_acc_thatbai','A');
+        else{
+          if(rows.length==0)socket.emit('S_caro_del_acc_thatbai','B');
+          else {
+            if(passwordHash.verify(pass, rows[0].pass)){
+              con.query("DELETE FROM `account2` WHERE `number` LIKE '"+socket.number+"'", function(err3){
+                if (err3)socket.emit('S_caro_del_acc_thatbai','A');
+                else {
+                  let abc= socket.number;
+                  socket.emit('S_caro_del_acc_ok');
+                  socket.number = undefined;
+                  con.query("DROP TABLE IF EXISTS `"+abc+"caro`", function(err4){ if (err4)console.log(err4);});
+
+                }
+              });
+            }
+            else socket.emit('S_caro_del_acc_thatbai','B');
+          }
+
+        }
+      });
+
+    }
+  });
   socket.on('ketban_Caro',(mail,name)=>{
     if(socket.number&&mail&&name){
       con.query("SELECT * FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' LIMIT 1", function(err, as){
