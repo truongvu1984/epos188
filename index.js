@@ -53,7 +53,8 @@ function kiemtra_taikhoan(){
 }
 app.get('/', (req, res) => res.render('privacy'));
 app.get('/privacy-policy', (req, res) => res.render('privacy'));
-
+var matkhau = passwordHash.generate('123456');
+console.log(matkhau);
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
@@ -380,17 +381,18 @@ io.on('connection',(socket)=>
   });
   socket.on('C_caro_del_acc',(pass)=>{
     if(socket.number && pass){
+
       con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
         if (err)socket.emit('S_caro_del_acc_thatbai','A');
         else{
-          if(rows.length==0)socket.emit('S_caro_del_acc_thatbai','B');
+          if(rows.length==0)socket.emit('S_caro_del_acc_ok');
           else {
             if(passwordHash.verify(pass, rows[0].pass)){
+              socket.emit('S_caro_del_acc_ok');
               con.query("DELETE FROM `account2` WHERE `number` LIKE '"+socket.number+"'", function(err3){
                 if (err3)socket.emit('S_caro_del_acc_thatbai','A');
                 else {
                   let abc= socket.number;
-                  socket.emit('S_caro_del_acc_ok');
                   socket.number = undefined;
                   con.query("DROP TABLE IF EXISTS `"+abc+"caro`", function(err4){ if (err4)console.log(err4);});
 
@@ -1543,7 +1545,7 @@ io.on('connection',(socket)=>
                           let vedonvi=null;if(row1.vedonvi!=null){vedonvi=get_time(row1.vedonvi);a4='A';}
                           let giaonv2=null;if(row1.giaonv2!=null){giaonv2=get_time(row1.giaonv2);a0='A';}
                           socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
-                            ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,
+                            ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:row1.nguyennhan,tieuhao:row1.tieuhao,
                             giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
 
                         });
@@ -1576,7 +1578,7 @@ io.on('connection',(socket)=>
                                 if(a3=='A')phat='A';
                             }
                             else if(a4=='A')phat='A';
-                            if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
+                            if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
 
                           }
                         });
@@ -1630,7 +1632,7 @@ io.on('connection',(socket)=>
                           let xong=null;if(row1.xong!=null){xong=get_time(row1.xong);a3='A';}
                           let vedonvi=null;if(row1.vedonvi!=null){vedonvi=get_time(row1.vedonvi);a4='A';}
                           socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
-                            ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,
+                            ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:row1.nguyennhan,tieuhao:row1.tieuhao,
                             giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
                         });
 
@@ -1666,7 +1668,7 @@ io.on('connection',(socket)=>
                                 if(a3=='A')phat='A';
                             }
                             else if(a4=='A')phat='A';
-                            if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
+                            if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,dennoi:dennoi,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
 
                           }
                         });
@@ -1761,33 +1763,75 @@ io.on('connection',(socket)=>
 
       }
   });
-  socket.on('C_capnhat', function(idc,nd){
+  socket.on('C_capnhat', function(idc,nd,nd2){
       if (socket.user!=null){
         let thoigian=new Date();
         let abc='';
         if(nd=="A")abc='batdau';
         else if(nd=="B")abc='dennoi';
         else if(nd=="C")abc='xong';
-        else abc='vedonvi';
-        let sql1 = "UPDATE `list_err` SET `"+abc+"` = ? WHERE `idc` LIKE ?";
-        let val1 = [thoigian, idc];
-        con.query(sql1,val1,function(err2){
-          if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
-           else {
-             socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,time:get_time(thoigian)});
-             io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,time:get_time(thoigian)});
-             //gui cho chi huy 1 neu co
-             if(socket.type=="F"){
-               con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
-                 if (err){console.log(err);}
-                 else{
-                   io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,time:get_time(thoigian)});
-                 }
-               });
-             }
+        else if(nd=="D")abc='vedonvi';
+        else if(nd=="E")abc='nguyennhan';
+        else abc='tieuhao';
+        if (nd=="E"||nd=="F"){
 
-           }
-        });
+          let sql1 = "UPDATE `list_err` SET `"+abc+"` = ? WHERE `idc` LIKE ?";
+          let val1 = [nd2, idc];
+          con.query(sql1,val1,function(err2){
+            if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
+             else {
+               if(nd=='E'){
+                 socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,nguyennhan:nd2,time:get_time(thoigian)});
+                 io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,nguyennhan:nd2,time:get_time(thoigian)});
+                 //gui cho chi huy 1 neu co
+                 if(socket.type=="F"){
+                   con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+                     if (err){console.log(err);}
+                     else{
+                       io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,nguyennhan:nd2,time:get_time(thoigian)});
+                     }
+                   });
+                 }
+              }
+              else {
+                socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,tieuhao:nd2,time:get_time(thoigian)});
+                io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,tieuhao:nd2,time:get_time(thoigian)});
+                //gui cho chi huy 1 neu co
+                if(socket.type=="F"){
+                  con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+                    if (err){console.log(err);}
+                    else{
+                      io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,tieuhao:nd2,time:get_time(thoigian)});
+                    }
+                  });
+                }
+              }
+
+             }
+          });
+        }
+        else {
+          let sql1 = "UPDATE `list_err` SET `"+abc+"` = ? WHERE `idc` LIKE ?";
+          let val1 = [thoigian, idc];
+          con.query(sql1,val1,function(err2){
+            if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
+             else {
+               socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,time:get_time(thoigian)});
+               io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,time:get_time(thoigian)});
+               //gui cho chi huy 1 neu co
+               if(socket.type=="F"){
+                 con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+                   if (err){console.log(err);}
+                   else{
+                     io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,time:get_time(thoigian)});
+                   }
+                 });
+               }
+
+             }
+          });
+        }
+
 
       }
   });
