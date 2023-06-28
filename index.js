@@ -1564,25 +1564,33 @@ io.on('connection',(socket)=>
                             let a3='B';
                             let a4='B';
                             let a0='B';
-                            let giaonv2=null;if(row2s[0].giaonv2!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';}
-                            let batdau=null;if(row2s[0].batdau!=null){batdau=get_time(row2s[0].batdau);a1='A';}
-                            let dennoi=null;if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';}
-                            let xong=null;if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';}
-                            let vedonvi=null;if(row2s[0].vedonvi!=null){vedonvi=get_time(row2s[0].vedonvi);a4='A';}
-                            if(item.a1=="A"){
-                              if(a1=='A')phat='A';
-                              else if(item.a0=="A"){ if(a0=='A')phat='A';}
+                            let a20='B';
+                            let a21='B';
+                            let batdau=''; let dennoi=''; let xong=''; let vedonvi='';
+                            if(item.a0=='A'){
+                              if(row2s[0].giaonv2!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';phat='A';}
                             }
-                            else if(item.a2=="A"){
-                                if(a2=='A')phat='A';
+                            if(item.a3=='A'){
+                              phat='A';
+                              if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';}
+                              if(item.a2=='A'){
+                                if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';}
+                                if(item.a1=='A'){
+                                  if(row2s[0].batdau!=null){batdau=get_time(row2s[0].batdau);a1='A';}
+                                }
+                              }
                             }
-                            else if(item.a3=="A"){
-                                if(a3=='A')phat='A';
+                            if(row2s[0].vedonvi!=null){vedonvi=get_time(row2s[0].vedonvi);a4='A';phat='A';}
+
+                            let nguyennhan='';let tieuhao='';
+
+                            if(item.a20=='A'){
+                              if(row2s[0].nguyennhan!=null){nguyennhan=row2s[0].nguyennhan;phat='A';a20='A';}
                             }
-                            else if(a4=='A')phat='A';
-                            let nguyennhan='';if(row2s[0].nguyennhan!=null){nguyennhan=row2s[0].nguyennhan;phat='A';}
-                            let tieuhao=''; if(row2s[0].tieuhao!=null){tieuhao=row2s[0].tieuhao;phat='A';}
-                            if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
+                            if(item.a21=='A'){
+                              if(row2s[0].tieuhao!=null){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
+                            }
+                            if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21});
 
                           }
                         });
@@ -1652,31 +1660,40 @@ io.on('connection',(socket)=>
                         con.query(lenh, function(err2, row2s){
                           if (err2){console.log('4444'+err2);}
                           else if(row2s.length>0){
+
                             let phat='B';
                             let a1='B';
                             let a2='B';
                             let a3='B';
                             let a4='B';
                             let a0='B';
-                            let giaonv2=null;if(row2s[0].giaonv2!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';}
-                            let batdau=null;if(row2s[0].batdau!=null){batdau=get_time(row2s[0].batdau);a1='A';}
-                            let dennoi=null;if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';}
-                            let xong=null;if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';}
-                            let vedonvi=null;if(row2s[0].vedonvi!=null){vedonvi=get_time(row2s[0].vedonvi);a4='A';}
-                            if(item.a1=="A"){
-                              if(a1=='A')phat='A';
-                              else if(item.a0=="A"){ if(a0=='A')phat='A';}
+                            let a20='B';
+                            let a21='B';
+                            let batdau=''; let dennoi=''; let xong=''; let vedonvi='';
+                            if(item.a0=='A'){
+                              if(row2s[0].giaonv2!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';phat='A';}
                             }
-                            else if(item.a2=="A"){
-                                if(a2=='A')phat='A';
+                            if(item.a3=='A'){
+                              phat='A';
+                              if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';}
+                              if(item.a2=='A'){
+                                if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';}
+                                if(item.a1=='A'){
+                                  if(row2s[0].batdau!=null){batdau=get_time(row2s[0].batdau);a1='A';}
+                                }
+                              }
                             }
-                            else if(item.a3=="A"){
-                                if(a3=='A')phat='A';
+                            if(row2s[0].vedonvi!=null){vedonvi=get_time(row2s[0].vedonvi);a4='A';phat='A';}
+
+                            let nguyennhan='';let tieuhao='';
+
+                            if(item.a20=='A'){
+                              if(row2s[0].nguyennhan!=null){nguyennhan=row2s[0].nguyennhan;phat='A';a20='A';}
                             }
-                            else if(a4=='A')phat='A';
-                            let nguyennhan='';if(row2s[0].nguyennhan!=null){nguyennhan=row2s[0].nguyennhan;phat='A';}
-                            let tieuhao=''; if(row2s[0].tieuhao!=null){tieuhao=row2s[0].tieuhao;phat='A';}
-                            if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,dennoi:dennoi,nguyennhan:nguyennhan,tieuhao:tieuhao,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
+                            if(item.a21=='A'){
+                              if(row2s[0].tieuhao!=null){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
+                            }
+                            if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21});
 
                           }
                         });
