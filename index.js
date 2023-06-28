@@ -1520,8 +1520,8 @@ io.on('connection',(socket)=>
   socket.on('login2_suco',(tin)=>{
     if(tin.user&&tin.pass){
             con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
-              if (err || rows.length ==0){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
-              else{
+              if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
+              else if(rows.length>0){
                 if (rows[0].pass==tin.pass){
                   socket.emit("login2_suco_ok");
                   socket.user = tin.user;
@@ -1580,6 +1580,8 @@ io.on('connection',(socket)=>
                                 if(a3=='A')phat='A';
                             }
                             else if(a4=='A')phat='A';
+                            let nguyennhan='';if(row2s[0].nguyennhan!=null){nguyennhan=row2s[0].nguyennhan;phat='A';}
+                            let tieuhao=''; if(row2s[0].tieuhao!=null){tieuhao=row2s[0].tieuhao;phat='A';}
                             if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
 
                           }
@@ -1672,7 +1674,9 @@ io.on('connection',(socket)=>
                                 if(a3=='A')phat='A';
                             }
                             else if(a4=='A')phat='A';
-                            if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,dennoi:dennoi,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
+                            let nguyennhan='';if(row2s[0].nguyennhan!=null){nguyennhan=row2s[0].nguyennhan;phat='A';}
+                            let tieuhao=''; if(row2s[0].tieuhao!=null){tieuhao=row2s[0].tieuhao;phat='A';}
+                            if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,dennoi:dennoi,nguyennhan:nguyennhan,tieuhao:tieuhao,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
 
                           }
                         });
