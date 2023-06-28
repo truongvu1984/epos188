@@ -1683,16 +1683,16 @@ io.on('connection',(socket)=>
                       });
                     }
                     if(rows[0].type=="E"){
-                      console.log('AAAA');
+
                       con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err4, row4s){
                         if (err4)console.log('5555'+err4);
                         else{
                           con.query("SELECT * FROM `list_user` WHERE LOCATE('"+row4s[0].donvi+"',donvi)>0 AND `id` > "+tin.tt_list+" AND `id` > 5 ORDER BY id ASC", function(err5, row5s){
                             if (err5)console.log(err5);
                             else{
-                              console.log('BBBB');
+
                               if(row5s.length>0){
-                                console.log('Tong='+row5s.length);
+                                
                                 row5s.forEach((item, i) => {
                                   if(item.user!=tin.user) socket.emit("S_send_user",{tt:item.id, user:item.user,hoten:item.hoten,capbac:item.capbac,chucvu:item.chucvu,donvi:item.donvi,type:item.type});
                                 });
