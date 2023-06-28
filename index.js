@@ -1692,7 +1692,7 @@ io.on('connection',(socket)=>
                             else{
 
                               if(row5s.length>0){
-                                
+
                                 row5s.forEach((item, i) => {
                                   if(item.user!=tin.user) socket.emit("S_send_user",{tt:item.id, user:item.user,hoten:item.hoten,capbac:item.capbac,chucvu:item.chucvu,donvi:item.donvi,type:item.type});
                                 });
@@ -1785,34 +1785,33 @@ io.on('connection',(socket)=>
         else if(nd=="E")abc='nguyennhan';
         else abc='tieuhao';
         if (nd=="E"||nd=="F"){
-
           let sql1 = "UPDATE `list_err` SET `"+abc+"` = ? WHERE `idc` LIKE ?";
           let val1 = [nd2, idc];
           con.query(sql1,val1,function(err2){
             if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
              else {
                if(nd=='E'){
-                 socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,nguyennhan:nd2,time:get_time(thoigian)});
-                 io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,nguyennhan:nd2,time:get_time(thoigian)});
+                 socket.emit('gui_thongtin_ok',{nd:nd,idc:idc});
+                 io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,nguyennhan:nd2});
                  //gui cho chi huy 1 neu co
                  if(socket.type=="F"){
                    con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
                      if (err){console.log(err);}
                      else{
-                       io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,nguyennhan:nd2,time:get_time(thoigian)});
+                       io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,nguyennhan:nd2});
                      }
                    });
                  }
               }
               else {
-                socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,tieuhao:nd2,time:get_time(thoigian)});
-                io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,tieuhao:nd2,time:get_time(thoigian)});
+                socket.emit('gui_thongtin_ok',{nd:nd,idc:idc});
+                io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,tieuhao:nd2});
                 //gui cho chi huy 1 neu co
                 if(socket.type=="F"){
                   con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
                     if (err){console.log(err);}
                     else{
-                      io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,tieuhao:nd2,time:get_time(thoigian)});
+                      io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,tieuhao:nd2});
                     }
                   });
                 }
