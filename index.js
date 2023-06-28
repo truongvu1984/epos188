@@ -1739,9 +1739,9 @@ io.on('connection',(socket)=>
              else {
                    socket.emit("giao_nhiemvu_ok",{tt:result.insertId ,idc:idc,time:get_time(thoigian)});
                    io.sockets.in("chung").emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,tb_hoten:tin.tb_hoten,tb_chucvu:tin.tb_chucvu,tb_donvi:tin.tb_donvi,giaonv1:get_time(thoigian),
-                   ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B'});
+                   ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B',nguyennhan:'',tieuhao:''});
                    io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,tb_hoten:tin.tb_hoten,tb_chucvu:tin.tb_chucvu,tb_donvi:tin.tb_donvi,giaonv1:get_time(thoigian),
-                   ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B'});
+                   ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B',nguyennhan:'',tieuhao:''});
              }
            });
         }
@@ -1761,7 +1761,7 @@ io.on('connection',(socket)=>
                   io.sockets.in("chung").emit("S_giaonv2",{idc:tin.idc,giaonv2:get_time(thoigian), ch2_hoten:tin.hoten,ch2_chucvu:tin.chucvu,ch2_donvi:tin.donvi});
                   io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:rows[0].id,idc:rows[0].idc,ten:rows[0].ten,mota:rows[0].mota,giaonv1:get_time(rows[0].giaonv1),tb_hoten:rows[0].tb_hoten,tb_chucvu:rows[0].tb_chucvu,tb_donvi:rows[0].tb_donvi,
                     ch1_hoten:rows[0].ch1_hoten,ch1_chucvu:rows[0].ch1_chucvu,ch1_donvi:rows[0].ch1_donvi,
-                    giaonv2:get_time(thoigian),a1:'B',a2:'B',a3:'B',a4:'B'});
+                    giaonv2:get_time(thoigian),a1:'B',a2:'B',a3:'B',a4:'B',nguyennhan:'',tieuhao:''});
 
                 }
               });
