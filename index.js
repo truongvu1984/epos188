@@ -1593,7 +1593,7 @@ io.on('connection',(socket)=>
                             }
 
                             if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21});
-                            else console.log('Khong co noi dung phat');
+
                           }
                         });
                       });
@@ -1695,7 +1695,7 @@ io.on('connection',(socket)=>
                               if(row2s[0].tieuhao!=null&&row2s[0].tieuhao!=''){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
                             }
                             if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21});
-                            else console.log('Khong co noi dung phat 2');
+                            
                           }
                         });
                       });
