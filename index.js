@@ -1570,30 +1570,30 @@ io.on('connection',(socket)=>
                             let batdau=''; let dennoi=''; let xong=''; let vedonvi='';
                             let giaonv2='';
                             if(item.a0=='A'){
-                              if(row2s[0].giaonv2!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';phat='A';}
+                              if(row2s[0].giaonv2!=null&&row2s[0].giaonv2!=''){giaonv2=get_time(row2s[0].giaonv2);a0='A';phat='A';}
                             }
                             if(item.a3=='A'){
-                              if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';phat='A';}
+                              if(row2s[0].xong!=null&&row2s[0].xong!=''){xong=get_time(row2s[0].xong);a3='A';phat='A';}
                               if(item.a2=='A'){
-                                if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';phat='A';}
+                                if(row2s[0].dennoi!=null&&row2s[0].dennoi!=''){dennoi=get_time(row2s[0].dennoi);a2='A';phat='A';}
                                 if(item.a1=='A'){
-                                  if(row2s[0].batdau!=null){batdau=get_time(row2s[0].batdau);a1='A';phat='A';}
+                                  if(row2s[0].batdau!=null&&row2s[0].batdau!=''){batdau=get_time(row2s[0].batdau);a1='A';phat='A';}
                                 }
                               }
                             }
-                            if(row2s[0].vedonvi!=null){vedonvi=get_time(row2s[0].vedonvi);a4='A';phat='A';}
+                            if(row2s[0].vedonvi!=null&&row2s[0].vedonvi!=''){vedonvi=get_time(row2s[0].vedonvi);a4='A';phat='A';}
 
                             let nguyennhan='';let tieuhao='';
 
                             if(item.a20=='A'){
-                              if(row2s[0].nguyennhan!=null){nguyennhan=row2s[0].nguyennhan;phat='A';a20='A';}
+                              if(row2s[0].nguyennhan!=null&&row2s[0].nguyennhan!=''){nguyennhan=row2s[0].nguyennhan;phat='A';a20='A';}
                             }
                             if(item.a21=='A'){
-                              if(row2s[0].tieuhao!=null){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
+                              if(row2s[0].tieuhao!=null&&row2s[0].tieuhao!=''){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
                             }
-                            console.log({idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21});
-                            if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21});
 
+                            if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21});
+                            else console.log('Khong co noi dung phat');
                           }
                         });
                       });
@@ -1673,29 +1673,29 @@ io.on('connection',(socket)=>
                             let a21='B';
                             let batdau=''; let dennoi=''; let xong=''; let vedonvi='';let giaonv2='';
                             if(item.a0=='A'){
-                              if(row2s[0].giaonv2!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';phat='A';}
+                              if(row2s[0].giaonv2!=null&&row2s[0].giaonv2!=''){giaonv2=get_time(row2s[0].giaonv2);a0='A';phat='A';}
                             }
                             if(item.a3=='A'){
-                              if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';phat='A';}
+                              if(row2s[0].xong!=null&&row2s[0].xong!=''){xong=get_time(row2s[0].xong);a3='A';phat='A';}
                               if(item.a2=='A'){
-                                if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';phat='A';}
+                                if(row2s[0].dennoi!=null&&row2s[0].dennoi!=''){dennoi=get_time(row2s[0].dennoi);a2='A';phat='A';}
                                 if(item.a1=='A'){
-                                  if(row2s[0].batdau!=null){batdau=get_time(row2s[0].batdau);a1='A';phat='A';}
+                                  if(row2s[0].batdau!=null&&row2s[0].batdau!=''){batdau=get_time(row2s[0].batdau);a1='A';phat='A';}
                                 }
                               }
                             }
-                            if(row2s[0].vedonvi!=null){vedonvi=get_time(row2s[0].vedonvi);a4='A';phat='A';}
+                            if(row2s[0].vedonvi!=null&&row2s[0].vedonvi!=''){vedonvi=get_time(row2s[0].vedonvi);a4='A';phat='A';}
 
                             let nguyennhan='';let tieuhao='';
 
                             if(item.a20=='A'){
-                              if(row2s[0].nguyennhan!=null){nguyennhan=row2s[0].nguyennhan;phat='A';a20='A';}
+                              if(row2s[0].nguyennhan!=null&&row2s[0].nguyennhan!=''){nguyennhan=row2s[0].nguyennhan;phat='A';a20='A';}
                             }
                             if(item.a21=='A'){
-                              if(row2s[0].tieuhao!=null){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
+                              if(row2s[0].tieuhao!=null&&row2s[0].tieuhao!=''){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
                             }
                             if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21});
-
+                            else console.log('Khong co noi dung phat 2');
                           }
                         });
                       });
