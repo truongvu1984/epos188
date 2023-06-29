@@ -1811,7 +1811,7 @@ io.on('connection',(socket)=>
                if(nd=='E'){
                  socket.emit('gui_thongtin_ok',{nd:nd,idc:idc});
                  console.log({nd:nd,idc:idc,nguyennhan:nd2});
-                 io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,nguyennhan:'Vũ yêu Vân'});
+                 io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:nd2,nguyennhan:nd2});
                  //gui cho chi huy 1 neu co
                  if(socket.type=="F"){
                    con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
