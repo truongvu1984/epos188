@@ -1695,7 +1695,7 @@ io.on('connection',(socket)=>
                               if(row2s[0].tieuhao!=null&&row2s[0].tieuhao!=''){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
                             }
                             if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21});
-                            
+
                           }
                         });
                       });
@@ -1810,7 +1810,7 @@ io.on('connection',(socket)=>
              else {
                if(nd=='E'){
                  socket.emit('gui_thongtin_ok',{nd:nd,idc:idc});
-                 console.log({nd:nd,idc:idc});
+                 console.log({nd:nd,idc:idc,nguyennhan:nd2});
                  io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,nguyennhan:nd2});
                  //gui cho chi huy 1 neu co
                  if(socket.type=="F"){
