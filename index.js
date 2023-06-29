@@ -1567,6 +1567,7 @@ io.on('connection',(socket)=>
                             let a20='B';
                             let a21='B';
                             let batdau=''; let dennoi=''; let xong=''; let vedonvi='';
+                            let giaonv2='';
                             if(item.a0=='A'){
                               if(row2s[0].giaonv2!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';phat='A';}
                             }
@@ -1669,7 +1670,7 @@ io.on('connection',(socket)=>
                             let a0='B';
                             let a20='B';
                             let a21='B';
-                            let batdau=''; let dennoi=''; let xong=''; let vedonvi='';
+                            let batdau=''; let dennoi=''; let xong=''; let vedonvi='';let giaonv2='';
                             if(item.a0=='A'){
                               if(row2s[0].giaonv2!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';phat='A';}
                             }
