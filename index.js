@@ -1573,12 +1573,11 @@ io.on('connection',(socket)=>
                               if(row2s[0].giaonv2!=null){giaonv2=get_time(row2s[0].giaonv2);a0='A';phat='A';}
                             }
                             if(item.a3=='A'){
-                              phat='A';
-                              if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';}
+                              if(row2s[0].xong!=null){xong=get_time(row2s[0].xong);a3='A';phat='A';}
                               if(item.a2=='A'){
-                                if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';}
+                                if(row2s[0].dennoi!=null){dennoi=get_time(row2s[0].dennoi);a2='A';phat='A';}
                                 if(item.a1=='A'){
-                                  if(row2s[0].batdau!=null){batdau=get_time(row2s[0].batdau);a1='A';}
+                                  if(row2s[0].batdau!=null){batdau=get_time(row2s[0].batdau);a1='A';phat='A';}
                                 }
                               }
                             }
