@@ -1810,6 +1810,7 @@ io.on('connection',(socket)=>
              else {
                if(nd=='E'){
                  socket.emit('gui_thongtin_ok',{nd:nd,idc:idc});
+                 console.log({nd:nd,idc:idc});
                  io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,nguyennhan:nd2});
                  //gui cho chi huy 1 neu co
                  if(socket.type=="F"){
