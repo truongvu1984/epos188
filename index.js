@@ -1518,7 +1518,7 @@ io.on('connection',(socket)=>
       }
     });
   socket.on('login2_suco',(tin)=>{
-    
+
     if(tin.user&&tin.pass){
             con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
               if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
@@ -1591,6 +1591,7 @@ io.on('connection',(socket)=>
                             if(item.a21=='A'){
                               if(row2s[0].tieuhao!=null){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
                             }
+                            console.log({idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21});
                             if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21});
 
                           }
