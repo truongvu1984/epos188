@@ -1547,7 +1547,7 @@ io.on('connection',(socket)=>
                           let giaonv2=null;if(row1.giaonv2!=null){giaonv2=get_time(row1.giaonv2);a0='A';}
                           let nguyennhan='';if(row1.nguyennhan!=null)nguyennhan=row1.nguyennhan;
                           let tieuhao=''; if(row1.tieuhao!=null)tieuhao=row1.tieuhao;
-                          con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.id+"'", function(err2, row2s){
+                          con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.idc+"'", function(err2, row2s){
                             if (err2){console.log(err2);}
                             else {
                               if(row2s.length>0){
@@ -1610,7 +1610,7 @@ io.on('connection',(socket)=>
                             if(item.a21=='A'){
                               if(row2s[0].tieuhao!=null&&row2s[0].tieuhao!=''){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
                             }
-                            con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.id+"'", function(err3, row3s){
+                            con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.idc+"'", function(err3, row3s){
                               if (err3){console.log(err3);}
                               else {
                                 if(row3s.length>0){
@@ -1684,7 +1684,7 @@ io.on('connection',(socket)=>
                           let vedonvi=null;if(row1.vedonvi!=null){vedonvi=get_time(row1.vedonvi);a4='A';}
                           let nguyennhan='';if(row1.nguyennhan!=null)nguyennhan=row1.nguyennhan;
                           let tieuhao=''; if(row1.tieuhao!=null)tieuhao=row1.tieuhao;
-                          con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.id+"'", function(err2, row2s){
+                          con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.idc+"'", function(err2, row2s){
                             if (err2){console.log(err2);}
                             else {
                               if(row2s.length>0){
@@ -1752,7 +1752,7 @@ io.on('connection',(socket)=>
                             if(item.a21=='A'){
                               if(row2s[0].tieuhao!=null&&row2s[0].tieuhao!=''){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
                             }
-                            con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.id+"'", function(err3, row3s){
+                            con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.idc+"'", function(err3, row3s){
                               if (err3){console.log(err3);}
                               else {
                                 if(row3s.length>0){
