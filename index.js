@@ -53,8 +53,7 @@ function kiemtra_taikhoan(){
 }
 app.get('/', (req, res) => res.render('privacy'));
 app.get('/privacy-policy', (req, res) => res.render('privacy'));
-var matkhau = passwordHash.generate('123456');
-console.log(matkhau);
+
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
@@ -1794,15 +1793,11 @@ io.on('connection',(socket)=>
   });
   socket.on('C_capnhat', function(idc,nd,nd2){
       if (socket.user!=null){
-        let thoigian=new Date();
+
         let abc='';
-        if(nd=="A")abc='batdau';
-        else if(nd=="B")abc='dennoi';
-        else if(nd=="C")abc='xong';
-        else if(nd=="D")abc='vedonvi';
-        else if(nd=="E")abc='nguyennhan';
-        else abc='tieuhao';
         if (nd=="E"||nd=="F"){
+          if(nd=="E")abc='nguyennhan';
+          else abc='tieuhao';
           let sql1 = "UPDATE `list_err` SET `"+abc+"` = ? WHERE `idc` LIKE ?";
           let val1 = [nd2, idc];
           con.query(sql1,val1,function(err2){
@@ -1839,7 +1834,32 @@ io.on('connection',(socket)=>
              }
           });
         }
+        else if(nd=="L"){
+          var sql = "INSERT INTO `list_vitri` (idc,lat, lon,name) VALUES ?";
+          var values = [[idc,nd2.lat,nd2.lon,nd2.name]];
+            con.query(sql, [values], function (err1, result) {
+              if (err1)socket.emit("giao_nhiemvu_thatbai","L");
+              else {
+                    socket.emit('gui_thongtin_ok',{nd:'L',idc:idc});
+                    io.sockets.in("chung").emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name});
+                    if(socket.type=="F"){
+                      con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+                        if (err){console.log(err);}
+                        else{
+                             io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name});
+                        }
+                      });
+                    }
+
+              }
+            });
+        }
         else {
+          let thoigian=new Date();
+          if(nd=="A")abc='batdau';
+          else if(nd=="B")abc='dennoi';
+          else if(nd=="C")abc='xong';
+          else if(nd=="D")abc='vedonvi';
           let sql1 = "UPDATE `list_err` SET `"+abc+"` = ? WHERE `idc` LIKE ?";
           let val1 = [thoigian, idc];
           con.query(sql1,val1,function(err2){
