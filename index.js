@@ -1526,7 +1526,6 @@ io.on('connection',(socket)=>
                   socket.emit("login2_suco_ok");
                   socket.user = tin.user;
                   socket.type = rows[0].type;
-
                   if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
                     socket.join("chung");
                     //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
@@ -1554,7 +1553,7 @@ io.on('connection',(socket)=>
                                 a6='A';
                                 let list_vitri=[];
                                 row2s.forEach((row2, j) => {
-                                    list_vitri.push({lat:row2.lat,lon:row2.lon,name:row2.name});
+                                    list_vitri.push({lat:row2.lat,lon:row2.lon,name:row2.name,tt:row2.id});
                                     if(j===(row2s.length-1)){
                                       socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
                                         ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
@@ -1617,7 +1616,7 @@ io.on('connection',(socket)=>
                                   a6='A';phat='A';
                                   let list_vitri=[];
                                   row3s.forEach((row3, j) => {
-                                      list_vitri.push({lat:row3.lat,lon:row3.lon,name:row3.name});
+                                      list_vitri.push({lat:row3.lat,lon:row3.lon,name:row3.name,tt:row3.id});
                                       if(j===(row3s.length-1)){
                                         socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21,a6:'A',list_vitri:list_vitri});
                                     }
@@ -1691,7 +1690,7 @@ io.on('connection',(socket)=>
                                 a6='A';
                                 let list_vitri=[];
                                 row2s.forEach((row2, j) => {
-                                    list_vitri.push({lat:row2.lat,lon:row2.lon,name:row2.name});
+                                    list_vitri.push({lat:row2.lat,lon:row2.lon,name:row2.name,tt:row2.id});
                                     if(j===(row2s.length-1)){
                                       socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
                                         ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
@@ -1759,7 +1758,7 @@ io.on('connection',(socket)=>
                                   a6='A';phat='A';
                                   let list_vitri=[];
                                   row3s.forEach((row3, j) => {
-                                      list_vitri.push({lat:row3.lat,lon:row3.lon,name:row3.name});
+                                      list_vitri.push({lat:row3.lat,lon:row3.lon,name:row3.name,tt:row3.id});
                                       if(j===(row3s.length-1)){
                                         socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21,a6:'A',list_vitri:list_vitri});
                                     }
@@ -1918,12 +1917,12 @@ io.on('connection',(socket)=>
               if (err1)socket.emit("giao_nhiemvu_thatbai","L");
               else {
                     socket.emit('gui_thongtin_ok',{nd:'L',idc:idc});
-                    io.sockets.in("chung").emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name});
+                    io.sockets.in("chung").emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name,tt:result.insertId });
                     if(socket.type=="F"){
                       con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
                         if (err){console.log(err);}
                         else{
-                             io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name});
+                             io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name,tt:result.insertId});
                         }
                       });
                     }
@@ -1976,6 +1975,10 @@ io.on('connection',(socket)=>
           con.query("DELETE FROM `list_err` WHERE `idc` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
           });
+          con.query("DELETE FROM `list_vitri` WHERE `idc` LIKE '"+mail+"'", function(err2){
+            if (err2)console.log(err2);
+          });
+
           if(key===(list.length-1))socket.emit('S_del_suco_ok','B');
         });
       }
