@@ -1869,7 +1869,6 @@ io.on('connection',(socket)=>
   });
   socket.on('C_capnhat', function(idc,nd,nd2){
       if (socket.user!=null){
-
         let abc='';
         if (nd=="E"||nd=="F"){
           if(nd=="E")abc='nguyennhan';
@@ -1916,7 +1915,7 @@ io.on('connection',(socket)=>
             con.query(sql, [values], function (err1, result) {
               if (err1)socket.emit("giao_nhiemvu_thatbai","L");
               else {
-                    socket.emit('gui_thongtin_ok',{nd:'L',idc:idc});
+                    socket.emit('gui_thongtin_ok',{nd:'L',idc:idc,tt:result.insertId});
                     io.sockets.in("chung").emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name,tt:result.insertId });
                     if(socket.type=="F"){
                       con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
