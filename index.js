@@ -1722,7 +1722,6 @@ io.on('connection',(socket)=>
                         con.query(lenh, function(err2, row2s){
                           if (err2){console.log('4444'+err2);}
                           else if(row2s.length>0){
-
                             let phat='B';
                             let a1='B';
                             let a2='B';
@@ -1929,6 +1928,28 @@ io.on('connection',(socket)=>
 
               }
             });
+        }
+        else if(nd=="M"){
+          let sql1 = "INSERT INTO `list_vitri` (idc,lat, lon,name) VALUES ?";
+          let val1 = [[idc,nd2.lat,nd2.lon,nd2.name]];
+          con.query(sql1,val1,function(err2){
+            if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
+             else {
+                socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,stt:nd2.id,name:nd2.name});
+                io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,stt:nd2.id,name:nd2.name});
+                //gui cho chi huy 1 neu co
+                if(socket.type=="F"){
+                  con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+                    if (err){console.log(err);}
+                    else{
+                      io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,stt:nd2.id,name:nd2.name});
+                    }
+                  });
+                }
+
+
+             }
+          });
         }
         else {
           let thoigian=new Date();
