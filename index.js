@@ -1962,11 +1962,11 @@ io.on('connection',(socket)=>
           console.log(idc+" nd="+nd+" nd2="+nd2);
           let sql1 = "INSERT INTO `list_del` (idc,ids) VALUES ?";
           let val1 = [[idc,nd2]];
-          con.query(sql1,val1,function(err2,result){
+          con.query(sql1,[val1],function(err2,result){
             if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
              else {
-               con.query("DELETE FROM `list_vitri` WHERE `id` ="+nd2, function(err2){
-                 if (err2)console.log(err2);
+               con.query("DELETE FROM `list_vitri` WHERE `id` ="+nd2, function(err3){
+                 if (err3)console.log(err3);
                });
                 socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,tt:nd2,tt_del:result.insertId});
                 io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,tt:nd2,tt_del:result.insertId});
