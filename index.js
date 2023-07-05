@@ -1633,9 +1633,23 @@ io.on('connection',(socket)=>
 
 
 
-
                           }
                         });
+                      });
+                    }
+                    if(tin.list_del.length>0){
+                      tin.bantin.forEach((item, i) => {
+                        con.query("SELECT * FROM `list_del` WHERE `idc` LIKE '"+item.idc+"' AND id >"+item.tt, function(err4, row4s){
+                            if (err4){console.log(err4);}
+                            else if(row4s.length>0){
+                              let list_del=[];
+                              row4s.forEach((item4, i4) => {
+                                list_del.push[{idc:item4.idc, ids:item4.ids, tt:item4.id}];
+                                  if(i4===(row4s.length-1)) socket.emit("S_capnhat",{idc:item.idc,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B',a20:'B',a21:'B',a6:'B',a7:'A', list_del:list_del});
+                              });
+                            }
+                          });
+
                       });
                     }
                     if(rows[0].type=="A") {
@@ -1773,6 +1787,21 @@ io.on('connection',(socket)=>
 
                           }
                         });
+                      });
+                    }
+                    if(tin.list_del.length>0){
+                      tin.bantin.forEach((item, i) => {
+                        con.query("SELECT * FROM `list_del` WHERE `idc` LIKE '"+item.idc+"' AND id >"+item.tt, function(err4, row4s){
+                            if (err4){console.log(err4);}
+                            else if(row4s.length>0){
+                              let list_del=[];
+                              row4s.forEach((item4, i4) => {
+                                list_del.push[{idc:item4.idc, ids:item4.ids, tt:item4.id}];
+                                  if(i4===(row4s.length-1)) socket.emit("S_capnhat",{idc:item.idc,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B',a20:'B',a21:'B',a6:'B',a7:'A', list_del:list_del});
+                              });
+                            }
+                          });
+
                       });
                     }
                     if(rows[0].type=="E"){
@@ -1930,19 +1959,22 @@ io.on('connection',(socket)=>
             });
         }
         else if(nd=="M"){
-          let sql1 = "INSERT INTO `list_vitri` (idc,lat, lon,name) VALUES ?";
-          let val1 = [[idc,nd2.lat,nd2.lon,nd2.name]];
-          con.query(sql1,val1,function(err2){
+          let sql1 = "INSERT INTO `list_del` (idc,ids) VALUES ?";
+          let val1 = [[idc,nd2]];
+          con.query(sql1,val1,function(err2,result){
             if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
              else {
-                socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,stt:nd2.id,name:nd2.name});
-                io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,stt:nd2.id,name:nd2.name});
+               con.query("DELETE FROM `list_vitri` WHERE `id` ="+nd2, function(err2){
+                 if (err2)console.log(err2);
+               });
+                socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,tt:nd2,tt_del:result.insertId});
+                io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,tt:nd2,tt_del:result.insertId});
                 //gui cho chi huy 1 neu co
                 if(socket.type=="F"){
                   con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
                     if (err){console.log(err);}
                     else{
-                      io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,stt:nd2.id,name:nd2.name});
+                      io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,tt:nd2,tt_del:result.insertId});
                     }
                   });
                 }
