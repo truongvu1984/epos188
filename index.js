@@ -1652,6 +1652,7 @@ io.on('connection',(socket)=>
                       });
                     }
                     if(rows[0].type=="A") {
+                      console.log('tt gui len='+tin.donvi);
                       con.query("SELECT * FROM `list_user` WHERE `id` > "+tin.tt_list+" AND `id`>5 ORDER BY id ASC", function(err5, row5s){
                         if (err5)console.log('2222'+err5);
                         else{
