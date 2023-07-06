@@ -1517,8 +1517,6 @@ io.on('connection',(socket)=>
       }
     });
   socket.on('login2_suco',(tin)=>{
-
-
     if(tin.user&&tin.pass){
             con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
               if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
@@ -1664,6 +1662,17 @@ io.on('connection',(socket)=>
                           }
                         }
                       });
+                      con.query("SELECT * FROM `list_donvi` WHERE `id` > "+tin.donvi+" ORDER BY id ASC", function(err6, row6s){
+                        if (err6)console.log('2222'+err6);
+                        else{
+                          if(row6s.length>0){
+                            row6s.forEach((item6, i) => {
+                                socket.emit("S_send_donvi",{tt:item.id, donvi:item.donvi});
+                            });
+                          }
+                        }
+                      });
+
                     }
                     else if(rows[0].type=="B") {
                       con.query("SELECT * FROM `list_user` WHERE `type` LIKE 'E' AND `id` > "+tin.tt_list+" AND `id`>5 ORDER BY id ASC", function(err5, row5s){
@@ -1806,16 +1815,13 @@ io.on('connection',(socket)=>
                       });
                     }
                     if(rows[0].type=="E"){
-
                       con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err4, row4s){
                         if (err4)console.log('5555'+err4);
                         else{
                           con.query("SELECT * FROM `list_user` WHERE LOCATE('"+row4s[0].donvi+"',donvi)>0 AND `id` > "+tin.tt_list+" AND `id` > 5 ORDER BY id ASC", function(err5, row5s){
                             if (err5)console.log(err5);
                             else{
-
                               if(row5s.length>0){
-
                                 row5s.forEach((item, i) => {
                                   if(item.user!=tin.user) socket.emit("S_send_user",{tt:item.id, user:item.user,hoten:item.hoten,capbac:item.capbac,chucvu:item.chucvu,donvi:item.donvi,type:item.type});
                                 });
@@ -1834,23 +1840,38 @@ io.on('connection',(socket)=>
           });
         }
     });
-  socket.on('make_user', function(tin){
+  socket.on('make_user', function(nd,tin){
     if (socket.user!=null && socket.type!=null&&socket.type=="A"){
-
-       con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
-         if (err)socket.emit("regis_suco_thatbai","A");
+      if(nd=='A'){
+        con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
+         if (err)socket.emit("regis_suco_thatbai",'A',"A");
          else{
               if(rows.length==0){
                 var sql = "INSERT INTO `list_user` (user, pass,hoten,capbac,chucvu,donvi,type) VALUES ?";
                   var values = [[tin.user,tin.pass,tin.hoten,tin.capbac,tin.chucvu,tin.donvi,tin.type]];
                   con.query(sql, [values], function (err1, result) {
-                    if (err1)socket.emit("regis_suco_thatbai","A");
-                    else  socket.emit("regis_suco_ok",result.insertId);
+                    if (err1)socket.emit("regis_suco_thatbai",'A',"A");
+                    else  socket.emit("regis_suco_ok",'A',result.insertId);
                   });
-              }  else socket.emit("regis_suco_thatbai","B");
+              }  else socket.emit("regis_suco_thatbai",'A',"B");
          }
        });
-
+      }
+      else {
+        con.query("SELECT * FROM `list_donvi` WHERE `donvi` LIKE '"+tin+"' LIMIT 1", function(err, rows){
+         if (err)socket.emit("regis_suco_thatbai",'B',"A");
+         else{
+              if(rows.length==0){
+                var sql = "INSERT INTO `list_donvi` (donvi) VALUES ?";
+                  var values = [[tin]];
+                  con.query(sql, [values], function (err1, result) {
+                    if (err1)socket.emit("regis_suco_thatbai",'B',"A");
+                    else  socket.emit("regis_suco_ok",'B',result.insertId);
+                  });
+              }  else socket.emit("regis_suco_thatbai",'B',"B");
+         }
+       });
+      }
 
       }
     });
