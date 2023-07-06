@@ -1667,7 +1667,7 @@ io.on('connection',(socket)=>
                         else{
                           if(row6s.length>0){
                             row6s.forEach((item6, i) => {
-                                socket.emit("S_send_donvi",{tt:item.id, donvi:item.donvi});
+                                socket.emit("S_send_donvi",{tt:item6.id, donvi:item6.donvi});
                             });
                           }
                         }
