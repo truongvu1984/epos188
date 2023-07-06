@@ -1643,7 +1643,7 @@ io.on('connection',(socket)=>
                             else if(row4s.length>0){
                               let list_del=[];
                               row4s.forEach((item4, i4) => {
-                                list_del.push[{idc:item4.idc, ids:item4.ids, tt:item4.id}];
+                                list_del.push[{idc:item4.idc, tt:item4.ids, tt_del:item4.id}];
                                   if(i4===(row4s.length-1)) socket.emit("S_capnhat",{idc:item.idc,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B',a20:'B',a21:'B',a6:'B',a7:'A', list_del:list_del});
                               });
                             }
@@ -1663,7 +1663,7 @@ io.on('connection',(socket)=>
                         }
                       });
                       con.query("SELECT * FROM `list_donvi` WHERE `id` > "+tin.donvi+" ORDER BY id ASC", function(err6, row6s){
-                        if (err6)console.log('2222'+err6);
+                        if (err6)console.log('2234'+err6);
                         else{
                           if(row6s.length>0){
                             row6s.forEach((item6, i) => {
@@ -1676,7 +1676,7 @@ io.on('connection',(socket)=>
                     }
                     else if(rows[0].type=="B") {
                       con.query("SELECT * FROM `list_user` WHERE `type` LIKE 'E' AND `id` > "+tin.tt_list+" AND `id`>5 ORDER BY id ASC", function(err5, row5s){
-                        if (err5)console.log('2222'+err5);
+                        if (err5)console.log('2225'+err5);
                         else{
                           if(row5s.length>0){
                             row5s.forEach((item, i) => {
@@ -1806,7 +1806,7 @@ io.on('connection',(socket)=>
                             else if(row4s.length>0){
                               let list_del=[];
                               row4s.forEach((item4, i4) => {
-                                list_del.push[{idc:item4.idc, ids:item4.ids, tt:item4.id}];
+                                list_del.push[{idc:item4.idc, tt:item4.ids, tt_del:item4.id}];
                                   if(i4===(row4s.length-1)) socket.emit("S_capnhat",{idc:item.idc,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B',a20:'B',a21:'B',a6:'B',a7:'A', list_del:list_del});
                               });
                             }
