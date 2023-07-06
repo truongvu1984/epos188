@@ -1652,7 +1652,7 @@ io.on('connection',(socket)=>
                       });
                     }
                     if(rows[0].type=="A") {
-                      
+
                       con.query("SELECT * FROM `list_user` WHERE `id` > "+tin.tt_list+" AND `id`>5 ORDER BY id ASC", function(err5, row5s){
                         if (err5)console.log('2222'+err5);
                         else{
@@ -2047,7 +2047,7 @@ io.on('connection',(socket)=>
           if(key===(list.length-1))socket.emit('S_del_suco_ok','A');
         });
       }
-      else {
+      else if(stt=='B'){
         list.forEach((mail,key)=>{
           con.query("DELETE FROM `list_err` WHERE `idc` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
@@ -2055,10 +2055,19 @@ io.on('connection',(socket)=>
           con.query("DELETE FROM `list_vitri` WHERE `idc` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
           });
-
           if(key===(list.length-1))socket.emit('S_del_suco_ok','B');
         });
       }
+      else {
+        list.forEach((mail,key)=>{
+          con.query("DELETE FROM `list_donvi` WHERE `id` = "+mail, function(err2){
+            if (err2)console.log(err2);
+          });
+
+          if(key===(list.length-1))socket.emit('S_del_suco_ok','C');
+        });
+      }
+
     }
   });
 });
