@@ -1517,7 +1517,7 @@ io.on('connection',(socket)=>
       }
     });
   socket.on('login2_suco',(tin)=>{
-    console.log(tin);
+
 
     if(tin.user&&tin.pass){
             con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
@@ -1639,7 +1639,7 @@ io.on('connection',(socket)=>
                       });
                     }
                     if(tin.list_del.length>0){
-                      tin.bantin.forEach((item, i) => {
+                      tin.list_del.forEach((item, i) => {
                         con.query("SELECT * FROM `list_del` WHERE `idc` LIKE '"+item.idc+"' AND id >"+item.tt, function(err4, row4s){
                             if (err4){console.log(err4);}
                             else if(row4s.length>0){
@@ -1791,7 +1791,7 @@ io.on('connection',(socket)=>
                       });
                     }
                     if(tin.list_del.length>0){
-                      tin.bantin.forEach((item, i) => {
+                      tin.list_del.forEach((item, i) => {
                         con.query("SELECT * FROM `list_del` WHERE `idc` LIKE '"+item.idc+"' AND id >"+item.tt, function(err4, row4s){
                             if (err4){console.log(err4);}
                             else if(row4s.length>0){
