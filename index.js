@@ -496,7 +496,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('choi_lai',(mail,luot)=>{
-    console.log('BBBB');
+    console.log('BBBB='+socket.number +" mail="+mail+' luot='+luot);
     if(socket.number != null&&mail!=null&&luot!=null){
           console.log('AAAA');
             con.query("UPDATE `"+socket.number+"caro` SET `danhan` = 'Y', `loai_ban` = 'B',`utien`='"+luot+"' WHERE `mail` LIKE '"+mail+"'", function(err2){
