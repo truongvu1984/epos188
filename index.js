@@ -496,13 +496,13 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('choi_lai',(mail,luot)=>{
-    console.log('BBBB='+socket.number +" mail="+mail+' luot='+luot);
+    
     if(socket.number != null&&mail!=null&&luot!=null){
-          console.log('AAAA');
+
             con.query("UPDATE `"+socket.number+"caro` SET `danhan` = 'Y', `loai_ban` = 'B',`utien`='"+luot+"' WHERE `mail` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
             else {
-              console.log('AAAA');
+
               socket.emit('choi_lai_ok',mail,luot);
               con.query("UPDATE `"+mail+"caro` SET `danhan` = 'N', `loai_ban` = 'B',`utien`='"+luot+"' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
                 if(err5)console.log(err5);
