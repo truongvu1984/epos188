@@ -496,18 +496,14 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('choi_lai',(mail,luot)=>{
-    
     if(socket.number != null&&mail!=null&&luot!=null){
-
             con.query("UPDATE `"+socket.number+"caro` SET `danhan` = 'Y', `loai_ban` = 'B',`utien`='"+luot+"' WHERE `mail` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
             else {
-
               socket.emit('choi_lai_ok',mail,luot);
               con.query("UPDATE `"+mail+"caro` SET `danhan` = 'N', `loai_ban` = 'B',`utien`='"+luot+"' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
                 if(err5)console.log(err5);
-                else  {io.sockets.in(mail).emit('C_muon_choi_lai',socket.number,socket.username,luot);console.log('DDDD');}
-
+                else  {io.sockets.in(mail).emit('C_muon_choi_lai',socket.number,socket.username,luot);}
 
               });
 
@@ -526,6 +522,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_send_diem',(toado,mail,stt)=>{
+    //B là C muốn chơi lại từ đầu
     if(socket.number != null){
       if(toado!=null && mail !=null&&stt!=null){
       // xem đã có cái row này hay chưa
@@ -1073,9 +1070,7 @@ io.on('connection',(socket)=>
                         con.query(sql5, [val5], function (err5, res5){
                               if ( err5){console.log(err5);}
                               else{
-
                                   //lưu vào bảng người gửi của người nhận
-
                                   let list_line=[];
                                   let list_diem=[];
                                   if(mess.vitri!=null &&mess.vitri.length>0){
@@ -1100,14 +1095,20 @@ io.on('connection',(socket)=>
                                                                     con.query(sql5, [val5], function (err5, res5) {if ( err5)console.log(err5);});
                                                                     if(key7===(row6.tuyen.length-1)){
                                                                       list_line.push({name:row6.name,culy:row6.culy,up_id:idc,list_line1: list_line1,local_id:row6.id});
-                                                                      io.sockets.in(row5.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
+                                                                      if(key6===(mess.line.length-1)){
+                                                                        io.sockets.in(row5.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
                                                                                                 subject: mess.subject, idc:idc, time:get_time(thoigian),list_line:list_line,list_diem:list_diem});
-
+                                                                      }
                                                                     }
                                                                 });
                                                             }
                                                       });
                                                   });
+                                              }
+                                            else {
+                                                io.sockets.in(row5.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
+                                                                          subject: mess.subject, idc:idc, time:get_time(thoigian),list_line:list_line,list_diem:list_diem});
+
                                               }
                                           }
                                       });
@@ -1127,20 +1128,10 @@ io.on('connection',(socket)=>
                                                           con.query(sql5, [val5], function (err5, res5) {if ( err5)console.log(err5);});
                                                           if(key1===(row.tuyen.length-1)){
                                                             list_line.push({name:row.name,culy:row.culy,up_id:idc,list_line1: list_line1,local_id:row.id});
-                                                            if(mess.vitri!=null &&mess.vitri.length>0){
-                                                                  var sql3 = "INSERT INTO `"+row5.number+"diem` (idc, name, lat, lon,idlo) VALUES ?";
-                                                                  mess.vitri.forEach((row8,key8)=>{
-                                                                    list_diem.push({idc:idc,name:row8.name,lat:row8.lat,lon:row8.lon,id:row8.id});
-                                                                    var val3 = [[idc, row8.name, row8.lat, row8.lon,row8.id]];
-                                                                    con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
-                                                                    if(key===(mess.vitri.length-1)){
-                                                                      io.sockets.in(row5.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
-                                                                                                subject: mess.subject, idc:idc, time:get_time(thoigian),list_line:list_line,list_diem:list_diem});
-
-                                                                    }
-                                                                });
+                                                            if(key===(mess.line.length-1)){
+                                                              io.sockets.in(row5.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
+                                                                                      subject: mess.subject, idc:idc, time:get_time(thoigian),list_line:list_line,list_diem:list_diem});
                                                             }
-
                                                           }
                                                       });
                                                   }
@@ -1495,8 +1486,8 @@ io.on('connection',(socket)=>
     socket.emit ('S_get_bosung_member');
     // lưu thành viên mới vào cơ sở dữ liệu của các thành viên cũ
     con.query("SELECT * FROM `" + socket.number+"main` WHERE `idc` LIKE '"+socket.roomabc+"' LIMIT 1", function(err1, rows){
-      if ( err1 || (rows.length ==0 )){console.log('co loi 2 '+err1);}
-      else {
+      if ( err1){console.log('co loi 2 '+err1);}
+      else if(rows.length >0){
 
       }
     });
