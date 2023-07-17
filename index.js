@@ -57,13 +57,7 @@ app.get('/privacy-policy', (req, res) => res.render('privacy'));
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
-      var sql5 = "INSERT INTO `list_donvi` (donvi) VALUES ?";
-      var val5 = [['AAAA']];
-      con.query(sql5, [val5], function (err5, res5){
-          if ( err5){console.log(err5);}
-          else{
-          }
-        });
+
 
 
  kiemtra_taikhoan();
@@ -706,7 +700,7 @@ io.on('connection',(socket)=>
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(15),`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"member` (`id` INT NOT NULL AUTO_INCREMENT,`idc`CHAR(20), `number` VARCHAR(45) NOT NULL,`name` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                // con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"member` (`id` INT NOT NULL AUTO_INCREMENT,`idc`CHAR(20), `number` VARCHAR(45) NOT NULL,`name` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
                 var values = [[tin.mail,tin.name, matkhau]];
@@ -1402,34 +1396,37 @@ io.on('connection',(socket)=>
       socket.emit('S_get_room',room_id);
       // gửi room cho các thành viên
       let member=[];
-      info.member_list.forEach((mem,key)=>{
-        member.push({number:mem.number,name:mem.name});
-        if(key==(info.member_list.length-1)){
-          info.member_list.forEach(function(row){
-              // kiểm tra xem thành viên này có tài khoản chưa
-              con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row.number +"' LIMIT 1", function(err3, kq)
-                {
-                  if(err3 || (kq.length ==0)){console.log(err3);}
-                  else {
-                      var sql5 = "INSERT INTO `"+row.number+"main` (idc, subject,number,name, stt,time ) VALUES ?";
-                      var val5 = [[ room_id, info.room_name,socket.number,socket.username,'R',thoigian]];
-                      con.query(sql5, [val5], function (err5, res5){
-                          if ( err5){console.log(err5);}
-                          else{
-                            var val7;
-                            var sql6 = "INSERT INTO `"+row.number+"member` (idc,number,name ) VALUES ?";
-                              info.member_list.forEach((mem)=>{
-                              val7 = [[ room_id,mem.number, mem.name]];
-                              con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
-                            });
-                            io.sockets.in(row.number).emit('S_send_room',{room_name:info.room_name, room_id_server:room_id, admin_name:socket.username, admin_number:socket.number,member:member, time:get_time(thoigian)});
-                          }
-                      });
-                  }
-                });
+      var val7;
 
-            });
-        }
+      info.member_list.forEach((mem,key)=>{
+        con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row.number +"' LIMIT 1", function(err3, kq)
+          {
+            if(err3 || (kq.length ==0)){console.log(err3);}
+            else if(kq.length >0){
+                var sql6 = "INSERT INTO `list_member_w` (idc,number,name,admin ) VALUES ?";
+                val7 = [[ room_id,mem.number, mem.name,socket.number]];
+                con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
+                member.push({number:mem.number,name:mem.name});
+                if(key===(info.member_list.length-1)){
+                  member.forEach((item, i) => {
+                    var sql5 = "INSERT INTO `"+item.number+"main` (idc, subject,number,name, stt,time ) VALUES ?";
+                    var val5 = [[ room_id, info.room_name,socket.number,socket.username,'R',thoigian]];
+                    con.query(sql5, [val5], function (err5, res5){
+                        if ( err5){console.log(err5);}
+                        else{
+                              io.sockets.in(row.number).emit('S_send_room',{room_name:info.room_name, room_id_server:room_id, admin_name:socket.username, admin_number:socket.number,member:member, time:get_time(thoigian)});
+                          }
+
+                      });
+                  });
+
+                }
+
+
+
+            }
+          });
+
       });
     }
   });
