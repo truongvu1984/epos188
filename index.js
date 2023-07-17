@@ -1414,7 +1414,7 @@ io.on('connection',(socket)=>
                     con.query(sql5, [val5], function (err5, res5){
                         if ( err5){console.log(err5);}
                         else{
-                              io.sockets.in(row.number).emit('S_send_room',{room_name:info.room_name, room_id_server:room_id, admin_name:socket.username, admin_number:socket.number,member:member, time:get_time(thoigian)});
+                              io.sockets.in(item.number).emit('S_send_room',{room_name:info.room_name, room_id_server:room_id, admin_name:socket.username, admin_number:socket.number,member:member, time:get_time(thoigian)});
                           }
 
                       });
