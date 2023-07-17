@@ -1399,7 +1399,7 @@ io.on('connection',(socket)=>
       var val7;
 
       info.member_list.forEach((mem,key)=>{
-        con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row.number +"' LIMIT 1", function(err3, kq)
+        con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mem.number +"' LIMIT 1", function(err3, kq)
           {
             if(err3 || (kq.length ==0)){console.log(err3);}
             else if(kq.length >0){
