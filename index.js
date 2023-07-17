@@ -57,6 +57,13 @@ app.get('/privacy-policy', (req, res) => res.render('privacy'));
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
+      var sql5 = "INSERT INTO `list_donvi` (donvi) VALUES ?";
+      var val5 = [['AAAA']];
+      con.query(sql5, [val5], function (err5, res5){
+          if ( err5){console.log(err5);}
+          else{
+          }
+        });
 
 
  kiemtra_taikhoan();
