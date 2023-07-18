@@ -1004,7 +1004,7 @@ io.on('connection',(socket)=>
               if(err)console.log(err);
               else if(rows.length>0){
                 rows.forEach((row, i) => {
-                  con.query("SELECT * FROM `"+socket.number+"member` WHERE `idc` LIKE '"+row.idc+"'", function(err2, rows2){
+                  con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+row.idc+"'", function(err2, rows2){
                     if(err2)console.log(err2);
                     else if(rows2.length>0){
                       let member=[];
@@ -1255,7 +1255,6 @@ io.on('connection',(socket)=>
                   socket.number = null;socket.roomabc = undefined;
               con.query("DROP TABLE IF EXISTS `"+abc+"contact`", function(err4){ if (err4)console.log(err4);});
               con.query("DROP TABLE IF EXISTS `"+abc+"main`", function(err4){ if (err4)console.log(err4);});
-              con.query("DROP TABLE IF EXISTS `"+abc+"member`", function(err4){ if (err4)console.log(err4);});
               con.query("DROP TABLE IF EXISTS `"+abc+"diem`", function(err4){ if (err4)console.log(err4);});
               con.query("DROP TABLE IF EXISTS `"+abc+"line_main`", function(err4){ if (err4)console.log(err4);});
               con.query("DROP TABLE IF EXISTS `"+abc+"line_detail`", function(err4){ if (err4)console.log(err4);});
@@ -1434,11 +1433,7 @@ io.on('connection',(socket)=>
     if(socket.number&&idc){
       con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"'", function(err9){
         if (err9)console.log(err9);
-        else {
-          con.query("DELETE FROM `"+socket.number+"member` WHERE `idc` LIKE '"+idc+"'", function(err7){
-            if (err7)console.log(err7);
-          })
-        }
+
       });
 
       }
