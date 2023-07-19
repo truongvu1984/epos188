@@ -63,6 +63,7 @@ con.connect(function(err) {
  kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
+  console.log('Co ket noi');
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
 
@@ -924,7 +925,6 @@ io.on('connection',(socket)=>
                     let idc=row.idc;
                     let list_line=[];
                     let list_diem=[];
-
                     con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `idc` LIKE '"+idc+"'", function(err1, row1s){
                       if (err1){socket.emit('login2_khongtaikhoan');}
                       else if(row1s.length>0){
@@ -1282,7 +1282,6 @@ io.on('connection',(socket)=>
               if ( err5){console.log(err5);}
               else {
                 io.sockets.in(nguoigui).emit('C_danhantinnhan',{nguoinhan:socket.number,subject:subject, idc:idc,time:get_time(thoigian)});
-
                 con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"'", function(err9){
                   if (err9)console.log(err9);
                   else {
@@ -1319,7 +1318,6 @@ io.on('connection',(socket)=>
   });
   socket.on('C_nhan_send', function (idc){
     if(socket.number && idc){
-
     con.query("DELETE FROM `"+socket.number+"main` WHERE `stt` LIKE 'K' AND `idc` LIKE '"+idc+"'", function(err){
         if(err)console.log(err);
     });
@@ -1346,6 +1344,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_join_room', function (room){
+    console.log('Co join len');
     if (socket.number&&room){
       socket.emit('S_get_join');
         if(socket.roomabc&&socket.roomabc!=room){
