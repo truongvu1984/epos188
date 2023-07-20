@@ -57,6 +57,31 @@ app.get('/privacy-policy', (req, res) => res.render('privacy'));
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
+      let mail='+84982025403';
+      con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` CHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail+"line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(15),`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      let mail2='+84982025404';
+      con.query("CREATE TABLE IF NOT EXISTS  `"+mail2+"main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` CHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail2+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail2+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail2+"line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(15),`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      let mail3='+84982025404';
+      con.query("CREATE TABLE IF NOT EXISTS  `"+mail3+"main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` CHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail3+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail3+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail3+"line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(15),`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      let mail4='+84982025405';
+      con.query("CREATE TABLE IF NOT EXISTS  `"+mail4+"main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` CHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail4+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail4+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail4+"line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(15),`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      let mail5='+84982025406';
+      con.query("CREATE TABLE IF NOT EXISTS  `"+mail5+"main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` CHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail5+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail5+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+      con.query("CREATE TABLE IF NOT EXISTS `"+mail5+"line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(15),`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
 
 
 
@@ -700,6 +725,7 @@ io.on('connection',(socket)=>
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(15),`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+
                 // con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"member` (`id` INT NOT NULL AUTO_INCREMENT,`idc`CHAR(20), `number` VARCHAR(45) NOT NULL,`name` VARCHAR(45),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
@@ -1517,17 +1543,63 @@ io.on('connection',(socket)=>
   socket.on('C_bosung_member', function(list){
     //nếu socket này đang tham gia room thì mới chấp nhận các thao tác tiếp theo
    if (socket.roomabc&&list&&isArray(list)){
-    socket.emit ('S_get_bosung_member',list);
+    socket.emit ('S_get_bosung_member');
+    //lưu thêm vào list member
+    //cập nhật full_member, gửi cho mấy member mới
+    // gửi xong cho người cũ
     let thoigian = new Date();
-    let sql6,val6;
-    let member=[];
     let member_full=[];
+    con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"'", function(err1, rows){
+      if ( err1){console.log('co loi 2 '+err1);}
+      else if(rows.length >0){
+        rows.forEach((item2, i2) => {
+          var sql5 = "INSERT INTO `"+item2.number+"main` (idc, number,name, stt ) VALUES ?";
+          var val5 = [[ socket.roomabc, socket.number,socket.username,'Z']];//z là ký hiệu cho member bổ sung
+          con.query(sql5, [val5], function (err5){
+            if ( err5)console.log(err5);
+            else io.sockets.in(item2.number).emit('S_send_member_bosung',{ idc:socket.roomabc, name:socket.username, number:socket.number,list:list});
+
+          });
+          member_full.push({number:item2.number,name:item2.name,stt:item2.stt});
+          if(i2===(rows.length-1)){
+            //gửi cho mấy đứa mới
+            con.query("SELECT * FROM `list_room` WHERE `idc` LIKE '"+socket.roomabc+"' LIMIT 1", function(err33, row3s){
+              if ( err33){console.log('co loi 33 '+err33);}
+              else if(row3s.length >0){
+                list.forEach((item3, i3) => {
+                  var sql3 = "INSERT INTO `"+item3.number+"main` (idc, subject,number,name, stt,time ) VALUES ?";
+                  var val3= [[ socket.roomabc, row3s[0].name,socket.number,socket.username,'R',thoigian]];
+                  con.query(sql3, [val3], function (err3, res3){
+                      if ( err3){console.log(err3);}
+                      else  io.sockets.in(item3.number).emit('S_send_room',{room_name:row3s[0].name, room_id_server:row3s[0].idc, nguoigui_name:socket.username, nguoigui_number:socket.number,member:member_full, time:get_time(thoigian)});
+
+                  });
+                  let sql4 = "INSERT INTO `list_member_w` (idc,number,name,stt) VALUES ?";
+                  var val4= [[ socket.roomabc, item3.number,item3.name,'B']];
+                  con.query(sql4, [val4], function (err4){
+                      if ( err4){console.log(err4);}
+
+                  });
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+
+
+
+
+
+    let sql6,val6;
+
+
     con.query("SELECT * FROM `list_room` WHERE `idc` LIKE '"+socket.roomabc+"' LIMIT 1", function(err33, row3s){
       if ( err33){console.log('co loi 33 '+err33);}
       else if(row3s.length >0){
         list.forEach((item, i) => {
-          member.push({number:item.number,name:item.name});
-          member_full.push({number:item.number,name:item.name,stt:'B'});
+
           if(i===(list.length-1)){
             //Gửi danh sách bổ sung mới cho người cũ
             con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"'", function(err1, rows){
@@ -1545,15 +1617,8 @@ io.on('connection',(socket)=>
                   });
                   if(i2===(rows.length-1)){
                       list.forEach((item3, i3) => {
-                          var sql3 = "INSERT INTO `"+item3.number+"main` (idc, subject,number,name, stt,time ) VALUES ?";
-                          var val3= [[ socket.roomabc, row3s[0].name,socket.number,socket.username,'R',thoigian]];
-                          con.query(sql3, [val3], function (err3, res3){
-                              if ( err3){console.log(err3);}
-                              else{
-                                io.sockets.in(item3.number).emit('S_send_room',{room_name:row3s[0].name, room_id_server:row3s[0].idc, nguoigui_name:socket.username, nguoigui_number:socket.number,member:member_full, time:get_time(thoigian)});
-                                }
-                            });
-                        });
+
+                    });
                   }
 
                 });
