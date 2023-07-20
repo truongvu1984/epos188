@@ -1388,7 +1388,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_make_room', function (info){
-    console.log(socket.username);
+
     if (socket.number&&info.room_name&&info.member_list){
       let thoigian = new Date();
       // bắt đầu xử lý cái room
@@ -1493,7 +1493,7 @@ io.on('connection',(socket)=>
 
     }
   });
-  socket.on('C_bosung_member', function(info){
+  socket.on('C_bosung_member', function(list){
     //nếu socket này đang tham gia room thì mới chấp nhận các thao tác tiếp theo
    if (socket.roomabc&&list&&isArray(list)){
     socket.emit ('S_get_bosung_member');
