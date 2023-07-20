@@ -1388,6 +1388,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_make_room', function (info){
+    console.log(socket.username);
     if (socket.number&&info.room_name&&info.member_list){
       let thoigian = new Date();
       // bắt đầu xử lý cái room
