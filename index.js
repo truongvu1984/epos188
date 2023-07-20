@@ -1011,7 +1011,7 @@ io.on('connection',(socket)=>
                       rows2.forEach((row2, i2) => {
                           member.push({number:row2.number,name:row2.name,stt:row2.stt});
                           if(i2===(rows2.length-1)){
-                            socket.emit('S_send_room',{room_name:row.subject, room_id_server:row.idc, nguoigui_name:row.name, nguoigui_number:row.number,member:member, time:get_time(thoigian)});
+                            socket.emit('S_send_room',{room_name:row.subject, room_id_server:row.idc, nguoigui_name:row.name, nguoigui_number:row.number,member:member, time:get_time(row.time)});
 
                           }
                       });
