@@ -1562,54 +1562,6 @@ io.on('connection',(socket)=>
         });
       }
     });
-
-
-
-
-
-    let sql6,val6;
-
-
-    con.query("SELECT * FROM `list_room` WHERE `idc` LIKE '"+socket.roomabc+"' LIMIT 1", function(err33, row3s){
-      if ( err33){console.log('co loi 33 '+err33);}
-      else if(row3s.length >0){
-        list.forEach((item, i) => {
-
-          if(i===(list.length-1)){
-            //Gửi danh sách bổ sung mới cho người cũ
-            con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"'", function(err1, rows){
-              if ( err1){console.log('co loi 2 '+err1);}
-              else if(rows.length >0){
-                rows.forEach((item2, i2) => {
-                  member_full.push({number:item2.number,name:item2.name,stt:item2.stt});
-                  var sql5 = "INSERT INTO `"+item2.number+"main` (idc, number,name, stt ) VALUES ?";
-                  var val5 = [[ socket.roomabc, socket.number,socket.username,'Z']];//z là ký hiệu cho member bổ sung
-                  con.query(sql5, [val5], function (err5){
-                    if ( err5)console.log(err5);
-                    //bên dưới là gửi cho mấy thằng member cũ danh sách thành viên mới
-                    else io.sockets.in(item2.number).emit('S_send_member_bosung',{ idc:socket.roomabc, name:socket.username, number:socket.number,list:member});
-
-                  });
-                  if(i2===(rows.length-1)){
-                      list.forEach((item3, i3) => {
-
-                    });
-                  }
-
-                });
-
-
-              }
-            });
-          }
-        });
-      }
-    });
-
-
-
-
-
       }
     });
   socket.on('login1_suco',(user1, pass1)=>{
