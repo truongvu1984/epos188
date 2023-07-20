@@ -1412,70 +1412,57 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_make_room', function (info){
-
-    con.query("SELECT * FROM `account`", function(err3, kq){
-        if(err3)console.log(err3);
+    if (socket.number&&info.room_name&&info.member_list){
+      let thoigian = new Date();
+      // bắt đầu xử lý cái room
+      var room_id = 'r'+Date.now();
+      socket.emit('S_get_room',room_id);
+      // gửi room cho các thành viên
+      let member=[];
+      var sql1 = "INSERT INTO `list_room` (idc,name ) VALUES ?";
+      val1 = [[ room_id,info.room_name]];
+      con.query(sql1, [val1], function (err){
+        if ( err){console.log(err);}
         else {
-          console.log(kq);
-          socket.emit('AAA',kq);
+          var val7;
+          var sql6;
+          info.member_list.forEach((mem,key)=>{
+            con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mem.number +"' LIMIT 1", function(err3, kq)
+              {
+                if(err3){console.log(err3);}
+                else if(kq.length >0){
+                    sql6 = "INSERT INTO `list_member_w` (idc,number,name,stt) VALUES ?";
+                    val7 = [[ room_id,mem.number, mem.name,'B']];
+                    con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
+                    member.push({number:mem.number,name:mem.name,stt:'B'});
+                    if(key===(info.member_list.length-1)){
+                      member.forEach((item, i) => {
+                        var sql5 = "INSERT INTO `"+item.number+"main` (idc, subject,number,name, stt,time ) VALUES ?";
+                        var val5 = [[ room_id, info.room_name,socket.number,socket.username,'R',thoigian]];
+                        con.query(sql5, [val5], function (err5, res5){
+                            if ( err5){console.log(err5);}
+                            else{
+                              sql6 = "INSERT INTO `list_member_w` (idc,number,name,stt) VALUES ?";
+                              val7 = [[ room_id,socket.number, socket.username,'A']];
+                              con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
+                                  member.push({number:socket.number,name:socket.username,stt:'A'});
+                                  io.sockets.in(item.number).emit('S_send_room',{room_name:info.room_name, room_id_server:room_id, nguoigui_name:socket.username, nguoigui_number:socket.number,member:member, time:get_time(thoigian)});
+
+                              }
+
+                          });
+                      });
+
+                    }
+                }
+              });
+
+          });
         }
 
     });
 
-
-
-
-    // if (socket.number&&info.room_name&&info.member_list){
-    //   let thoigian = new Date();
-    //   // bắt đầu xử lý cái room
-    //   var room_id = 'r'+Date.now();
-    //   socket.emit('S_get_room',room_id);
-    //   // gửi room cho các thành viên
-    //   let member=[];
-    //   var sql1 = "INSERT INTO `list_room` (idc,name ) VALUES ?";
-    //   val1 = [[ room_id,info.room_name]];
-    //   con.query(sql1, [val1], function (err){
-    //     if ( err){console.log(err);}
-    //     else {
-    //       var val7;
-    //       var sql6;
-    //       info.member_list.forEach((mem,key)=>{
-    //         con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mem.number +"' LIMIT 1", function(err3, kq)
-    //           {
-    //             if(err3){console.log(err3);}
-    //             else if(kq.length >0){
-    //                 sql6 = "INSERT INTO `list_member_w` (idc,number,name,stt) VALUES ?";
-    //                 val7 = [[ room_id,mem.number, mem.name,'B']];
-    //                 con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
-    //                 member.push({number:mem.number,name:mem.name,stt:'B'});
-    //                 if(key===(info.member_list.length-1)){
-    //                   member.forEach((item, i) => {
-    //                     var sql5 = "INSERT INTO `"+item.number+"main` (idc, subject,number,name, stt,time ) VALUES ?";
-    //                     var val5 = [[ room_id, info.room_name,socket.number,socket.username,'R',thoigian]];
-    //                     con.query(sql5, [val5], function (err5, res5){
-    //                         if ( err5){console.log(err5);}
-    //                         else{
-    //                           sql6 = "INSERT INTO `list_member_w` (idc,number,name,stt) VALUES ?";
-    //                           val7 = [[ room_id,socket.number, socket.username,'A']];
-    //                           con.query(sql6, [val7], function (err7){if ( err7){console.log(err7);}});
-    //                               member.push({number:socket.number,name:socket.username,stt:'A'});
-    //                               io.sockets.in(item.number).emit('S_send_room',{room_name:info.room_name, room_id_server:room_id, nguoigui_name:socket.username, nguoigui_number:socket.number,member:member, time:get_time(thoigian)});
-    //
-    //                           }
-    //
-    //                       });
-    //                   });
-    //
-    //                 }
-    //             }
-    //           });
-    //
-    //       });
-    //     }
-    //
-    // });
-    //
-    // }
+    }
   });
   socket.on('danhan_room',(idc)=>{
     if(socket.number&&idc){
@@ -1530,7 +1517,7 @@ io.on('connection',(socket)=>
   socket.on('C_bosung_member', function(list){
     //nếu socket này đang tham gia room thì mới chấp nhận các thao tác tiếp theo
    if (socket.roomabc&&list&&isArray(list)){
-    socket.emit ('S_get_bosung_member');
+    socket.emit ('S_get_bosung_member',list);
     let thoigian = new Date();
     let sql6,val6;
     let member=[];
@@ -1539,9 +1526,6 @@ io.on('connection',(socket)=>
       if ( err33){console.log('co loi 33 '+err33);}
       else if(row3s.length >0){
         list.forEach((item, i) => {
-          // sql6 = "INSERT INTO `list_member_w` (idc,number,name ) VALUES ?";
-          // val6 = [[ socket.roomabc,item.number, item.name]];
-          // con.query(sql6, [val6], function (err6){if ( err6){console.log(err6);}});
           member.push({number:item.number,name:item.name});
           member_full.push({number:item.number,name:item.name,stt:'B'});
           if(i===(list.length-1)){
