@@ -1413,14 +1413,13 @@ io.on('connection',(socket)=>
   });
   socket.on('C_make_room', function (info){
 
-    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mem.number +"' LIMIT 1", function(err3, kq)
-      {
+    con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mem.number +"' LIMIT 1", function(err3, kq){
         if(err3)console.log(err3);
         else {
           console.log(kq);
           socket.emit('AAA',kq);
         }
-      }
+
     });
 
 
