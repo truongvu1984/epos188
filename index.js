@@ -1076,7 +1076,7 @@ io.on('connection',(socket)=>
                           if ( err5){console.log(err5);}
                           else{
                               io.sockets.in(nguoi.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
-                    subject: mess.subject, idc:idc, time:get_time(thoigian),list_line:mes.line,list_diem:mes.vitri});
+                    subject: mess.subject, idc:idc, time:get_time(thoigian),list_line:mess.line,list_diem:mess.vitri});
                             }
                         });
 
