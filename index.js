@@ -933,33 +933,18 @@ io.on('connection',(socket)=>
                           con.query("SELECT * FROM `"+socket.number+"line_detail` WHERE `idc` LIKE '"+row1.idlo+"'", function(err2, row2s){
                             if (err2){socket.emit('login2_khongtaikhoan');}
                             else if(row2s.length>0){
-                              let list_line1=[];
-                              row2s.forEach((row2, i2) => {
-                                list_line1.push({up_id:row1.idc,lat:row2.lat,lon:row2.lon,name:row2.name,color:row2.color,rieng1_id:row2.rieng1_id,stt_rieng1:row2.stt_rieng1,rieng2_id:row2.rieng2_id,stt_rieng2:row2.stt_rieng2});
-                                if(i2===(row2s.length-1)){
-                                  list_line.push({name:row1.name,culy:row1.culy,up_id:idc,list_line1:list_line1,local_id:row1.idlo});
-                                  if(i1===(row1s.length-1)){
-
-                                    con.query("SELECT * FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err3, row3s){
-                                      if(err3){socket.emit('login2_khongtaikhoan');}
-                                      else if(row3s.length>0){
-                                        row3s.forEach((row3, i3) => {
-                                          list_diem.push({idc:idc,name:row3.name,lat:row3.lat,lon:row3.lon,id:row3.id});
-                                          if(i3===(row3s.length-1)){
-                                            socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
-                                                                      subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:list_diem});
-                                          }
-                                        });
-                                      }
-                                      else {
-                                        socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
-                                                                  subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:list_diem});
-                                      }
-                                    });
+                              list_line.push({name:row1.name,culy:row1.culy,up_id:idc,list_line1:row2s,local_id:row1.idlo});
+                              if(i1===(row1s.length-1)){
+                                con.query("SELECT * FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err3, row3s){
+                                  if(err3){socket.emit('login2_khongtaikhoan');}
+                                  else {
+                                    socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
+                                                              subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:row3s});
 
                                   }
-                                }
-                              });
+                                });
+                              }
+
                             }
                           });
                         });
@@ -967,19 +952,12 @@ io.on('connection',(socket)=>
                       else {
                         con.query("SELECT * FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err3, row3s){
                           if(err3){socket.emit('login2_khongtaikhoan');}
-                          else if(row3s.length>0){
-                            row3s.forEach((row3, i3) => {
-                              list_diem.push({idc:idc,name:row3.name,lat:row3.lat,lon:row3.lon,id:row3.id});
-                              if(i3===(row3s.length-1)){
-                                socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
-                                                          subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:list_diem});
-                              }
-                            });
-                          }
                           else {
                             socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
-                                                      subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:list_diem});
+                                                      subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:row3s});
+
                           }
+
                         });
 
                       }
@@ -1007,21 +985,10 @@ io.on('connection',(socket)=>
                   con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+row.idc+"'", function(err2, rows2){
                     if(err2)console.log(err2);
                     else if(rows2.length>0){
-                      let member=[];
-                      rows2.forEach((row2, i2) => {
-                          member.push({number:row2.number,name:row2.name,stt:row2.stt});
-                          if(i2===(rows2.length-1)){
-                            socket.emit('S_send_room',{room_name:row.subject, room_id_server:row.idc, nguoigui_name:row.name, nguoigui_number:row.number,member:member, time:get_time(row.time)});
-
-                          }
-                      });
-
-
+                    socket.emit('S_send_room',{room_name:row.subject, room_id_server:row.idc, nguoigui_name:row.name, nguoigui_number:row.number,member:rows2, time:get_time(row.time)});
                     }
                   });
                 });
-
-
               }
             });
             //gửi danh sách bổ sung nếu chưa nhận được
@@ -1032,16 +999,7 @@ io.on('connection',(socket)=>
                   con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+row.idc+"'", function(err2, rows2){
                     if(err2)console.log(err2);
                     else if(rows2.length>0){
-                      let member=[];
-                      rows2.forEach((row2, i2) => {
-                          member.push({number:row2.number,name:row2.name,stt:row2.stt});
-                          if(i2===(rows2.length-1)){
-                            socket.emit('S_send_room',{room_name:row.subject, room_id_server:row.idc, nguoigui_name:row.name, nguoigui_number:row.number,member:member});
-
-                          }
-                      });
-
-
+                      socket.emit('S_send_member_bosung',{ idc:row.idc, name:row.name, number:row.number,list:rows2});
                     }
                   });
                 });
@@ -1528,12 +1486,21 @@ io.on('connection',(socket)=>
       if ( err1){console.log('co loi 2 '+err1);}
       else if(rows.length >0){
         rows.forEach((item2, i2) => {
-          var sql5 = "INSERT INTO `"+item2.number+"main` (idc, number,name, stt ) VALUES ?";
-          var val5 = [[ socket.roomabc, socket.number,socket.username,'Z']];//z là ký hiệu cho member bổ sung
-          con.query(sql5, [val5], function (err5){
-            if ( err5)console.log(err5);
-            else io.sockets.in(item2.number).emit('S_send_member_bosung',{ idc:socket.roomabc, name:socket.username, number:socket.number,list:list});
+          con.query("SELECT * FROM `"+item2.number+"main` WHERE `idc` LIKE '"+socket.roomabc+"' AND `stt` LIKE 'Z' LIMIT 1", function(err6, rows6){
+            if ( err6){console.log('co loi 6 '+err6);}
+            else {
+              if(rows6.length=0){
+              var sql5 = "INSERT INTO `"+item2.number+"main` (idc, number,name, stt ) VALUES ?";
+              var val5 = [[ socket.roomabc, socket.number,socket.username,'Z']];//z là ký hiệu cho member bổ sung
+              con.query(sql5, [val5], function (err5){
+                if ( err5)console.log(err5);
+                io.sockets.in(item2.number).emit('S_send_member_bosung',{ idc:socket.roomabc, name:socket.username, number:socket.number,list:list});
 
+              });
+            }
+              else io.sockets.in(item2.number).emit('S_send_member_bosung',{ idc:socket.roomabc, name:socket.username, number:socket.number,list:list});
+
+          }
           });
           member_full.push({number:item2.number,name:item2.name,stt:item2.stt});
           if(i2===(rows.length-1)){
@@ -1998,7 +1965,6 @@ io.on('connection',(socket)=>
              else {
                if(nd=='E'){
                  socket.emit('gui_thongtin_ok',{nd:nd,idc:idc});
-
                  io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,nguyennhan:nd2});
                  //gui cho chi huy 1 neu co
                  if(socket.type=="F"){
