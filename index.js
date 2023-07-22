@@ -1411,18 +1411,11 @@ io.on('connection',(socket)=>
 
     }
   });
-  socket.on('C_get_add_mem', function(info){
-   if (socket.number&&info.room_fullname&&info.member){
-        con.query("SELECT * FROM `" + socket.number+"main` WHERE `idc` LIKE '"+info.room_fullname+"' LIMIT 1", function(err1, rows){
-          if ( err1 || (rows.length ==0)){console.log(err);}
-          else {
-          if(isArray(info.member)){
-
-
-            }
-          }
-        });
-
+  socket.on('C_danhan_member_bosung', function(idc){
+   if (socket.number&&idc){
+     con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"' AND `stt` LIKE 'Z'", function(err2){
+       if (err2)console.log(err2);
+     });
 
     }
   });
