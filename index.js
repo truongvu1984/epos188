@@ -63,7 +63,7 @@ con.connect(function(err) {
  kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
-  console.log('Co ket noi');
+
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
       if(mail&&code&&id_phone){
@@ -1431,9 +1431,7 @@ io.on('connection',(socket)=>
     con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"'", function(err1, rows){
       if ( err1){console.log('co loi 2 '+err1);}
       else if(rows.length >0){
-        console.log('Tim thay='+rows.length);
         rows.forEach((item2, i2) => {
-          console.log('Tim thay='+item2.name);
           con.query("SELECT * FROM `"+item2.number+"main` WHERE `idc` LIKE '"+socket.roomabc+"' AND `stt` LIKE 'Z' LIMIT 1", function(err6, rows6){
             if ( err6){console.log('co loi 6 '+err6);}
             else {
