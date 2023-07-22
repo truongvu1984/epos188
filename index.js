@@ -1039,101 +1039,54 @@ io.on('connection',(socket)=>
       let thoigian = new Date();
       let idc=''+Date.now();
       socket.emit('S_get_tinnhan',idc);
-        let nguoinhans = [];
-        if(isArray(mess.nguoinhan)){
+      if(isArray(mess.nguoinhan)){
           mess.nguoinhan.forEach((nguoi, key7)=>{
             if(nguoi.number){
-              nguoinhans.push({number:nguoi.number, name:nguoi.name, stt:'N'});
-              if(key7===(mess.nguoinhan.length-1)){
-                mess.nguoinhan.forEach(function(row5,key5){
-                  con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ row5.number +"' LIMIT 1", function(err4, res4){
+              con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ nguoi.number +"' LIMIT 1", function(err4, res4){
                     if ( err4 ){console.log(err4);}
                     else if ( res4.length >0){
                       // lưu vào bảng chính của người nhận
-                        var sql5= "INSERT INTO `"+row5.number+"main` (idc,subject, number,name, stt, time ) VALUES ?";
-                        var val5 = [[idc, mess.subject,socket.number,socket.username,'N',thoigian]];
-                        con.query(sql5, [val5], function (err5, res5){
-                              if ( err5){console.log(err5);}
-                              else{
-                                  //lưu vào bảng người gửi của người nhận
-                                  let list_line=[];
-                                  let list_diem=[];
-                                  if(mess.vitri!=null &&mess.vitri.length>0){
-                                        var sql3 = "INSERT INTO `"+row5.number+"diem` (idc, name, lat, lon,idlo) VALUES ?";
-                                        mess.vitri.forEach((row,key)=>{
-                                          list_diem.push({idc:idc,name:row.name,lat:row.lat,lon:row.lon,id:row.id});
-                                          var val3 = [[idc, row.name, row.lat, row.lon,row.id]];
-                                          con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
-                                          if(key===(mess.vitri.length-1)){
-                                            if(mess.line!=null &&mess.line.length>0){
-                                                        var sql4 = "INSERT INTO `"+row5.number+"line_main` (idc, name, culy,idlo) VALUES ?";
-                                                        mess.line.forEach((row6,key6)=>{
-                                                          var val4 = [[idc, row6.name, row6.culy,row6.id]];
-                                                          con.query(sql4, [val4], function (err4, res4) {
-                                                            if ( err4)console.log(err4);
-                                                            else {
-                                                                var sql5 = "INSERT INTO `"+row5.number+"line_detail` (idc, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
-                                                                let list_line1=[];
-                                                                row6.tuyen.forEach((row7,key7)=>{
-                                                                  list_line1.push({up_id:row6.id,lat:row7.lat,lon:row7.lon,name:row7.name,color:row7.color,rieng1_id: row7.rieng1_id,stt_rieng1:row7.stt_rieng1,rieng2_id:row7.rieng2_id,stt_rieng2:row7.stt_rieng2});
-                                                                    var val5 = [[row6.id,row7.lat, row7.lon,row7.name,row7.color, row7.rieng1_id,row7.stt_rieng1,row7.rieng2_id,row7.stt_rieng2]];
-                                                                    con.query(sql5, [val5], function (err5, res5) {if ( err5)console.log(err5);});
-                                                                    if(key7===(row6.tuyen.length-1)){
-                                                                      list_line.push({name:row6.name,culy:row6.culy,up_id:idc,list_line1: list_line1,local_id:row6.id});
-                                                                      if(key6===(mess.line.length-1)){
-                                                                        io.sockets.in(row5.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
-                                                                                                subject: mess.subject, idc:idc, time:get_time(thoigian),list_line:list_line,list_diem:list_diem});
-                                                                      }
-                                                                    }
-                                                                });
-                                                            }
-                                                      });
-                                                  });
-                                              }
-                                            else {
-                                                io.sockets.in(row5.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
-                                                                          subject: mess.subject, idc:idc, time:get_time(thoigian),list_line:list_line,list_diem:list_diem});
+                      if(mess.vitri!=null &&mess.vitri.length>0){
+                        var sql3 = "INSERT INTO `"+row5.number+"diem` (idc, name, lat, lon,idlo) VALUES ?";
+                        mess.vitri.forEach((row,key)=>{
+                              var val3 = [[idc, row.name, row.lat, row.lon,row.id]];
+                              con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
 
-                                              }
-                                          }
-                                      });
-                                  }
-                                  else if(mess.line!=null &&mess.line.length>0){
-                                              var sql4 = "INSERT INTO `"+row5.number+"line_main` (idc, name, culy,idlo) VALUES ?";
-                                              mess.line.forEach((row,key)=>{
-                                                var val4 = [[idc, row.name, row.culy,row.id]];
-                                                con.query(sql4, [val4], function (err4, res4) {
-                                                  if ( err4)console.log(err4);
-                                                  else {
-                                                      var sql5 = "INSERT INTO `"+row5.number+"line_detail` (idc, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
-                                                      let list_line1=[];
-                                                      row.tuyen.forEach((row1,key1)=>{
-                                                        list_line1.push({up_id:row.id,lat:row1.lat,lon:row1.lon,name:row1.name,color:row1.color,rieng1_id: row1.rieng1_id,stt_rieng1:row1.stt_rieng1,rieng2_id:row1.rieng2_id,stt_rieng2:row1.stt_rieng2});
-                                                          var val5 = [[row.id,row1.lat, row1.lon,row1.name,row1.color, row1.rieng1_id,row1.stt_rieng1,row1.rieng2_id,row1.stt_rieng2]];
-                                                          con.query(sql5, [val5], function (err5, res5) {if ( err5)console.log(err5);});
-                                                          if(key1===(row.tuyen.length-1)){
-                                                            list_line.push({name:row.name,culy:row.culy,up_id:idc,list_line1: list_line1,local_id:row.id});
-                                                            if(key===(mess.line.length-1)){
-                                                              io.sockets.in(row5.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
-                                                                                      subject: mess.subject, idc:idc, time:get_time(thoigian),list_line:list_line,list_diem:list_diem});
-                                                            }
-                                                          }
-                                                      });
-                                                  }
-                                                });
-                                                  });
-                                                }
-
-                              }
+                        });
+                      }
+                      if(mess.line!=null &&mess.line.length>0){
+                        var sql4 = "INSERT INTO `"+nguoi.number+"line_main` (idc, name, culy,idlo) VALUES ?";
+                        mess.line.forEach((row6,key6)=>{
+                          var val4 = [[idc, row6.name, row6.culy,row6.id]];
+                          con.query(sql4, [val4], function (err4, res4) {
+                          if ( err4)console.log(err4);
+                          else {
+                              var sql5 = "INSERT INTO `"+nguoi.number+"line_detail` (idc, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
+                              row6.tuyen.forEach((row7,key7)=>{
+                                  var val5 = [[row6.id,row7.lat, row7.lon,row7.name,row7.color, row7.rieng1_id,row7.stt_rieng1,row7.rieng2_id,row7.stt_rieng2]];
+                                  con.query(sql5, [val5], function (err5, res5) {if ( err5)console.log(err5);});
+                              });
+                            }
+                          });
+                        });
+                      }
+                      var sql5= "INSERT INTO `"+nguoi.number+"main` (idc,subject, number,name, stt, time ) VALUES ?";
+                      var val5 = [[idc, mess.subject,socket.number,socket.username,'N',thoigian]];
+                      con.query(sql5, [val5], function (err5, res5){
+                          if ( err5){console.log(err5);}
+                          else{
+                              io.sockets.in(nguoi.number).emit('S_send_tinnhan',{name_nguoigui:socket.username,number_nguoigui:socket.number,
+                    subject: mess.subject, idc:idc, time:get_time(thoigian),list_line:mes.line,list_diem:mes.vitri});
+                            }
                         });
 
                     }
                       // nếu tìm trong bảng acccount mà không có tên người nhận thì báo lại là không có ai nhận
                     else socket.emit('S_send_mess_no_contact',row5.number);
                   });
-                });
 
-          }
+
+
         }
         });
         }
