@@ -1047,7 +1047,7 @@ io.on('connection',(socket)=>
                     else if ( res4.length >0){
                       // lưu vào bảng chính của người nhận
                       if(mess.vitri!=null &&mess.vitri.length>0){
-                        var sql3 = "INSERT INTO `"+row5.number+"diem` (idc, name, lat, lon,idlo) VALUES ?";
+                        var sql3 = "INSERT INTO `"+nguoi.number+"diem` (idc, name, lat, lon,idlo) VALUES ?";
                         mess.vitri.forEach((row,key)=>{
                               var val3 = [[idc, row.name, row.lat, row.lon,row.id]];
                               con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
