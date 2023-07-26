@@ -1443,8 +1443,18 @@ io.on('connection',(socket)=>
                     val7 = [[ room_id,mem.number, mem.name,mem.stt]];
                     con.query(sql6, [val7], function (err7){
                       if ( err7){console.log(err7);}
-                      else io.sockets.in(mem.number).emit('S_send_room',{room_name:info.room_name, room_id_server:room_id, nguoigui_name:socket.username, nguoigui_number:socket.number,member:info.member_list, time:get_time(thoigian)});
+                      else {
+                        sql8 = "INSERT INTO `"+mem.number+"`main (idc,subject,number,name,stt,time) VALUES ?";
+                        val8 = [[ room_id,info.room_name,socket.number, socket.username,'R',thoigian]];
+                        con.query(sql6, [val7], function (err7){
+                          if ( err7){console.log(err7);}
+                          else io.sockets.in(mem.number).emit('S_send_room',{room_name:info.room_name, room_id_server:room_id, nguoigui_name:socket.username, nguoigui_number:socket.number,member:info.member_list, time:get_time(thoigian)});
+                        });
+                      }
+
                     });
+
+
                 }
               });
             }
@@ -1455,7 +1465,6 @@ io.on('connection',(socket)=>
 
     }
   });
-
   socket.on('C_change_pass', function(oldpass,newpass){
    if (socket.number&&oldpass&&newpass){
      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
@@ -1482,7 +1491,6 @@ io.on('connection',(socket)=>
 
     }
   });
-
   socket.on('C_bosung_member', function(list){
     //nếu socket này đang tham gia room thì mới chấp nhận các thao tác tiếp theo
    if (socket.roomabc&&list&&isArray(list)){
