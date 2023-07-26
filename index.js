@@ -1425,7 +1425,6 @@ io.on('connection',(socket)=>
       var room_id = 'r'+Date.now();
       socket.emit('S_get_room',room_id);
       // gửi room cho các thành viên
-
       var sql1 = "INSERT INTO `list_room` (idc,name ) VALUES ?";
       val1 = [[ room_id,info.room_name]];
       con.query(sql1, [val1], function (err){
@@ -1434,9 +1433,15 @@ io.on('connection',(socket)=>
           var val7;
           var sql6;
           info.member_list.forEach((mem,key)=>{
-            if(mem.number!=socket.number){
-              con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mem.number +"' LIMIT 1", function(err3, kq)
-              {
+            if(mem.number==socket.number){
+              sql6 = "INSERT INTO `list_member_w` (idc,number,name,stt) VALUES ?";
+              val7 = [[ room_id,mem.number, mem.name,mem.stt]];
+              con.query(sql6, [val7], function (err7){
+                if ( err7){console.log(err7);}
+              });
+            }
+            else {
+              con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mem.number +"' LIMIT 1", function(err3, kq){
                 if(err3){console.log(err3);}
                 else if(kq.length >0){
                     sql6 = "INSERT INTO `list_member_w` (idc,number,name,stt) VALUES ?";
@@ -1446,8 +1451,8 @@ io.on('connection',(socket)=>
                       else {
                         sql8 = "INSERT INTO `"+mem.number+"`main (idc,subject,number,name,stt,time) VALUES ?";
                         val8 = [[ room_id,info.room_name,socket.number, socket.username,'R',thoigian]];
-                        con.query(sql6, [val7], function (err7){
-                          if ( err7){console.log(err7);}
+                        con.query(sql8, [val8], function (err8){
+                          if ( err8){console.log(err8);}
                           else io.sockets.in(mem.number).emit('S_send_room',{room_name:info.room_name, room_id_server:room_id, nguoigui_name:socket.username, nguoigui_number:socket.number,member:info.member_list, time:get_time(thoigian)});
                         });
                       }
@@ -1457,6 +1462,7 @@ io.on('connection',(socket)=>
 
                 }
               });
+
             }
           });
         }
