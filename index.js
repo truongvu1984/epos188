@@ -1012,7 +1012,7 @@ io.on('connection',(socket)=>
               if(err)console.log(err);
               else if(rows.length>0){
                 rows.forEach((row, i) => {
-                  sockets.emit('S_send_roi_nhom',row.idc,row.number);
+                  socket.emit('S_send_roi_nhom',row.idc,row.number);
                 });
               }
             });
@@ -1021,7 +1021,7 @@ io.on('connection',(socket)=>
               if(err)console.log(err);
               else if(rows.length>0){
                 rows.forEach((row, i) => {
-                  sockets.emit('S_send_new_admin',row.idc,row.number);
+                  socket.emit('S_send_new_admin',row.idc,row.number);
                 });
               }
             });
@@ -1330,7 +1330,6 @@ io.on('connection',(socket)=>
         socket.leave(tin.room);
         socket.roomabc = undefined;
       }
-
       con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+tin.room+"' AND `number` LIKE '"+socket.number+"' LIMIT 1", function(err1, row1s){
         if ( err1){console.log('co loi 1 '+err1);}
         else if(row1s.length >0){
@@ -1404,12 +1403,7 @@ io.on('connection',(socket)=>
 
         }
         else socket.emit('S_get_out_of_room',tin.room);
-
       });
-
-
-
-
     }
   });
   socket.on('C_pos_online', function (info){
