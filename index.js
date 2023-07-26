@@ -1333,6 +1333,7 @@ io.on('connection',(socket)=>
       con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+tin.room+"' AND `number` LIKE '"+socket.number+"' LIMIT 1", function(err1, row1s){
         if ( err1){console.log('co loi 1 '+err1);}
         else if(row1s.length >0){
+
           if(row1s[0].stt=='A'){
             if(tin.new_admin){
               con.query("UPDATE `list_member_w` SET `stt` = 'A' WHERE `number` LIKE '"+tin.new_admin+"'",function(err3, ok)
@@ -1386,14 +1387,14 @@ io.on('connection',(socket)=>
                 con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+tin.room+"'", function(err1, rows){
                   if ( err1){console.log('co loi 2 '+err1);}
                   else if(rows.length >0){
-                    var sql5 = "INSERT INTO `"+row.number+"main` (idc, number, stt ) VALUES ?";
-                    var val5 = [[ tin.room, socket.number,'H']];
-                    con.query(sql5, [val5], function (err5, res5){
-                        if ( err5){console.log(err5);}
-                        else io.sockets.in(row.number).emit('S_send_roi_nhom',tin.room,socket.number);
+                    rows.forEach((row, i) => {
+                      var sql5 = "INSERT INTO `"+row.number+"main` (idc, number, stt ) VALUES ?";
+                      var val5 = [[ tin.room, socket.number,'H']];
+                      con.query(sql5, [val5], function (err5, res5){
+                          if ( err5){console.log(err5);}
+                          else io.sockets.in(row.number).emit('S_send_roi_nhom',tin.room,socket.number);
+                      });
                     });
-
-
                   }
                 });
               }
