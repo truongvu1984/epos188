@@ -1449,7 +1449,7 @@ io.on('connection',(socket)=>
                     con.query(sql6, [val7], function (err7){
                       if ( err7){console.log(err7);}
                       else {
-                        sql8 = "INSERT INTO `"+mem.number+"`main (idc,subject,number,name,stt,time) VALUES ?";
+                        sql8 = "INSERT INTO `"+mem.number+"main` (idc,subject,number,name,stt,time) VALUES ?";
                         val8 = [[ room_id,info.room_name,socket.number, socket.username,'R',thoigian]];
                         con.query(sql8, [val8], function (err8){
                           if ( err8){console.log(err8);}
