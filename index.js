@@ -1007,7 +1007,24 @@ io.on('connection',(socket)=>
 
               }
             });
-
+            // gửi danh sách thành viên rời khỏi nhóm
+            con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'H'", function(err, rows){
+              if(err)console.log(err);
+              else if(rows.length>0){
+                rows.forEach((row, i) => {
+                  sockets.emit('S_send_roi_nhom',row.idc,row.number);
+                });
+              }
+            });
+            // gửi danh sách new admin, có chuyển cho người khác
+            con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'V'", function(err, rows){
+              if(err)console.log(err);
+              else if(rows.length>0){
+                rows.forEach((row, i) => {
+                  sockets.emit('S_send_new_admin',row.idc,row.number);
+                });
+              }
+            });
           }//end
           else {socket.emit('login2_sai');}
         }
@@ -1207,6 +1224,7 @@ io.on('connection',(socket)=>
 
     }
   });
+
   socket.on('danhantinnhan', function (nguoigui, ten_nguoi_nhan,idc,subject){
    	if (socket.number&&nguoigui&&idc){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ nguoigui +"' LIMIT 1", function(err4, res4){
@@ -1253,11 +1271,12 @@ io.on('connection',(socket)=>
       }
 
   });
-  socket.on('C_nhan_send', function (idc){
-    if(socket.number && idc){
-    con.query("DELETE FROM `"+socket.number+"main` WHERE `stt` LIKE 'K' AND `idc` LIKE '"+idc+"'", function(err){
-        if(err)console.log(err);
-    });
+  socket.on('C_get_tin', (idc,code)=>{
+    if(socket.number && idc&&code){
+        con.query("DELETE FROM `"+socket.number+"main` WHERE `stt` LIKE '"+code+"' AND `idc` LIKE '"+idc+"'", function(err){
+            if(err)console.log(err);
+        });
+
     }
   });
   socket.on('search_contact', function (string){
@@ -1283,33 +1302,111 @@ io.on('connection',(socket)=>
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
       socket.emit('S_get_join');
-
-        if(socket.roomabc&&socket.roomabc!=room){
-            socket.leave(socket.roomabc);
+      con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"' AND `number` LIKE '"+socket.number+"' LIMIT 1", function(err1, rows){
+        if ( err1){console.log('co loi 2 '+err1);}
+        else if(rows.length >0){
+          if(socket.roomabc&&socket.roomabc!=room){
+              socket.leave(socket.roomabc);
+              socket.join(room);
+              socket.roomabc = room;
+          }
+          else {
             socket.join(room);
             socket.roomabc = room;
+          }
         }
-        else {
-          socket.join(room);
-          socket.roomabc = room;
-        }
+      });
     }
-  });
-  socket.on('C_leave_off', function () {
-      if (socket.number){
-      socket.leave(socket.number);
-      socket.number = undefined;
-      }
-      if(socket.roomabc){
-        socket.leave(socket.roomabc);
-        socket.roomabc = undefined;
-      }
-
   });
   socket.on('C_leave_room', function (room) {
       if (socket.number&&room){
       socket.leave(room);
       socket.roomabc = undefined;
+    }
+  });
+  socket.on('C_out_of_room', function (tin) {
+    if (socket.number&&tin&&tin.room){
+      if(socket.roomabc==tin.room){
+        socket.leave(tin.room);
+        socket.roomabc = undefined;
+      }
+      con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+tin.room+"' AND `number` LIKE '"+socket.number+"' LIMIT 1", function(err1, row1s){
+        if ( err1){console.log('co loi 1 '+err1);}
+        else if(row1s.length >0){
+          if(row1s[0].stt=='A'){
+            if(tin.new_admin){
+              con.query("UPDATE `list_member_w` SET `stt` = 'A' WHERE `number` LIKE '"+tin.new_admin+"'",function(err3, ok)
+              {
+                if ( err3 ){socket.emit('C_out_of_room_thatbai');}
+                else {
+                  con.query("DELETE FROM `list_member_w` WHERE `idc` LIKE '"+tin.room+"' AND `number` LIKE '"+socket.number+"'", function(err2){
+                    if (err2)console.log(err2);
+                    else {
+                      socket.emit('S_get_out_of_room',tin.room);
+                      con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+tin.room+"'", function(err1, rows){
+                        if ( err1){console.log('co loi 2 '+err1);}
+                        else if(rows.length >0){
+                          //gửi thông báo đến toàn bộ thành viên về việc rời nhóm
+                          // xóa member đó đi,
+                          // nếu thằng socket.number này mà là admin, thì chuyển lại admin cho thằng tiếp theo
+                          rows.forEach((row, i) => {
+                            var sql5 = "INSERT INTO `"+row.number+"main` (idc, number, stt ) VALUES ?";
+                            var val5 = [[ tin.room, socket.number,'H']];
+                            con.query(sql5, [val5], function (err5, res5){
+                                if ( err5){console.log(err5);}
+                                else {
+                                  io.sockets.in(row.number).emit('S_send_roi_nhom',tin.room,socket.number);
+                                  var sql6 = "INSERT INTO `"+row.number+"main` (idc, number, stt ) VALUES ?";
+                                  var val6 = [[ tin.room, tin.new_admin,'V']];
+                                  con.query(sql6, [val6], function (err6, res6){
+                                      if ( err6){console.log(err6);}
+                                      else io.sockets.in(row.number).emit('S_send_new_admin',tin.room,tin.new_admin);
+
+                                  });
+
+                                }
+                            });
+
+                          });
+
+                        }
+                      });
+                    }
+                  });
+
+                }
+              });
+            }
+          }
+          else {
+            con.query("DELETE FROM `list_member_w` WHERE `idc` LIKE '"+tin.room+"' AND `number` LIKE '"+socket.number+"'", function(err2){
+              if (err2)console.log(err2);
+              else {
+                socket.emit('S_get_out_of_room',tin.room);
+                con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+tin.room+"'", function(err1, rows){
+                  if ( err1){console.log('co loi 2 '+err1);}
+                  else if(rows.length >0){
+                    var sql5 = "INSERT INTO `"+row.number+"main` (idc, number, stt ) VALUES ?";
+                    var val5 = [[ tin.room, socket.number,'H']];
+                    con.query(sql5, [val5], function (err5, res5){
+                        if ( err5){console.log(err5);}
+                        else io.sockets.in(row.number).emit('S_send_roi_nhom',tin.room,socket.number);
+                    });
+
+
+                  }
+                });
+              }
+            });
+
+          }
+
+        }
+      });
+
+
+
+
     }
   });
   socket.on('C_pos_online', function (info){
@@ -1376,15 +1473,7 @@ io.on('connection',(socket)=>
 
     }
   });
-  socket.on('danhan_room',(idc)=>{
-    if(socket.number&&idc){
-      con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"'", function(err9){
-        if (err9)console.log(err9);
 
-      });
-
-      }
-  });
   socket.on('C_change_pass', function(oldpass,newpass){
    if (socket.number&&oldpass&&newpass){
      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
@@ -1411,14 +1500,7 @@ io.on('connection',(socket)=>
 
     }
   });
-  socket.on('C_danhan_member_bosung', function(idc){
-   if (socket.number&&idc){
-     con.query("DELETE FROM `"+socket.number+"main` WHERE `idc` LIKE '"+idc+"' AND `stt` LIKE 'Z'", function(err2){
-       if (err2)console.log(err2);
-     });
 
-    }
-  });
   socket.on('C_bosung_member', function(list){
     //nếu socket này đang tham gia room thì mới chấp nhận các thao tác tiếp theo
    if (socket.roomabc&&list&&isArray(list)){
