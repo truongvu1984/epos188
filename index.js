@@ -1509,7 +1509,7 @@ io.on('connection',(socket)=>
     con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"'", function(err1, rows){
       if ( err1){console.log('co loi 2 '+err1);}
       else if(rows.length >0){
-        let member_full=rows;
+        let member_full=list;
         rows.forEach((item2, i2) => {
           con.query("SELECT * FROM `"+item2.number+"main` WHERE `idc` LIKE '"+socket.roomabc+"' AND `stt` LIKE 'Z' LIMIT 1", function(err6, rows6){
             if ( err6){console.log('co loi 6 '+err6);}
