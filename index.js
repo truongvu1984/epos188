@@ -1498,8 +1498,10 @@ io.on('connection',(socket)=>
   });
   socket.on('C_bosung_member', function(list){
     console.log('Co bo sung');
+    console.log('room='+socket.roomabc);
     //nếu socket này đang tham gia room thì mới chấp nhận các thao tác tiếp theo
    if (socket.roomabc&&list&&isArray(list)){
+     console.log('room vao ok');
     socket.emit ('S_get_bosung_member');
     //lưu thêm vào list member
     //cập nhật full_member, gửi cho mấy member mới
