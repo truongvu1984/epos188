@@ -63,7 +63,7 @@ con.connect(function(err) {
  kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
-
+  console.log('ket noi='+socket.id);
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
       if(mail&&code&&id_phone){
@@ -1497,6 +1497,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_bosung_member', function(list){
+    console.log('Co bo sung');
     //nếu socket này đang tham gia room thì mới chấp nhận các thao tác tiếp theo
    if (socket.roomabc&&list&&isArray(list)){
     socket.emit ('S_get_bosung_member');
