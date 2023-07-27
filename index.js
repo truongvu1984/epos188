@@ -1333,7 +1333,6 @@ io.on('connection',(socket)=>
       con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+tin.room+"' AND `number` LIKE '"+socket.number+"' LIMIT 1", function(err1, row1s){
         if ( err1){console.log('co loi 1 '+err1);}
         else if(row1s.length >0){
-
           if(row1s[0].stt=='A'){
             if(tin.new_admin){
               con.query("UPDATE `list_member_w` SET `stt` = 'A' WHERE `number` LIKE '"+tin.new_admin+"'",function(err3, ok)
@@ -1505,10 +1504,11 @@ io.on('connection',(socket)=>
     //cập nhật full_member, gửi cho mấy member mới
     // gửi xong cho người cũ
     let thoigian = new Date();
-    let member_full=[];
+
     con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"'", function(err1, rows){
       if ( err1){console.log('co loi 2 '+err1);}
       else if(rows.length >0){
+        let member_full=rows;
         rows.forEach((item2, i2) => {
           con.query("SELECT * FROM `"+item2.number+"main` WHERE `idc` LIKE '"+socket.roomabc+"' AND `stt` LIKE 'Z' LIMIT 1", function(err6, rows6){
             if ( err6){console.log('co loi 6 '+err6);}
@@ -1538,14 +1538,16 @@ io.on('connection',(socket)=>
                   con.query(sql3, [val3], function (err3, res3){
                       if ( err3){console.log(err3);}
                       else  io.sockets.in(item3.number).emit('S_send_room',{room_name:row3s[0].name, room_id_server:row3s[0].idc, nguoigui_name:socket.username, nguoigui_number:socket.number,member:member_full, time:get_time(thoigian)});
-
                   });
-                  let sql4 = "INSERT INTO `list_member_w` (idc,number,name,stt) VALUES ?";
-                  var val4= [[ socket.roomabc, item3.number,item3.name,'B']];
-                  con.query(sql4, [val4], function (err4){
-                      if ( err4){console.log(err4);}
+                  con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"' AND `number` LIKE '"+item3.number+"' LIMIT 1", function(err7, row7s){
+                    if ( err7){console.log('co loi 7 '+err7);}
+                    else if(row7s.length ==0){
+                      let sql4 = "INSERT INTO `list_member_w` (idc,number,name,stt) VALUES ?";
+                      var val4= [[ socket.roomabc, item3.number,item3.name,'B']];
+                      con.query(sql4, [val4], function (err4){ if ( err4){console.log(err4);}});
+                    }
+                  })
 
-                  });
                 });
               }
             });
