@@ -1534,7 +1534,7 @@ io.on('connection',(socket)=>
                   con.query(sql3, [val3], function (err3, res3){
                       if ( err3){console.log(err3);}
                       else {
-                        console.log('gui di='+item3.number);
+                        console.log(member_full);
                        io.sockets.in(item3.number).emit('S_send_room',{room_name:row3s[0].name, room_id_server:row3s[0].idc, nguoigui_name:socket.username, nguoigui_number:socket.number,member:member_full, time:get_time(thoigian)});
                      }
                   });
