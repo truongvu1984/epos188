@@ -1506,7 +1506,8 @@ io.on('connection',(socket)=>
       else if(rows.length >0){
         let member_full=list;
         rows.forEach((item2, i2) => {
-          con.query("SELECT * FROM `"+item2.number+"main` WHERE `idc` LIKE '"+socket.roomabc+"' AND `stt` LIKE 'Z' LIMIT 1", function(err6, rows6){
+          if(item2.number!=socket.number){
+            con.query("SELECT * FROM `"+item2.number+"main` WHERE `idc` LIKE '"+socket.roomabc+"' AND `stt` LIKE 'Z' LIMIT 1", function(err6, rows6){
             if ( err6){console.log('co loi 6 '+err6);}
             else {
               if(rows6.length=0){
@@ -1517,11 +1518,11 @@ io.on('connection',(socket)=>
                 io.sockets.in(item2.number).emit('S_send_member_bosung',{ idc:socket.roomabc, name:socket.username, number:socket.number,list:list});
 
               });
-            }
+              }
               else io.sockets.in(item2.number).emit('S_send_member_bosung',{ idc:socket.roomabc, name:socket.username, number:socket.number,list:list});
-
           }
           });
+          }
           member_full.push({number:item2.number,name:item2.name,stt:item2.stt});
           if(i2===(rows.length-1)){
             //gửi cho mấy đứa mới
