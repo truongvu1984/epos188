@@ -58,8 +58,6 @@ con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
 
-
-
  kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
@@ -1224,7 +1222,6 @@ io.on('connection',(socket)=>
 
     }
   });
-
   socket.on('danhantinnhan', function (nguoigui, ten_nguoi_nhan,idc,subject){
    	if (socket.number&&nguoigui&&idc){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ nguoigui +"' LIMIT 1", function(err4, res4){
@@ -1497,18 +1494,13 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_bosung_member', function(list){
-    console.log('Co bo sung');
-    console.log('room='+socket.roomabc);
     //nếu socket này đang tham gia room thì mới chấp nhận các thao tác tiếp theo
+    console.log('Bo sung='+socket.roomabc);
    if (socket.roomabc&&list&&isArray(list)){
-     console.log('room vao ok');
-    socket.emit ('S_get_bosung_member');
-    //lưu thêm vào list member
-    //cập nhật full_member, gửi cho mấy member mới
-    // gửi xong cho người cũ
-    let thoigian = new Date();
-
-    con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"'", function(err1, rows){
+      console.log('room vao ok');
+      socket.emit ('S_get_bosung_member');
+      let thoigian = new Date();
+      con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"'", function(err1, rows){
       if ( err1){console.log('co loi 2 '+err1);}
       else if(rows.length >0){
         let member_full=list;
@@ -1559,7 +1551,7 @@ io.on('connection',(socket)=>
       }
     });
       }
-    });
+  });
   socket.on('login1_suco',(user1, pass1)=>{
       if(user1&&pass1){
           con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+user1+"' LIMIT 1", function(err, rows){
