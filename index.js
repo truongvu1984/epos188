@@ -1298,10 +1298,11 @@ io.on('connection',(socket)=>
   });
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
-      socket.emit('S_get_join');
-      con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"' AND `number` LIKE '"+socket.number+"' LIMIT 1", function(err1, rows){
+
+      con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+room+"' AND `number` LIKE '"+socket.number+"' LIMIT 1", function(err1, rows){
         if ( err1){console.log('co loi 2 '+err1);}
         else if(rows.length >0){
+          socket.emit('S_get_join');
           if(socket.roomabc&&socket.roomabc!=room){
               socket.leave(socket.roomabc);
               socket.join(room);
