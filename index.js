@@ -1533,7 +1533,10 @@ io.on('connection',(socket)=>
                   var val3= [[ socket.roomabc, row3s[0].name,socket.number,socket.username,'R',thoigian]];
                   con.query(sql3, [val3], function (err3, res3){
                       if ( err3){console.log(err3);}
-                      else  io.sockets.in(item3.number).emit('S_send_room',{room_name:row3s[0].name, room_id_server:row3s[0].idc, nguoigui_name:socket.username, nguoigui_number:socket.number,member:member_full, time:get_time(thoigian)});
+                      else {
+                        console.log('gui di='+item3.number);
+                       io.sockets.in(item3.number).emit('S_send_room',{room_name:row3s[0].name, room_id_server:row3s[0].idc, nguoigui_name:socket.username, nguoigui_number:socket.number,member:member_full, time:get_time(thoigian)});
+                     }
                   });
                   con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"' AND `number` LIKE '"+item3.number+"' LIMIT 1", function(err7, row7s){
                     if ( err7){console.log('co loi 7 '+err7);}
