@@ -1496,9 +1496,9 @@ io.on('connection',(socket)=>
   });
   socket.on('C_bosung_member', function(list){
     //nếu socket này đang tham gia room thì mới chấp nhận các thao tác tiếp theo
-    console.log('Bo sung='+socket.roomabc);
+
    if (socket.roomabc&&list&&isArray(list)){
-      console.log('room vao ok');
+
       socket.emit ('S_get_bosung_member');
       let thoigian = new Date();
       con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"'", function(err1, rows){
@@ -1535,7 +1535,7 @@ io.on('connection',(socket)=>
                   con.query(sql3, [val3], function (err3, res3){
                       if ( err3){console.log(err3);}
                       else {
-                        console.log(member_full);
+
                        io.sockets.in(item3.number).emit('S_send_room',{room_name:row3s[0].name, room_id_server:row3s[0].idc, nguoigui_name:socket.username, nguoigui_number:socket.number,member:member_full, time:get_time(thoigian)});
                      }
                   });
