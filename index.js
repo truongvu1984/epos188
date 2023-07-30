@@ -1572,8 +1572,8 @@ io.on('connection',(socket)=>
           });
         }
       });
-      }
     }
+
   }
   });
   socket.on('login1_suco',(user1, pass1)=>{
