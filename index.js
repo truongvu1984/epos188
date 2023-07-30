@@ -1546,7 +1546,7 @@ io.on('connection',(socket)=>
   });
   socket.on('C_kick_member', (room,number)=>{
    if (socket.roomabc&&room&&number){
-     if(socket.roomabc==room)
+     if(socket.roomabc==room){
       con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+room+"' AND `number` LIKE '"+socket.number+"' AND `stt` LIKE 'A' LIMIT 1", function(err, rows){
         if ( err){console.log('co loi 1 '+err);}
         else if(rows.length >0){
@@ -1572,6 +1572,7 @@ io.on('connection',(socket)=>
           });
         }
       });
+      }
     }
   }
   });
