@@ -1551,20 +1551,23 @@ io.on('connection',(socket)=>
         if ( err){console.log('co loi 1 '+err);}
         else if(rows.length >0){
         //ĐÂY ĐÚNG LÀ ADMIN CỦA ROOM
-          con.query("DELETE FROM `list_member_w` WHERE `idc` LIKE '"+room+"' AND `number` LIKE '"+number+"'", function(err2){
+          con.query("DELETE FROM `list_member_w` WHERE `idc` LIKE '"+room+"' AND `number` LIKE '"+number+"'", function(err2,kq){
             if (err2)console.log(err2);
             else {
               socket.emit ('S_get_kick_member');
+              console.log(kq);
               con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+room+"'", function(err1, row1s){
                 if(err1)console.log('C_kick_member'+err1);
                 else {
                   row1s.forEach((row1, i) => {
-                    var sql5 = "INSERT INTO `"+row1.number+"main` (idc, number, stt ) VALUES ?";
-                    var val5 = [[ room, number,'H']];
-                    con.query(sql5, [val5], function (err5, res5){
+                    if(row1.number!=socket.number){
+                      var sql5 = "INSERT INTO `"+row1.number+"main` (idc, number, stt ) VALUES ?";
+                      var val5 = [[ room, number,'H']];
+                      con.query(sql5, [val5], function (err5, res5){
                         if ( err5){console.log(err5);}
                         else io.sockets.in(row1.number).emit('S_send_roi_nhom',room,number);
                     });
+                    }
                   });
                 }
               });
