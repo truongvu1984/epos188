@@ -1014,6 +1014,16 @@ io.on('connection',(socket)=>
                 });
               }
             });
+            // gửi danh sách new admin, có chuyển cho người khác
+            con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'X'", function(err, rows){
+              if(err)console.log(err);
+              else if(rows.length>0){
+                rows.forEach((row, i) => {
+                  socket.emit('S_kick_off',row.idc);
+                });
+              }
+            });
+
           }//end
           else {socket.emit('login2_sai');}
         }
@@ -1040,7 +1050,7 @@ io.on('connection',(socket)=>
       }
     }
   });
-  socket.on('C_gui_tinnhan', function(mess){
+  socket.on('C_gui_tinnhan', (mess)=>{
     if (socket.number&&mess.nguoinhan&&mess.subject&&mess.vitri&&mess.line){
       let thoigian = new Date();
       let idc=''+Date.now();
@@ -1213,7 +1223,7 @@ io.on('connection',(socket)=>
 
     }
   });
-  socket.on('danhantinnhan', function (nguoigui, ten_nguoi_nhan,idc,subject){
+  socket.on('danhantinnhan',  (nguoigui, ten_nguoi_nhan,idc,subject)=>{
    	if (socket.number&&nguoigui&&idc){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ nguoigui +"' LIMIT 1", function(err4, res4){
           if ( err4 ){console.log(err4);}
@@ -1261,13 +1271,13 @@ io.on('connection',(socket)=>
   });
   socket.on('C_get_tin', (idc,code)=>{
     if(socket.number && idc&&code){
-        con.query("DELETE FROM `"+socket.number+"main` WHERE `stt` LIKE '"+code+"' AND `idc` LIKE '"+idc+"'", function(err){
+        con.query("DELETE FROM `"+socket.number+"main` WHERE `stt` LIKE '"+code+"' AND `idc` LIKE '"+idc+"'", (err)=>{
             if(err)console.log(err);
         });
 
     }
   });
-  socket.on('search_contact', function (string){
+  socket.on('search_contact',  (string)=>{
     if (socket.number&&string!=null){
       con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0 LIMIT 50", function(err, a1s){
       if ( err)console.log(err);
@@ -1287,7 +1297,7 @@ io.on('connection',(socket)=>
     });
     }
   });
-  socket.on('C_join_room', function (room){
+  socket.on('C_join_room',  (room)=>{
     if (socket.number&&room){
       con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+room+"' AND `number` LIKE '"+socket.number+"' LIMIT 1", function(err1, rows){
         if ( err1){console.log('co loi 2 '+err1);}
@@ -1306,13 +1316,13 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('C_leave_room', function (room) {
+  socket.on('C_leave_room',  (room)=> {
       if (socket.number&&room){
       socket.leave(room);
       socket.roomabc = undefined;
     }
   });
-  socket.on('C_out_of_room', function (tin) {
+  socket.on('C_out_of_room', (tin) =>{
     if (socket.number&&tin&&tin.room){
       if(socket.roomabc==tin.room){
         socket.leave(tin.room);
@@ -1394,10 +1404,10 @@ io.on('connection',(socket)=>
       });
     }
   });
-  socket.on('C_pos_online', function (info){
+  socket.on('C_pos_online',  (info)=>{
     if (socket.number&&info.room){
       if (isArray(info.room)){
-        info.room.forEach(function(room){
+        info.room.forEach((room)=>{
           if(room.room_fullname){
             io.sockets.in(room.room_fullname).emit('S_pos_online',{lat:info.lat, lon:info.lon, name:socket.username, number:socket.number, room:room.room_fullname});
           }
@@ -1405,7 +1415,7 @@ io.on('connection',(socket)=>
       }
     }
   });
-  socket.on('C_make_room', function (info){
+  socket.on('C_make_room',  (info)=>{
     if (socket.number&&info.room_name&&info.member_list){
       let thoigian = new Date();
       // bắt đầu xử lý cái room
@@ -1458,7 +1468,7 @@ io.on('connection',(socket)=>
 
     }
   });
-  socket.on('C_change_pass', function(oldpass,newpass){
+  socket.on('C_change_pass', (oldpass,newpass)=>{
    if (socket.number&&oldpass&&newpass){
      con.query("SELECT * FROM `account` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
         if (err || rows.length ==0){ socket.emit('change_pass_thatbai');}
@@ -1484,7 +1494,7 @@ io.on('connection',(socket)=>
 
     }
   });
-  socket.on('C_bosung_member', function(list){
+  socket.on('C_bosung_member', (list)=>{
    if (socket.roomabc&&list&&isArray(list)){
       socket.emit ('S_get_bosung_member');
       let thoigian = new Date();
@@ -1927,7 +1937,7 @@ io.on('connection',(socket)=>
           });
         }
     });
-  socket.on('make_user', function(nd,tin){
+  socket.on('make_user', (nd,tin)=>{
     if (socket.user!=null && socket.type!=null&&socket.type=="A"){
       if(nd=='A'){
         con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
@@ -1962,7 +1972,7 @@ io.on('connection',(socket)=>
 
       }
     });
-  socket.on('giao_nhiemvu', function(tin){
+  socket.on('giao_nhiemvu', (tin)=>{
        if (socket.user!=null && socket.type!=null&&socket.type=="B"){
          var idc = 'r'+Date.now();
          let thoigian=new Date();
@@ -1980,7 +1990,7 @@ io.on('connection',(socket)=>
            });
         }
       });
-  socket.on('giao_nhiemvu2', function(tin){
+  socket.on('giao_nhiemvu2', (tin)=>{
     if (socket.user!=null && socket.type!=null&&socket.type=="E"){
         let thoigian=new Date();
         let sql1 = "UPDATE `list_err` SET `giaonv2` = ?,`ch2_user` = ?,`ch2_hoten` = ?,`ch2_chucvu` = ?,`ch2_donvi` = ? WHERE `idc` LIKE ?";
@@ -2005,7 +2015,7 @@ io.on('connection',(socket)=>
 
       }
   });
-  socket.on('C_capnhat', function(idc,nd,nd2){
+  socket.on('C_capnhat', (idc,nd,nd2)=>{
       if (socket.user!=null){
         let abc='';
         if (nd=="E"||nd=="F"){
