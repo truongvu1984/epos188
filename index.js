@@ -61,7 +61,7 @@ con.connect(function(err) {
  kiemtra_taikhoan();
 io.on('connection',(socket)=>
 {
-  console.log('ket noi='+socket.id);
+
   socket.emit('check_pass');
   socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
       if(mail&&code&&id_phone){
