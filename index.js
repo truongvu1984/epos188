@@ -323,18 +323,12 @@ io.on('connection',(socket)=>
 
         });
   socket.on('login1_Caro',(user1, pass1)=>{
-      if(user1&&pass1){
-
-
+    if(user1&&pass1){
       con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
   			 else{
-          if (passwordHash.verify(pass1, rows[0].pass)){
-                  socket.emit('login1_caro_dung', {name:rows[0].user});
-          }
+          if (passwordHash.verify(pass1, rows[0].pass)) socket.emit('login1_caro_dung', {name:rows[0].user});
           else  socket.emit('login1_carosai', {name:rows[0].user});
-
-
         }
       });
     }
@@ -345,7 +339,6 @@ io.on('connection',(socket)=>
         if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
         else{
           if (passwordHash.verify(data.right_pass, rows[0].pass)){
-
             socket.number = data.rightuser;
             socket.username = rows[0].user;
             socket.join(data.rightuser);
@@ -877,9 +870,7 @@ io.on('connection',(socket)=>
   }
   // lắng nghe sự kiện đăng ký tài khoản mới
   socket.on('login1',(user1, pass1)=>{
-
-      if(user1&&pass1){
-
+    if(user1&&pass1){
       con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
   	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
   			 else{
@@ -1298,7 +1289,6 @@ io.on('connection',(socket)=>
   });
   socket.on('C_join_room', function (room){
     if (socket.number&&room){
-
       con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+room+"' AND `number` LIKE '"+socket.number+"' LIMIT 1", function(err1, rows){
         if ( err1){console.log('co loi 2 '+err1);}
         else if(rows.length >0){
@@ -1495,10 +1485,7 @@ io.on('connection',(socket)=>
     }
   });
   socket.on('C_bosung_member', function(list){
-    //nếu socket này đang tham gia room thì mới chấp nhận các thao tác tiếp theo
-
    if (socket.roomabc&&list&&isArray(list)){
-
       socket.emit ('S_get_bosung_member');
       let thoigian = new Date();
       con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+socket.roomabc+"'", function(err1, rows){
@@ -1556,6 +1543,37 @@ io.on('connection',(socket)=>
       }
     });
       }
+  });
+  socket.on('C_kick_member', (room,number)=>{
+   if (socket.roomabc&&room&&number){
+     if(socket.roomabc==room)
+      con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+room+"' AND `number` LIKE '"+socket.number+"' AND `stt` LIKE 'A' LIMIT 1", function(err, rows){
+        if ( err){console.log('co loi 1 '+err);}
+        else if(rows.length >0){
+        //ĐÂY ĐÚNG LÀ ADMIN CỦA ROOM
+          con.query("DELETE FROM `list_member_w` WHERE `idc` LIKE '"+room+"' AND `number` LIKE '"+number+"'", function(err2){
+            if (err2)console.log(err2);
+            else {
+              socket.emit ('S_get_kick_member');
+              con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+room+"'", function(err1, row1s){
+                if(err1)console.log('C_kick_member'+err1);
+                else {
+                  row1s.forEach((row1, i) => {
+                    var sql5 = "INSERT INTO `"+row1.number+"main` (idc, number, stt ) VALUES ?";
+                    var val5 = [[ room, number,'H']];
+                    con.query(sql5, [val5], function (err5, res5){
+                        if ( err5){console.log(err5);}
+                        else io.sockets.in(row1.number).emit('S_send_roi_nhom',room,number);
+                    });
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  }
   });
   socket.on('login1_suco',(user1, pass1)=>{
       if(user1&&pass1){
