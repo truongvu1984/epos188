@@ -1555,7 +1555,12 @@ io.on('connection',(socket)=>
             if (err2)console.log(err2);
             else {
               socket.emit ('S_get_kick_member');
-              console.log(kq);
+              var sql3 = "INSERT INTO `"+number+"main` (idc, stt ) VALUES ?";
+              var val3 = [[ room, 'X']];//x là bị kick ra ngoài
+              con.query(sql3, [val3], function (err3, res3){
+                if ( err3){console.log(err3);}
+                else io.sockets.in(number).emit('S_kick_off',room);
+              });
               con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+room+"'", function(err1, row1s){
                 if(err1)console.log('C_kick_member'+err1);
                 else {
@@ -1566,7 +1571,7 @@ io.on('connection',(socket)=>
                       con.query(sql5, [val5], function (err5, res5){
                         if ( err5){console.log(err5);}
                         else io.sockets.in(row1.number).emit('S_send_roi_nhom',room,number);
-                    });
+                      });
                     }
                   });
                 }
