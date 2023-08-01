@@ -2165,5 +2165,25 @@ io.on('connection',(socket)=>
 
     }
   });
+  socket.on('upload_start', ( filesize) => {
+      let filename = 'p'+Date.now();
+      const filePath = path.join('tdsc', filename);
+      const writeStream = fs.createWriteStream(filePath);
+
+      // Xử lý dữ liệu ảnh nhận được từ client và ghi vào tệp tin trên server
+      socket.on('upload_chunk', (data) => {
+        writeStream.write(data);
+      });
+
+      // Khi ảnh đã được gửi hoàn tất, đóng write stream và thông báo cho client
+      socket.on('upload_end', () => {
+        writeStream.end();
+        console.log('upload ok');
+        socket.emit('upload_complete',filename);
+      });
+    });
+
+
+
 });
 }});
