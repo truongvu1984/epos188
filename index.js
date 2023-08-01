@@ -1,5 +1,7 @@
 var express = require("express");
 var app = express();
+const fs = require('fs');
+const path = require('path');
 var http = require("http");
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
@@ -2077,7 +2079,7 @@ io.on('connection',(socket)=>
             });
         }
         else if(nd=="M"){
-          console.log(idc+" nd="+nd+" nd2="+nd2);
+
           let sql1 = "INSERT INTO `list_del` (idc,ids) VALUES ?";
           let val1 = [[idc,nd2]];
           con.query(sql1,[val1],function(err2,result){
