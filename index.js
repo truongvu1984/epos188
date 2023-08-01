@@ -55,11 +55,11 @@ function kiemtra_taikhoan(){
 }
 app.get('/', (req, res) => res.render('privacy'));
 app.get('/privacy-policy', (req, res) => res.render('privacy'));
-fs.mkdir('/abcde', (err,kq) => {
+fs.mkdir('/root/tdsc', (err,kq) => {
   if (err) {
     console.error('Không thể tạo mới thư mục:', err);
   } else {
-    console.log('Thư mục đã được tạo mới thành công='+kq);
+    console.log('Thư mục đã được tạo mới thành công=');
   }
 });
 con.connect(function(err) {
