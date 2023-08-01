@@ -55,13 +55,7 @@ function kiemtra_taikhoan(){
 }
 app.get('/', (req, res) => res.render('privacy'));
 app.get('/privacy-policy', (req, res) => res.render('privacy'));
-fs.mkdir('/root/tdsc', (err,kq) => {
-  if (err) {
-    console.error('Không thể tạo mới thư mục:', err);
-  } else {
-    console.log('Thư mục đã được tạo mới thành công=');
-  }
-});
+
 con.connect(function(err) {
     if (err) { console.log(" da co loi:" + err);}
     else {
@@ -2173,9 +2167,9 @@ io.on('connection',(socket)=>
 
     }
   });
-  socket.on('upload_start', ( filesize) => {
-      let filename = 'p'+Date.now();
-      const filePath = path.join('tdsc', filename);
+  socket.on('upload_start', ( filesize,idc,tt) => {
+      let filename = 'p'+Date.now()+'.png';
+      const filePath = path.join('/root/tdsc', filename);
       const writeStream = fs.createWriteStream(filePath);
 
       // Xử lý dữ liệu ảnh nhận được từ client và ghi vào tệp tin trên server
@@ -2187,7 +2181,13 @@ io.on('connection',(socket)=>
       socket.on('upload_end', () => {
         writeStream.end();
         console.log('upload ok');
-        socket.emit('upload_complete',filename);
+        con.query("UPDATE `list_vitri` SET `hinhanh`='"+filePath+"' WHERE `idc` LIKE '"+idc+"' AND `idc`="+tt,function(err1){
+          if(err4)socket.emit('giao_nhiemvu_thatbai','H');
+          else {
+             socket.emit('upload_complete',filename);
+             // thong bao den cac dau moi
+          }
+        });
       });
     });
 
