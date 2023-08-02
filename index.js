@@ -2171,20 +2171,19 @@ io.on('connection',(socket)=>
       let filename = 'p'+Date.now()+'.png';
       const filePath = path.join('/root/tdsc', filename);
       const writeStream = fs.createWriteStream(filePath);
-
       // Xử lý dữ liệu ảnh nhận được từ client và ghi vào tệp tin trên server
       socket.on('upload_chunk', (data) => {
         writeStream.write(data);
       });
-
       // Khi ảnh đã được gửi hoàn tất, đóng write stream và thông báo cho client
       socket.on('upload_end', () => {
         writeStream.end();
         console.log('upload ok');
-        con.query("UPDATE `list_vitri` SET `hinhanh`='"+filePath+"' WHERE `idc` LIKE '"+idc+"' AND `idc`="+tt,function(err1){
+        con.query("UPDATE `list_vitri` SET `hinhanh`='"+filePath+"' WHERE `idc` LIKE '"+idc+"' AND `id`="+tt,function(err4){
           if(err4)socket.emit('giao_nhiemvu_thatbai','H');
           else {
-             socket.emit('upload_complete',filename);
+            console.log('OKKKKK');
+             socket.emit('upload_complete',filename,idc);
              // thong bao den cac dau moi
           }
         });
