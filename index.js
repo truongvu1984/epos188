@@ -2189,7 +2189,7 @@ io.on('connection',(socket)=>
         });
       });
     });
-  socket.on('send_file',()=>{
+  socket.on('send_file',async()=>{
     try {
       const filePath = '/root/tdsc/your/p1690944477017.png';
       const fileData = await fs.promises.readFile(filePath);
