@@ -2192,7 +2192,8 @@ io.on('connection',(socket)=>
   socket.on('send_file',()=>{
     console.log('Co nhan');
     fs.readFile("/root/tdsc/p1690944477017.png'", function(err, data){
-    var img64 = new Buffer(data, 'binary').toString('base64')
+    const img64 = data.toString('base64');
+    // var img64 = new Buffer(data, 'binary').toString('base64')
     socket.emit("send_img", img64);
 
 })
