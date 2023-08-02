@@ -2191,12 +2191,11 @@ io.on('connection',(socket)=>
     });
   socket.on('send_file',()=>{
     console.log('Co nhan');
-    fs.readFile("/root/tdsc/p1690944477017.png'", function(err, data){
-    const img64 = data.toString('base64');
-    // var img64 = new Buffer(data, 'binary').toString('base64')
-    socket.emit("send_img", img64);
-
-})
+    fs.readFile('/root/tdsc/p1690944477017.png', function(err, data){
+      const img64 = data.toString('base64');
+      // var img64 = new Buffer(data, 'binary').toString('base64')
+      socket.emit("send_img", img64);
+    })
   });
   socket.on('request_file', async () => {
     const filePath = '/root/tdsc/p1690944477017.png'; // Thay đổi đường dẫn tới file cần gửi
