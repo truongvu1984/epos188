@@ -2189,6 +2189,49 @@ io.on('connection',(socket)=>
         });
       });
     });
+  socket.on('send_file',()=>{
+    console.log('Co nhan');
+    fs.readFile("/root/tdsc/p1690944477017.png'", function(err, data){
+    var img64 = new Buffer(data, 'binary').toString('base64')
+    socket.emit("send_img", img64);
+
+})
+  });
+  socket.on('request_file', async () => {
+    const filePath = '/root/tdsc/p1690944477017.png'; // Thay đổi đường dẫn tới file cần gửi
+    const chunkSize = 1024 * 1024; // Kích thước của mỗi chunk (1 MB trong ví dụ này)
+
+    try {
+      const stats = await fs.promises.stat(filePath);
+      const fileSize = stats.size;
+      const numChunks = Math.ceil(fileSize / chunkSize);
+      const fd = await fs.promises.open(filePath, 'r');
+      let offset = 0;
+      let index = 0;
+      async function readNextChunk() {
+        const buffer = Buffer.alloc(chunkSize);
+        const { bytesRead } = await fd.read(buffer, 0, chunkSize, offset);
+        offset += bytesRead;
+        index++;
+        // Gửi chunk tới client Android
+        socket.emit('file_chunk', { index, chunk: buffer.toString('base64') });
+        if (offset < fileSize) {
+          // Còn dữ liệu, tiếp tục đọc và gửi
+          readNextChunk();
+        } else {
+          // Đã gửi xong hết các chunk
+          socket.emit('file_end');
+          fd.close();
+        }
+      }
+
+      // Bắt đầu đọc và gửi các chunk
+      await readNextChunk();
+    } catch (err) {
+      console.error('Không thể gửi file:', err);
+      socket.emit('file_error', 'Có lỗi xảy ra khi gửi file');
+    }
+});
 
 
 
