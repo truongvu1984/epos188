@@ -2191,7 +2191,7 @@ io.on('connection',(socket)=>
     });
   socket.on('send_file',async()=>{
     try {
-      const filePath = '/root/tdsc/your/p1690944477017.png';
+      const filePath = '/root/tdsc/p1690944477017.png';
       const fileData = await fs.promises.readFile(filePath);
       const base64Data = fileData.toString('base64');
       socket.emit('send_img', base64Data);
