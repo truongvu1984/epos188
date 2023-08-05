@@ -1707,7 +1707,6 @@ con.connect(function(err) {
                                   if(row3s.length>0){
                                     a6='A';phat='A';
                                     socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21,a7:'B',a6:'A',list_vitri:row3s});
-
                                   }
                                   else {
                                     if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21,a6:'B',a7:'B'});
@@ -1813,7 +1812,6 @@ con.connect(function(err) {
                                   socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
                                     ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
                                     giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a6:'B'});
-
                                 }
                               }
                             });
@@ -2040,19 +2038,18 @@ con.connect(function(err) {
             });
           }
           else if(nd=="L"){
-            var sql = "INSERT INTO `list_vitri` (idc,lat, lon,name) VALUES ?";
-            var values = [[idc,nd2.lat,nd2.lon,nd2.name]];
+            var sql = "INSERT INTO `list_vitri` (idc,lat, lon,name,diadanh) VALUES ?";
+            var values = [[idc,nd2.lat,nd2.lon,nd2.name,nd2.diadanh]];
               con.query(sql, [values], function (err1, result) {
                 if (err1)socket.emit("giao_nhiemvu_thatbai","L");
                 else {
                       socket.emit('gui_thongtin_ok',{nd:'L',idc:idc,tt:result.insertId});
-                      io.sockets.in("chung").emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name,tt:result.insertId });
-
+                      io.sockets.in("chung").emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name,tt:result.insertId,diadanh: nd2.diadanh});
                       if(socket.type=="F"){
                         con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
                           if (err){console.log(err);}
                           else{
-                               io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name,tt:result.insertId});
+                               io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name,tt:result.insertId,diadanh: nd2.diadanh});
                           }
                         });
                       }
@@ -2151,7 +2148,7 @@ con.connect(function(err) {
     });
     socket.on('C_upload_pic', ( idc,tt,data) => {
       if (socket.user!=null && idc!=null&&tt!=null&&data!=null){
-        let filename = 'p'+Date.now()+'.png';
+        let filename = 'p'+Date.now()+'.jpg';
         let filePath = path.join('/root/tdsc', filename);
         let byteArray = Buffer.from(data, 'base64');
         fs.writeFile(filePath, byteArray, (err) => {
@@ -2166,7 +2163,7 @@ con.connect(function(err) {
                   con.query("UPDATE `list_vitri` SET `hinhanh`='"+filePath+"', `hinhanh_tt`= "+new_tt+" WHERE `idc` LIKE '"+idc+"' AND `tt`="+tt,function(err4){
                     if(err4)socket.emit('giao_nhiemvu_thatbai','H');
                     else {
-                      socket.emit('upload_complete',filename,idc,tt);
+                      socket.emit('upload_complete',filename,idc,tt,new_tt);
                       io.sockets.in("chung").emit("S_capnhat_anh",{filename: filename,idc:idc,tt:tt,hinhanh: data,hinhanh_tt:new_tt});
                       //gửi những tài khoản chung
                       // fs.readFile(filePath, (err, data2) => {
