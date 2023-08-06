@@ -1642,21 +1642,27 @@ con.connect(function(err) {
                             let giaonv2=null;if(row1.giaonv2!=null){giaonv2=get_time(row1.giaonv2);a0='A';}
                             let nguyennhan='';if(row1.nguyennhan!=null)nguyennhan=row1.nguyennhan;
                             let tieuhao=''; if(row1.tieuhao!=null)tieuhao=row1.tieuhao;
+                            socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
+                              ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
+                              giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
+
                             con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.idc+"'", function(err2, row2s){
                               if (err2){console.log(err2);}
                               else {
                                 if(row2s.length>0){
-                                  a6='A';
-                                  socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
-                                    ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
-                                    giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a6:'A',list_vitri:row2s});
+                                  row2s.forEach((item, i) => {
+                                      if(item.hinhanh!=null){
+                                        fs.readFile(item.hinhanh, (err, data2) => {
+                                          if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
+                                          else {
+                                            let base64Data = data2.toString('base64');
+                                            socket.emit("S_capnhat_anh",{idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.item});
+                                          }
+                                        });
+                                      }
+                                    });
+                                }
 
-                                }
-                                else {
-                                  socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
-                                    ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
-                                    giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a6:'B'});
-                                }
                               }
                             });
 
@@ -1701,26 +1707,26 @@ con.connect(function(err) {
                               if(item.a21=='A'){
                                 if(row2s[0].tieuhao!=null&&row2s[0].tieuhao!=''){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
                               }
+                              if(phat=='A')socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21,a7:'B'});
                               con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+item.idc+"' AND tt >"+item.a25, function(err3, row3s){
                                 if (err3){console.log(err3);}
                                 else {
                                   if(row3s.length>0){
-                                    a6='A';phat='A';
-                                    socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21,a7:'B',a6:'A',list_vitri:row3s});
-                                  }
-                                  else {
-                                    if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21,a6:'B',a7:'B'});
+                                    row3s.forEach((item, i) => {
+                                      if(item.hinhanh!=null){
+                                        fs.readFile(item.hinhanh, (err, data2) => {
+                                          if (err) {console.log('Có lỗi xảy ra khi đọc file:');}
+                                          else {
+                                            let base64Data = data2.toString('base64');
+                                            socket.emit("S_capnhat_anh",{idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
+                                          }
+                                        });
+                                      }
+                                    });
                                   }
 
                                 }
                               });
-
-  //     mỗi cái item này sẽ có 1 cái list vị trí kèm theo, mỗi cái list vị trí đó chỉ là số tt thôi, kèm theo số
-  // id đó là số id của ảnh. Mỗi lần upload ảnh lên, lấy số cũ tăng lên 1 đơn vị, nếu ảnh của vị trí nào mà có số id lớn hơn thì gửi về,
-  // gọi là cập nhật ảnh.
-
-
-
                             }
                           });
                         });
@@ -1741,7 +1747,6 @@ con.connect(function(err) {
                         });
                       }
                       if(rows[0].type=="A") {
-
                         con.query("SELECT * FROM `list_user` WHERE `id` > "+tin.tt_list+" AND `id`>5 ORDER BY id ASC", function(err5, row5s){
                           if (err5)console.log('2222'+err5);
                           else{
@@ -1762,7 +1767,6 @@ con.connect(function(err) {
                             }
                           }
                         });
-
                       }
                       else if(rows[0].type=="B") {
                         con.query("SELECT * FROM `list_user` WHERE `type` LIKE 'E' AND `id` > "+tin.tt_list+" AND `id`>5 ORDER BY id ASC", function(err5, row5s){
@@ -1798,26 +1802,28 @@ con.connect(function(err) {
                             let vedonvi=null;if(row1.vedonvi!=null){vedonvi=get_time(row1.vedonvi);a4='A';}
                             let nguyennhan='';if(row1.nguyennhan!=null)nguyennhan=row1.nguyennhan;
                             let tieuhao=''; if(row1.tieuhao!=null)tieuhao=row1.tieuhao;
+                            socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
+                              ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
+                              giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
                             con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.idc+"'", function(err2, row2s){
                               if (err2){console.log(err2);}
                               else {
                                 if(row2s.length>0){
-                                  a6='A';
-                                  socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
-                                    ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
-                                    giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a6:'A',list_vitri:row2s});
+                                  row2s.forEach((item, i) => {
+                                      if(item.hinhanh!=null){
+                                        fs.readFile(item.hinhanh, (err, data2) => {
+                                          if (err) {console.log('Có lỗi xảy ra khi đọc file:');}
+                                          else {
+                                            let base64Data = data2.toString('base64');
+                                            socket.emit("S_capnhat_vitri",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
 
-                                }
-                                else {
-                                  socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
-                                    ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
-                                    giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a6:'B'});
+                                          }
+                                        });
+                                      }
+                                    });
                                 }
                               }
                             });
-
-
-
                           });
 
                         }
@@ -1859,16 +1865,30 @@ con.connect(function(err) {
                               if(item.a21=='A'){
                                 if(row2s[0].tieuhao!=null&&row2s[0].tieuhao!=''){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
                               }
+                              if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21,a7:'B'});
                               con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+item.idc+"' AND id >"+item.a25, function(err3, row3s){
                                 if (err3){console.log(err3);}
                                 else {
                                   if(row3s.length>0){
-                                    a6='A';phat='A';
-                                    socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21,a7:'B',a6:'A',list_vitri:row3s});
+                                    row3s.forEach((item, i) => {
+                                      if(item.hinhanh!=null){
+                                        fs.readFile(item.hinhanh, (err, data2) => {
+                                          if (err) {console.log('Có lỗi xảy ra khi đọc file:');}
+                                          else {
+                                            let base64Data = data2.toString('base64');
+                                            socket.emit("S_capnhat_vitri",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
+
+                                          }
+                                        });
+                                      }
+                                    });
+
+
+
+
+
                                   }
-                                  else {
-                                    if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21,a6:'B',a7:'B'});
-                                  }
+
 
                                 }
                               });
@@ -2038,22 +2058,27 @@ con.connect(function(err) {
             });
           }
           else if(nd=="L"){
-            var sql = "INSERT INTO `list_vitri` (idc,lat, lon,name,diadanh) VALUES ?";
-            var values = [[idc,nd2.lat,nd2.lon,nd2.name,nd2.diadanh]];
-              con.query(sql, [values], function (err1, result) {
-                if (err1)socket.emit("giao_nhiemvu_thatbai","L");
+            let filename = 'p'+Date.now()+'.jpg';
+            let filePath = path.join('/root/tdsc', filename);
+            let byteArray = Buffer.from(nd2.hinhanh, 'base64');
+            fs.writeFile(filePath, byteArray, (err) => {
+                if (err) {console.log(err);}
                 else {
+                  var sql = "INSERT INTO `list_vitri` (idc,lat, lon,name,hinhanh,hinhanh_tt,diadanh) VALUES ?";
+                  var values = [[idc,nd2.lat,nd2.lon,nd2.name,filePath,0,nd2.diadanh]];
+                  con.query(sql, [values], function (err1, result) {
+                  if (err1)socket.emit("giao_nhiemvu_thatbai","L");
+                  else {
                       socket.emit('gui_thongtin_ok',{nd:'L',idc:idc,tt:result.insertId});
-                      io.sockets.in("chung").emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name,tt:result.insertId,diadanh: nd2.diadanh});
+                      io.sockets.in("chung").emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId,hinhanh: nd2.hinhanh,hinhanh_tt:0});
                       if(socket.type=="F"){
-                        con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
-                          if (err){console.log(err);}
-                          else{
-                               io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:'L',idc:idc,lat:nd2.lat,lon:nd2.lon,name:nd2.name,tt:result.insertId,diadanh: nd2.diadanh});
-                          }
-                        });
+                          con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+                              if (err){console.log(err);}
+                              else io.sockets.in(rows[0].ch1_user).emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId,hinhanh: nd2.hinhanh,hinhanh_tt:0});
+                          });
                       }
-
+                    }
+                  });
                 }
               });
           }
@@ -2146,49 +2171,7 @@ con.connect(function(err) {
 
       }
     });
-    socket.on('C_upload_pic', ( idc,tt,data) => {
-      if (socket.user!=null && idc!=null&&tt!=null&&data!=null){
-        let filename = 'p'+Date.now()+'.jpg';
-        let filePath = path.join('/root/tdsc', filename);
-        let byteArray = Buffer.from(data, 'base64');
-        fs.writeFile(filePath, byteArray, (err) => {
-            if (err) {console.error('Error saving file:', err);}
-            else {
-              console.log('File saved:', filePath);
-              con.query("SELECT `hinhanh_tt` FROM `list_vitri` WHERE `idc` LIKE '"+idc+"' AND `tt`="+tt, function(err5, row5s){
-                if (err5)console.log(err5);
-                else {
-                  let new_tt=0;
-                  if(row5s[0].hinhanh_tt!=null)new_tt=row5s[0].hinhanh_tt+1;
-                  con.query("UPDATE `list_vitri` SET `hinhanh`='"+filePath+"', `hinhanh_tt`= "+new_tt+" WHERE `idc` LIKE '"+idc+"' AND `tt`="+tt,function(err4){
-                    if(err4)socket.emit('giao_nhiemvu_thatbai','H');
-                    else {
-                      socket.emit('upload_complete',filename,idc,tt,new_tt);
-                      io.sockets.in("chung").emit("S_capnhat_anh",{filename: filename,idc:idc,tt:tt,hinhanh: data,hinhanh_tt:new_tt});
-                      //gửi những tài khoản chung
-                      // fs.readFile(filePath, (err, data2) => {
-                      //   if (err) {
-                      //     console.error('Có lỗi xảy ra khi đọc file:', err);
-                      //     socket.emit('file_error', 'Có lỗi xảy ra khi đọc file');
-                      //   } else {
-                      //     const base64Data = data2.toString('base64');
-                      //     io.sockets.in("chung").emit("S_capnhat_anh",{idc:idc,tt:tt,hinhanh: writeStream});
-                      //     socket.emit('file_data_base64', { base64Data2 });
-                      //
-                      //   }
-                      // });
 
-
-
-                       // thong bao den cac đầu mối có liên quan, tức là thuộc đơn vị đó, nhưng không gửi cho chính thằng gửi lên
-                    }
-                  });
-                }
-              });
-            }
-          });
-      }
-    });
 
   });
   }
