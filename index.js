@@ -1623,6 +1623,7 @@ con.connect(function(err) {
                     socket.user = tin.user;
                     socket.type = rows[0].type;
                     if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
+                      console.log('Da join user '+socket.user+' voi type='+socket.type);
                       socket.join("chung");
                       //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
                       con.query("SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id ASC", function(err1, row1s){
