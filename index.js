@@ -1623,7 +1623,7 @@ con.connect(function(err) {
                     socket.user = tin.user;
                     socket.type = rows[0].type;
                     if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
-                      console.log('Da join user '+socket.user+' voi type='+socket.type);
+
                       socket.join("chung");
                       //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
                       con.query("SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id ASC", function(err1, row1s){
@@ -1657,7 +1657,7 @@ con.connect(function(err) {
                                           if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
                                           else {
                                             let base64Data = data2.toString('base64');
-                                            socket.emit("S_capnhat_anh",{idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.item});
+                                            socket.emit("S_capnhat_vitri",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
                                           }
                                         });
                                       }
@@ -1719,7 +1719,7 @@ con.connect(function(err) {
                                           if (err) {console.log('Có lỗi xảy ra khi đọc file:');}
                                           else {
                                             let base64Data = data2.toString('base64');
-                                            socket.emit("S_capnhat_anh",{idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
+                                            socket.emit("S_capnhat_vitri",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
                                           }
                                         });
                                       }
@@ -1867,7 +1867,7 @@ con.connect(function(err) {
                                 if(row2s[0].tieuhao!=null&&row2s[0].tieuhao!=''){tieuhao=row2s[0].tieuhao;phat='A';a21='A';}
                               }
                               if(phat=='A') socket.emit("S_capnhat",{idc:item.idc,giaonv2:giaonv2,ch2_hoten:row2s[0].ch2_hoten,ch2_chucvu:row2s[0].ch2_chucvu,ch2_donvi:row2s[0].ch2_donvi,batdau:batdau,nguyennhan:row2s[0].nguyennhan,tieuhao:row2s[0].tieuhao,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4,a20:a20,a21:a21,a7:'B'});
-                              con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+item.idc+"' AND id >"+item.a25, function(err3, row3s){
+                              con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+item.idc+"' AND tt >"+item.a25, function(err3, row3s){
                                 if (err3){console.log(err3);}
                                 else {
                                   if(row3s.length>0){
@@ -2074,7 +2074,7 @@ con.connect(function(err) {
                       console.log('Đã gửi đi');
                       io.sockets.in("chung").emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId,hinhanh: nd2.hinhanh,hinhanh_tt:0});
                       if(socket.type=="F"){
-                          con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+                          con.query("SELECT `ch1_user` FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
                               if (err){console.log(err);}
                               else io.sockets.in(rows[0].ch1_user).emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId,hinhanh: nd2.hinhanh,hinhanh_tt:0});
                           });
