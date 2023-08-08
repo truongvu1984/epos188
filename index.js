@@ -2001,8 +2001,8 @@ con.connect(function(err) {
                   else {
                         socket.join(number);
                         let lenh;
-                        if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+rows[0].donvi+"' AND id > "+tin.tt+" ORDER BY id ASC";
-                        else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+tin.tt+"  ORDER BY id ASC";
+                        if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+rows[0].donvi+"' AND id > "+stt_err+" ORDER BY id ASC";
+                        else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+stt_err+"  ORDER BY id ASC";
                         con.query(lenh, function(err1, row1s){
                           if (err1){console.log('33333'+err1);}
                           else if(row1s.length>0){
