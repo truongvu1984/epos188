@@ -1999,11 +1999,10 @@ con.connect(function(err) {
                     });
                   }
                   else {
-                        socket.join(tin.user);
+                        socket.join(number);
                         let lenh;
-                        let mang_vitri=[];
-                        if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND id > "+tin.tt+" ORDER BY id ASC";
-                        else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+tin.user+"' AND id >"+tin.tt+"  ORDER BY id ASC";
+                        if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+rows[0].donvi+"' AND id > "+tin.tt+" ORDER BY id ASC";
+                        else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+tin.tt+"  ORDER BY id ASC";
                         con.query(lenh, function(err1, row1s){
                           if (err1){console.log('33333'+err1);}
                           else if(row1s.length>0){
@@ -2031,7 +2030,7 @@ con.connect(function(err) {
                             socket.on('C_get_err_ok',()=>{
                               let lenh1;
                               if(rows[0].type=="E")lenh1="SELECT * FROM `list_vitri` WHERE donvi LIKE '"+rows[0].ch1_donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-                              else lenh1="SELECT * FROM `list_vitri` WHERE user LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                              else lenh1="SELECT * FROM `list_vitri` WHERE user LIKE '"+number+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
                               con.query(lenh1, (err2, row2s)=>{
                                   if (err2){console.log(err2);}
                                   else if(row2s.length>0){
