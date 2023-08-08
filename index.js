@@ -1945,8 +1945,7 @@ con.connect(function(err) {
               if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
               else if(rows.length>0){
                 if (rows[0].pass==pass){
-                  socket.user = tin.user;
-                  socket.type = rows[0].type;
+                  socket.user = number;
                   if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
                     socket.join("chung");
                     con.query("SELECT `id` FROM `list_err` WHERE `id` > "+stt_err+" ORDER BY id ASC", (err1, row1s)=>{
