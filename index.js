@@ -60,28 +60,6 @@ con.connect(function(err) {
   if (err) { console.log(" da co loi:" + err);}
   else {
   kiemtra_taikhoan();
-  con.query("SELECT * FROM `list_err`", function(err2, row2s){
-    if (err2){console.log(err2);}
-    else{
-        row2s.forEach((item, i) => {
-          if(item.ch2_user!=null){
-            con.query("UPDATE `list_vitri` SET `user`='"+item.ch2_user+"',`donvi`='"+item.ch1_donvi+"' WHERE `idc` LIKE '"+item.idc+"'",function(err1){
-              if(err1)console.log(err1);
-            });
-          }
-          else {
-            con.query("UPDATE `list_vitri` SET `user`='"+item.ch1_user+"',`donvi`='"+item.ch1_donvi+"' WHERE `idc` LIKE '"+item.idc+"'",function(err1){
-              if(err1)console.log(err1);
-            });
-          }
-        });
-
-    }
-  });
-
-
-
-
 
   io.on('connection',(socket)=>
   {
@@ -1997,7 +1975,7 @@ con.connect(function(err) {
                           });
                         });
                         socket.on('C_get_err_ok',()=>{
-                          con.query("SELECT * FROM `list_vitri` WHERE `id`>"+stt_vitri+" ORDER BY id ASC", (err2, row2s)=>{
+                          con.query("SELECT * FROM `list_vitri` WHERE `tt`>"+stt_vitri+" ORDER BY id ASC", (err2, row2s)=>{
                             if (err2){console.log(err2);}
                             else if(row2s.length>0){
                               socket.emit("S_send_sum_vitri",row2s.length);
@@ -2049,33 +2027,33 @@ con.connect(function(err) {
                                 socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
                                   ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
                                   giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
-                                con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.idc+"'", function(err2, row2s){
-                                  if (err2){console.log(err2);}
-                                  else {
-                                    if(row2s.length>0){
-                                      row2s.forEach((item, i) => {
-                                          if(item.hinhanh!=null){
-                                            fs.readFile(item.hinhanh, (err, data2) => {
-                                              if (err) {console.log('Có lỗi xảy ra khi đọc file:');}
-                                              else {
-                                                let base64Data = data2.toString('base64');
-                                                socket.emit("S_capnhat_vitri",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
-
-                                              }
-                                            });
-                                          }
-                                        });
-                                    }
-                                  }
-                                });
                               });
                             });
                             socket.on('C_get_err_ok',()=>{
-                              mang_vitri.forEach((item2, i2) => {
+                              let lenh1;
+                              if(rows[0].type=="E")lenh1="SELECT * FROM `list_vitri` WHERE donvi LIKE '"+rows[0].ch1_donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                              else lenh1="SELECT * FROM `list_vitri` WHERE user LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                              con.query(lenh1, (err2, row2s)=>{
+                                  if (err2){console.log(err2);}
+                                  else if(row2s.length>0){
+                                    socket.emit("S_send_sum_vitri",row2s.length);
+                                    socket.on('C_get_sum_vitri',()=>{
+                                        row2s.forEach((item, i) => {
+                                              if(item.hinhanh!=null){
+                                                fs.readFile(item.hinhanh, (err, data2) => {
+                                                  if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
+                                                  else {
+                                                    let base64Data = data2.toString('base64');
+                                                    socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
+                                                  }
+                                                });
+                                              }
+                                              else socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: null,hinhanh_tt: 0});
+                                        });
+                                      });
 
-
+                                  }
                               });
-
                             });
                           }
                         });
