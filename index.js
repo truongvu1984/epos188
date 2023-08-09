@@ -1939,7 +1939,7 @@ con.connect(function(err) {
             });
           }
       });
-    socket.on('C_tdsc_first_login',(number,pass,stt_err,stt_vitri)=>{
+    socket.on('C_tdsc_first_login',(number,pass,stt_err)=>{
       if(number&&pass){
         con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
               if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
@@ -2039,7 +2039,7 @@ con.connect(function(err) {
       }
     });
     socket.on('C_get_err_ok',(stt_vitri)=>{
-      if(socket.user!=null){
+      if(socket.user!=null&&stt_vitri){
         console.log('C_get_err_ok');
           con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+socket.user+"' LIMIT 1", function(err, rows){
             if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
@@ -2069,7 +2069,7 @@ con.connect(function(err) {
 
     });
     socket.on('C_get_sum_vitri',(stt_vitri)=>{
-      if(socket.user!=null){
+      if(socket.user!=null&&stt_vitri){
         con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
           if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
           else if(rows.length>0){
