@@ -1953,7 +1953,6 @@ con.connect(function(err) {
                       if (err1){console.log(err1);}
                       else if(row1s.length>0){
                         socket.emit('S_send_sum_err',row1s.length);
-
                       }
                     });
                   }
@@ -1974,15 +1973,18 @@ con.connect(function(err) {
             }
         });
     socket.on('C_get_sum_err',()=>{
+      console.log('C_get_sum_err');
       if(socket.user!=null){
+        console.log('C là:'+socket.type);
         if(socket.type=="E"||socket.type=="F"){
+          console.log('C là E/F');
           if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+rows[0].donvi+"' AND id > "+stt_err+" ORDER BY id ASC";
           else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+stt_err+"  ORDER BY id ASC";
           con.query(lenh, function(err1, row1s){
             if (err1){console.log('33333'+err1);}
             else if(row1s.length>0){
               row1s.forEach((row1, i) => {
-                mang_vitri.push(row1.idc);
+                console.log('S da gui');
                 let a1='B';
                 let a2='B';
                 let a3='B';
@@ -2003,6 +2005,7 @@ con.connect(function(err) {
           });
         }
         else {
+          console.log('C là A,B,C,D');
           con.query("SELECT * FROM `list_err` WHERE `id` > "+stt_err+" ORDER BY id ASC", (err1, row1s)=>{
             if (err1){console.log(err1);}
             else if(row1s.length>0){
