@@ -1972,17 +1972,17 @@ con.connect(function(err) {
               });
             }
         });
-    socket.on('C_get_sum_err',()=>{
+    socket.on('C_get_sum_err',(stt_err)=>{
       console.log('C_get_sum_err');
       if(socket.user!=null){
         console.log('C là:'+socket.type);
-        con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
+        con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+socket.user+"' LIMIT 1", function(err, rows){
           if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
           else if(rows.length>0){
             if(socket.type=="E"||socket.type=="F"){
               console.log('C là E/F');
               if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+rows[0].donvi+"' AND id > "+stt_err+" ORDER BY id ASC";
-              else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+stt_err+"  ORDER BY id ASC";
+              else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+socket.user+"' AND id >"+stt_err+"  ORDER BY id ASC";
               con.query(lenh, function(err1, row1s){
                 if (err1){console.log('33333'+err1);}
                 else if(row1s.length>0){
@@ -2040,20 +2040,23 @@ con.connect(function(err) {
 
 
     });
-    socket.on('C_get_err_ok',()=>{
-        if(socket.user!=null){
-          if(socket.type=="E"||socket.type=="F"){
-            let lenh1;
-            if(rows[0].type=="E")lenh1="SELECT * FROM `list_vitri` WHERE donvi LIKE '"+rows[0].ch1_donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-            else lenh1="SELECT * FROM `list_vitri` WHERE user LIKE '"+number+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-            con.query(lenh1, (err2, row2s)=>{
-                if (err2){console.log(err2);}
-                else if(row2s.length>0){
-                    socket.emit("S_send_sum_vitri",row2s.length);
-                }
-              });
-          }
-          else {
+    socket.on('C_get_err_ok',(stt_vitri)=>{
+      if(socket.user!=null){
+          con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+socket.user+"' LIMIT 1", function(err, rows){
+            if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
+            else if(rows.length>0){
+              if(socket.type=="E"||socket.type=="F"){
+                let lenh1;
+                if(rows[0].type=="E")lenh1="SELECT `tt` FROM `list_vitri` WHERE donvi LIKE '"+rows[0].ch1_donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                else lenh1="SELECT `tt` FROM `list_vitri` WHERE user LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                con.query(lenh1, (err2, row2s)=>{
+                    if (err2){console.log(err2);}
+                    else if(row2s.length>0){
+                        socket.emit("S_send_sum_vitri",row2s.length);
+                    }
+                  });
+              }
+              else {
             con.query("SELECT * FROM `list_vitri` WHERE `tt`>"+stt_vitri+" ORDER BY id ASC", (err2, row2s)=>{
                 if (err2){console.log(err2);}
                 else if(row2s.length>0){
@@ -2061,10 +2064,12 @@ con.connect(function(err) {
                 }
             });
           }
+            }
+          });
         }
 
     });
-    socket.on('C_get_sum_vitri',()=>{
+    socket.on('C_get_sum_vitri',(stt_vitri)=>{
       if(socket.user!=null){
         con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
           if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
