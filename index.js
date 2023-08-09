@@ -1978,7 +1978,7 @@ con.connect(function(err) {
         console.log('C là:'+socket.type);
         if(socket.type=="E"||socket.type=="F"){
           console.log('C là E/F');
-          if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+rows[0].donvi+"' AND id > "+stt_err+" ORDER BY id ASC";
+          if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+rows[0].donvi+"' AND id > "+stt_err+" ORDER BY id ASC";
           else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+stt_err+"  ORDER BY id ASC";
           con.query(lenh, function(err1, row1s){
             if (err1){console.log('33333'+err1);}
