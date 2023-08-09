@@ -2092,7 +2092,7 @@ con.connect(function(err) {
                                   }
                                 });
                               }
-                              else socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: null,hinhanh_tt: 0});
+                              else socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: 'A',hinhanh_tt: 0});
                         });
 
 
