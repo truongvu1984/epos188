@@ -1976,35 +1976,38 @@ con.connect(function(err) {
       console.log('C_get_sum_err');
       if(socket.user!=null){
         console.log('C là:'+socket.type);
-        if(socket.type=="E"||socket.type=="F"){
-          console.log('C là E/F');
-          if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+rows[0].donvi+"' AND id > "+stt_err+" ORDER BY id ASC";
-          else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+stt_err+"  ORDER BY id ASC";
-          con.query(lenh, function(err1, row1s){
-            if (err1){console.log('33333'+err1);}
-            else if(row1s.length>0){
-              row1s.forEach((row1, i) => {
-                console.log('S da gui');
-                let a1='B';
-                let a2='B';
-                let a3='B';
-                let a4='B';
-                let a0='B';
-                let giaonv2=null;if(row1.giaonv2!=null){giaonv2=get_time(row1.giaonv2);a0='A';}
-                let batdau=null;if(row1.batdau!=null){batdau=get_time(row1.batdau);a1='A';}
-                let dennoi=null;if(row1.dennoi!=null){dennoi=get_time(row1.dennoi);a2='A';}
-                let xong=null;if(row1.xong!=null){xong=get_time(row1.xong);a3='A';}
-                let vedonvi=null;if(row1.vedonvi!=null){vedonvi=get_time(row1.vedonvi);a4='A';}
-                let nguyennhan='';if(row1.nguyennhan!=null)nguyennhan=row1.nguyennhan;
-                let tieuhao=''; if(row1.tieuhao!=null)tieuhao=row1.tieuhao;
-                socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
-                  ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
-                  giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
+        con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
+          if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
+          else if(rows.length>0){
+            if(socket.type=="E"||socket.type=="F"){
+              console.log('C là E/F');
+              if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+rows[0].donvi+"' AND id > "+stt_err+" ORDER BY id ASC";
+              else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+stt_err+"  ORDER BY id ASC";
+              con.query(lenh, function(err1, row1s){
+                if (err1){console.log('33333'+err1);}
+                else if(row1s.length>0){
+                  row1s.forEach((row1, i) => {
+                    console.log('S da gui');
+                    let a1='B';
+                    let a2='B';
+                    let a3='B';
+                    let a4='B';
+                    let a0='B';
+                    let giaonv2=null;if(row1.giaonv2!=null){giaonv2=get_time(row1.giaonv2);a0='A';}
+                    let batdau=null;if(row1.batdau!=null){batdau=get_time(row1.batdau);a1='A';}
+                    let dennoi=null;if(row1.dennoi!=null){dennoi=get_time(row1.dennoi);a2='A';}
+                    let xong=null;if(row1.xong!=null){xong=get_time(row1.xong);a3='A';}
+                    let vedonvi=null;if(row1.vedonvi!=null){vedonvi=get_time(row1.vedonvi);a4='A';}
+                    let nguyennhan='';if(row1.nguyennhan!=null)nguyennhan=row1.nguyennhan;
+                    let tieuhao=''; if(row1.tieuhao!=null)tieuhao=row1.tieuhao;
+                    socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
+                      ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
+                      giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
+                  });
+                }
               });
             }
-          });
-        }
-        else {
+            else {
           console.log('C là A,B,C,D');
           con.query("SELECT * FROM `list_err` WHERE `id` > "+stt_err+" ORDER BY id ASC", (err1, row1s)=>{
             if (err1){console.log(err1);}
@@ -2031,6 +2034,8 @@ con.connect(function(err) {
             }
           });
         }
+        }
+        });
       }
 
 
@@ -2061,31 +2066,34 @@ con.connect(function(err) {
     });
     socket.on('C_get_sum_vitri',()=>{
       if(socket.user!=null){
-        if(socket.type=="E"||socket.type=="F"){
-          let lenh1;
-          if(rows[0].type=="E")lenh1="SELECT * FROM `list_vitri` WHERE donvi LIKE '"+rows[0].ch1_donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-          else lenh1="SELECT * FROM `list_vitri` WHERE user LIKE '"+number+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-          con.query(lenh1, (err2, row2s)=>{
-              if (err2){console.log(err2);}
-              else if(row2s.length>0){
-                  row2s.forEach((item, i) => {
-                      if(item.hinhanh!=null){
-                          fs.readFile(item.hinhanh, (err, data2) => {
-                              if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
-                              else {
-                                let base64Data = data2.toString('base64');
-                                socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
+        con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
+          if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
+          else if(rows.length>0){
+            if(socket.type=="E"||socket.type=="F"){
+              let lenh1;
+              if(socket.type=="E")lenh1="SELECT * FROM `list_vitri` WHERE donvi LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+              else lenh1="SELECT * FROM `list_vitri` WHERE user LIKE '"+number+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+              con.query(lenh1, (err2, row2s)=>{
+                  if (err2){console.log(err2);}
+                  else if(row2s.length>0){
+                      row2s.forEach((item, i) => {
+                          if(item.hinhanh!=null){
+                              fs.readFile(item.hinhanh, (err, data2) => {
+                                  if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
+                                  else {
+                                    let base64Data = data2.toString('base64');
+                                    socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
+                                  }
+                                });
                               }
-                            });
-                          }
-                          else socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: null,hinhanh_tt: 0});
-                    });
+                              else socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: null,hinhanh_tt: 0});
+                        });
 
 
-              }
-          });
-        }
-        else {
+                  }
+              });
+            }
+            else {
 
           con.query("SELECT * FROM `list_vitri` WHERE `tt` > "+stt_vitri+" ORDER BY tt ASC", (err2, row2s)=>{
               if (err2){console.log(err2);}
@@ -2107,6 +2115,9 @@ con.connect(function(err) {
               }
           });
         }
+          }
+        });
+
       }
     });
 
