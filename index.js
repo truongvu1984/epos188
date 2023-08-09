@@ -2039,7 +2039,7 @@ con.connect(function(err) {
       }
     });
     socket.on('C_get_err_ok',(stt_vitri)=>{
-      console.log('C_get_err_ok out side');
+      console.log('C_get_err_ok out side'+stt_vitri+' user='+socket.user);
       if(socket.user!=null&&stt_vitri!=null){
         console.log('C_get_err_ok');
           con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+socket.user+"' LIMIT 1", function(err, rows){
@@ -2070,7 +2070,7 @@ con.connect(function(err) {
 
     });
     socket.on('C_get_sum_vitri',(stt_vitri)=>{
-        console.log('C_get_sum_vitri out side');
+        console.log('C_get_sum_vitri out side'+stt_vitri+' user='+socket.user);
       if(socket.user!=null&&stt_vitri!=null){
         con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
           if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
