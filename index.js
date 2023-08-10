@@ -2047,8 +2047,8 @@ con.connect(function(err) {
             else if(rows.length>0){
               if(socket.type=="E"||socket.type=="F"){
                 let lenh1;
-                if(rows[0].type=="E")lenh1="SELECT `tt` FROM `list_vitri` WHERE donvi LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-                else lenh1="SELECT `tt` FROM `list_vitri` WHERE user LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                if(socket.type=="E")lenh1="SELECT `tt` FROM `list_vitri` WHERE `donvi` LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                else lenh1="SELECT `tt` FROM `list_vitri` WHERE `user` LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
                 con.query(lenh1, (err2, row2s)=>{
                     if (err2){console.log(err2);}
                     else if(row2s.length>0){
@@ -2077,8 +2077,9 @@ con.connect(function(err) {
           else if(rows.length>0){
             if(socket.type=="E"||socket.type=="F"){
               let lenh1;
-              if(socket.type=="E")lenh1="SELECT * FROM `list_vitri` WHERE donvi LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-              else lenh1="SELECT * FROM `list_vitri` WHERE user LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+
+              if(socket.type=="E")lenh1="SELECT * FROM `list_vitri` WHERE `donvi` LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+              else lenh1="SELECT * FROM `list_vitri` WHERE `user` LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
               con.query(lenh1, (err2, row2s)=>{
                   if (err2){console.log(err2);}
                   else if(row2s.length>0){
