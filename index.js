@@ -1939,7 +1939,7 @@ con.connect(function(err) {
             });
           }
       });
-    socket.on('C_tdsc_first_login',(number,pass,stt_err)=>{
+    socket.on('C_tdsc_first_login',(number,pass,stt_vitri)=>{
       if(number&&pass){
         con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
               if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
@@ -1947,47 +1947,128 @@ con.connect(function(err) {
                 if (rows[0].pass==pass){
                   socket.user = number;
                   socket.type=rows[0].type;
-                  if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
-                    socket.join("chung");
-                    con.query("SELECT `id` FROM `list_err` WHERE `id` > "+stt_err+" ORDER BY id ASC", (err1, row1s)=>{
-                      if (err1){console.log(err1);}
-                      else if(row1s.length>0){
-                        socket.emit('S_send_sum_err',row1s.length);
-                      }
-                    });
+                  if(socket.type=="E"||socket.type=="F"){
+                    socket.join(number);
+                    let lenh1;
+                    if(socket.type=="E")lenh1="SELECT `tt` FROM `list_vitri` WHERE `donvi` LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                    else lenh1="SELECT `tt` FROM `list_vitri` WHERE `user` LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                    con.query(lenh1, (err2, row2s)=>{
+                        if (err2){console.log(err2);}
+                        else if(row2s.length>0){
+                            socket.emit("S_send_sum_vitri",row2s.length);
+                        }
+                      });
                   }
                   else {
-                        socket.join(number);
-                        let lenh;
-                        if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+rows[0].donvi+"' AND id > "+stt_err+" ORDER BY id ASC";
-                        else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+stt_err+"  ORDER BY id ASC";
-                        con.query(lenh, function(err1, row1s){
-                          if (err1){console.log('33333'+err1);}
-                          else if(row1s.length>0){ socket.emit('S_send_sum_err',row1s.length); }
-                        });
-                      }
+                    socket.join('chung');
+                    con.query("SELECT * FROM `list_vitri` WHERE `tt`>"+stt_vitri+" ORDER BY id ASC", (err2, row2s)=>{
+                    if (err2){console.log(err2);}
+                    else if(row2s.length>0){
+                      socket.emit("S_send_sum_vitri",row2s.length);
+                    }
+                  });
                   }
-                    else  socket.emit('login2_suco_thatbai');
+                }
+                else  socket.emit('login2_suco_thatbai');
+              }
+        });
+      }
+    });
+    socket.on('C_get_sum_vitri',(stt_vitri)=>{
+          if(socket.user!=null&&stt_vitri!=null){
+            con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+socket.user+"' LIMIT 1", function(err, rows){
+              if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
+              else if(rows.length>0){
+                if(socket.type=="E"||socket.type=="F"){
+                  let lenh1;
+                  if(socket.type=="E")lenh1="SELECT * FROM `list_vitri` WHERE `donvi` LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                  else lenh1="SELECT * FROM `list_vitri` WHERE `user` LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                  con.query(lenh1, (err2, row2s)=>{
+                      if (err2){console.log(err2);}
+                      else if(row2s.length>0){
+                          row2s.forEach((item, i) => {
+                              if(item.hinhanh!=null){
+                                  fs.readFile(item.hinhanh, (err, data2) => {
+                                      if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
+                                      else {
+                                        let base64Data = data2.toString('base64');
+                                        socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
+                                      }
+                                    });
+                                }
+                                else {
+                                  socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: '',hinhanh_tt: -1});
+                                }
+                            });
+
+
+                      }
+                  });
+                }
+                else {
+                  con.query("SELECT * FROM `list_vitri` WHERE `tt` > "+stt_vitri+" ORDER BY tt ASC", (err2, row2s)=>{
+                  if (err2){console.log(err2);}
+                  else if(row2s.length>0){
+                      row2s.forEach((item, i) => {
+                          if(item.hinhanh!=null){
+                              fs.readFile(item.hinhanh, (err, data2) => {
+                                  if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
+                                  else {
+                                    let base64Data = data2.toString('base64');
+                                    socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
+                                  }
+                                });
+                          }
+                          else socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: null,hinhanh_tt: 0});
+                        });
+
+
                   }
               });
-            }
+                }
+              }
+            });
+          }
         });
+    socket.on('C_get_vitri_ok',(stt_err)=>{
+      if(socket.user!=null&&stt_err!=null){
+        if(socket.type=="A"||socket.type=="B"||socket.type=="C"||socket.type=="D"){
+          con.query("SELECT `id` FROM `list_err` WHERE `id` > "+stt_err+" ORDER BY id ASC", (err1, row1s)=>{
+            if (err1){console.log(err1);}
+            else if(row1s.length>0){
+              socket.emit('S_send_sum_err',row1s.length);
+            }
+          });
+        }
+        else {
+              let lenh;
+              con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+socket.user+"' LIMIT 1", function(err, rows){
+                if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
+                else if(rows.length>0){
+                  if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+rows[0].donvi+"' AND id > "+stt_err+" ORDER BY id ASC";
+                  else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+stt_err+"  ORDER BY id ASC";
+                  con.query(lenh, function(err1, row1s){
+                    if (err1){console.log('33333'+err1);}
+                    else if(row1s.length>0){ socket.emit('S_send_sum_err',row1s.length); }
+                  });
+                }
+              });
+
+            }
+      }
+    });
     socket.on('C_get_sum_err',(stt_err)=>{
-      console.log('C_get_sum_err');
-      if(socket.user!=null){
-        console.log('C là:'+socket.type);
+      if(socket.user!=null&&stt_err){
         con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+socket.user+"' LIMIT 1", function(err, rows){
           if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
           else if(rows.length>0){
             if(socket.type=="E"||socket.type=="F"){
-              console.log('C là E/F');
               if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+rows[0].donvi+"' AND id > "+stt_err+" ORDER BY id ASC";
               else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+socket.user+"' AND id >"+stt_err+"  ORDER BY id ASC";
               con.query(lenh, function(err1, row1s){
                 if (err1){console.log('33333'+err1);}
                 else if(row1s.length>0){
                   row1s.forEach((row1, i) => {
-                    console.log('S da gui');
                     let a1='B';
                     let a2='B';
                     let a3='B';
@@ -2008,8 +2089,7 @@ con.connect(function(err) {
               });
             }
             else {
-          console.log('C là A,B,C,D');
-          con.query("SELECT * FROM `list_err` WHERE `id` > "+stt_err+" ORDER BY id ASC", (err1, row1s)=>{
+              con.query("SELECT * FROM `list_err` WHERE `id` > "+stt_err+" ORDER BY id ASC", (err1, row1s)=>{
             if (err1){console.log(err1);}
             else if(row1s.length>0){
               row1s.forEach((item, i) => {
@@ -2029,106 +2109,14 @@ con.connect(function(err) {
                 socket.emit("S_send_nhiemvu_full",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
                   ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
                   giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
-
               });
             }
           });
-        }
+            }
         }
         });
       }
     });
-    socket.on('C_get_err_ok',(stt_vitri)=>{
-
-      if(socket.user!=null&&stt_vitri!=null){
-
-          con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+socket.user+"' LIMIT 1", function(err, rows){
-            if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
-            else if(rows.length>0){
-              if(socket.type=="E"||socket.type=="F"){
-                let lenh1;
-                if(socket.type=="E")lenh1="SELECT `tt` FROM `list_vitri` WHERE `donvi` LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-                else lenh1="SELECT `tt` FROM `list_vitri` WHERE `user` LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-                con.query(lenh1, (err2, row2s)=>{
-                    if (err2){console.log(err2);}
-                    else if(row2s.length>0){
-                        socket.emit("S_send_sum_vitri",row2s.length);
-                    }
-                  });
-              }
-              else {
-            con.query("SELECT * FROM `list_vitri` WHERE `tt`>"+stt_vitri+" ORDER BY id ASC", (err2, row2s)=>{
-                if (err2){console.log(err2);}
-                else if(row2s.length>0){
-                  socket.emit("S_send_sum_vitri",row2s.length);
-                }
-            });
-          }
-            }
-          });
-        }
-
-    });
-    socket.on('C_get_sum_vitri',(stt_vitri)=>{
-      if(socket.user!=null&&stt_vitri!=null){
-        con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+socket.user+"' LIMIT 1", function(err, rows){
-          if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
-          else if(rows.length>0){
-            if(socket.type=="E"||socket.type=="F"){
-              let lenh1;
-
-              if(socket.type=="E")lenh1="SELECT * FROM `list_vitri` WHERE `donvi` LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-              else lenh1="SELECT * FROM `list_vitri` WHERE `user` LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-              con.query(lenh1, (err2, row2s)=>{
-                  if (err2){console.log(err2);}
-                  else if(row2s.length>0){
-                      row2s.forEach((item, i) => {
-                          if(item.hinhanh!=null){
-
-                              fs.readFile(item.hinhanh, (err, data2) => {
-                                  if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
-                                  else {
-                                    let base64Data = data2.toString('base64');
-                                    socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
-                                  }
-                                });
-                            }
-                            else {
-
-                              socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: '',hinhanh_tt: -1});
-                            }
-                        });
-
-
-                  }
-              });
-            }
-            else {
-              con.query("SELECT * FROM `list_vitri` WHERE `tt` > "+stt_vitri+" ORDER BY tt ASC", (err2, row2s)=>{
-              if (err2){console.log(err2);}
-              else if(row2s.length>0){
-                  row2s.forEach((item, i) => {
-                      if(item.hinhanh!=null){
-                          fs.readFile(item.hinhanh, (err, data2) => {
-                              if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
-                              else {
-                                let base64Data = data2.toString('base64');
-                                socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
-                              }
-                            });
-                      }
-                      else socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: null,hinhanh_tt: 0});
-                    });
-
-
-              }
-          });
-            }
-          }
-        });
-      }
-    });
-
 
 
 
