@@ -2047,7 +2047,7 @@ con.connect(function(err) {
             else if(rows.length>0){
               if(socket.type=="E"||socket.type=="F"){
                 let lenh1;
-                if(rows[0].type=="E")lenh1="SELECT `tt` FROM `list_vitri` WHERE donvi LIKE '"+rows[0].ch1_donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                if(rows[0].type=="E")lenh1="SELECT `tt` FROM `list_vitri` WHERE donvi LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
                 else lenh1="SELECT `tt` FROM `list_vitri` WHERE user LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
                 con.query(lenh1, (err2, row2s)=>{
                     if (err2){console.log(err2);}
@@ -2078,12 +2078,13 @@ con.connect(function(err) {
             if(socket.type=="E"||socket.type=="F"){
               let lenh1;
               if(socket.type=="E")lenh1="SELECT * FROM `list_vitri` WHERE donvi LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-              else lenh1="SELECT * FROM `list_vitri` WHERE user LIKE '"+number+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+              else lenh1="SELECT * FROM `list_vitri` WHERE user LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
               con.query(lenh1, (err2, row2s)=>{
                   if (err2){console.log(err2);}
                   else if(row2s.length>0){
                       row2s.forEach((item, i) => {
                           if(item.hinhanh!=null){
+                            console.log('Co lay anh='+item.hinhanh);
                               fs.readFile(item.hinhanh, (err, data2) => {
                                   if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
                                   else {
@@ -2091,8 +2092,11 @@ con.connect(function(err) {
                                     socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
                                   }
                                 });
-                              }
-                              else socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: '',hinhanh_tt: -1});
+                            }
+                            else {
+                              console.log('Khong co vi tri');
+                              socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: '',hinhanh_tt: -1});
+                            }
                         });
 
 
