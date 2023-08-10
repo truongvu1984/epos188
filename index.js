@@ -2039,9 +2039,9 @@ con.connect(function(err) {
       }
     });
     socket.on('C_get_err_ok',(stt_vitri)=>{
-      console.log('C_get_err_ok out side'+stt_vitri+' user='+socket.user);
+
       if(socket.user!=null&&stt_vitri!=null){
-        console.log('C_get_err_ok');
+
           con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+socket.user+"' LIMIT 1", function(err, rows){
             if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
             else if(rows.length>0){
@@ -2070,7 +2070,6 @@ con.connect(function(err) {
 
     });
     socket.on('C_get_sum_vitri',(stt_vitri)=>{
-        console.log('C_get_sum_vitri out side'+stt_vitri+' user='+socket.user);
       if(socket.user!=null&&stt_vitri!=null){
         con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+socket.user+"' LIMIT 1", function(err, rows){
           if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
@@ -2085,7 +2084,7 @@ con.connect(function(err) {
                   else if(row2s.length>0){
                       row2s.forEach((item, i) => {
                           if(item.hinhanh!=null){
-                            console.log('Co lay anh='+item.hinhanh);
+
                               fs.readFile(item.hinhanh, (err, data2) => {
                                   if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
                                   else {
@@ -2095,7 +2094,7 @@ con.connect(function(err) {
                                 });
                             }
                             else {
-                              console.log('Khong co vi tri');
+
                               socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: '',hinhanh_tt: -1});
                             }
                         });
@@ -2105,8 +2104,7 @@ con.connect(function(err) {
               });
             }
             else {
-
-          con.query("SELECT * FROM `list_vitri` WHERE `tt` > "+stt_vitri+" ORDER BY tt ASC", (err2, row2s)=>{
+              con.query("SELECT * FROM `list_vitri` WHERE `tt` > "+stt_vitri+" ORDER BY tt ASC", (err2, row2s)=>{
               if (err2){console.log(err2);}
               else if(row2s.length>0){
                   row2s.forEach((item, i) => {
@@ -2118,17 +2116,16 @@ con.connect(function(err) {
                                 socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
                               }
                             });
-                          }
-                          else socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: null,hinhanh_tt: 0});
+                      }
+                      else socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: null,hinhanh_tt: 0});
                     });
 
 
               }
           });
-        }
+            }
           }
         });
-
       }
     });
 
