@@ -63,7 +63,9 @@ con.connect(function(err) {
 
   io.on('connection',(socket)=>
   {
+    console.log(socket.id);
     socket.emit('check_pass');
+    socket.emit('check_pass_1_login');
     socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
         if(mail&&code&&id_phone){
                 con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", function(err3, row1s){
@@ -1991,6 +1993,7 @@ con.connect(function(err) {
                                   fs.readFile(item.hinhanh, (err, data2) => {
                                       if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
                                       else {
+                                        console.log('Gui anh di='+i);
                                         let base64Data = data2.toString('base64');
                                         socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
                                       }
@@ -2117,9 +2120,6 @@ con.connect(function(err) {
         });
       }
     });
-
-
-
     socket.on('make_user', (nd,tin)=>{
       if (socket.user!=null && socket.type!=null&&socket.type=="A"){
         if(nd=='A'){
