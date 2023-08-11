@@ -2051,8 +2051,9 @@ con.connect(function(err) {
     });
     socket.on('C_get_sum_err',(stt_err)=>{
       console.log('C_get_sum_err='+stt_err+' user='+socket.user+' type='+socket.type+' donvi='+socket.donvi);
-      if(socket.user!=null&&stt_err){
+      if(socket.user!=null&&stt_err!=null){
         if(socket.type=="E"||socket.type=="F"){
+          console.log('Co vo day');
               if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+socket.donvi+"' AND id > "+stt_err+" ORDER BY id ASC LIMIT 1";
               else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+socket.user+"' AND id >"+stt_err+"  ORDER BY id ASC LIMIT 1";
               con.query(lenh, function(err1, row1s){
@@ -2075,6 +2076,7 @@ con.connect(function(err) {
                       giaonv2:giaonv2, ch2_hoten:row1s[0].ch2_hoten,ch2_chucvu:row1s[0].ch2_chucvu,ch2_donvi:row1s[0].ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
 
                 }
+                else console.log('bang 0s');
               });
             }
         else {
