@@ -1978,7 +1978,7 @@ con.connect(function(err) {
                   else {
                     if(socket.type=="A"||socket.type=="B"||socket.type=="C"||socket.type=="D"){
                       socket.join('chung');
-                      con.query("SELECT `id` FROM `list_err` WHERE `id` > "+stt_err+" ORDER BY id ASC", (err1, row1s)=>{
+                      con.query("SELECT `id` FROM `list_err` WHERE `id` > "+stt_vitri+" ORDER BY id ASC", (err1, row1s)=>{
                         if (err1){console.log(err1);}
                         else if(row1s.length>0){
                           socket.emit('S_send_sum_err',row1s[0].id,row1s.length);
@@ -1989,7 +1989,7 @@ con.connect(function(err) {
                     else {
                       socket.join(number);
                           let lenh;
-                          if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+socket.donvi+"' AND id > "+stt_err+" ORDER BY id ASC";
+                          if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+socket.donvi+"' AND id > "+stt_vitri+" ORDER BY id ASC";
                           else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+stt_err+"  ORDER BY id ASC";
                           con.query(lenh, function(err1, row1s){
                                 if (err1){console.log('33333'+err1);}
