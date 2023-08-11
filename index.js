@@ -1977,54 +1977,48 @@ con.connect(function(err) {
       }
     });
     socket.on('C_get_sum_vitri',(stt_vitri)=>{
-          if(socket.user!=null&&stt_vitri!=null){
+        if(socket.user!=null&&stt_vitri!=null){
             con.query("SELECT `donvi` FROM `list_user` WHERE `user` LIKE '"+socket.user+"' LIMIT 1", function(err, rows){
               if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
               else if(rows.length>0){
                 if(socket.type=="E"||socket.type=="F"){
                   let lenh1;
-                  if(socket.type=="E")lenh1="SELECT * FROM `list_vitri` WHERE `donvi` LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-                  else lenh1="SELECT * FROM `list_vitri` WHERE `user` LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                  if(socket.type=="E")lenh1="SELECT * FROM `list_vitri` WHERE `donvi` LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC LIMIT 1";
+                  else lenh1="SELECT * FROM `list_vitri` WHERE `user` LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC LIMIT 1";
                   con.query(lenh1, (err2, row2s)=>{
                       if (err2){console.log(err2);}
                       else if(row2s.length>0){
-                          row2s.forEach((item, i) => {
-                              if(item.hinhanh!=null){
-                                  fs.readFile(item.hinhanh, (err, data2) => {
+                          if(row2s[0].hinhanh!=null){
+                                  fs.readFile(row2s[0].hinhanh, (err, data2) => {
                                       if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
                                       else {
                                         console.log('Gui anh di='+i);
                                         let base64Data = data2.toString('base64');
-                                        socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
+                                        socket.emit("S_send_vitri_full",{lat:row2s[0].lat,lon:row2s[0].lon,name:row2s[0].name,diadanh:row2s[0].diadanh,idc:row2s[0].idc,tt:row2s[0].tt,hinhanh: base64Data,hinhanh_tt: row2s[0].hinhanh_tt});
                                       }
                                     });
-                                }
-                                else {
-                                  socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: '',hinhanh_tt: -1});
-                                }
-                            });
+                            }
+                            else { socket.emit("S_send_vitri_full",{lat:row2s[0].lat,lon:row2s[0].lon,name:row2s[0].name,diadanh:row2s[0].diadanh,idc:row2s[0].idc,tt:row2s[0].tt,hinhanh: '',hinhanh_tt: -1}); }
+
 
 
                       }
                   });
                 }
                 else {
-                  con.query("SELECT * FROM `list_vitri` WHERE `tt` > "+stt_vitri+" ORDER BY tt ASC", (err2, row2s)=>{
+                  con.query("SELECT * FROM `list_vitri` WHERE `tt` > "+stt_vitri+" ORDER BY tt ASC LIMIT 1", (err2, row2s)=>{
                   if (err2){console.log(err2);}
                   else if(row2s.length>0){
-                      row2s.forEach((item, i) => {
-                          if(item.hinhanh!=null){
-                              fs.readFile(item.hinhanh, (err, data2) => {
+                    if(row2s[0].hinhanh!=null){
+                        fs.readFile(row2s[0].hinhanh, (err, data2) => {
                                   if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
                                   else {
                                     let base64Data = data2.toString('base64');
-                                    socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
+                                    socket.emit("S_send_vitri_full",{lat:row2s[0].lat,lon:row2s[0].lon,name:row2s[0].name,diadanh:row2s[0].diadanh,idc:row2s[0].idc,tt:row2s[0].tt,hinhanh: base64Data,hinhanh_tt: row2s[0].hinhanh_tt});
                                   }
                                 });
-                          }
-                          else socket.emit("S_send_vitri_full",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: null,hinhanh_tt: 0});
-                        });
-
+                    }
+                    else socket.emit("S_send_vitri_full",{lat:row2s[0].lat,lon:row2s[0].lon,name:row2s[0].name,diadanh:row2s[0].diadanh,idc:row2s[0].idc,tt:row2s[0].tt,hinhanh: null,hinhanh_tt: 0});
 
                   }
               });
