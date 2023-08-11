@@ -2050,6 +2050,7 @@ con.connect(function(err) {
       }
     });
     socket.on('C_get_sum_err',(stt_err)=>{
+      console.log('C_get_sum_err='+stt_err+' user='+socket.user+' type='+socket.type+' donvi='+socket.donvi);
       if(socket.user!=null&&stt_err){
         if(socket.type=="E"||socket.type=="F"){
               if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+socket.donvi+"' AND id > "+stt_err+" ORDER BY id ASC LIMIT 1";
