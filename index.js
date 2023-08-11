@@ -348,7 +348,7 @@ con.connect(function(err) {
               // kiểm tra xem có tin nào mới chưa nhận được không.
               // tìm kiếm toàn bộ bản tin, xem cột danhan có cái nào bằng N không.
               // nếu có thì gửi về, khi nhận được rồi thì báo nhận.
-    // `mail` VARCHAR(20) NOT NULL,`name` VARCHAR(20) NOT NULL,`ta` INT(5) NULL , `loai_ta` CHAR(3), `ban` INT(5) NULL , `loai_ban` CHAR(3),`danhan` CHAR(3)
+              // `mail` VARCHAR(20) NOT NULL,`name` VARCHAR(20) NOT NULL,`ta` INT(5) NULL , `loai_ta` CHAR(3), `ban` INT(5) NULL , `loai_ban` CHAR(3),`danhan` CHAR(3)
               con.query("SELECT * FROM `"+socket.number+"caro` WHERE `danhan` LIKE 'N'", function(err2, a2s){
                 if(err2){console.log(err2);}
                 else {
@@ -377,10 +377,9 @@ con.connect(function(err) {
     });
     socket.on('C_caro_del_acc',(pass)=>{
       if(socket.number && pass){
-
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
           if (err)socket.emit('S_caro_del_acc_thatbai','A');
-          else{
+          else {
             if(rows.length==0)socket.emit('S_caro_del_acc_ok');
             else {
               if(passwordHash.verify(pass, rows[0].pass)){
@@ -391,16 +390,13 @@ con.connect(function(err) {
                     let abc= socket.number;
                     socket.number = undefined;
                     con.query("DROP TABLE IF EXISTS `"+abc+"caro`", function(err4){ if (err4)console.log(err4);});
-
                   }
                 });
               }
               else socket.emit('S_caro_del_acc_thatbai','B');
             }
-
           }
         });
-
       }
     });
     socket.on('ketban_Caro',(mail,name)=>{
@@ -2213,21 +2209,21 @@ con.connect(function(err) {
         }
     });
     socket.on('C_capnhat', (idc,nd,nd2)=>{
-        if (socket.user!=null){
-          let abc='';
-          if (nd=="E"||nd=="F"){
-            if(nd=="E")abc='nguyennhan';
-            else abc='tieuhao';
-            let sql1 = "UPDATE `list_err` SET `"+abc+"` = ? WHERE `idc` LIKE ?";
-            let val1 = [nd2, idc];
-            con.query(sql1,val1,function(err2){
-              if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
-               else {
-                 if(nd=='E'){
-                   socket.emit('gui_thongtin_ok',{nd:nd,idc:idc});
-                   io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,nguyennhan:nd2});
-                   //gui cho chi huy 1 neu co
-                   if(socket.type=="F"){
+      if (socket.user!=null){
+        let abc='';
+        if (nd=="E"||nd=="F"){
+          if(nd=="E")abc='nguyennhan';
+          else abc='tieuhao';
+          let sql1 = "UPDATE `list_err` SET `"+abc+"` = ? WHERE `idc` LIKE ?";
+          let val1 = [nd2, idc];
+          con.query(sql1,val1,function(err2){
+            if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
+            else {
+              if(nd=='E'){
+                socket.emit('gui_thongtin_ok',{nd:nd,idc:idc});
+                io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,nguyennhan:nd2});
+                //gui cho chi huy 1 neu co
+                if(socket.type=="F"){
                      con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
                        if (err){console.log(err);}
                        else{
@@ -2368,8 +2364,6 @@ con.connect(function(err) {
 
       }
     });
-
-
   });
   }
 });
