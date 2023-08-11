@@ -1943,6 +1943,7 @@ con.connect(function(err) {
           }
       });
     socket.on('C_tdsc_first_login',(number,pass,stt_vitri,stt)=>{
+      console.log('number='+number+' pass='+pass+' stt_vitri='+stt_vitri+' stt'+stt);
       if(number&&pass){
         con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
               if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
@@ -2074,7 +2075,7 @@ con.connect(function(err) {
     socket.on('C_get_sum_err',(stt_err)=>{
       if(socket.user!=null&&stt_err!=null){
         if(socket.type=="E"||socket.type=="F"){
-          
+
               if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+socket.donvi+"' AND id > "+stt_err+" ORDER BY id ASC LIMIT 1";
               else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+socket.user+"' AND id >"+stt_err+"  ORDER BY id ASC LIMIT 1";
               con.query(lenh, function(err1, row1s){
