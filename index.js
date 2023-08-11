@@ -1942,7 +1942,7 @@ con.connect(function(err) {
           }
       });
     socket.on('C_tdsc_first_login',(number,pass,stt_vitri)=>{
-      console.log('C_tdsc_first_login='+stt_vitri);
+      console.log('C_tdsc_first_login='+stt_vitri+' number='+number+' pass='+pass);
       if(number&&pass){
         con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
               if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
@@ -1950,6 +1950,7 @@ con.connect(function(err) {
                 if (rows[0].pass==pass){
                   socket.user = number;
                   socket.type=rows[0].type;
+                  console.log('type='+socket.type);
                   if(socket.type=="E"||socket.type=="F"){
                     socket.join(number);
                     let lenh1;
@@ -1958,6 +1959,7 @@ con.connect(function(err) {
                     con.query(lenh1, (err2, row2s)=>{
                         if (err2){console.log(err2);}
                         else if(row2s.length>0){
+                          console.log('Co gui lenhg di='+row2s.length);
                             socket.emit("S_send_sum_vitri",row2s.length);
                         }
                       });
