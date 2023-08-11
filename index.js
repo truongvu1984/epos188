@@ -1961,6 +1961,7 @@ con.connect(function(err) {
                       con.query(lenh1, (err2, row2s)=>{
                           if (err2){console.log(err2);}
                           else if(row2s.length>0){
+                            console.log('row2s[0].tt='+row2s[0].tt+' row2s.length='+row2s.length);
                             socket.emit("S_send_sum_vitri",row2s[0].tt,row2s.length);
                           }
                           else socket.emit("S_send_no_new_vitri");
@@ -1970,7 +1971,10 @@ con.connect(function(err) {
                     socket.join('chung');
                     con.query("SELECT * FROM `list_vitri` WHERE `tt`>"+stt_vitri+" ORDER BY id ASC", (err2, row2s)=>{
                     if (err2){console.log(err2);}
-                    else if(row2s.length>0){socket.emit("S_send_sum_vitri",row2s[0].tt,row2s.length);}
+                    else if(row2s.length>0){
+                      console.log('row2s[0].tt='+row2s[0].tt+' row2s.length='+row2s.length);
+                      socket.emit("S_send_sum_vitri",row2s[0].tt,row2s.length);
+                    }
                     else socket.emit("S_send_no_new_vitri");
                   });
                   }
