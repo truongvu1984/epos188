@@ -1942,6 +1942,7 @@ con.connect(function(err) {
           }
       });
     socket.on('C_tdsc_first_login',(number,pass,stt_vitri)=>{
+      console.log('C_tdsc_first_login='+stt_vitri);
       if(number&&pass){
         con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
               if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
