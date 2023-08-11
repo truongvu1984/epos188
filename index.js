@@ -1942,8 +1942,7 @@ con.connect(function(err) {
             });
           }
       });
-    socket.on('C_tdsc_first_login',(number,pass,stt_vitri)=>{
-      console.log('C_tdsc_first_login='+stt_vitri+' number='+number+' pass='+pass);
+    socket.on('C_tdsc_first_login',(number,pass,stt_vitri,stt)=>{
       if(number&&pass){
         con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
               if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
@@ -1952,28 +1951,51 @@ con.connect(function(err) {
                   socket.user = number;
                   socket.type=rows[0].type;
                   socket.donvi=rows[0].donvi;
-                  console.log('type='+socket.type);
-                  if(socket.type=="E"||socket.type=="F"){
-                    socket.join(number);
-                    let lenh1;
-                    if(socket.type=="E")lenh1="SELECT `tt` FROM `list_vitri` WHERE `donvi` LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-                    else lenh1="SELECT `tt` FROM `list_vitri` WHERE `user` LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
-                    con.query(lenh1, (err2, row2s)=>{
-                        if (err2){console.log(err2);}
-                        else if(row2s.length>0){
-                          console.log('Co gui lenhg di='+row2s.length);
+                  if(stt=='A'){
+                    if(socket.type=="E"||socket.type=="F"){
+                      socket.join(number);
+                      let lenh1;
+                      if(socket.type=="E")lenh1="SELECT `tt` FROM `list_vitri` WHERE `donvi` LIKE '"+rows[0].donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                      else lenh1="SELECT `tt` FROM `list_vitri` WHERE `user` LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC";
+                      con.query(lenh1, (err2, row2s)=>{
+                          if (err2){console.log(err2);}
+                          else if(row2s.length>0){
                             socket.emit("S_send_sum_vitri",row2s.length);
-                        }
-                      });
-                  }
-                  else {
+                          }
+                          else socket.emit("S_send_no_new_vitri");
+                        });
+                    }
+                    else {
                     socket.join('chung');
                     con.query("SELECT * FROM `list_vitri` WHERE `tt`>"+stt_vitri+" ORDER BY id ASC", (err2, row2s)=>{
                     if (err2){console.log(err2);}
-                    else if(row2s.length>0){
-                      socket.emit("S_send_sum_vitri",row2s.length);
-                    }
+                    else if(row2s.length>0){socket.emit("S_send_sum_vitri",row2s.length);}
+                    else socket.emit("S_send_no_new_vitri");
                   });
+                  }
+                  }
+                  else {
+                    if(socket.type=="A"||socket.type=="B"||socket.type=="C"||socket.type=="D"){
+                      socket.join('chung');
+                      con.query("SELECT `id` FROM `list_err` WHERE `id` > "+stt_err+" ORDER BY id ASC", (err1, row1s)=>{
+                        if (err1){console.log(err1);}
+                        else if(row1s.length>0){
+                          socket.emit('S_send_sum_err',row1s.length);
+                        }
+                        else socket.emit('S_send_no_new_err');
+                      });
+                    }
+                    else {
+                      socket.join(number);
+                          let lenh;
+                          if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+socket.donvi+"' AND id > "+stt_err+" ORDER BY id ASC";
+                          else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+stt_err+"  ORDER BY id ASC";
+                          con.query(lenh, function(err1, row1s){
+                                if (err1){console.log('33333'+err1);}
+                                else if(row1s.length>0){ socket.emit('S_send_sum_err',row1s.length); }
+                                else socket.emit('S_send_no_new_err');
+                          });
+                        }
                   }
                 }
                 else  socket.emit('login2_suco_thatbai');
@@ -2033,9 +2055,8 @@ con.connect(function(err) {
         if(socket.type=="A"||socket.type=="B"||socket.type=="C"||socket.type=="D"){
           con.query("SELECT `id` FROM `list_err` WHERE `id` > "+stt_err+" ORDER BY id ASC", (err1, row1s)=>{
             if (err1){console.log(err1);}
-            else if(row1s.length>0){
-              socket.emit('S_send_sum_err',row1s.length);
-            }
+            else if(row1s.length>0){socket.emit('S_send_sum_err',row1s.length);}
+            else socket.emit("S_send_no_new_err");
           });
         }
         else {
@@ -2045,15 +2066,15 @@ con.connect(function(err) {
               con.query(lenh, function(err1, row1s){
                     if (err1){console.log('33333'+err1);}
                     else if(row1s.length>0){ socket.emit('S_send_sum_err',row1s.length); }
+                    else socket.emit("S_send_no_new_err");
               });
             }
       }
     });
     socket.on('C_get_sum_err',(stt_err)=>{
-      console.log('C_get_sum_err='+stt_err+' user='+socket.user+' type='+socket.type+' donvi='+socket.donvi);
       if(socket.user!=null&&stt_err!=null){
         if(socket.type=="E"||socket.type=="F"){
-          console.log('Co vo day');
+          
               if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+socket.donvi+"' AND id > "+stt_err+" ORDER BY id ASC LIMIT 1";
               else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+socket.user+"' AND id >"+stt_err+"  ORDER BY id ASC LIMIT 1";
               con.query(lenh, function(err1, row1s){
