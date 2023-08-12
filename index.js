@@ -2261,7 +2261,7 @@ con.connect(function(err) {
                 else {
                   console.log('co insert');
                   var sql = "INSERT INTO `list_vitri` (idc,lat, lon,name,hinhanh,hinhanh_tt,diadanh,donvi,user) VALUES ?";
-                  var values = [[idc,nd2.lat,nd2.lon,nd2.name,filePath,0,nd2.diadanh,]];
+                  var values = [[idc,nd2.lat,nd2.lon,nd2.name,filePath,0,nd2.diadanh,socket.donvi,socket.user]];
                   con.query(sql, [values], function (err1, result) {
                   if (err1)socket.emit("giao_nhiemvu_thatbai","L");
                   else {
