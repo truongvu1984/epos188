@@ -1965,7 +1965,7 @@ con.connect(function(err) {
                     }
                     else {
                     socket.join('chung');
-                    con.query("SELECT * FROM `list_vitri` WHERE `tt`>"+stt_vitri+" ORDER BY id ASC", (err2, row2s)=>{
+                    con.query("SELECT `tt` FROM `list_vitri` WHERE `tt`>"+stt_vitri+" ORDER BY tt ASC", (err2, row2s)=>{
                     if (err2){console.log(err2);}
                     else if(row2s.length>0){
                       console.log('row2s[0].tt='+row2s[0].tt+' row2s.length='+row2s.length);
