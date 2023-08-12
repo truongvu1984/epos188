@@ -2005,7 +2005,6 @@ con.connect(function(err) {
       }
     });
     socket.on('C_get_sum_vitri',(stt_vitri)=>{
-        console.log('C_get_sum_vitri='+stt_vitri);
         if(socket.user!=null&&stt_vitri!=null){
             if(socket.type=="E"||socket.type=="F"){
                   let lenh1;
@@ -2078,7 +2077,7 @@ con.connect(function(err) {
       }
     });
     socket.on('C_get_sum_err',(stt_err)=>{
-      console.log('C_get_sum_err='+stt_err);
+
       if(socket.user!=null&&stt_err!=null){
         if(socket.type=="E"||socket.type=="F"){
               if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+socket.donvi+"' AND id > "+stt_err+" ORDER BY id ASC LIMIT 1";
@@ -2252,13 +2251,15 @@ con.connect(function(err) {
                }
             });
           }
-          else if(nd=="L"){
+        else if(nd=="L"){
+          console.log('co nhan L');
             let filename = 'p'+Date.now()+'.jpg';
             let filePath = path.join('/root/tdsc', filename);
             let byteArray = Buffer.from(nd2.hinhanh, 'base64');
             fs.writeFile(filePath, byteArray, (err) => {
                 if (err) {console.log(err);}
                 else {
+                  console.log('co insert');
                   var sql = "INSERT INTO `list_vitri` (idc,lat, lon,name,hinhanh,hinhanh_tt,diadanh,donvi,user) VALUES ?";
                   var values = [[idc,nd2.lat,nd2.lon,nd2.name,filePath,0,nd2.diadanh,]];
                   con.query(sql, [values], function (err1, result) {
