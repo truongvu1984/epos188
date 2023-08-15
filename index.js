@@ -2169,7 +2169,7 @@ con.connect(function(err) {
       console.log('C_get_nguoidung_ok');
       if(socket.user!=null){
         if(socket.type=='A'){
-          con.query("SELECT * FROM `list_donvi` WHERE `id` > "+stt+" ORDER BY id ASC", (err1, row1s)=>{
+          con.query("SELECT * FROM `list_donvi` ORDER BY id ASC", (err1, row1s)=>{
               if (err1){console.log(err1);}
               else if(row1s.length>0){socket.emit('S_send_donvi_full',row1s);}
               else socket.emit("S_send_no_new_donvi");
