@@ -2166,7 +2166,7 @@ con.connect(function(err) {
       }
     });
     socket.on('C_get_nguoidung_ok',()=>{
-      console.log('C_get_nguoidung_ok='+);
+      console.log('C_get_nguoidung_ok');
       if(socket.user!=null){
         if(socket.type=='A'){
           con.query("SELECT * FROM `list_donvi` WHERE `id` > "+stt+" ORDER BY id ASC", (err1, row1s)=>{
