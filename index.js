@@ -1828,7 +1828,6 @@ con.connect(function(err) {
 
                         }
                       });
-
                       if(tin.bantin.length>0){
                         tin.bantin.forEach((item, i) => {
                           if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND `idc` LIKE '"+item.idc+"' LIMIT 1";
@@ -1930,7 +1929,6 @@ con.connect(function(err) {
                           }
                         });
                       }
-
                     }
                   }
                   else  socket.emit('login2_suco_thatbai');
@@ -2000,13 +1998,27 @@ con.connect(function(err) {
                   }
                   else {
                       if(socket.type=='A'){
-                        if(socket.type=='A'){
-                          con.query("SELECT `id` FROM `list_user` WHERE `id` > "+stt_vitri+" ORDER BY id", (err1, row1s)=>{
+                        con.query("SELECT `id` FROM `list_user` WHERE `id` > "+stt_vitri+" ORDER BY id", (err1, row1s)=>{
                               if (err1){console.log(err1);}
                               else if(row1s.length>0){socket.emit('S_send_sum_nguoidung',row1s[0].id,row1s.length);}
                               else socket.emit("S_send_no_new_user");
-                            });
-                        }
+                        });
+                      }
+                      else if(socket.type=='B'){
+                        //B là trực ban, gửi danh sách chỉ huy đơn vị (E) cho trực ban
+                        con.query("SELECT * FROM `list_user` WHERE `type` LIKE 'E' ORDER BY id", (err1, row1s)=>{
+                            if (err1){console.log(err1);}
+                            else if(row1s.length>0){socket.emit('S_send_nguoidung_full',row1s);}
+                            else socket.emit("S_send_no_new_user");
+                        });
+                      }
+                      else if(socket.type=='E'){
+                        //B là trực ban, gửi danh sách chỉ huy đơn vị (E) cho trực ban
+                        con.query("SELECT * FROM `list_user` WHERE `type` LIKE 'F'  AND `donvi` LIKE '"+socket.donvi+"' ORDER BY id", (err1, row1s)=>{
+                            if (err1){console.log(err1);}
+                            else if(row1s.length>0){socket.emit('S_send_nguoidung_full',row1s);}
+                            else socket.emit("S_send_no_new_user");
+                        });
                       }
                   }
                 }
@@ -2141,15 +2153,30 @@ con.connect(function(err) {
         }
       }
     });
-    socket.on('C_get_err_full_ok',(stt)=>{
-      console.log('C_get_err_full_ok='+stt);
-      if(socket.user!=null&&stt!=null){
+    socket.on('C_get_err_full_ok',()=>{
+      if(socket.user!=null){
         if(socket.type=='A'){
-          con.query("SELECT `id` FROM `list_user` WHERE `id` > "+stt+" ORDER BY id", (err1, row1s)=>{
+          con.query("SELECT `id` FROM `list_user` ORDER BY id", (err1, row1s)=>{
               if (err1){console.log(err1);}
               else if(row1s.length>0){socket.emit('S_send_sum_nguoidung',row1s[0].id,row1s.length);}
               else socket.emit("S_send_no_new_user");
-            });
+          });
+        }
+        else if(socket.type=='B'){
+          //B là trực ban, gửi danh sách chỉ huy đơn vị (E) cho trực ban
+          con.query("SELECT * FROM `list_user` WHERE `type` LIKE 'E' ORDER BY id", (err1, row1s)=>{
+              if (err1){console.log(err1);}
+              else if(row1s.length>0){socket.emit('S_send_nguoidung_full',row1s);}
+              else socket.emit("S_send_no_new_user");
+          });
+        }
+        else if(socket.type=='E'){
+          //B là trực ban, gửi danh sách chỉ huy đơn vị (E) cho trực ban
+          con.query("SELECT * FROM `list_user` WHERE `type` LIKE 'F'  AND `donvi` LIKE '"+socket.donvi+"' ORDER BY id", (err1, row1s)=>{
+              if (err1){console.log(err1);}
+              else if(row1s.length>0){socket.emit('S_send_nguoidung_full',row1s);}
+              else socket.emit("S_send_no_new_user");
+          });
         }
       }
     });
