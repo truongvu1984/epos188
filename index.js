@@ -2159,7 +2159,7 @@ con.connect(function(err) {
         if(socket.type=='A'){
           con.query("SELECT * FROM `list_user` WHERE `id` > "+stt+" ORDER BY id ASC LIMIT 5 ", (err1, row1s)=>{
               if (err1){console.log(err1);}
-              else if(row1s.length>0){socket.emit('S_send_user_full',row1s);}
+              else if(row1s.length>0){socket.emit('S_send_nguoidung_full',row1s);}
               else socket.emit("S_send_no_new_user");
             });
         }
