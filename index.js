@@ -2324,32 +2324,52 @@ con.connect(function(err) {
             });
           }
         else if(nd=="L"){
-          console.log('co nhan L');
+          var sql = "INSERT INTO `list_vitri` (idc,lat, lon,name,hinhanh,hinhanh_tt,diadanh,donvi,user) VALUES ?";
+          var values = [[idc,nd2.lat,nd2.lon,nd2.name,filePath,0,nd2.diadanh,socket.donvi,socket.user]];
+          con.query(sql, [values], function (err1, result) {
+          if (err1)socket.emit("giao_nhiemvu_thatbai","L");
+          else {
+              socket.emit('gui_thongtin_ok',{nd:'L',idc:idc,tt:result.insertId});
+              io.sockets.in("chung").emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId});
+              if(socket.type=="F"){
+                  con.query("SELECT `ch1_user` FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+                      if (err){console.log(err);}
+                      else io.sockets.in(rows[0].ch1_user).emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId});
+                  });
+              }
+            }
+          });
+
+
+
+
+
+
             let filename = 'p'+Date.now()+'.jpg';
             let filePath = path.join('/root/tdsc', filename);
             let byteArray = Buffer.from(nd2.hinhanh, 'base64');
-            fs.writeFile(filePath, byteArray, (err) => {
-                if (err) {console.log(err);}
-                else {
-                  console.log('co insert');
-                  var sql = "INSERT INTO `list_vitri` (idc,lat, lon,name,hinhanh,hinhanh_tt,diadanh,donvi,user) VALUES ?";
-                  var values = [[idc,nd2.lat,nd2.lon,nd2.name,filePath,0,nd2.diadanh,socket.donvi,socket.user]];
-                  con.query(sql, [values], function (err1, result) {
-                  if (err1)socket.emit("giao_nhiemvu_thatbai","L");
-                  else {
-                      socket.emit('gui_thongtin_ok',{nd:'L',idc:idc,tt:result.insertId});
-                      console.log('Đã gửi đi');
-                      io.sockets.in("chung").emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId,hinhanh: nd2.hinhanh,hinhanh_tt:0});
-                      if(socket.type=="F"){
-                          con.query("SELECT `ch1_user` FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
-                              if (err){console.log(err);}
-                              else io.sockets.in(rows[0].ch1_user).emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId,hinhanh: nd2.hinhanh,hinhanh_tt:0});
-                          });
-                      }
-                    }
-                  });
-                }
-              });
+            // fs.writeFile(filePath, byteArray, (err) => {
+            //     if (err) {console.log(err);}
+            //     else {
+            //
+            //       var sql = "INSERT INTO `list_vitri` (idc,lat, lon,name,hinhanh,hinhanh_tt,diadanh,donvi,user) VALUES ?";
+            //       var values = [[idc,nd2.lat,nd2.lon,nd2.name,filePath,0,nd2.diadanh,socket.donvi,socket.user]];
+            //       con.query(sql, [values], function (err1, result) {
+            //       if (err1)socket.emit("giao_nhiemvu_thatbai","L");
+            //       else {
+            //           socket.emit('gui_thongtin_ok',{nd:'L',idc:idc,tt:result.insertId});
+            //
+            //           io.sockets.in("chung").emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId,hinhanh: nd2.hinhanh,hinhanh_tt:0});
+            //           if(socket.type=="F"){
+            //               con.query("SELECT `ch1_user` FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+            //                   if (err){console.log(err);}
+            //                   else io.sockets.in(rows[0].ch1_user).emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId,hinhanh: nd2.hinhanh,hinhanh_tt:0});
+            //               });
+            //           }
+            //         }
+            //       });
+            //     }
+            //   });
           }
           else if(nd=="M"){
 
