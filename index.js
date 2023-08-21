@@ -917,19 +917,18 @@ console.log('ket noi moi='+socket.id);
                         if (err1){socket.emit('login2_khongtaikhoan');}
                         else if(row1s.length>0){
                           row1s.forEach((row1, i1) => {
-                            let local_id=row.idc;
                             con.query("SELECT * FROM `"+socket.number+"line_detail` WHERE `idc` LIKE '"+row1.idlo+"'", function(err2, row2s){
                               if (err2){socket.emit('login2_khongtaikhoan');}
                               else if(row2s.length>0){
-                                list_line.push({name:row1.name,culy:row1.culy,up_id:idc,list_line1:row2s,local_id:row1.idlo});
+                                list_line.push({name:row1.name,culy:row1.culy,up_id:idc,list_line1:row2s,idlo:row1.idlo});
                                 if(i1===(row1s.length-1)){
                                   con.query("SELECT * FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err3, row3s){
                                     if(err3){socket.emit('login2_khongtaikhoan');}
-                                    else {
+                                    else if(row3s.length>0){
                                       socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
                                                                 subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:row3s});
-
                                     }
+
                                   });
                                 }
 
@@ -943,7 +942,6 @@ console.log('ket noi moi='+socket.id);
                             else {
                               socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
                                                         subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:row3s});
-
                             }
 
                           });
