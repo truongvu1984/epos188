@@ -1075,7 +1075,7 @@ console.log('ket noi moi='+socket.id);
                             if ( err4)console.log(err4);
                             else {
                                 var sql5 = "INSERT INTO `"+nguoi.number+"line_detail` (idc, lat, lon,name,color,rieng1_id,stt_rieng1,rieng2_id,stt_rieng2) VALUES ?";
-                                row6.tuyen.forEach((row7,key7)=>{
+                                row6.list_line1.forEach((row7,key7)=>{
                                     var val5 = [[row6.idlo,row7.lat, row7.lon,row7.name,row7.color, row7.rieng1_id,row7.stt_rieng1,row7.rieng2_id,row7.stt_rieng2]];
                                     con.query(sql5, [val5], function (err5, res5) {if ( err5)console.log(err5);});
                                 });
