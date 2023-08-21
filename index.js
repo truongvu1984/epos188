@@ -63,7 +63,7 @@ con.connect(function(err) {
 
   io.on('connection',(socket)=>
   {
-    console.log(socket.id);
+console.log('ket noi moi='+socket.id);
     socket.emit('check_pass');
     socket.emit('check_pass_1_login');
     socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
@@ -1277,6 +1277,7 @@ con.connect(function(err) {
       }
     });
     socket.on('search_contact',  (string)=>{
+      console.log('Co search'+socket.number+' string='+string);
       if (socket.number&&string!=null){
         con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0 LIMIT 50", function(err, a1s){
         if ( err)console.log(err);
@@ -1286,7 +1287,7 @@ con.connect(function(err) {
             let noidung=[];
             a1s.forEach(function(a1,key){
               noidung.push({user:a1.user, number: a1.number});
-                if(key===(a1s.length-1))  { socket.emit('S_send_search_contact',noidung);}
+                if(key===(a1s.length-1))  { socket.emit('S_send_search_contact',noidung);console.log('co gui='+noidung);}
 
             });
 
@@ -2332,7 +2333,6 @@ con.connect(function(err) {
           if (err1)socket.emit("giao_nhiemvu_thatbai","L");
           else {
               socket.emit('gui_thongtin_ok',{nd:'L',idc:idc,tt:result.insertId});
-
               io.sockets.in("chung").emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId,hinhanh: nd2.hinhanh,hinhanh_tt:0});
               if(socket.type=="F"){
                   con.query("SELECT `ch1_user` FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
