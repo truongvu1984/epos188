@@ -687,7 +687,7 @@ console.log('ket noi moi='+socket.id);
              else {
                if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
                   con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` CHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                  con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                  con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE, `idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                   con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                   con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(15),`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
 
@@ -1064,7 +1064,7 @@ console.log('ket noi moi='+socket.id);
                         if(mess.vitri!=null &&mess.vitri.length>0){
                           var sql3 = "INSERT INTO `"+nguoi.number+"diem` (idc, name, lat, lon,idlo) VALUES ?";
                           mess.vitri.forEach((row,key)=>{
-                                var val3 = [[idc, row.name, row.lat, row.lon,row.id]];
+                                var val3 = [[idc, row.name, row.lat, row.lon,row.idlo]];
                                 con.query(sql3, [val3], function (err3, res3) {if ( err3){console.log(err3);}});
 
                           });
@@ -1277,7 +1277,7 @@ console.log('ket noi moi='+socket.id);
       }
     });
     socket.on('search_contact',  (string)=>{
-      console.log('Co search'+socket.number+' string='+string);
+
       if (socket.number&&string!=null){
         con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0 LIMIT 50", function(err, a1s){
         if ( err)console.log(err);
@@ -1287,7 +1287,7 @@ console.log('ket noi moi='+socket.id);
             let noidung=[];
             a1s.forEach(function(a1,key){
               noidung.push({user:a1.user, number: a1.number});
-                if(key===(a1s.length-1))  { socket.emit('S_send_search_contact',noidung);console.log('co gui='+noidung);}
+                if(key===(a1s.length-1))  { socket.emit('S_send_search_contact',noidung);}
 
             });
 
