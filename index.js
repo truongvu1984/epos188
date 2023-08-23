@@ -1999,6 +1999,7 @@ console.log('ket noi moi='+socket.id);
       }
     });
     socket.on('C_get_sum_err',(stt_err)=> {
+      console.log('C_get_sum_err='+stt_err);
       if(socket.user!=null&&stt_err!=null){
         if(socket.type=="E"||socket.type=="F"){
               if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+socket.donvi+"' AND id > "+stt_err+" ORDER BY id ASC LIMIT 5";
@@ -2025,7 +2026,7 @@ console.log('ket noi moi='+socket.id);
                       giaonv2:giaonv2, ch2_hoten:row1s[0].ch2_hoten,ch2_chucvu:row1s[0].ch2_chucvu,ch2_donvi:row1s[0].ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
 
                   }
-                    socket.emit("S_send_nhiemvu_full",noidung);
+                  socket.emit("S_send_nhiemvu_full",noidung);
                 }
                 else console.log('bang 0');
               });
