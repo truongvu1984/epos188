@@ -2014,16 +2014,16 @@ console.log('ket noi moi='+socket.id);
                     let a3='B';
                     let a4='B';
                     let a0='B';
-                    let giaonv2=null;if(row1s[0].giaonv2!=null){giaonv2=get_time(row1s[0].giaonv2);a0='A';}
-                    let batdau=null;if(row1s[0].batdau!=null){batdau=get_time(row1s[0].batdau);a1='A';}
-                    let dennoi=null;if(row1s[0].dennoi!=null){dennoi=get_time(row1s[0].dennoi);a2='A';}
-                    let xong=null;if(row1s[0].xong!=null){xong=get_time(row1s[0].xong);a3='A';}
-                    let vedonvi=null;if(row1s[0].vedonvi!=null){vedonvi=get_time(row1s[0].vedonvi);a4='A';}
-                    let nguyennhan='';if(row1s[0].nguyennhan!=null)nguyennhan=row1s[0].nguyennhan;
-                    let tieuhao=''; if(row1s[0].tieuhao!=null)tieuhao=row1s[0].tieuhao;
-                    noidung.push({tt:row1s[0].id,idc:row1s[0].idc,ten:row1s[0].ten,mota:row1s[0].mota,giaonv1:get_time(row1s[0].giaonv1),tb_hoten:row1s[0].tb_hoten,tb_chucvu:row1s[0].tb_chucvu,tb_donvi:row1s[0].tb_donvi,
-                      ch1_hoten:row1s[0].ch1_hoten,ch1_chucvu:row1s[0].ch1_chucvu,ch1_donvi:row1s[0].ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
-                      giaonv2:giaonv2, ch2_hoten:row1s[0].ch2_hoten,ch2_chucvu:row1s[0].ch2_chucvu,ch2_donvi:row1s[0].ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
+                    let giaonv2=null;if(row1s[i].giaonv2!=null){giaonv2=get_time(row1s[i].giaonv2);a0='A';}
+                    let batdau=null;if(row1s[i].batdau!=null){batdau=get_time(row1s[i].batdau);a1='A';}
+                    let dennoi=null;if(row1s[i].dennoi!=null){dennoi=get_time(row1s[i].dennoi);a2='A';}
+                    let xong=null;if(row1s[i].xong!=null){xong=get_time(row1s[i].xong);a3='A';}
+                    let vedonvi=null;if(row1s[i].vedonvi!=null){vedonvi=get_time(row1s[i].vedonvi);a4='A';}
+                    let nguyennhan='';if(row1s[i].nguyennhan!=null)nguyennhan=row1s[i].nguyennhan;
+                    let tieuhao=''; if(row1s[i].tieuhao!=null)tieuhao=row1s[i].tieuhao;
+                    noidung.push({tt:row1s[i].id,idc:row1s[i].idc,ten:row1s[i].ten,mota:row1s[i].mota,giaonv1:get_time(row1s[i].giaonv1),tb_hoten:row1s[i].tb_hoten,tb_chucvu:row1s[i].tb_chucvu,tb_donvi:row1s[i].tb_donvi,
+                      ch1_hoten:row1s[i].ch1_hoten,ch1_chucvu:row1s[i].ch1_chucvu,ch1_donvi:row1s[i].ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
+                      giaonv2:giaonv2, ch2_hoten:row1s[i].ch2_hoten,ch2_chucvu:row1s[i].ch2_chucvu,ch2_donvi:row1s[i].ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
 
                   }
                   socket.emit("S_send_nhiemvu_full",noidung);
@@ -2043,16 +2043,16 @@ console.log('ket noi moi='+socket.id);
                 let a4='B';
                 let a0='B';
                 let a6='B';
-                let batdau=null;if(row1s[0].batdau!=null){batdau=get_time(row1s[0].batdau);a1='A';}
-                let dennoi=null;if(row1s[0].dennoi!=null){dennoi=get_time(row1s[0].dennoi);a2='A';}
-                let xong=null;if(row1s[0].xong!=null){xong=get_time(row1s[0].xong);a3='A';}
-                let vedonvi=null;if(row1s[0].vedonvi!=null){vedonvi=get_time(row1s[0].vedonvi);a4='A';}
-                let giaonv2=null;if(row1s[0].giaonv2!=null){giaonv2=get_time(row1s[0].giaonv2);a0='A';}
-                let nguyennhan='';if(row1s[0].nguyennhan!=null)nguyennhan=row1s[0].nguyennhan;
-                let tieuhao=''; if(row1s[0].tieuhao!=null)tieuhao=row1s[0].tieuhao;
-                noidung.push({tt:row1s[0].id,idc:row1s[0].idc,ten:row1s[0].ten,mota:row1s[0].mota,giaonv1:get_time(row1s[0].giaonv1),tb_hoten:row1s[0].tb_hoten,tb_chucvu:row1s[0].tb_chucvu,tb_donvi:row1s[0].tb_donvi,
-                  ch1_hoten:row1s[0].ch1_hoten,ch1_chucvu:row1s[0].ch1_chucvu,ch1_donvi:row1s[0].ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
-                  giaonv2:giaonv2, ch2_hoten:row1s[0].ch2_hoten,ch2_chucvu:row1s[0].ch2_chucvu,ch2_donvi:row1s[0].ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
+                let batdau=null;if(row1s[i].batdau!=null){batdau=get_time(row1s[i].batdau);a1='A';}
+                let dennoi=null;if(row1s[i].dennoi!=null){dennoi=get_time(row1s[i].dennoi);a2='A';}
+                let xong=null;if(row1s[i].xong!=null){xong=get_time(row1s[i].xong);a3='A';}
+                let vedonvi=null;if(row1s[i].vedonvi!=null){vedonvi=get_time(row1s[i].vedonvi);a4='A';}
+                let giaonv2=null;if(row1s[i].giaonv2!=null){giaonv2=get_time(row1s[i].giaonv2);a0='A';}
+                let nguyennhan='';if(row1s[i].nguyennhan!=null)nguyennhan=row1s[i].nguyennhan;
+                let tieuhao=''; if(row1s[i].tieuhao!=null)tieuhao=row1s[i].tieuhao;
+                noidung.push({tt:row1s[i].id,idc:row1s[i].idc,ten:row1s[i].ten,mota:row1s[i].mota,giaonv1:get_time(row1s[i].giaonv1),tb_hoten:row1s[i].tb_hoten,tb_chucvu:row1s[i].tb_chucvu,tb_donvi:row1s[i].tb_donvi,
+                  ch1_hoten:row1s[i].ch1_hoten,ch1_chucvu:row1s[i].ch1_chucvu,ch1_donvi:row1s[i].ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
+                  giaonv2:giaonv2, ch2_hoten:row1s[i].ch2_hoten,ch2_chucvu:row1s[i].ch2_chucvu,ch2_donvi:row1s[i].ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
 
               }
               socket.emit("S_send_nhiemvu_full",noidung);
