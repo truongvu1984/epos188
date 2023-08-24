@@ -1899,6 +1899,7 @@ console.log('ket noi moi='+socket.id);
                         con.query("SELECT `id` FROM `list_err` WHERE `id` > "+stt_vitri+" ORDER BY id ASC", (err1, row1s)=>{
                         if (err1){console.log(err1);}
                         else if(row1s.length>0){
+                          console.log('Co gui S_send_sum_err='+row1s.length+' id='+row1s[0].id);
                           socket.emit('S_send_sum_err',row1s[0].id,row1s.length);
                         }
                         else socket.emit('S_send_no_new_err');
@@ -1910,7 +1911,10 @@ console.log('ket noi moi='+socket.id);
                           else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+number+"' AND id >"+stt_err+"  ORDER BY id ASC";
                           con.query(lenh, function(err1, row1s){
                                 if (err1){console.log('33333'+err1);}
-                                else if(row1s.length>0){ socket.emit('S_send_sum_err',row1s[0].id,row1s.length); }
+                                else if(row1s.length>0){
+                                  console.log('AAAAACo gui S_send_sum_err='+row1s.length+' id='+row1s[0].id);
+                                  socket.emit('S_send_sum_err',row1s[0].id,row1s.length);
+                                 }
                                 else socket.emit('S_send_no_new_err');
                           });
                         }
