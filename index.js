@@ -1999,7 +1999,7 @@ console.log('ket noi moi='+socket.id);
       }
     });
     socket.on('C_get_sum_err',(stt_err)=> {
-      console.log('C_get_sum_err='+stt_err);
+
       if(socket.user!=null&&stt_err!=null){
         if(socket.type=="E"||socket.type=="F"){
               if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+socket.donvi+"' AND id > "+stt_err+" ORDER BY id ASC LIMIT 5";
@@ -2062,53 +2062,32 @@ console.log('ket noi moi='+socket.id);
         }
       }
     });
-    socket.on('C_get_sum_vitri',(stt_vitri)=>{
-        if(socket.user!=null&&stt_vitri!=null){
-            if(socket.type=="E"||socket.type=="F"){
-                  let lenh1;
-                  if(socket.type=="E")lenh1="SELECT * FROM `list_vitri` WHERE `donvi` LIKE '"+socket.donvi+"' AND tt>"+stt_vitri+" ORDER BY tt ASC LIMIT 1";
-                  else lenh1="SELECT * FROM `list_vitri` WHERE `user` LIKE '"+socket.user+"' AND tt>"+stt_vitri+" ORDER BY tt ASC LIMIT 1";
-                  con.query(lenh1, (err2, row2s)=>{
-                      if (err2){console.log(err2);}
-                      else if(row2s.length>0){
-                          if(row2s[0].hinhanh!=null){
-                                  fs.readFile(row2s[0].hinhanh, (err, data2) => {
-                                      if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
-                                      else {
-                                        console.log('Gui anh di=');
-                                        let base64Data = data2.toString('base64');
-                                        socket.emit("S_send_vitri_full",{lat:row2s[0].lat,lon:row2s[0].lon,name:row2s[0].name,diadanh:row2s[0].diadanh,idc:row2s[0].idc,tt:row2s[0].tt,hinhanh: base64Data,hinhanh_tt: row2s[0].hinhanh_tt});
-                                      }
-                                    });
-                            }
-                            else { socket.emit("S_send_vitri_full",{lat:row2s[0].lat,lon:row2s[0].lon,name:row2s[0].name,diadanh:row2s[0].diadanh,idc:row2s[0].idc,tt:row2s[0].tt,hinhanh: '',hinhanh_tt: -1}); }
-
-
-
-                      }
-                  });
-                }
-            else {
-                  con.query("SELECT * FROM `list_vitri` WHERE `tt` > "+stt_vitri+" ORDER BY tt ASC LIMIT 1", (err2, row2s)=>{
-                  if (err2){console.log(err2);}
-                  else if(row2s.length>0){
-                    if(row2s[0].hinhanh!=null){
-                        fs.readFile(row2s[0].hinhanh, (err, data2) => {
-                                  if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
-                                  else {
-                                    let base64Data = data2.toString('base64');
-                                    socket.emit("S_send_vitri_full",{lat:row2s[0].lat,lon:row2s[0].lon,name:row2s[0].name,diadanh:row2s[0].diadanh,idc:row2s[0].idc,tt:row2s[0].tt,hinhanh: base64Data,hinhanh_tt: row2s[0].hinhanh_tt});
-                                  }
-                                });
-                    }
-                    else socket.emit("S_send_vitri_full",{lat:row2s[0].lat,lon:row2s[0].lon,name:row2s[0].name,diadanh:row2s[0].diadanh,idc:row2s[0].idc,tt:row2s[0].tt,hinhanh: null,hinhanh_tt: 0});
-
-                  }
-              });
-                }
-
-          }
+    socket.on('C_reg_vitri',(idc)=>{
+      if(socket.user!=null&&idc!=null){
+        con.query("SELECT `tt`,`lat`,`lon` FROM `list_vitri` WHERE `idc` LIKE '"+idc+"' ORDER BY tt ASC", (err2, row2s)=>{
+            if (err2){console.log(err2);}
+            else socket.emit("S_send_vitri_ok",row2s);
         });
+      }
+    });
+    socket.on('C_reg_hinhanh',(idc,tt)=>{
+        if(socket.user!=null&&tt!=null){
+          con.query("SELECT `hinhanh`,`name`,`diadanh` FROM `list_vitri` WHERE `idc` LIKE '"+idc+"' AND `tt`="+tt+" ORDER BY tt ASC LIMIT 1", (err2, row2s)=>{
+              if (err2){console.log(err2);}
+              else {
+                if(row2s[0].hinhanh!=null){
+                  fs.readFile(row2s[0].hinhanh, (err, data2) => {
+                      if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
+                      else {
+                        let base64Data = data2.toString('base64');
+                        socket.emit("S_send_hinhanh_ok",{name:row2s[0].name,diadanh:row2s[0].diadanh,hinhanh: base64Data});
+                      }
+                    });
+                }
+              }
+          });
+        }
+            });
     socket.on('C_get_vitri_ok',(stt_err)=>{
       console.log('C_get_vitri_ok='+stt_err);
       if(socket.user!=null&&stt_err!=null){
@@ -2134,7 +2113,6 @@ console.log('ket noi moi='+socket.id);
             }
       }
     });
-
     socket.on('C_get_err_full_ok',()=>{
       if(socket.user!=null){
         if(socket.type=='A'){
@@ -2296,25 +2274,26 @@ console.log('ket noi moi='+socket.id);
         else if(nd=="L"){
           let filename = 'p'+Date.now()+'.jpg';
           let filePath = path.join('/root/tdsc', filename);
-          var sql = "INSERT INTO `list_vitri` (idc,lat, lon,name,hinhanh,hinhanh_tt,diadanh,donvi,user) VALUES ?";
-          var values = [[idc,nd2.lat,nd2.lon,nd2.name,filePath,0,nd2.diadanh,socket.donvi,socket.user]];
-          con.query(sql, [values], function (err1, result) {
-          if (err1)socket.emit("giao_nhiemvu_thatbai","L");
-          else {
-              socket.emit('gui_thongtin_ok',{nd:'L',idc:idc,tt:result.insertId});
-              io.sockets.in("chung").emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId});
-              if(socket.type=="F"){
-                  con.query("SELECT `ch1_user` FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
-                      if (err){console.log(err);}
-                      else io.sockets.in(rows[0].ch1_user).emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,name:nd2.name,diadanh:nd2.diadanh,idc:idc,tt:result.insertId});
-                  });
-              }
-            }
-          });
           let byteArray = Buffer.from(nd2.hinhanh, 'base64');
-            fs.writeFile(filePath, byteArray, (err) => {
+          fs.writeFile(filePath, byteArray, (err) => {
                 if (err) {console.log(err);}
-
+                else {
+                  var sql = "INSERT INTO `list_vitri` (idc,lat, lon,name,hinhanh,hinhanh_tt,diadanh,donvi,user) VALUES ?";
+                  var values = [[idc,nd2.lat,nd2.lon,nd2.name,filePath,0,nd2.diadanh,socket.donvi,socket.user]];
+                  con.query(sql, [values], function (err1, result) {
+                  if (err1)socket.emit("giao_nhiemvu_thatbai","L");
+                  else {
+                      socket.emit('gui_thongtin_ok',{nd:'L',idc:idc,tt:result.insertId});
+                      io.sockets.in("chung").emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,idc:idc,tt:result.insertId});
+                      if(socket.type=="F"){
+                          con.query("SELECT `ch1_user` FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+                              if (err){console.log(err);}
+                              else io.sockets.in(rows[0].ch1_user).emit("S_capnhat_vitri",{lat:nd2.lat,lon:nd2.lon,idc:idc,tt:result.insertId});
+                          });
+                      }
+                    }
+                  });
+                }
               });
           }
           else if(nd=="M"){
@@ -2325,18 +2304,19 @@ console.log('ket noi moi='+socket.id);
                else {
                  con.query("DELETE FROM `list_vitri` WHERE `tt` ="+nd2, function(err3){
                    if (err3)console.log(err3);
+                   else {
+                     socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,tt:nd2});
+                     io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,tt:nd2});
+                     if(socket.type=="F"){
+                       con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+                         if (err){console.log(err);}
+                         else{
+                           io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,tt:nd2});
+                         }
+                       });
+                     }
+                   }
                  });
-                  socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,tt:nd2,tt_del:result.insertId});
-                  io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,tt:nd2,tt_del:result.insertId});
-                  //gui cho chi huy 1 neu co
-                  if(socket.type=="F"){
-                    con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
-                      if (err){console.log(err);}
-                      else{
-                        io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,tt:nd2,tt_del:result.insertId});
-                      }
-                    });
-                  }
 
 
                }
