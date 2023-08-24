@@ -1981,7 +1981,10 @@ console.log('ket noi moi='+socket.id);
                           noidung.push({tt_vitri:tt,tt:row1s[i].id,idc:row1s[i].idc,ten:row1s[i].ten,mota:row1s[i].mota,giaonv1:get_time(row1s[i].giaonv1),tb_hoten:row1s[i].tb_hoten,tb_chucvu:row1s[i].tb_chucvu,tb_donvi:row1s[i].tb_donvi,
                             ch1_hoten:row1s[i].ch1_hoten,ch1_chucvu:row1s[i].ch1_chucvu,ch1_donvi:row1s[i].ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
                             giaonv2:giaonv2, ch2_hoten:row1s[i].ch2_hoten,ch2_chucvu:row1s[i].ch2_chucvu,ch2_donvi:row1s[i].ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
-                          if(i===(row1s.length-1))socket.emit("S_send_nhiemvu_full",noidung);
+                          if(i===(row1s.length-1)){
+                            console.log('S_send_nhiemvu_full='+);
+                            socket.emit("S_send_nhiemvu_full",noidung.length);
+                          }
                         }
                     });
                   }
