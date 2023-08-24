@@ -1958,6 +1958,7 @@ console.log('ket noi moi='+socket.id);
               con.query(lenh, function(err1, row1s){
                 if (err1){console.log('33333'+err1);}
                 else if(row1s.length>0){
+                  let noidung=[];
                   for(let i=0;i<row1s.length;i++){
                     con.query("SELECT `tt` FROM `list_vitri` WHERE `idc` LIKE '"+row1s[i].idc+"' ORDER BY tt DESC LIMIT 1", (err2, row2s)=>{
                         if (err2){console.log(err2);}
