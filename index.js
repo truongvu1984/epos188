@@ -2013,14 +2013,19 @@ console.log('ket noi moi='+socket.id);
       }
     });
     socket.on('"C_reg_tt_vitri"',(arr)=>{
+      console.log('Co nhan C_reg_tt_vitri');
       if(socket.user!=null&&arr!=null&&isArray(arr)){
+        console.log('1111111');
         let noidung=[];
         arr.forEach((item, i) => {
           con.query("SELECT `tt` FROM `list_vitri` WHERE `idc` LIKE '"+item+"' ORDER BY tt DESC LIMIT 1", (err2, row2s)=>{
               if (err2){console.log(err2);}
               else {
                 noidung.push({idc:item,tt:row2s[0].tt});
-                if(i===(arr.length-1))socket.emit('S_send_max_tt_vitri',noidung);
+                if(i===(arr.length-1)){
+                  console.log('S_send_max_tt_vitri='+noidung.length);
+                  socket.emit('S_send_max_tt_vitri',noidung);
+                }
               }
           });
         });
@@ -2098,9 +2103,9 @@ console.log('ket noi moi='+socket.id);
         }
         else if(socket.type=='E'){
           //B là trực ban, gửi danh sách chỉ huy đơn vị (E) cho trực ban
-          con.query("SELECT * FROM `list_user` WHERE `type` LIKE 'F'  AND `donvi` LIKE '"+socket.donvi+"' ORDER BY id", (err1, row1s)=>{
+          con.query("SELECT * FROM `list_user` WHERE `donvi` LIKE '"+socket.donvi+"' ORDER BY id", (err1, row1s)=>{
               if (err1){console.log(err1);}
-              else if(row1s.length>0){socket.emit('S_send_nguoidung_full',row1s);}
+              else if(row1s.length>0){console.log('co  S_send_nguoidung_full');socket.emit('S_send_nguoidung_full',row1s);}
               else socket.emit("S_send_no_new_user");
           });
         }
