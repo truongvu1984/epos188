@@ -1936,6 +1936,7 @@ console.log('ket noi moi='+socket.id);
           }
       });
     socket.on('C_tdsc_first_login',(number,pass,stt_vitri,stt)=>{
+      console.log('C_tdsc_first_login='+number);
       if(number&&pass){
         con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
             if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
@@ -1947,6 +1948,7 @@ console.log('ket noi moi='+socket.id);
                   if(socket.type=="A"||socket.type=="B"||socket.type=="C"||socket.type=="D")socket.join('chung');
                   else socket.join(number);
                   if(stt=='A'){
+
                     if(socket.type=="A"||socket.type=="B"||socket.type=="C"||socket.type=="D"){
                         con.query("SELECT `id` FROM `list_err` WHERE `id` > "+stt_vitri+" ORDER BY id ASC", (err1, row1s)=>{
                         if (err1){console.log(err1);}
