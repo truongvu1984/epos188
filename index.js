@@ -1625,7 +1625,7 @@ console.log('ket noi moi='+socket.id);
                       //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
                       con.query("SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id ASC", function(err1, row1s){
                         if (err1){console.log(err1);}
-                        else if(row1s.length>0{
+                        else if(row1s.length>0){
                           let noidung=[];
                           row1s.forEach((row1, i) => {
                             let a1='B';
