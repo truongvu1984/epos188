@@ -1883,6 +1883,7 @@ console.log('ket noi moi='+socket.id);
           }
       });
     socket.on('C_tdsc_first_login',(number,pass,stt_vitri,stt)=>{
+      console.log('C_tdsc_first_login='+number+' stt_vitri='+stt_vitri+' stt='+stt);
       if(number&&pass){
         con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+number+"' LIMIT 1", function(err, rows){
             if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
