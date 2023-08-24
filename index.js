@@ -1646,20 +1646,10 @@ console.log('ket noi moi='+socket.id);
 
                             con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.idc+"'", function(err2, row2s){
                               if (err2){console.log(err2);}
-                              else {
-                                if(row2s.length>0){
-                                  row2s.forEach((item, i) => {
-                                      if(item.hinhanh!=null){
-                                        fs.readFile(item.hinhanh, (err, data2) => {
-                                          if (err) { console.log('Có lỗi xảy ra khi đọc file:');}
-                                          else {
-                                            let base64Data = data2.toString('base64');
-                                            socket.emit("S_capnhat_vitri",{lat:item.lat,lon:item.lon,name:item.name,diadanh:item.diadanh,idc:item.idc,tt:item.tt,hinhanh: base64Data,hinhanh_tt: item.hinhanh_tt});
-                                          }
-                                        });
-                                      }
-                                    });
-                                }
+                              else if(row2s.length>0){
+                                  socket.emit("S_capnhat_vitri",{lat:item.lat,lon:item.lon,idc:item.idc,tt:item.tt});
+
+
 
                               }
                             });
@@ -1670,6 +1660,7 @@ console.log('ket noi moi='+socket.id);
                       });
                       if(tin.bantin!=undefined&&tin.bantin.length>0){
                         tin.bantin.forEach((item, i) => {
+                          console.log('idc='+item.idc+' a25='+item.a25);
                         con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+item.idc+"' LIMIT 1", function(err2, row2s){
                             if (err2){console.log(err2);}
                             else if(row2s.length>0){
