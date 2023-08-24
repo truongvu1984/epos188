@@ -1645,7 +1645,7 @@ console.log('ket noi moi='+socket.id);
                               ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
                               giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
 
-                            con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.idc+"' ORDER BY `tt` DESC LIMIT 1"+, function(err2, row2s){
+                            con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.idc+"' ORDER BY `tt` DESC LIMIT 1", function(err2, row2s){
                               if (err2){console.log(err2);}
                               else if(row2s.length>0){
                                   noidung.push({idc:row1.idc,tt:row2s[0].tt});
@@ -1782,7 +1782,7 @@ console.log('ket noi moi='+socket.id);
                             socket.emit("S_send_nhiemvu",{tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
                               ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
                               giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4});
-                              con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.idc+"' ORDER BY `tt` DESC LIMIT 1"+, function(err2, row2s){
+                              con.query("SELECT * FROM `list_vitri` WHERE idc LIKE '"+row1.idc+"' ORDER BY `tt` DESC LIMIT 1", function(err2, row2s){
                                 if (err2){console.log(err2);}
                                 else if(row2s.length>0){
                                     noidung.push({idc:row1.idc,tt:row2s[0].tt});
