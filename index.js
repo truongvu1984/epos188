@@ -1953,6 +1953,7 @@ console.log('ket noi moi='+socket.id);
     socket.on('C_get_sum_err',(stt_err)=> {
       if(socket.user!=null&&stt_err!=null){
         if(socket.type=="E"||socket.type=="F"){
+          console.log('C_get_sum_err='+stt_err);
               if(socket.type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_donvi` LIKE '"+socket.donvi+"' AND id > "+stt_err+" ORDER BY id ASC LIMIT 5";
               else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+socket.user+"' AND id >"+stt_err+"  ORDER BY id ASC LIMIT 5";
               con.query(lenh, function(err1, row1s){
