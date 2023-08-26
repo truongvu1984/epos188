@@ -1763,8 +1763,7 @@ con.connect(function(err) {
                     else {
                       socket.join(tin.user);
                       let lenh;
-                      let lenh;
-                      let lenh;
+
                       if(trangthai=='A')lenh="SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id DESC LIMIT 20";
                       else lenh="SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id ASC";
                       if(trangthai=='A'){
