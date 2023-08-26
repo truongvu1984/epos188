@@ -63,7 +63,7 @@ con.connect(function(err) {
 
   io.on('connection',(socket)=>
   {
-console.log('ket noi moi='+socket.id);
+
     socket.emit('check_pass');
     socket.emit('check_pass_1_login');
     socket.on('regis_1_windlaxy_A',(mail,code,id_phone)=>{
@@ -1623,7 +1623,10 @@ console.log('ket noi moi='+socket.id);
                     if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
                       socket.join("chung");
                       //kiểm tra xem có bản tin nào chưa gửi về không thì gửi về cho nó
-                      con.query("SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id ASC", function(err1, row1s){
+                      let lenh;
+                      if(trangthai=='A')lenh="SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id DESC LIMIT 20";
+                      else lenh="SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id ASC";
+                      con.query(lenh, function(err1, row1s){
                         if (err1){console.log(err1);}
                         else if(row1s.length>0){
                           let noidung=[];
@@ -1760,8 +1763,19 @@ console.log('ket noi moi='+socket.id);
                     else {
                       socket.join(tin.user);
                       let lenh;
-                      if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND id > "+tin.tt+" ORDER BY id ASC";
-                      else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+tin.user+"' AND id >"+tin.tt+"  ORDER BY id ASC";
+                      let lenh;
+                      let lenh;
+                      if(trangthai=='A')lenh="SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id DESC LIMIT 20";
+                      else lenh="SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id ASC";
+                      if(trangthai=='A'){
+                        if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND id > "+tin.tt+" ORDER BY id DESC LIMIT 20";
+                        else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+tin.user+"' AND id >"+tin.tt+"  ORDER BY id DESC LIMIT 20";
+                      }
+                      else {
+                        if(rows[0].type=="E")lenh="SELECT * FROM `list_err` WHERE `ch1_user` LIKE '"+tin.user+"' AND id > "+tin.tt+" ORDER BY id ASC";
+                        else lenh="SELECT * FROM `list_err` WHERE `ch2_user` LIKE '"+tin.user+"' AND id >"+tin.tt+"  ORDER BY id ASC";
+                      }
+
                       con.query(lenh, function(err1, row1s){
                         if (err1){console.log('33333'+err1);}
                         else if(row1s.length>0){
