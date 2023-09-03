@@ -413,7 +413,7 @@ con.connect(function(err) {
               if ( err3){console.log(err3);}
               else {
                 socket.emit('S_get_reg_ketban',{mail:mail,name:rows[0].user});
-                var sql4 = "INSERT INTO `"+mail+"caro` (mail, name, time, ngang,doc,thongbao,stt) VALUES ?";
+                var sql4 = "INSERT INTO `"+mail+"caro` (mail, name, time,thongbao,stt) VALUES ?";
                 var val4 = [[mail, rows[0].user, date, 'D','B']];
                 con.query(sql4, [val4], function (err4, res4) {
                   if ( err4){console.log(err4);}
