@@ -406,14 +406,15 @@ con.connect(function(err) {
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, rows){
           if (err || rows.length ==0){socket.emit('taikhoan_da_xoa');}
           else{
+            let date=new Date();
             var sql3 = "INSERT INTO `"+socket.number+"caro` (mail, name, time, thongbao,stt) VALUES ?";
-            var val3 = [[mail, row[0].user, row.lat, 'B','A']];
+            var val3 = [[mail, row[0].user, date, 'B','A']];
             con.query(sql3, [val3], function (err3, res3) {
               if ( err3){console.log(err3);}
               else {
                 socket.emit('S_get_reg_ketban',{mail:mail,name:rows[0].user});
                 var sql4 = "INSERT INTO `"+mail+"caro` (mail, name, time, ngang,doc,thongbao,stt) VALUES ?";
-                var val4 = [[mail, row[0].user, row.lat, 'D','B']];
+                var val4 = [[mail, row[0].user, date, 'D','B']];
                 con.query(sql4, [val4], function (err4, res4) {
                   if ( err4){console.log(err4);}
                   else {
