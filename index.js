@@ -355,14 +355,11 @@ con.connect(function(err) {
               // tìm kiếm toàn bộ bản tin, xem cột danhan có cái nào bằng N không.
               // nếu có thì gửi về, khi nhận được rồi thì báo nhận.
               // `mail` VARCHAR(20) NOT NULL,`name` VARCHAR(20) NOT NULL,`ta` INT(5) NULL , `loai_ta` CHAR(3), `ban` INT(5) NULL , `loai_ban` CHAR(3),`danhan` CHAR(3)
-              con.query("SELECT * FROM `"+socket.number+"caro` WHERE `danhan` LIKE 'N'", function(err2, a2s){
+              con.query("SELECT `thongbao`,`mail` FROM `"+socket.number+"caro` WHERE `stt` LIKE 'B'", function(err2, a2s){
                 if(err2){console.log(err2);}
                 else {
                   if(a2s.length>0){
-                    a2s.forEach((a2,key)=>{
-                      socket.emit('S_send_diem',a2.mail,a2.ban,a2.loai_ban,a2.name,a2.utien);
-                    });
-
+                      socket.emit('S_capnhat_caro',a2s);
                   }
                 }
               });
