@@ -510,7 +510,8 @@ con.connect(function(err) {
         });
       }
     });
-    socket.on('search_contact_caro', function (string){
+    socket.on('search_contact_caro',(string)=>{
+      console.log('search_contact_caro='+string);
       if (socket.number&&string!=null){
         con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account2` WHERE LOCATE('"+string+"',number)>0 LIMIT 50", function(err, a1s){
         if ( err)console.log(err);
@@ -521,6 +522,7 @@ con.connect(function(err) {
             a1s.forEach(function(a1,key){
               noidung.push({user:a1.user, number: a1.number});
                 if(key===(a1s.length-1))  {
+                  console.log(noidung);
                   socket.emit('S_send_search_caro',noidung);
 
                 }
@@ -1322,7 +1324,6 @@ con.connect(function(err) {
       }
     });
     socket.on('search_contact',  (string)=>{
-
       if (socket.number&&string!=null){
         con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0 LIMIT 50", function(err, a1s){
         if ( err)console.log(err);
