@@ -408,13 +408,13 @@ con.connect(function(err) {
           else{
             let date=new Date();
             var sql3 = "INSERT INTO `"+socket.number+"caro` (mail, name, time, thongbao,stt) VALUES ?";
-            var val3 = [[mail, row[0].user, date, 'B','A']];
+            var val3 = [[mail, rows[0].user, date, 'B','A']];
             con.query(sql3, [val3], function (err3, res3) {
               if ( err3){console.log(err3);}
               else {
                 socket.emit('S_get_reg_ketban',{mail:mail,name:rows[0].user});
                 var sql4 = "INSERT INTO `"+mail+"caro` (mail, name, time, ngang,doc,thongbao,stt) VALUES ?";
-                var val4 = [[mail, row[0].user, date, 'D','B']];
+                var val4 = [[mail, rows[0].user, date, 'D','B']];
                 con.query(sql4, [val4], function (err4, res4) {
                   if ( err4){console.log(err4);}
                   else {
@@ -520,7 +520,7 @@ con.connect(function(err) {
           if(a1s.length>0){
             let noidung=[];
             a1s.forEach(function(a1,key){
-              noidung.push({user:a1.user, number: a1.number});
+              if(noidung!=socket.number)noidung.push({user:a1.user, number: a1.number});
                 if(key===(a1s.length-1))  {
                   console.log(noidung);
                   socket.emit('S_send_search_caro',noidung);
