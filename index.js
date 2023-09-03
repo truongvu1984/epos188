@@ -434,15 +434,16 @@ con.connect(function(err) {
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, rows){
           if (err || rows.length ==0){socket.emit('taikhoan_da_xoa');}
           else{
+            let date=new Date();
             if(stt=='A'){
-              con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", function(err2){
+              con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A',`time`="+date+", `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", function(err2){
                 if (err2)console.log(err2);
                 else {
                   socket.emit('S_get_xacnhan_caro',mail,'A');
                  }
               });
               // F nghĩa là đã đồng ý kết bạn rồi
-              con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'F', `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", function(err2){
+              con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'F',`time`="+date+", `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", function(err2){
                 if (err2)console.log(err2);
                 else {
                   io.sockets.in(mail).emit('S_xacnhan_ketban',socket.number,'A');
@@ -451,13 +452,13 @@ con.connect(function(err) {
             }
             else {
             //K là không đồng ý kết bạn thằng này
-              con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'K', `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", function(err3){
+              con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'K',`time`="+date+",  `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", function(err3){
               if (err3)socket.emit('taikhoan_da_xoa');
               else {
                 socket.emit('S_get_xacnhan_caro',mail,'B');
                 //sau khi xóa xong thì báo cho bên kia biết rằng người ta đã từ chối
                 //E nghĩa là từ chối kết bạn, bật  cờ stt lên B để biết là tin này người kia chưa nhận, nếu có mạng thì sẽ gửi lại
-                con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'E', `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", function(err2){
+                con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'E',`time`="+date+",  `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", function(err2){
                   if (err2)console.log(err2);
                   else { io.sockets.in(mail).emit('S_xacnhan_ketban',socket.number,'B'); }
                 });
@@ -470,8 +471,9 @@ con.connect(function(err) {
     });
     socket.on('C_xacnnhan_ketban_ok',(mail,stt)=>{
       if(socket.number!=null&&mail!=null&&stt!=null){
+        let date=new Date();
         if(stt=='A'){
-          con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", function(err2){
+          con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A',`time`="+date+",  `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
 
           });
