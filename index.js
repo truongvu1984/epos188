@@ -404,7 +404,7 @@ con.connect(function(err) {
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, rows){
           if (err || rows.length ==0){socket.emit('taikhoan_da_xoa');}
           else{
-            let date=new Date();
+            let date=Date.now();
             var sql3 = "INSERT INTO `"+socket.number+"caro` (mail, name, time, thongbao,stt) VALUES ?";
             var val3 = [[mail, rows[0].user, date, 'B','A']];
             con.query(sql3, [val3], function (err3, res3) {
@@ -413,7 +413,7 @@ con.connect(function(err) {
                 console.log('Da gui S_get_reg_ketban');
                 socket.emit('S_get_reg_ketban',{mail:mail,name:rows[0].user});
                 var sql4 = "INSERT INTO `"+mail+"caro` (mail, name, time,thongbao,stt) VALUES ?";
-                var val4 = [[mail, rows[0].user, date, 'D','B']];
+                var val4 = [[socket.number, socket.username, date, 'D','B']];
                 con.query(sql4, [val4], function (err4, res4) {
                   if ( err4){console.log(err4);}
                   else {
@@ -433,7 +433,7 @@ con.connect(function(err) {
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, rows){
           if (err || rows.length ==0){socket.emit('taikhoan_da_xoa');}
           else{
-            let date=new Date();
+            let date=Date.now();
             if(stt=='A'){
               con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A',`time`="+date+", `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", function(err2){
                 if (err2)console.log(err2);
@@ -470,7 +470,8 @@ con.connect(function(err) {
     });
     socket.on('C_xacnnhan_ketban_ok',(mail,stt)=>{
       if(socket.number!=null&&mail!=null&&stt!=null){
-        let date=new Date();
+        
+        let date= Date.now()
         if(stt=='A'){
           con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A',`time`="+date+",  `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
