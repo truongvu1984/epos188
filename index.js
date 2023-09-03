@@ -400,6 +400,7 @@ con.connect(function(err) {
     });
     socket.on('C_reg_ketban_caro',(mail)=>{
       if(socket.number!=null&&mail!=null){
+        console.log('C_reg_ketban_caro');
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, rows){
           if (err || rows.length ==0){socket.emit('taikhoan_da_xoa');}
           else{
@@ -409,6 +410,7 @@ con.connect(function(err) {
             con.query(sql3, [val3], function (err3, res3) {
               if ( err3){console.log(err3);}
               else {
+                console.log('Da gui S_get_reg_ketban');
                 socket.emit('S_get_reg_ketban',{mail:mail,name:rows[0].user});
                 var sql4 = "INSERT INTO `"+mail+"caro` (mail, name, time,thongbao,stt) VALUES ?";
                 var val4 = [[mail, rows[0].user, date, 'D','B']];
