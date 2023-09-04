@@ -378,6 +378,7 @@ con.connect(function(err) {
       }
 
     });
+
     socket.on('C_reg_caro_1',(data)=>{
       if(data.rightuser&&data.right_pass){
           con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
@@ -398,6 +399,7 @@ con.connect(function(err) {
 
       }
     });
+      // thằng C đề nghị kết bạn với A
     socket.on('C_reg_ketban_caro',(mail)=>{
       if(socket.number!=null&&mail!=null){
         console.log('C_reg_ketban_caro');
@@ -411,7 +413,7 @@ con.connect(function(err) {
               if ( err3){console.log(err3);}
               else {
                 console.log('Da gui S_get_reg_ketban');
-                socket.emit('S_get_reg_ketban',{mail:mail,name:rows[0].user});
+                socket.emit('S_danhan_reg_ketban',{mail:mail,name:rows[0].user});
                 var sql4 = "INSERT INTO `"+mail+"caro` (mail, name, time,thongbao,stt) VALUES ?";
                 var val4 = [[socket.number, socket.username, date, 'D','B']];
                 con.query(sql4, [val4], function (err4, res4) {
@@ -430,19 +432,22 @@ con.connect(function(err) {
     });
     socket.on('C_xacnhan_ketban',(mail,stt)=>{
       if(socket.number!=null&&mail!=null&&stt!=null){
+        console.log('C_xacnhan_ketban');
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, rows){
           if (err || rows.length ==0){socket.emit('taikhoan_da_xoa');}
           else{
             let date=Date.now();
             if(stt=='A'){
-              con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A',`time`="+date+", `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", function(err2){
+              //nếu đồng ý, xác nhận rằng máy chủ đã nhận được đề nghị, mày lưu thằng đó vào CSDL đi, lưu rồi thì báo lại tao.
+              con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A',`time`="+date+", `stt` = 'B' WHERE `mail` LIKE '"+mail+"'", function(err2){
                 if (err2)console.log(err2);
                 else {
+                  console.log('S_get_xacnhan_caro');
                   socket.emit('S_get_xacnhan_caro',mail,'A');
                  }
               });
-              // F nghĩa là đã đồng ý kết bạn rồi
-              con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'F',`time`="+date+", `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", function(err2){
+              // đông thời báo cho thằng gửi lời đề nghị, rằng thằng này đã chấp nhận
+              con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'A',`time`="+date+", `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", function(err2){
                 if (err2)console.log(err2);
                 else {
                   io.sockets.in(mail).emit('S_xacnhan_ketban',socket.number,'A');
@@ -470,12 +475,10 @@ con.connect(function(err) {
     });
     socket.on('C_xacnnhan_ketban_ok',(mail,stt)=>{
       if(socket.number!=null&&mail!=null&&stt!=null){
-        
         let date= Date.now()
         if(stt=='A'){
           con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A',`time`="+date+",  `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", function(err2){
             if (err2)console.log(err2);
-
           });
         }
         else {
@@ -486,6 +489,7 @@ con.connect(function(err) {
 
       }
     });
+
     socket.on('C_caro_del_acc',(pass)=>{
       if(socket.number && pass){
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
