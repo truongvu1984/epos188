@@ -351,11 +351,7 @@ con.connect(function(err) {
               socket.number = data.rightuser;
               socket.username = rows[0].user;
               socket.join(data.rightuser);
-              // kiểm tra xem có tin nào mới chưa nhận được không.
-              // tìm kiếm toàn bộ bản tin, xem cột danhan có cái nào bằng N không.
-              // nếu có thì gửi về, khi nhận được rồi thì báo nhận.
-              // `mail` VARCHAR(20) NOT NULL,`name` VARCHAR(20) NOT NULL,`ta` INT(5) NULL , `loai_ta` CHAR(3), `ban` INT(5) NULL , `loai_ban` CHAR(3),`danhan` CHAR(3)
-              con.query("SELECT `thongbao`,`mail` FROM `"+socket.number+"caro` WHERE `stt` LIKE 'B'", function(err2, a2s){
+              con.query("SELECT `thongbao`,`mail`,`name` FROM `"+socket.number+"caro` WHERE `stt` LIKE 'B' ORDER BY time ASC", (err2, a2s)=>{
                 if(err2){console.log(err2);}
                 else {
                   if(a2s.length>0){
@@ -378,7 +374,6 @@ con.connect(function(err) {
       }
 
     });
-
     socket.on('C_reg_caro_1',(data)=>{
       if(data.rightuser&&data.right_pass){
           con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
@@ -399,10 +394,8 @@ con.connect(function(err) {
 
       }
     });
-      // thằng C đề nghị kết bạn với A
     socket.on('C_reg_ketban_caro',(mail)=>{
       if(socket.number!=null&&mail!=null){
-        console.log('C_reg_ketban_caro');
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, rows){
           if (err || rows.length ==0){socket.emit('taikhoan_da_xoa');}
           else{
@@ -412,7 +405,7 @@ con.connect(function(err) {
             con.query(sql3, [val3], function (err3, res3) {
               if ( err3){console.log(err3);}
               else {
-                console.log('Da gui S_get_reg_ketban');
+
                 socket.emit('S_danhan_reg_ketban',{mail:mail,name:rows[0].user});
                 var sql4 = "INSERT INTO `"+mail+"caro` (mail, name, time,thongbao,stt) VALUES ?";
                 var val4 = [[socket.number, socket.username, date, 'D','B']];
@@ -432,7 +425,6 @@ con.connect(function(err) {
     });
     socket.on('C_xacnhan_ketban',(mail,stt)=>{
       if(socket.number!=null&&mail!=null&&stt!=null){
-        console.log('C_xacnhan_ketban');
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, rows){
           if (err || rows.length ==0){socket.emit('taikhoan_da_xoa');}
           else{
@@ -442,7 +434,6 @@ con.connect(function(err) {
               con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A',`time`="+date+", `stt` = 'B' WHERE `mail` LIKE '"+mail+"'", function(err2){
                 if (err2)console.log(err2);
                 else {
-                  console.log('S_get_xacnhan_caro');
                   socket.emit('S_get_xacnhan_caro',mail,'A');
                  }
               });
@@ -464,7 +455,7 @@ con.connect(function(err) {
                 //E nghĩa là từ chối kết bạn, bật  cờ stt lên B để biết là tin này người kia chưa nhận, nếu có mạng thì sẽ gửi lại
                 con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'E',`time`="+date+",  `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", function(err2){
                   if (err2)console.log(err2);
-                  else { io.sockets.in(mail).emit('S_xacnhan_ketban',socket.number,'B'); }
+                  else { io.sockets.in(mail).emit('S_xacnhan_ketban',socket.number,'B');}
                 });
               }
             });
@@ -489,7 +480,6 @@ con.connect(function(err) {
 
       }
     });
-
     socket.on('C_caro_del_acc',(pass)=>{
       if(socket.number && pass){
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
@@ -515,7 +505,6 @@ con.connect(function(err) {
       }
     });
     socket.on('search_contact_caro',(string)=>{
-      console.log('search_contact_caro='+string);
       if (socket.number&&string!=null){
         con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account2` WHERE LOCATE('"+string+"',number)>0 LIMIT 50", function(err, a1s){
         if ( err)console.log(err);
@@ -525,12 +514,7 @@ con.connect(function(err) {
             let noidung=[];
             a1s.forEach(function(a1,key){
               if(noidung!=socket.number)noidung.push({user:a1.user, number: a1.number});
-                if(key===(a1s.length-1))  {
-                  console.log(noidung);
-                  socket.emit('S_send_search_caro',noidung);
-
-                }
-
+                if(key===(a1s.length-1))  {socket.emit('S_send_search_caro',noidung);}
             });
 
           }
@@ -557,12 +541,26 @@ con.connect(function(err) {
     });
     socket.on('C_xoa_game',(nhom_mail)=>{
       if(socket.number != null&&isArray(nhom_mail)){
+        socket.emit('S_get_xoagame',nhom_mail);
           nhom_mail.forEach((mail,key)=>{
             con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
               if (err2)console.log(err2);
             });
-            if(key===(nhom_mail.length-1))socket.emit('S_del_caro_ok');
-          });
+            con.query("UPDATE `"+mail+"caro` SET `thongbao` ='X',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",function(err6,res6){
+              if(err6)console.log('a8'+err6);
+              else io.sockets.in(mail).emit('S_send_huy_ketban',socket.number);
+            });
+
+        });
+      }
+    });
+    socket.on('C_xoa_game_free',(mail)=>{
+      if(socket.number != null&&mail){
+        socket.emit('S_get_xoagame_free',mail);
+        con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
+          if (err2)console.log(err2);
+        });
+
       }
     });
     socket.on('C_send_diem',(toado,mail,stt)=>{
