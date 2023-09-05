@@ -489,7 +489,7 @@ con.connect(function(err) {
             else {
               con.query("SELECT * FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"' ORDER BY id", (err2, a2s)=>{
                   if(err2)console.log(err2);
-                  else {socket.emit('S_send_game',a2s,as[0].luotchoi);console.log('Da gui S_send_game');}
+                  else {socket.emit('S_send_game',a2s,as[0].luotchoi);console.log(a2s);}
 
               });
             }
