@@ -481,6 +481,7 @@ con.connect(function(err) {
       }
     });
     socket.on('C_reg_game',(mail)=>{
+      console.log('C_reg_game');
       if(socket.number!=null&&mail!=null){
         con.query("SELECT `luotchoi` FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' ORDER BY id LIMIT 1", (err, as)=>{
             if(err)console.log(err);
@@ -488,8 +489,7 @@ con.connect(function(err) {
             else {
               con.query("SELECT * FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' ORDER BY id", (err2, a2s)=>{
                   if(err2)console.log(err2);
-                  else if(a2s.length==0)socket.emit('taikhoan_da_xoa');
-                  else socket.emit('S_send_game',a2s,as[0].luotchoi);
+                  else {socket.emit('S_send_game',a2s,as[0].luotchoi);console.log('Da gui S_send_game');}
 
               });
             }
