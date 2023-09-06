@@ -489,7 +489,7 @@ con.connect(function(err) {
             else {
               con.query("SELECT * FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"' ORDER BY id", (err2, a2s)=>{
                   if(err2)console.log(err2);
-                  else {socket.emit('S_send_game',a2s,as[0].luotchoi);console.log(a2s);}
+                  else socket.emit('S_send_game',a2s,as[0].luotchoi);
 
               });
             }
@@ -540,20 +540,66 @@ con.connect(function(err) {
       });
       }
     });
-    socket.on('choi_lai',(mail,luot)=>{
-      if(socket.number != null&&mail!=null&&luot!=null){
-              con.query("UPDATE `"+socket.number+"caro` SET `danhan` = 'Y', `loai_ban` = 'B',`utien`='"+luot+"' WHERE `mail` LIKE '"+mail+"'", function(err2){
+    socket.on('C_reg_choi_lai',(mail)=>{
+      if(socket.number != null&&mail!=null){
+        con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'N' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
               if (err2)console.log(err2);
               else {
-                socket.emit('choi_lai_ok',mail,luot);
-                con.query("UPDATE `"+mail+"caro` SET `danhan` = 'N', `loai_ban` = 'B',`utien`='"+luot+"' WHERE `mail` LIKE '"+socket.number+"'",function(err5,res5){
+                socket.emit('S_get_reg_choilai',mail);
+                con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'M', `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
                   if(err5)console.log(err5);
-                  else  {io.sockets.in(mail).emit('C_muon_choi_lai',socket.number,socket.username,luot);}
+                  else io.sockets.in(mail).emit('C_muon_choi_lai',socket.number,socket.username);
 
                 });
 
             }
         });
+      }
+    });
+    socket.on('C_dongy_choilai',(mail,stt)=>{
+      if(socket.number != null&&mail!=null&&stt!=null){
+        if(stt=='A'){
+          con.query("SELECT `ditruoc` FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' ORDER BY id LIMIT 1", (err, as)=>{
+            if(err)console.log(err);
+            else if(as.length==0)socket.emit('taikhoan_da_xoa');
+            else {
+              let new_luot;
+              if(as[0].ditruoc=='A')new_luot='B';
+              else new_luot='A';
+              con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A',`luotchoi`='"+new_luot+"',`ditruoc`='"+new_luot+"' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+                    if (err2)console.log(err2);
+                    else {
+                      socket.emit('S_get_dongy_choilai',mail,new_luot);
+                      con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'S', `stt` = 'B','luotchoi'='"+as[0].ditruoc+"',`ditruoc`='"+as[0].ditruoc+"' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
+                        if(err5)console.log(err5);
+                        else io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'A',as[0].ditruoc);
+                      });
+
+                  }
+              });
+            }
+        });
+        }
+        else {
+          //neu tu chuoi
+          con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+                if (err2)console.log(err2);
+                else {
+                  socket.emit('S_get_dongy_choilai',mail,'B',new_luot);
+                  con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'P', `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
+                    if(err5)console.log(err5);
+                    else io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'B');
+                  });
+
+              }
+          });
+        }
+
+
+
+
+
+
       }
     });
     socket.on('C_xoa_game',(nhom_mail)=>{
