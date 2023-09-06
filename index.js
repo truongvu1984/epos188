@@ -558,7 +558,9 @@ con.connect(function(err) {
     });
     socket.on('C_dongy_choilai',(mail,stt)=>{
       if(socket.number != null&&mail!=null&&stt!=null){
+        console.log('C_dongy_choilai='+stt);
         if(stt=='A'){
+
           con.query("SELECT `ditruoc` FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' ORDER BY id LIMIT 1", (err, as)=>{
             if(err)console.log(err);
             else if(as.length==0)socket.emit('taikhoan_da_xoa');
