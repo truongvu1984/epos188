@@ -570,7 +570,7 @@ con.connect(function(err) {
                     if (err2)console.log(err2);
                     else {
                       socket.emit('S_get_dongy_choilai',mail,new_luot);
-                      con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'S', `stt` = 'B','luotchoi'='"+as[0].ditruoc+"',`ditruoc`='"+as[0].ditruoc+"' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
+                      con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'S', `stt` = 'B',`luotchoi`='"+as[0].ditruoc+"',`ditruoc`='"+as[0].ditruoc+"' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
                         if(err5)console.log(err5);
                         else io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'A',as[0].ditruoc);
                       });
