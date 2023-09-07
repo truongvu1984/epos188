@@ -1788,21 +1788,7 @@ con.connect(function(err) {
                           });
                         });
                       }
-                      if(tin.list_del.length>0){
-                        tin.list_del.forEach((item, i) => {
-                          con.query("SELECT * FROM `list_del` WHERE `idc` LIKE '"+item.idc+"' AND id >"+item.tt, function(err4, row4s){
-                              if (err4){console.log(err4);}
-                              else if(row4s.length>0){
-                                let list_del=[];
-                                row4s.forEach((item4, i4) => {
-                                  list_del.push[{idc:item4.idc, tt:item4.ids, tt_del:item4.id}];
-                                    if(i4===(row4s.length-1)) socket.emit("S_capnhat",{idc:item.idc,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B',a20:'B',a21:'B',a6:'B',a7:'A', list_del:list_del});
-                                });
-                              }
-                            });
 
-                        });
-                      }
                       if(rows[0].type=="A") {
                         con.query("SELECT * FROM `list_user` WHERE `id` > "+tin.tt_list+" AND `id`>5 ORDER BY id ASC", function(err5, row5s){
                           if (err5)console.log('2222'+err5);
@@ -1939,21 +1925,7 @@ con.connect(function(err) {
                           });
                         });
                       }
-                      if(tin.list_del.length>0){
-                        tin.list_del.forEach((item, i) => {
-                          con.query("SELECT * FROM `list_del` WHERE `idc` LIKE '"+item.idc+"' AND id >"+item.tt, function(err4, row4s){
-                              if (err4){console.log(err4);}
-                              else if(row4s.length>0){
-                                let list_del=[];
-                                row4s.forEach((item4, i4) => {
-                                  list_del.push[{idc:item4.idc, tt:item4.ids, tt_del:item4.id}];
-                                    if(i4===(row4s.length-1)) socket.emit("S_capnhat",{idc:item.idc,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B',a20:'B',a21:'B',a6:'B',a7:'A', list_del:list_del});
-                                });
-                              }
-                            });
 
-                        });
-                      }
                       if(rows[0].type=="E"){
                         con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err4, row4s){
                           if (err4)console.log('5555'+err4);
@@ -2095,9 +2067,9 @@ con.connect(function(err) {
                if (err1)socket.emit("giao_nhiemvu_thatbai","A");
                else {
                      socket.emit("giao_nhiemvu_ok",{tt:result.insertId ,idc:idc,time:get_time(thoigian)});
-                     io.sockets.in("chung").emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,tb_hoten:tin.tb_hoten,tb_chucvu:tin.tb_chucvu,tb_donvi:tin.tb_donvi,giaonv1:get_time(thoigian),
+                     io.sockets.in("chung").emit("S_send_nhiemvu",{tt_vitri:0,tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,tb_hoten:tin.tb_hoten,tb_chucvu:tin.tb_chucvu,tb_donvi:tin.tb_donvi,giaonv1:get_time(thoigian),
                      ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B',nguyennhan:'',tieuhao:''},'B');
-                     io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,tb_hoten:tin.tb_hoten,tb_chucvu:tin.tb_chucvu,tb_donvi:tin.tb_donvi,giaonv1:get_time(thoigian),
+                     io.sockets.in(tin.user).emit("S_send_nhiemvu",{tt_vitri:0,tt:result.insertId,idc:idc,ten:tin.ten,mota:tin.mota,tb_hoten:tin.tb_hoten,tb_chucvu:tin.tb_chucvu,tb_donvi:tin.tb_donvi,giaonv1:get_time(thoigian),
                      ch1_hoten:tin.hoten,ch1_chucvu:tin.chucvu,ch1_donvi:tin.donvi,a0:'B',a1:'B',a2:'B',a3:'B',a4:'B',nguyennhan:'',tieuhao:''},'B');
                }
              });
@@ -2195,29 +2167,20 @@ con.connect(function(err) {
               });
           }
           else if(nd=="M"){
-            let sql1 = "INSERT INTO `list_del` (idc,ids) VALUES ?";
-            let val1 = [[idc,nd2]];
-            con.query(sql1,[val1],function(err2,result){
-              if(err2){socket.emit('gui_thongtin_thatbai',nd);console.log(err2);}
-               else {
-                 con.query("DELETE FROM `list_vitri` WHERE `tt` ="+nd2, function(err3){
-                   if (err3)console.log(err3);
-                   else {
-                     socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,tt:nd2});
-                     io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,tt:nd2});
-                     if(socket.type=="F"){
-                       con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
-                         if (err){console.log(err);}
-                         else{
-                           io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,tt:nd2});
-                         }
-                       });
-                     }
-                   }
-                 });
-
-
-               }
+            con.query("DELETE FROM `list_vitri` WHERE `tt` ="+nd2, function(err3){
+              if (err3)console.log(err3);
+              else {
+                socket.emit('gui_thongtin_ok',{nd:nd,idc:idc,tt:nd2});
+                io.sockets.in("chung").emit("S_gui_thongtin",{nd:nd,idc:idc,tt:nd2});
+                if(socket.type=="F"){
+                  con.query("SELECT * FROM `list_err` WHERE `idc` LIKE '"+idc+"' LIMIT 1", function(err, rows){
+                    if (err){console.log(err);}
+                    else{
+                      io.sockets.in(rows[0].ch1_user).emit("S_gui_thongtin",{nd:nd,idc:idc,tt:nd2});
+                    }
+                  });
+                }
+              }
             });
           }
           else {
