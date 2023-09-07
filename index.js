@@ -60,7 +60,7 @@ con.connect(function(err) {
   if (err) { console.log(" da co loi:" + err);}
   else {
   kiemtra_taikhoan();
-  con.query("UPDATE `+982025401caro` SET `game_id` = `game_id`+1 WHERE `id` = 16", (err2,kq)=>{
+  con.query("UPDATE `+84982025401caro` SET `game_id` = `game_id`+1 WHERE `id` = 16", (err2,kq)=>{
         if (err2)console.log(err2);
         else {
           console.log(kq);
