@@ -570,6 +570,7 @@ con.connect(function(err) {
               con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A',`luotchoi`='"+new_luot+"',`ditruoc`='"+new_luot+"' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                     if (err2)console.log(err2);
                     else {
+                      console.log('S_get_dongy_choilai');
                       socket.emit('S_get_dongy_choilai',mail,'A',new_luot);
                       con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'S', `stt` = 'B',`luotchoi`='"+as[0].ditruoc+"',`ditruoc`='"+as[0].ditruoc+"' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
                         if(err5)console.log(err5);
