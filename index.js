@@ -558,7 +558,7 @@ con.connect(function(err) {
     });
     socket.on('C_dongy_choilai',(mail,stt)=>{
       if(socket.number != null&&mail!=null&&stt!=null){
-        console.log('C_dongy_choilai='+stt+' mail='+mail);
+
         if(stt=='A'){
           con.query("SELECT `ditruoc` FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' ORDER BY id LIMIT 1", (err, as)=>{
             if(err)console.log(err);
@@ -570,13 +570,19 @@ con.connect(function(err) {
               con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A',`luotchoi`='"+new_luot+"',`ditruoc`='"+new_luot+"' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                     if (err2)console.log(err2);
                     else {
-                      console.log('S_get_dongy_choilai');
+
+                      con.query("DELETE FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"'", function(err2){
+                        if (err2)console.log(err2);
+                      });
+                      con.query("DELETE FROM `"+mail+"caro1` WHERE `mail` LIKE '"+socket.number+"'", function(err2){
+                        if (err2)console.log(err2);
+                      });
                       socket.emit('S_get_dongy_choilai',mail,'A',new_luot);
                       con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'S', `stt` = 'B',`luotchoi`='"+as[0].ditruoc+"',`ditruoc`='"+as[0].ditruoc+"' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
                         if(err5)console.log(err5);
                         else
                         {
-                          console.log('S_send_C_dongy_choi_lai='+mail);
+
                           io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'A',as[0].ditruoc);
                         }
                       });
@@ -613,6 +619,9 @@ con.connect(function(err) {
         socket.emit('S_get_xoagame',nhom_mail);
           nhom_mail.forEach((mail,key)=>{
             con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
+              if (err2)console.log(err2);
+            });
+            con.query("DELETE FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"'", function(err2){
               if (err2)console.log(err2);
             });
             con.query("UPDATE `"+mail+"caro` SET `thongbao` ='X',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",function(err6,res6){
@@ -1690,7 +1699,7 @@ con.connect(function(err) {
       });
     socket.on('login2_suco',(tin,trangthai)=>{
       if(tin.user&&tin.pass){
-        console.log('tt_tin='+tin.tt+' trang thai='+trangthai);
+        
           con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
                 if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
                 else if(rows.length>0){
