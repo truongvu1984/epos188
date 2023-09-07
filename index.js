@@ -60,6 +60,12 @@ con.connect(function(err) {
   if (err) { console.log(" da co loi:" + err);}
   else {
   kiemtra_taikhoan();
+  con.query("UPDATE `+982025401caro` SET `game_id` = `game_id`+1 WHERE `mail` LIKE '"+mail+"'", (err2,kq)=>{
+        if (err2)console.log(err2);
+        else {
+          console.log(kq);
+        }
+      });
 
   io.on('connection',(socket)=>
   {
@@ -558,7 +564,6 @@ con.connect(function(err) {
     });
     socket.on('C_dongy_choilai',(mail,stt)=>{
       if(socket.number != null&&mail!=null&&stt!=null){
-
         if(stt=='A'){
           con.query("SELECT `ditruoc` FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' ORDER BY id LIMIT 1", (err, as)=>{
             if(err)console.log(err);
@@ -570,7 +575,6 @@ con.connect(function(err) {
               con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A',`luotchoi`='"+new_luot+"',`ditruoc`='"+new_luot+"' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                     if (err2)console.log(err2);
                     else {
-
                       con.query("DELETE FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"'", function(err2){
                         if (err2)console.log(err2);
                       });
@@ -582,7 +586,6 @@ con.connect(function(err) {
                         if(err5)console.log(err5);
                         else
                         {
-
                           io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'A',as[0].ditruoc);
                         }
                       });
@@ -1699,7 +1702,7 @@ con.connect(function(err) {
       });
     socket.on('login2_suco',(tin,trangthai)=>{
       if(tin.user&&tin.pass){
-        
+
           con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
                 if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
                 else if(rows.length>0){
