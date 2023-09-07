@@ -351,7 +351,7 @@ con.connect(function(err) {
               socket.number = data.rightuser;
               socket.username = rows[0].user;
               socket.join(data.rightuser);
-              con.query("SELECT `thongbao`,`mail`,`name` FROM `"+socket.number+"caro` WHERE `stt` LIKE 'B' ORDER BY time ASC", (err2, a2s)=>{
+              con.query("SELECT `thongbao`,`mail`,`name`,`luotchoi` FROM `"+socket.number+"caro` WHERE `stt` LIKE 'B' ORDER BY time ASC", (err2, a2s)=>{
                 if(err2){console.log(err2);}
                 else {
                   if(a2s.length>0){
@@ -1689,6 +1689,7 @@ con.connect(function(err) {
       });
     socket.on('login2_suco',(tin,trangthai)=>{
       if(tin.user&&tin.pass){
+        console.log('tt_tin='+tin.tt+' trang thai='+trangthai);
           con.query("SELECT * FROM `list_user` WHERE `user` LIKE '"+tin.user+"' LIMIT 1", function(err, rows){
                 if (err){socket.emit('login2_suco_thatbai');console.log('11111'+err);}
                 else if(rows.length>0){
@@ -1840,7 +1841,6 @@ con.connect(function(err) {
                     else {
                       socket.join(tin.user);
                       let lenh;
-
                       if(trangthai=='A')lenh="SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id DESC";
                       else lenh="SELECT * FROM `list_err` WHERE id > "+tin.tt+" ORDER BY id ASC";
                       if(trangthai=='A'){
@@ -1877,7 +1877,6 @@ con.connect(function(err) {
                                 socket.emit("S_send_nhiemvu",{tt_vitri:tt_vitri,tt:row1.id,idc:row1.idc,ten:row1.ten,mota:row1.mota,giaonv1:get_time(row1.giaonv1),tb_hoten:row1.tb_hoten,tb_chucvu:row1.tb_chucvu,tb_donvi:row1.tb_donvi,
                                   ch1_hoten:row1.ch1_hoten,ch1_chucvu:row1.ch1_chucvu,ch1_donvi:row1.ch1_donvi,nguyennhan:nguyennhan,tieuhao:tieuhao,
                                   giaonv2:giaonv2, ch2_hoten:row1.ch2_hoten,ch2_chucvu:row1.ch2_chucvu,ch2_donvi:row1.ch2_donvi,batdau:batdau,dennoi:dennoi,xong:xong,vedonvi:vedonvi,a0:a0,a1:a1,a2:a2,a3:a3,a4:a4},trangthai);
-
 
                               }
                             });
