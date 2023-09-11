@@ -68,7 +68,7 @@ con.connect(function(err) {
     socket.emit('check_pass_1_login');
     socket.on('regis_1_windlaxy_A',(tin)=>{
         if(tin.user&&tin.name&&tin.pass&&tin.recover){
-          con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
+          con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ tin.user +"' LIMIT 1", function(err, rows){
                   // nếu tài khoản đã có người đăng ký rồi thì:
               if(err)socket.emit('regis_1_thatbai_A','A');
                   else {
@@ -77,10 +77,10 @@ con.connect(function(err) {
                       con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(1) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                       var sql = "INSERT INTO `account2` (number,user, pass,recover) VALUES ?";
                         var matkhau = passwordHash.generate(''+tin.pass);
-                        var values = [[tin.mail,tin.name, matkhau,tin.recover]];
+                        var values = [[tin.user,tin.name, matkhau,tin.recover]];
                         con.query(sql, [values], function (err1, result) {
                           if (err1)socket.emit('regis2_thatbai_A','A');
-                          else  socket.emit('regis2_thanhcong_A');
+                          else socket.emit('regis2_thanhcong_A');
                         });
                     }
                   }
