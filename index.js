@@ -75,12 +75,14 @@ con.connect(function(err) {
                     if (rows.length >0 )	{socket.emit('regis_1_thatbai_A','D');}
                     else {
                       con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(1) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                      con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                      console.log('AAAAA');
                       var sql = "INSERT INTO `account2` (number,user, pass,recover) VALUES ?";
                         var matkhau = passwordHash.generate(''+tin.pass);
                         var values = [[tin.user,tin.name, matkhau,tin.recover]];
                         con.query(sql, [values], function (err1, result) {
                           if (err1)socket.emit('regis2_thatbai_A','A');
-                          else socket.emit('regis2_thanhcong_A');
+                          else {socket.emit('regis2_thanhcong_A');console.log('regis2_thanhcong_A');}
                         });
                     }
                   }
