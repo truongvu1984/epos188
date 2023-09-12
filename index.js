@@ -67,6 +67,7 @@ con.connect(function(err) {
     socket.emit('check_pass');
     socket.emit('check_pass_1_login');
     socket.on('regis_1_windlaxy_A',(tin)=>{
+      console.log('regis_1_windlaxy_A='+tin);
         if(tin.user&&tin.name&&tin.pass&&tin.recover){
           con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ tin.user +"' LIMIT 1", function(err, rows){
                   // nếu tài khoản đã có người đăng ký rồi thì:
@@ -81,8 +82,8 @@ con.connect(function(err) {
                         var matkhau = passwordHash.generate(''+tin.pass);
                         var values = [[tin.user,tin.name, matkhau,tin.recover]];
                         con.query(sql, [values], function (err1, result) {
-                          if (err1)socket.emit('regis2_thatbai_A','A');
-                          else {socket.emit('regis2_thanhcong_A');console.log('regis2_thanhcong_A');}
+                          if (err1)socket.emit('regis_1_thanhcong_A','A');
+                          else {socket.emit('regis_1_thanhcong_A');console.log('regis_1_thanhcong_A');}
                         });
                     }
                   }
