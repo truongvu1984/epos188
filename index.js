@@ -89,7 +89,6 @@ con.connect(function(err) {
           });
         }
     });
-
     socket.on('forget_pass_1_windlaxy_A',(mail,code,phone_id)=>{
       if(mail&&code&&phone_id){
                 con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ phone_id +"' LIMIT 1", function(err3, row1s){
