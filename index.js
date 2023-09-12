@@ -69,11 +69,11 @@ con.connect(function(err) {
     socket.on('regis_1_windlaxy_A',(tin)=>{
       console.log('regis_1_windlaxy_A='+tin);
         if(tin.user&&tin.name&&tin.pass&&tin.recover){
-          con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ tin.user +"' LIMIT 1", function(err, rows){
+          con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ tin.user +"' LIMIT 1", (err, rows)=>{
                   // nếu tài khoản đã có người đăng ký rồi thì:
-              if(err)socket.emit('regis_1_thatbai_A','A');
-                  else {
-                    if (rows.length >0 )	{socket.emit('regis_1_thatbai_A','D');}
+              if(err){socket.emit('regis_1_thatbai_A','A');console.log(err);}
+              else {
+                    if (rows.length >0 )	{socket.emit('regis_1_thatbai_A','D');console.log('GGGGG'+rows.length);}
                     else {
                       con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(1) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                       con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
