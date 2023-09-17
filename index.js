@@ -121,7 +121,7 @@ con.connect(function(err) {
           if (err)socket.emit('check_mail_regis_caro_thatbai','A');
           else if(rows.length==0)socket.emit('check_mail_regis_caro_thatbai','B');
           else {
-            if(passwordHash.verify(chuoi, rows[0].chuoi)){
+            if(chuoi===rows[0].chuoi)){
               con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(1) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
               con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
               var sql = "INSERT INTO `account2` (number,user,pass) VALUES ?";
