@@ -67,6 +67,7 @@ con.connect(function(err) {
     socket.emit('check_pass');
     socket.emit('check_pass_1_login');
     socket.on('C_regis_caro',(stt,tin)=>{
+      console.log(tin.username);
       if(stt!=null&&tin.username&&tin.displayname&&tin.pass){
           con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ tin.username +"' LIMIT 1", (err, rows)=>{
             if(err){console.log(err);socket.emit('C_regis_caro_loi','A');}
