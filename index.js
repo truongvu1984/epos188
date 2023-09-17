@@ -50,6 +50,7 @@ function kiemtra_taikhoan(){
   // var date2 = Math.floor(Date.now() / 1000) - 600;
   var date3=Math.floor(Date.now() / 1000) - 300;
   con.query(" DELETE FROM `active` WHERE `time` < "+date3, (err)=>{if(err)console.log('co loi HA HA HA:'+err);});
+  con.query(" DELETE FROM `account_tem` WHERE `time` < "+date3, (err)=>{if(err)console.log('co loi HA HA HA:'+err);});
   kiemtra_taikhoan();
 }, 5000);
 }
@@ -87,9 +88,10 @@ con.connect(function(err) {
                   con.query("DELETE FROM `account_tem` WHERE `user` LIKE '"+tin.username+"'", (err2)=>{
                       if (err2)console.log(err2);
                       else {
-                        var sql = "INSERT INTO `account_tem` (user,name,pass,chuoi) VALUES ?";
+                        var sql = "INSERT INTO `account_tem` (user,name,pass,chuoi,time) VALUES ?";
+                        var time = Math.floor(Date.now() / 1000);
                         var matkhau = passwordHash.generate(''+tin.pass);
-                        var values = [[tin.username,tin.displayname, matkhau,string]];
+                        var values = [[tin.username,tin.displayname, matkhau,string,time]];
                         con.query(sql, [values], function (err1, result) {
                           if (err1)socket.emit('C_regis_caro_loi','A');
                           else socket.emit('S_regis_caro_check_mail',tin.username);
