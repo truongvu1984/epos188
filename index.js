@@ -94,7 +94,7 @@ con.connect(function(err) {
                         var values = [[tin.username,tin.displayname, matkhau,string,time]];
                         con.query(sql, [values], function (err1, result) {
                           if (err1)socket.emit('C_regis_caro_loi','A');
-                          else socket.emit('S_regis_caro_check_mail',tin.username);
+                          else {socket.emit('S_regis_caro_check_mail',tin.username);console.log('S_regis_caro_check_mail='+tin.username);}
                         });
                       }
                   });
