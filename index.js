@@ -115,7 +115,7 @@ con.connect(function(err) {
       }
     });
     socket.on('check_mail_regis_caro',(mail,chuoi)=>{
-      if(mail!!=null&&chuoi!=null){
+      if(mail!=null&&chuoi!=null){
         con.query("SELECT * FROM `account_tem` WHERE `user` LIKE '"+mail+"' LIMIT 1", (err, rows)=>{
           if (err)socket.emit('check_mail_regis_caro_thatbai','A');
           else if(rows.length==0)socket.emit('check_mail_regis_caro_thatbai','B');
