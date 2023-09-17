@@ -84,7 +84,7 @@ con.connect(function(err) {
                 transporter.sendMail(mailOptions, (error, info)=>{
                 if (error){ socket.emit('C_regis_caro_loi','D');console.log(error);}
                 else {
-                  con.query("DELETE FROM `account_tem` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+                  con.query("DELETE FROM `account_tem` WHERE `user` LIKE '"+tin.username+"'", (err2)=>{
                       if (err2)console.log(err2);
                       else {
                         var sql = "INSERT INTO `account_tem` (user,name,pass,chuoi) VALUES ?";
