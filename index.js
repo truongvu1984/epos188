@@ -71,7 +71,7 @@ con.connect(function(err) {
       if(stt!=null&&tin.username&&tin.displayname&&tin.pass){
           con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ tin.username +"' LIMIT 1", (err, rows)=>{
             if(err){console.log(err);socket.emit('C_regis_caro_loi','A');}
-            else if(rows.leng>0)socket.emit('C_regis_caro_loi','B');
+            else if(rows.length>0)socket.emit('C_regis_caro_loi','B');
             else {
               if(stt=='A'){
                 var string = Math.floor(Math.random() * (899999)) + 100000;
@@ -130,7 +130,7 @@ con.connect(function(err) {
                 if (err1)socket.emit('C_regis_caro_loi','A');
                 else {
                   socket.emit('C_regis_caro_ok',rows[0].user);
-                  con.query("DELETE FROM `account_tem` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+                  con.query("DELETE FROM `account_tem` WHERE `user` LIKE '"+mail+"'", (err2)=>{
                       if (err2)console.log(err2);
                   });
                 }
