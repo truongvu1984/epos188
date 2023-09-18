@@ -198,10 +198,11 @@ con.connect(function(err) {
     });
     socket.on('forget_pass_2_caro',(tin)=>{
       if(tin.mail&&tin.chuoi&&tin.pass){
+        console.log('vao day roi');
           con.query("SELECT * FROM `account_tem` WHERE `user` LIKE '"+tin.mail+"' LIMIT 1", (err, rows)=>{
-                  if (err)socket.emit('forget_pass_2_caro_thatbai','A');
+                  if (err){socket.emit('forget_pass_2_caro_thatbai','A');console.log('SSSS');}
                   else{
-                    if(rows.length==0)socket.emit('forget_pass_2_caro_thatbai','B');
+                    if(rows.length==0){socket.emit('forget_pass_2_caro_thatbai','B');console.log('TTTT');}
                     else {
                       if(rows[0].chuoi===tin.chuoi){
                         let pass1 = passwordHash.generate(''+tin.pass);
