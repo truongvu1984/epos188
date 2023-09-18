@@ -206,7 +206,7 @@ con.connect(function(err) {
                       if(rows[0].chuoi===tin.chuoi){
                         let pass1 = passwordHash.generate(''+tin.pass);
                         con.query("UPDATE `account2` SET `pass` = '"+pass1+"' WHERE `number` LIKE '"+tin.mail+"'", (err2)=>{
-                           if (err2)socket.emit('forget_pass_2_caro_thatbai','A');
+                           if (err2){socket.emit('forget_pass_2_caro_thatbai','A');console.log(err2);}
                           else {
                             con.query("DELETE FROM `account_tem` WHERE `user` LIKE '"+tin.mail+"'", (err3)=>{
                                if (err3)console.log(err3);
