@@ -2224,7 +2224,9 @@ con.connect(function(err) {
       }
     });
     socket.on('C_pos_online_tdsc',  (info)=>{
+      console.log('C_pos_online_tdsc');
       if (socket.user&&info.suco_id){
+        console.log('Gui di='+info.lat);
           io.sockets.in(info.suco_id).emit('S_pos_online_tdsc',{lat:info.lat, lon:info.lon, name:socket.hoten, number:socket.user, suco_id:info.suco_id});
       }
     });
