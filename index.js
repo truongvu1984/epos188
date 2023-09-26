@@ -1667,7 +1667,7 @@ con.connect(function(err) {
                   if (rows[0].pass==tin.pass){
                     socket.emit("login2_suco_ok");
                     socket.user = tin.user;
-                    socket.hoten = tin.hoten;
+                    socket.hoten = rows[0].hoten;
                     socket.type = rows[0].type;
                     socket.donvi=rows[0].donvi;
                     if(rows[0].type=="A"||rows[0].type=="B"||rows[0].type=="C"||rows[0].type=="D") {
