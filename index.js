@@ -133,7 +133,7 @@ con.connect(function(err) {
                 });
               }
               else {
-                let dem=row1s[0].dem1+1;
+                let dem=row1s[0].dem+1;
                 con.query("UPDATE `kiemtra` SET `dem` = "+dem+",`time`="+time+" WHERE `username` LIKE '"+mail+"'", (err6)=>{
                   if (err6)console.log(err6);
                 });
@@ -236,7 +236,7 @@ con.connect(function(err) {
                 });
               }
               else {
-                let dem=row1s[0].dem1+1;
+                let dem=row1s[0].dem+1;
                 con.query("UPDATE `kiemtra` SET `dem` = "+dem+",`time`="+time+" WHERE `username` LIKE '"+mail+"'", (err6)=>{
                   if (err6)console.log(err6);
                 });
@@ -289,7 +289,7 @@ con.connect(function(err) {
                 });
               }
               else {
-                let dem=row1s[0].dem1+1;
+                let dem=row1s[0].dem+1;
                 con.query("UPDATE `kiemtra` SET `dem` = "+dem+",`time`="+time+" WHERE `username` LIKE '"+user1+"'", (err6)=>{
                   if (err6)console.log(err6);
                 });
