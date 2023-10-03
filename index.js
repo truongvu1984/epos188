@@ -368,16 +368,18 @@ con.connect(function(err) {
       if(socket.number!=null&&mail!=null&&type!=null){
         if(type=="A"){
           // gửi lời đề nghị kết bạn với tôi nhé
-          con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", function(err, rows){
-            if (err || rows.length ==0){socket.emit('taikhoan_da_xoa');}
+          con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", (err, rows)=>{
+            if (err)console.log(err);
             else{
-              let date=Date.now();
-              var sql3 = "INSERT INTO `"+socket.number+"caro` (mail, name, time, thongbao,stt,luotchoi) VALUES ?";
-              var val3 = [[mail, rows[0].user, date, 'B','A','A']];
-              con.query(sql3, [val3], function (err3, res3) {
+              if(rows.length ==0)socket.emit('taikhoan_da_xoa');
+              else {
+                let date=Date.now();
+                var sql3 = "INSERT INTO `"+socket.number+"caro` (mail, name, time, thongbao,stt,luotchoi) VALUES ?";
+                var val3 = [[mail, rows[0].user, date, 'B','A','A']];
+                con.query(sql3, [val3], function (err3, res3) {
                 if ( err3){console.log(err3);}
                 else {
-                  socket.emit('S_danhan_reg_ketban',{mail:mail,name:rows[0].user});
+                  socket.emit('S_danhan_reg_ketban',{mail:mail,name:rows[0].user},'A');
                   var sql4 = "INSERT INTO `"+mail+"caro` (mail, name, time,thongbao,stt,luotchoi) VALUES ?";
                   var val4 = [[socket.number, socket.username, date, 'D','B','B']];
                   con.query(sql4, [val4], function (err4, res4) {
@@ -389,10 +391,23 @@ con.connect(function(err) {
 
                 }
             });
+              }
 
             }
           });
 
+        }
+        else if(type=="C"){
+          // cho tôi thu hồi lời mời kết bạn lại nhé
+          socket.emit('S_danhan_reg_ketban',{mail:mail},'B');
+          con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+            if (err2)console.log(err2);
+          });
+
+          con.query("UPDATE `"+mail+"caro` SET `thongbao` ='X',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
+            if(err6)console.log('a8'+err6);
+            else io.sockets.in(mail).emit('S_send_huy_ketban',socket.number);
+          });
         }
 
       }
