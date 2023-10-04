@@ -446,14 +446,14 @@ con.connect(function(err) {
             }
             else {
             //K là không đồng ý kết bạn thằng này
-              con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'K',`time`="+date+",  `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", (err3)=>{
+            socket.emit('S_get_xacnhan_caro',mail,'B');
+            con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
+              if (err2)console.log(err2);
+            });
+              con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'K',`time`="+date+",  `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", (err3)=>{
               if (err3)socket.emit('taikhoan_da_xoa');
-              else {
-                socket.emit('S_get_xacnhan_caro',mail,'B');
-                con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
-                  if (err2)console.log(err2);
-                });
-              }
+              else io.sockets.in(mail).emit('S_send_huy_ketban',socket.number);
+
             });
             }
           }
@@ -476,7 +476,13 @@ con.connect(function(err) {
 
       }
     });
-
+    socket.on('C_danhan_huy_ketban',(mail)=>{
+      if(socket.number!=null&&mail!=null){
+          con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+            if (err2)console.log(err2);
+          });
+      }
+    });
     socket.on('C_reg_game',(mail)=>{
       if(socket.number!=null&&mail!=null){
         con.query("SELECT `luotchoi` FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' ORDER BY id LIMIT 1", (err, as)=>{
