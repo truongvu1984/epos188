@@ -386,7 +386,7 @@ con.connect(function(err) {
                   con.query(sql4, [val4],  (err4, res4)=> {
                     if ( err4){console.log(err4);}
                     else {
-                      io.sockets.in(mail).emit('S_send_reg_ketban','B1',socket.number,:socket.username);
+                      io.sockets.in(mail).emit('S_send_reg_ketban','B1',socket.number,socket.username);
                     }
                 });
 
@@ -405,7 +405,7 @@ con.connect(function(err) {
           });
           con.query("UPDATE `"+mail+"caro` SET `thongbao` ='X',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
             if(err6)console.log('a8'+err6);
-            else   io.sockets.in(mail).emit('S_send_reg_ketban','E',socket.number,:socket.username);
+            else   io.sockets.in(mail).emit('S_send_reg_ketban','E',socket.number,socket.username);
           });
         }
         else if(type=="C"){
@@ -415,7 +415,7 @@ con.connect(function(err) {
           });
           con.query("UPDATE `"+mail+"caro` SET `thongbao` ='C',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
             if(err6)console.log('a8'+err6);
-            else   io.sockets.in(mail).emit('S_send_reg_ketban','C',socket.number,:socket.username);
+            else   io.sockets.in(mail).emit('S_send_reg_ketban','C',socket.number,socket.username);
           });
         }
         else if(type=="D"){
@@ -425,7 +425,7 @@ con.connect(function(err) {
           });
           con.query("UPDATE `"+mail+"caro` SET `thongbao` ='D',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
             if(err6)console.log('a8'+err6);
-            else   io.sockets.in(mail).emit('S_send_reg_ketban','D',socket.number,:socket.username);
+            else   io.sockets.in(mail).emit('S_send_reg_ketban','D',socket.number,socket.username);
           });
         }
         else if(type=="F"){
@@ -435,7 +435,7 @@ con.connect(function(err) {
           });
           con.query("UPDATE `"+mail+"caro` SET `thongbao` ='F',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
             if(err6)console.log('a8'+err6);
-            else   io.sockets.in(mail).emit('S_send_reg_ketban','F',socket.number,:socket.username);
+            else   io.sockets.in(mail).emit('S_send_reg_ketban','F',socket.number,socket.username);
           });
         }
         else if(type=="E1"){
