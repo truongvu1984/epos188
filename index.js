@@ -325,7 +325,7 @@ con.connect(function(err) {
                 if(err2){console.log(err2);}
                 else {
                   if(a2s.length>0){
-                      socket.emit('S_capnhat_caro',a2s);
+                      socket.emit('S_thongbao_ketban',a2s);
                   }
                 }
               });
@@ -364,28 +364,29 @@ con.connect(function(err) {
 
       }
     });
-    socket.on('C_reg_ketban_caro',(type,mail)=>{
+
+    socket.on('C_send_ketban_caro',(type,mail)=>{
       if(socket.number!=null&&mail!=null&&type!=null){
-        if(type=="A"){
+        socket.emit('S_danhan_reg_ketban',type,mail,name);
+        if(type=="B1"){
           // gửi lời đề nghị kết bạn với tôi nhé
           con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", (err, rows)=>{
             if (err)console.log(err);
             else{
-              if(rows.length ==0)socket.emit('taikhoan_da_xoa');
+              if(rows.length ==0)socket.emit('taikhoan_da_xoa',mail);
               else {
                 let date=Date.now();
                 var sql3 = "INSERT INTO `"+socket.number+"caro` (mail, name, time, thongbao,stt,luotchoi) VALUES ?";
                 var val3 = [[mail, rows[0].user, date, 'B','A','A']];
-                con.query(sql3, [val3], function (err3, res3) {
+                con.query(sql3, [val3],  (err3, res3)=> {
                 if ( err3){console.log(err3);}
                 else {
-                  socket.emit('S_danhan_reg_ketban',{mail:mail,name:rows[0].user},'A');
                   var sql4 = "INSERT INTO `"+mail+"caro` (mail, name, time,thongbao,stt,luotchoi) VALUES ?";
-                  var val4 = [[socket.number, socket.username, date, 'D','B','B']];
-                  con.query(sql4, [val4], function (err4, res4) {
+                  var val4 = [[socket.number, socket.username, date, 'B1','B','B']];
+                  con.query(sql4, [val4],  (err4, res4)=> {
                     if ( err4){console.log(err4);}
                     else {
-                      io.sockets.in(mail).emit('S_send_reg_ketban',{mail:socket.number,name:socket.username});
+                      io.sockets.in(mail).emit('S_send_reg_ketban','B1',socket.number,:socket.username);
                     }
                 });
 
@@ -397,90 +398,67 @@ con.connect(function(err) {
           });
 
         }
-        else if(type=="C"){
+        else if(type=="E"){
           // cho tôi thu hồi lời mời kết bạn lại nhé
-          socket.emit('S_danhan_reg_ketban',{mail:mail},'B');
           con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
             if (err2)console.log(err2);
           });
-
           con.query("UPDATE `"+mail+"caro` SET `thongbao` ='X',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
             if(err6)console.log('a8'+err6);
-            else io.sockets.in(mail).emit('S_send_huy_ketban',socket.number);
+            else   io.sockets.in(mail).emit('S_send_reg_ketban','E',socket.number,:socket.username);
           });
         }
-
+        else if(type=="C"){
+          // cho tôi từ chối lời mời kết bạn  nhé
+          con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+            if (err2)console.log(err2);
+          });
+          con.query("UPDATE `"+mail+"caro` SET `thongbao` ='C',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
+            if(err6)console.log('a8'+err6);
+            else   io.sockets.in(mail).emit('S_send_reg_ketban','C',socket.number,:socket.username);
+          });
+        }
+        else if(type=="D"){
+          // cho tôi đồng ý lời mời kết bạn  nhé
+          con.query("UPDATE `"++socket.number+"caro` SET `thongbao` ='A',`stt`='A' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
+            if(err6)console.log('a8'+err6);
+          });
+          con.query("UPDATE `"+mail+"caro` SET `thongbao` ='D',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
+            if(err6)console.log('a8'+err6);
+            else   io.sockets.in(mail).emit('S_send_reg_ketban','D',socket.number,:socket.username);
+          });
+        }
+        else if(type=="F"){
+          // xóa kết bạn nhé
+          con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+            if (err2)console.log(err2);
+          });
+          con.query("UPDATE `"+mail+"caro` SET `thongbao` ='F',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
+            if(err6)console.log('a8'+err6);
+            else   io.sockets.in(mail).emit('S_send_reg_ketban','F',socket.number,:socket.username);
+          });
+        }
+        else if(type=="E1"){
+          // xóa kết bạn ông này đi, lúc này chỉ xóa thôi, vì bên kia cũng đã xóa rồi
+          con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+            if (err2)console.log(err2);
+          });
+        }
       }
     });
-    socket.on('C_get_reg_ketban_caro',(mail)=>{
+    socket.on('C_get_reg_ketban_caro',(type,mail)=>{
       if(socket.number!=null&&mail!=null){
-        con.query("UPDATE `"+socket.number+"caro` SET `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
-          if (err2)console.log(err2);
-        });
-      }
-    });
-    socket.on('C_xacnhan_ketban',(mail,stt)=>{
-      if(socket.number!=null&&mail!=null&&stt!=null){
-        con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", (err, rows)=>{
-          if (err){console.log(err);}
-          else{
-            let date=Date.now();
-            if(stt=='A'){
-              if(rows.length>0){
-                //nếu đồng ý, xác nhận rằng máy chủ đã nhận được đề nghị, mày lưu thằng đó vào CSDL đi, lưu rồi thì báo lại tao.
-                con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A',`time`="+date+", `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
-                  if (err2)console.log(err2);
-                  else {
-                    socket.emit('S_get_xacnhan_caro',mail,'A');
-                   }
-                });
-                // đông thời báo cho thằng gửi lời đề nghị, rằng thằng này đã chấp nhận
-                con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'A',`time`="+date+", `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", (err2)=>{
-                if (err2)console.log(err2);
-                else {
-                  io.sockets.in(mail).emit('S_xacnhan_ketban',socket.number,'A');
-                 }
-              });
-              }
-              else socket.emit('taikhoan_da_xoa');
-            }
-            else {
-            //K là không đồng ý kết bạn thằng này
-            socket.emit('S_get_xacnhan_caro',mail,'B');
-            con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
-              if (err2)console.log(err2);
-            });
-              con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'K',`time`="+date+",  `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'", (err3)=>{
-              if (err3)socket.emit('taikhoan_da_xoa');
-              else io.sockets.in(mail).emit('S_send_huy_ketban',socket.number);
-
-            });
-            }
-          }
-        });
-      }
-    });
-    socket.on('C_get_xacnnhan_ketban',(mail,stt)=>{
-      if(socket.number!=null&&mail!=null&&stt!=null){
-        let date= Date.now();
-        if(stt=='A'){
-          con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A',`time`="+date+",  `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", function(err2){
+        if(type=='E'||type=='F'){
+          con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
             if (err2)console.log(err2);
           });
         }
         else {
-          con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
-            if (err2)console.log(err2);
+          con.query("UPDATE `"+socket.number+"caro` SET `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+              if (err2)console.log(err2);
           });
         }
 
-      }
-    });
-    socket.on('C_danhan_huy_ketban',(mail)=>{
-      if(socket.number!=null&&mail!=null){
-          con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
-            if (err2)console.log(err2);
-          });
       }
     });
     socket.on('C_reg_game',(mail)=>{
@@ -629,15 +607,6 @@ con.connect(function(err) {
             });
 
         });
-      }
-    });
-    socket.on('C_xoa_game_free',(mail)=>{
-      if(socket.number != null&&mail){
-        socket.emit('S_get_xoagame_free',mail);
-        con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
-          if (err2)console.log(err2);
-        });
-
       }
     });
     socket.on('C_send_diem',(toado,mail)=>{
@@ -1361,7 +1330,7 @@ con.connect(function(err) {
 
       }
     });
-    socket.on('search_contact',  (string)=>{
+    socket.on('search_contact', (string)=>{
       if (socket.number&&string!=null){
         con.query("SELECT `number`,`user`,  LOCATE('"+string+"',number) FROM `account` WHERE LOCATE('"+string+"',number)>0 LIMIT 50", function(err, a1s){
         if ( err)console.log(err);
@@ -1381,7 +1350,7 @@ con.connect(function(err) {
       });
       }
     });
-    socket.on('C_join_room',  (room)=>{
+    socket.on('C_join_room', (room)=>{
       if (socket.number&&room){
         con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+room+"' AND `number` LIKE '"+socket.number+"' LIMIT 1", function(err1, rows){
           if ( err1){console.log('co loi 2 '+err1);}
@@ -1395,7 +1364,7 @@ con.connect(function(err) {
         });
       }
     });
-    socket.on('C_leave_room',  (room)=> {
+    socket.on('C_leave_room', (room)=> {
         if (socket.number&&room){
         socket.leave(room);
         socket.roomabc = undefined;
@@ -1483,7 +1452,7 @@ con.connect(function(err) {
         });
       }
     });
-    socket.on('C_pos_online',  (info)=>{
+    socket.on('C_pos_online', (info)=>{
       if (socket.number&&info.room){
         if (isArray(info.room)){
           info.room.forEach((room)=>{
@@ -1494,7 +1463,7 @@ con.connect(function(err) {
         }
       }
     });
-    socket.on('C_make_room',  (info)=>{
+    socket.on('C_make_room', (info)=>{
       if (socket.number&&info.room_name&&info.member_list){
         let thoigian = new Date();
         // bắt đầu xử lý cái room
