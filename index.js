@@ -420,7 +420,7 @@ con.connect(function(err) {
         }
         else if(type=="D"){
           // cho tôi đồng ý lời mời kết bạn  nhé
-          con.query("UPDATE `"++socket.number+"caro` SET `thongbao` ='A',`stt`='A' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
+          con.query("UPDATE `"+socket.number+"caro` SET `thongbao` ='A',`stt`='A' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
             if(err6)console.log('a8'+err6);
           });
           con.query("UPDATE `"+mail+"caro` SET `thongbao` ='D',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
