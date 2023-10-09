@@ -143,7 +143,7 @@ con.connect(function(err) {
                 else if(rows.length==0)socket.emit('check_mail_regis_caro_thatbai','B');
                 else {
                   if(chuoi===rows[0].chuoi){
-                    con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(1) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                    con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(2) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                     con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                     var sql = "INSERT INTO `account2` (number,user,pass) VALUES ?";
                     var values = [[rows[0].user,rows[0].name,rows[0].pass]];
@@ -364,13 +364,12 @@ con.connect(function(err) {
 
       }
     });
-
-    socket.on('C_send_ketban_caro',(type,mail)=>{
+    socket.on('C_send_ketban_caro',(type,mail,name)=>{
       if(socket.number!=null&&mail!=null&&type!=null){
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", (err, rows)=>{
           if (err)console.log(err);
           else if(rows.length>0){
-            socket.emit('S_danhan_reg_ketban',type,mail,rows[0].user);
+            socket.emit('S_danhan_reg_ketban',type,mail,name);
             if(type=="B1"){
               // gửi lời đề nghị kết bạn với tôi nhé
                   if(rows.length ==0)socket.emit('taikhoan_da_xoa',mail);
