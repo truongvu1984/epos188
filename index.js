@@ -592,6 +592,7 @@ con.connect(function(err) {
       if(socket.number != null&&isArray(nhom_mail)){
         socket.emit('S_get_xoagame',nhom_mail);
           nhom_mail.forEach((mail,key)=>{
+            console.log('xoa la='+mail);
             con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
               if (err2)console.log(err2);
             });
