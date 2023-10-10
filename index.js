@@ -592,17 +592,19 @@ con.connect(function(err) {
       if(socket.number != null&&isArray(nhom_mail)){
         socket.emit('S_get_xoagame',nhom_mail);
           nhom_mail.forEach((mail,key)=>{
-            con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", function(err2){
+            con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
               if (err2)console.log(err2);
             });
-            con.query("DELETE FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"'", function(err2){
+            con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
               if (err2)console.log(err2);
             });
-            con.query("UPDATE `"+mail+"caro` SET `thongbao` ='X',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",function(err6,res6){
+            con.query("DELETE FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+              if (err2)console.log(err2);
+            });
+            con.query("UPDATE `"+mail+"caro` SET `thongbao` ='F',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
               if(err6)console.log('a8'+err6);
-              else io.sockets.in(mail).emit('S_send_huy_ketban',socket.number);
+              else  io.sockets.in(mail).emit('S_send_reg_ketban','F',socket.number,socket.username);
             });
-
         });
       }
     });
