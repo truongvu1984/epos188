@@ -336,9 +336,10 @@ con.connect(function(err) {
                               // đây là send điểm mà bên nhận không phải phát thông báo, vì thông báo đã gửi theo kênh ở trên
                                 socket.emit('S_send_diem_2',game,a3s[0].name,a3s[0].toado);
                             }
+                            break;
                           }
                         });
-                        break;
+
                       }
                     });
 
