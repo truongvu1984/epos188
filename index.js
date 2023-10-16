@@ -380,18 +380,18 @@ con.connect(function(err) {
           if (err)console.log(err);
           else if(rows.length>0){
             socket.emit('S_danhan_reg_ketban',type,mail,name);
+            // gửi lời đề nghị kết bạn với tôi nhé
             if(type=="B1"){
-              // gửi lời đề nghị kết bạn với tôi nhé
                   if(rows.length ==0)socket.emit('taikhoan_da_xoa',mail);
                   else {
                     let date=Date.now();
-                    var sql3 = "INSERT INTO `"+socket.number+"caro` (mail, name, time, thongbao,stt,luotchoi) VALUES ?";
-                    var val3 = [[mail, rows[0].user, date, 'B','A','A']];
+                    var sql3 = "INSERT INTO `"+socket.number+"caro` (mail, name, time, thongbao,stt,luotchoi,ditruoc) VALUES ?";
+                    var val3 = [[mail, rows[0].user, date, 'B','A','A','A']];
                     con.query(sql3, [val3],  (err3, res3)=> {
                     if ( err3){console.log(err3);}
                     else {
-                      var sql4 = "INSERT INTO `"+mail+"caro` (mail, name, time,thongbao,stt,luotchoi) VALUES ?";
-                      var val4 = [[socket.number, socket.username, date, 'B1','B','B']];
+                      var sql4 = "INSERT INTO `"+mail+"caro` (mail, name, time,thongbao,stt,luotchoi,ditruoc) VALUES ?";
+                      var val4 = [[socket.number, socket.username, date, 'B1','B','B','B']];
                       con.query(sql4, [val4],  (err4, res4)=> {
                         if ( err4){console.log(err4);}
                         else {
@@ -403,8 +403,8 @@ con.connect(function(err) {
                 });
                   }
             }
+            // cho tôi thu hồi lời mời kết bạn lại nhé
             else if(type=="E"){
-              // cho tôi thu hồi lời mời kết bạn lại nhé
               con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                 if (err2)console.log(err2);
               });
@@ -413,8 +413,8 @@ con.connect(function(err) {
                 else   io.sockets.in(mail).emit('S_send_reg_ketban','E',socket.number,socket.username);
               });
             }
+            // cho tôi từ chối lời mời kết bạn  nhé
             else if(type=="C"){
-              // cho tôi từ chối lời mời kết bạn  nhé
               con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                 if (err2)console.log(err2);
               });
@@ -423,8 +423,8 @@ con.connect(function(err) {
                 else   io.sockets.in(mail).emit('S_send_reg_ketban','C',socket.number,socket.username);
               });
             }
+            // cho tôi đồng ý lời mời kết bạn  nhé
             else if(type=="D"){
-              // cho tôi đồng ý lời mời kết bạn  nhé
               con.query("UPDATE `"+socket.number+"caro` SET `thongbao` ='A',`stt`='A' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
                 if(err6)console.log('a8'+err6);
               });
@@ -433,8 +433,8 @@ con.connect(function(err) {
                 else   io.sockets.in(mail).emit('S_send_reg_ketban','D',socket.number,socket.username);
               });
             }
+            // xóa kết bạn nhé
             else if(type=="F"){
-              // xóa kết bạn nhé
               con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                 if (err2)console.log(err2);
               });
@@ -443,12 +443,12 @@ con.connect(function(err) {
                 else   io.sockets.in(mail).emit('S_send_reg_ketban','F',socket.number,socket.username);
               });
             }
+            // xóa kết bạn ông này đi, lúc này chỉ xóa thôi, vì bên kia cũng đã xóa rồi
             else if(type=="E1"){
-          // xóa kết bạn ông này đi, lúc này chỉ xóa thôi, vì bên kia cũng đã xóa rồi
-          con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
-            if (err2)console.log(err2);
-          });
-        }
+              con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+                if (err2)console.log(err2);
+              });
+            }
           }
         });
       }
