@@ -143,7 +143,7 @@ con.connect(function(err) {
                 else if(rows.length==0)socket.emit('check_mail_regis_caro_thatbai','B');
                 else {
                   if(chuoi===rows[0].chuoi){
-                    con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(2) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                    con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(2) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1),, PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                     con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                     var sql = "INSERT INTO `account2` (number,user,pass) VALUES ?";
                     var values = [[rows[0].user,rows[0].name,rows[0].pass]];
@@ -322,27 +322,28 @@ con.connect(function(err) {
               socket.username = rows[0].user;
               socket.join(data.rightuser);
               // tìm các thông báo gửi về cho người chơi, bao gồm cả thông báo kết bạn và chơi game
+              // thông báo ở đây không bao gồm các nước đi mới
                 con.query("SELECT `thongbao`,`mail`,`name`,`luotchoi` FROM `"+socket.number+"caro` WHERE `stt` LIKE 'B' ORDER BY time ASC", (err2, a2s)=>{
                   if(err2){console.log(err2);}
-                  else {
-                    if(a2s.length>0){
-                        socket.emit('S_send_thongbao',a2s,);
+                  else if(a2s.length>0) {
+                    socket.emit('S_send_thongbao',a2s,);
+                    a2s.forEach((item, i) => {
+                      if(item==game){
+                        con.query("SELECT `name`,`toado` FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+game+"' AND `ta` LIKE 'B' ORDER BY id DESC LIMIT 1", (err3, a3s)=>{
+                          if(err3){console.log(err3);}
+                          else {
+                            if(a3s.length>0){
+                              // đây là send điểm mà bên nhận không phải phát thông báo, vì thông báo đã gửi theo kênh ở trên
+                                socket.emit('S_send_diem_2',game,a3s[0].name,a3s[0].toado);
+                            }
+                          }
+                        });
+                        break;
+                      }
+                    });
 
-                    }
                   }
                 });
-              // kiểm tra xem người chơi có đang ở trong game nào không, nếu có thì gửi vị trí đó về
-              if(game!=''){
-                con.query("SELECT `name`,`toado` FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+game+"' AND `ta` LIKE 'B' ORDER BY id DESC LIMIT 1", (err2, a2s)=>{
-                  if(err2){console.log(err2);}
-                  else {
-                    if(a2s.length>0){
-                        socket.emit('S_send_diem',game,a2s[0].name,a2s[0].toado);
-                    }
-                  }
-                });
-              }
-
 
             }
             else {
@@ -413,7 +414,7 @@ con.connect(function(err) {
               con.query("DELETE FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                 if (err2)console.log(err2);
               });
-              con.query("UPDATE `"+mail+"caro` SET `thongbao` ='X',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
+              con.query("UPDATE `"+mail+"caro` SET `thongbao` ='E',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
                 if(err6)console.log('a8'+err6);
                 else   io.sockets.in(mail).emit('S_send_reg_ketban','E',socket.number,socket.username);
               });
@@ -621,10 +622,9 @@ con.connect(function(err) {
       }
     });
     socket.on('C_send_diem',(toado,mail)=>{
-      //
       if(socket.number != null){
         if(toado!=null && mail !=null){
-          con.query("UPDATE `"+mail+"caro` SET `luotchoi` = 'A',`stt`='C' WHERE `mail` LIKE '"+socket.number+"'",(err,res)=>{
+          con.query("UPDATE `"+mail+"caro` SET `thongbao`='K',`luotchoi` = 'A',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err,res)=>{
             if(err)console.log('a8'+err);
             else {
               var sql = "INSERT INTO `"+mail+"caro1` (mail,toado, ta) VALUES ?";
@@ -633,6 +633,8 @@ con.connect(function(err) {
                 if ( err1){console.log('a5'+err1);}
                 else {
                   socket.emit('C_send_diem_ok',mail,toado);
+                  // đây là send điểm có thông báo, còn hiển thị điểm thì tùy trạng thái bên nhận, nếu đang ở game thì hiển thị
+                  io.sockets.in(mail).emit('S_send_diem',socket.number,socket.username,toado);
                   con.query("UPDATE `"+socket.number+"caro` SET `luotchoi` = 'B' WHERE `mail` LIKE '"+mail+"'",(err,res)=>{
                     if(err)console.log('a8'+err);
                     else {
@@ -644,7 +646,6 @@ con.connect(function(err) {
                       });
                     }
                   });
-                  io.sockets.in(mail).emit('S_send_diem',socket.number,socket.username,toado);
                 }
               });
             }
