@@ -543,7 +543,7 @@ con.connect(function(err) {
               }
           });
         }
-        // bên kia đồng ý chơi ván mới
+        // đồng ý chơi ván mới
         else if(type=='S'){
           con.query("SELECT `ditruoc` FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' ORDER BY id LIMIT 1", (err, as)=>{
             if(err)console.log(err);
@@ -575,7 +575,7 @@ con.connect(function(err) {
           });
 
         }
-        // bên kia không đồng ý chơi ván mới
+        // không đồng ý chơi ván mới
         else if(type=='P'){
           con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                 if (err2)console.log(err2);
