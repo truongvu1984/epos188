@@ -323,35 +323,28 @@ con.connect(function(err) {
               socket.join(data.rightuser);
               // tìm các thông báo gửi về cho người chơi, bao gồm cả thông báo kết bạn và chơi game
               // thông báo ở đây không bao gồm các nước đi mới
-                con.query("SELECT `thongbao`,`mail`,`name`,`luotchoi` FROM `"+socket.number+"caro` WHERE `stt` LIKE 'B' ORDER BY time ASC", (err2, a2s)=>{
+              con.query("SELECT `thongbao`,`mail`,`name`,`luotchoi` FROM `"+socket.number+"caro` WHERE `stt` LIKE 'B' ORDER BY time ASC", (err2, a2s)=>{
                   if(err2){console.log(err2);}
                   else if(a2s.length>0) {
                     socket.emit('S_send_thongbao',a2s,);
-                    a2s.forEach((item, i) => {
-                      if(item==game){
-                        con.query("SELECT `name`,`toado` FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+game+"' AND `ta` LIKE 'B' ORDER BY id DESC LIMIT 1", (err3, a3s)=>{
-                          if(err3){console.log(err3);}
-                          else {
-                            if(a3s.length>0){
-                              // đây là send điểm mà bên nhận không phải phát thông báo, vì thông báo đã gửi theo kênh ở trên
-                                socket.emit('S_send_diem_2',game,a3s[0].name,a3s[0].toado);
-                            }
-                            break;
-                          }
-                        });
 
-                      }
-                    });
-
+                }
+              });
+              con.query("SELECT `name`,`toado` FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+game+"' AND `ta` LIKE 'B' ORDER BY id DESC LIMIT 1", (err3, a3s)=>{
+                if(err3){console.log(err3);}
+                else {
+                  if(a3s.length>0){
+                      // đây là send điểm mà bên nhận không phải phát thông báo, vì thông báo đã gửi theo kênh ở trên
+                      socket.emit('S_send_diem_2',game,a3s[0].name,a3s[0].toado);
                   }
-                });
-
+                }
+              });
             }
             else {
               socket.number = null;
               socket.username = null;
             }
-            }
+          }
         });
       }//end
       else {
