@@ -527,25 +527,24 @@ con.connect(function(err) {
       });
       }
     });
-    socket.on('C_reg_choi_lai',(mail)=>{
+    socket.on('C_reg_choi_lai',(type,mail)=>{
       if(socket.number != null&&mail!=null){
-        con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'N' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+        // bên kia đề nghị chơi lại
+        if(type=='N'){
+          // đề nghị được chơi lại
+          con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'N' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
               if (err2)console.log(err2);
               else {
-                socket.emit('S_get_reg_choilai',mail);
+                socket.emit('S_get_reg_choilai',type,mail);
                 con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'M', `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
                   if(err5)console.log(err5);
-                  else io.sockets.in(mail).emit('C_muon_choi_lai',socket.number,socket.username);
-
+                  else io.sockets.in(mail).emit('S_send_choi_lai','N',socket.number);
                 });
-
-            }
-        });
-      }
-    });
-    socket.on('C_dongy_choilai',(mail,stt)=>{
-      if(socket.number != null&&mail!=null&&stt!=null){
-        if(stt=='A'){
+              }
+          });
+        }
+        // bên kia đồng ý chơi ván mới
+        else if(type=='S'){
           con.query("SELECT `ditruoc` FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' ORDER BY id LIMIT 1", (err, as)=>{
             if(err)console.log(err);
             else if(as.length==0)socket.emit('taikhoan_da_xoa');
@@ -554,7 +553,7 @@ con.connect(function(err) {
               if(as[0].ditruoc=='A')new_luot='B';
               else new_luot='A';
               con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A',`luotchoi`='"+new_luot+"',`ditruoc`='"+new_luot+"' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
-                    if (err2)console.log(err2);
+                  if (err2)console.log(err2);
                     else {
                       con.query("DELETE FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                         if (err2)console.log(err2);
@@ -569,15 +568,15 @@ con.connect(function(err) {
                         {
                           io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'A',as[0].ditruoc);
                         }
-                      });
-
+                    });
                   }
               });
             }
-        });
+          });
+
         }
-        else {
-          //neu tu chuoi
+        // bên kia không đồng ý chơi ván mới
+        else if(type=='P'){
           con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                 if (err2)console.log(err2);
                 else {
@@ -589,15 +588,11 @@ con.connect(function(err) {
 
               }
           });
+
         }
-
-
-
-
-
-
       }
     });
+
     socket.on('C_xoa_game',(nhom_mail)=>{
       if(socket.number != null&&isArray(nhom_mail)){
         socket.emit('S_get_xoagame',nhom_mail);
