@@ -580,7 +580,7 @@ con.connect(function(err) {
           con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                 if (err2)console.log(err2);
                 else {
-                  socket.emit('S_get_dongy_choilai',mail,'B',new_luot);
+                  socket.emit('S_get_dongy_choilai',mail,'B');
                   con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'P', `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
                     if(err5)console.log(err5);
                     else io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'B');
