@@ -103,8 +103,11 @@ con.connect(function(err) {
               });
               }
               else {
-                con.query("CREATE TABLE IF NOT EXISTS  `"+tin.username+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(1) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                con.query("CREATE TABLE IF NOT EXISTS  `"+tin.username+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(2) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                 con.query("CREATE TABLE IF NOT EXISTS  `"+tin.username+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+
+
+
                 var sql = "INSERT INTO `account2` (number,user,pass) VALUES ?";
                 var matkhau = passwordHash.generate(''+tin.pass);
                 var values = [[tin.username,tin.displayname, matkhau]];
@@ -143,8 +146,9 @@ con.connect(function(err) {
                 else if(rows.length==0)socket.emit('check_mail_regis_caro_thatbai','B');
                 else {
                   if(chuoi===rows[0].chuoi){
-                    con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(2) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1),, PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+                    con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(2) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                     con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+
                     var sql = "INSERT INTO `account2` (number,user,pass) VALUES ?";
                     var values = [[rows[0].user,rows[0].name,rows[0].pass]];
                     con.query(sql, [values], (err1, result)=>{
@@ -222,7 +226,7 @@ con.connect(function(err) {
     });
     socket.on('forget_pass_2_caro',(tin)=>{
       if(tin.mail&&tin.chuoi&&tin.pass){
-        con.query("SELECT `dem` FROM `kiemtra` WHERE `username` LIKE '"+mail+"' LIMIT 1", (err1, row1s)=>{
+        con.query("SELECT `dem` FROM `kiemtra` WHERE `username` LIKE '"+tin.mail+"' LIMIT 1", (err1, row1s)=>{
           if(err1)console.log(err1);
           else {
             if(row1s.length>0&&row1s[0].dem>4)socket.emit('C_reg_qua_solan');
@@ -230,14 +234,14 @@ con.connect(function(err) {
               var time = Math.floor(Date.now() / 1000);
               if(row1s.length==0){
                 var sql = "INSERT INTO `kiemtra` (username,loai,dem,time) VALUES ?";
-                var values = [[mail,'A',0, time]];
+                var values = [[tin.mail,'A',0, time]];
                 con.query(sql, [values], function (err4, result) {
                     if (err1)console.log(err1);
                 });
               }
               else {
                 let dem=row1s[0].dem+1;
-                con.query("UPDATE `kiemtra` SET `dem` = "+dem+",`time`="+time+" WHERE `username` LIKE '"+mail+"'", (err6)=>{
+                con.query("UPDATE `kiemtra` SET `dem` = "+dem+",`time`="+time+" WHERE `username` LIKE '"+tin.mail+"'", (err6)=>{
                   if (err6)console.log(err6);
                 });
               }
@@ -566,7 +570,7 @@ con.connect(function(err) {
                         if(err5)console.log(err5);
                         else
                         {
-                          io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'A',as[0].ditruoc);
+                          io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'S',as[0].ditruoc);
                         }
                     });
                   }
@@ -583,12 +587,10 @@ con.connect(function(err) {
                   socket.emit('S_get_dongy_choilai',mail,'B');
                   con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'P', `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
                     if(err5)console.log(err5);
-                    else io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'B');
+                    else io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'P');
                   });
-
               }
           });
-
         }
       }
     });
