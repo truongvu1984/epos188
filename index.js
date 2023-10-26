@@ -625,36 +625,39 @@ con.connect(function(err) {
     socket.on('C_send_diem',(toado,mail)=>{
       if(socket.number != null){
         if(toado!=null && mail !=null){
-          con.query("UPDATE `"+mail+"caro` SET `thongbao`='K',`luotchoi` = 'A',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err,res)=>{
-            if(err)console.log('a8'+err);
-            else {
-              var sql = "INSERT INTO `"+mail+"caro1` (mail,toado, ta) VALUES ?";
-              var val = [[socket.number,toado,'B']];
-              con.query(sql, [val],  (err1, res1)=> {
-                if ( err1){console.log('a5'+err1);}
-                else {
-                  socket.emit('C_send_diem_ok',mail,toado);
-                  // đây là send điểm có thông báo, còn hiển thị điểm thì tùy trạng thái bên nhận, nếu đang ở game thì hiển thị
-                  io.sockets.in(mail).emit('S_send_diem',socket.number,socket.username,toado);
-                  con.query("UPDATE `"+socket.number+"caro` SET SET `thongbao`='A',`luotchoi` = 'B' WHERE `mail` LIKE '"+mail+"'",(err,res)=>{
-                    if(err)console.log('a8'+err);
-                    else {
-                      var sql = "INSERT INTO `"+socket.number+"caro1` (mail,toado, ta) VALUES ?";
-                      var val = [[mail,toado,'A']];
-                      con.query(sql, [val],  (err1, res1)=> {
-                        if ( err1){console.log('a5'+err1);}
+          con.query("SELECT `toado` FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"' ORDER BY id LIMIT 1", (err, as)=>{
+              if(err)console.log(err);
+              else if(as.length>0)socket.emit('nuoc_di_ko_hople');
+              else {
+                con.query("UPDATE `"+mail+"caro` SET `thongbao`='K',`luotchoi` = 'A',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err,res)=>{
+                  if(err)console.log('a8'+err);
+                  else {
+                    var sql = "INSERT INTO `"+mail+"caro1` (mail,toado, ta) VALUES ?";
+                    var val = [[socket.number,toado,'B']];
+                    con.query(sql, [val],  (err1, res1)=> {
+                      if ( err1){console.log('a5'+err1);}
+                      else {
+                        socket.emit('C_send_diem_ok',mail,toado);
+                        // đây là send điểm có thông báo, còn hiển thị điểm thì tùy trạng thái bên nhận, nếu đang ở game thì hiển thị
+                        io.sockets.in(mail).emit('S_send_diem',socket.number,socket.username,toado);
+                        con.query("UPDATE `"+socket.number+"caro` SET `thongbao`='A',`luotchoi` = 'B' WHERE `mail` LIKE '"+mail+"'",(err,res)=>{
+                          if(err)console.log('a8'+err);
+                          else {
+                            var sql = "INSERT INTO `"+socket.number+"caro1` (mail,toado, ta) VALUES ?";
+                            var val = [[mail,toado,'A']];
+                            con.query(sql, [val],  (err1, res1)=> {
+                              if ( err1){console.log('a5'+err1);}
 
-                      });
-                    }
-                  });
-                }
-              });
-            }
+                            });
+                          }
+                        });
+                      }
+                    });
+                  }
+                });
+
+              }
           });
-
-
-
-
       }
     }
 
