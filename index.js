@@ -432,9 +432,9 @@ con.connect(function(err) {
               con.query("UPDATE `"+socket.number+"caro` SET `thongbao` ='A',`stt`='A' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
                 if(err6)console.log('a8'+err6);
               });
-              con.query("UPDATE `"+mail+"caro` SET `thongbao` ='D',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
+              con.query("UPDATE `"+mail+"caro` SET `thongbao` ='K',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
                 if(err6)console.log('a8'+err6);
-                else   io.sockets.in(mail).emit('S_send_reg_ketban','D',socket.number,socket.username);
+                else   io.sockets.in(mail).emit('S_send_reg_ketban','K',socket.number,socket.username);
               });
             }
             // xóa kết bạn nhé
@@ -553,9 +553,8 @@ con.connect(function(err) {
             if(err)console.log(err);
             else if(as.length==0)socket.emit('taikhoan_da_xoa');
             else {
-              let new_luot;
+              let new_luot='A';
               if(as[0].ditruoc=='A')new_luot='B';
-              else new_luot='A';
               con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A',`luotchoi`='"+new_luot+"',`ditruoc`='"+new_luot+"' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                   if (err2)console.log(err2);
                     else {
@@ -581,20 +580,31 @@ con.connect(function(err) {
         }
         // không đồng ý chơi ván mới
         else if(type=='P'){
-          con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
-                if (err2)console.log(err2);
-                else {
-                  socket.emit('S_get_dongy_choilai',mail,'B');
-                  con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'P', `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
-                    if(err5)console.log(err5);
-                    else io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'P');
-                  });
-              }
+          con.query("SELECT `luotchoi` FROM `"+socket.number+"caro` WHERE `mail` LIKE '"+mail+"' ORDER BY id LIMIT 1", (err, as)=>{
+            if(err)console.log(err);
+            else if(as.length==0)socket.emit('taikhoan_da_xoa');
+            else {
+              con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+                  if (err2)console.log(err2);
+                    else {
+                      let luot1='A';
+                      if(as[0].luotchoi=='A')luot1='B';
+                      socket.emit('S_get_dongy_choilai',mail,'B',luot1);
+                      con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'P', `stt` = 'B' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
+                        if(err5)console.log(err5);
+                        else io.sockets.in(mail).emit('S_send_C_dongy_choi_lai',socket.number,socket.username,'P',luot1);
+                      });
+                  }
+              });
+
+            }
           });
+
+
+
         }
       }
     });
-
     socket.on('C_xoa_game',(nhom_mail)=>{
       if(socket.number != null&&isArray(nhom_mail)){
         socket.emit('S_get_xoagame',nhom_mail);
@@ -626,7 +636,7 @@ con.connect(function(err) {
                   socket.emit('C_send_diem_ok',mail,toado);
                   // đây là send điểm có thông báo, còn hiển thị điểm thì tùy trạng thái bên nhận, nếu đang ở game thì hiển thị
                   io.sockets.in(mail).emit('S_send_diem',socket.number,socket.username,toado);
-                  con.query("UPDATE `"+socket.number+"caro` SET `luotchoi` = 'B' WHERE `mail` LIKE '"+mail+"'",(err,res)=>{
+                  con.query("UPDATE `"+socket.number+"caro` SET SET `thongbao`='A',`luotchoi` = 'B' WHERE `mail` LIKE '"+mail+"'",(err,res)=>{
                     if(err)console.log('a8'+err);
                     else {
                       var sql = "INSERT INTO `"+socket.number+"caro1` (mail,toado, ta) VALUES ?";
