@@ -432,9 +432,9 @@ con.connect(function(err) {
               con.query("UPDATE `"+socket.number+"caro` SET `thongbao` ='A',`stt`='A' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
                 if(err6)console.log('a8'+err6);
               });
-              con.query("UPDATE `"+mail+"caro` SET `thongbao` ='K',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
+              con.query("UPDATE `"+mail+"caro` SET `thongbao` ='D',`stt`='B' WHERE `mail` LIKE '"+socket.number+"'",(err6,res6)=>{
                 if(err6)console.log('a8'+err6);
-                else   io.sockets.in(mail).emit('S_send_reg_ketban','K',socket.number,socket.username);
+                else   io.sockets.in(mail).emit('S_send_reg_ketban','D',socket.number,socket.username);
               });
             }
             // xóa kết bạn nhé
