@@ -638,6 +638,7 @@ con.connect(function(err) {
                       if ( err1){console.log('a5'+err1);}
                       else {
                         socket.emit('C_send_diem_ok',mail,toado);
+                        console.log('Co gui di cho '+mail+"="+toado);
                         // đây là send điểm có thông báo, còn hiển thị điểm thì tùy trạng thái bên nhận, nếu đang ở game thì hiển thị
                         io.sockets.in(mail).emit('S_send_diem',socket.number,socket.username,toado);
                         con.query("UPDATE `"+socket.number+"caro` SET `thongbao`='A',`luotchoi` = 'B' WHERE `mail` LIKE '"+mail+"'",(err,res)=>{
