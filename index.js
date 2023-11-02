@@ -480,7 +480,7 @@ con.connect(function(err) {
             else {
               con.query("SELECT * FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"' ORDER BY id", (err2, a2s)=>{
                   if(err2)console.log(err2);
-                  else socket.emit('S_send_game',a2s,as[0].luotchoi);
+                  else socket.emit('S_send_game',a2s,as[0].luotchoi,mail);
 
               });
             }
@@ -558,13 +558,14 @@ con.connect(function(err) {
               con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'A', `stt`='A',`luotchoi`='"+new_luot+"',`ditruoc`='"+new_luot+"' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                   if (err2)console.log(err2);
                     else {
+                      socket.emit('S_get_dongy_choilai',mail,'A',new_luot);
                       con.query("DELETE FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"'", (err2)=>{
                         if (err2)console.log(err2);
                       });
                       con.query("DELETE FROM `"+mail+"caro1` WHERE `mail` LIKE '"+socket.number+"'", (err2)=>{
                         if (err2)console.log(err2);
                       });
-                      socket.emit('S_get_dongy_choilai',mail,'A',new_luot);
+
                       con.query("UPDATE `"+mail+"caro` SET `thongbao` = 'S', `stt` = 'B',`luotchoi`='"+as[0].ditruoc+"',`ditruoc`='"+as[0].ditruoc+"' WHERE `mail` LIKE '"+socket.number+"'",(err5,res5)=>{
                         if(err5)console.log(err5);
                         else
@@ -638,7 +639,7 @@ con.connect(function(err) {
                       if ( err1){console.log('a5'+err1);}
                       else {
                         socket.emit('C_send_diem_ok',mail,toado);
-                      
+
                         // đây là send điểm có thông báo, còn hiển thị điểm thì tùy trạng thái bên nhận, nếu đang ở game thì hiển thị
                         io.sockets.in(mail).emit('S_send_diem',socket.number,socket.username,toado);
                         con.query("UPDATE `"+socket.number+"caro` SET `thongbao`='A',`luotchoi` = 'B' WHERE `mail` LIKE '"+mail+"'",(err,res)=>{
