@@ -606,6 +606,15 @@ con.connect(function(err) {
         }
       }
     });
+    socket.on('C_get_dongy_choilai',(mail)=>{
+      if(socket.number != null&&mail!=null){
+        con.query("UPDATE `"+socket.number+"caro` SET `stt` = 'A' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
+            if (err2)console.log(err2);
+
+        });
+
+      }
+    });
     socket.on('C_xoa_game',(nhom_mail)=>{
       if(socket.number != null&&isArray(nhom_mail)){
         socket.emit('S_get_xoagame',nhom_mail);
