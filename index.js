@@ -695,7 +695,7 @@ con.connect(function(err) {
                           var string = Math.floor(Math.random() * (899999)) + 100000;
                           var mailOptions = {
                               from: 'windlaxy@gmail.com',
-                              to: mail,
+                              to: tin.username,
                               subject: 'Windlaxy OTP',
                               text: 'Your Windlaxy OTP:'+string
                             };
