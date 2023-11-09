@@ -765,7 +765,7 @@ con.connect(function(err) {
 
                 }
                else {
-                 if(rows[0].dem>3)socket.emit('S_regis_1_windlaxy_thatbai','C');
+                 if(rows[0].dem>3)socket.emit('S_regis_2_windlaxy_thatbai','D');
                  else {
                    let dem = rows[0].dem+1;
                    var time = Math.floor(Date.now() / 1000);
