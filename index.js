@@ -738,13 +738,16 @@ con.connect(function(err) {
       }
     });
     socket.on('C_regis_2_windlaxy',(chuoi,id_phone)=>{
+      console.log(chuoi+":"+id_phone);
       if(chuoi&&id_phone){
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+id_phone +"' LIMIT 1", (err, rows)=>{
           if (err)socket.emit('C_regis_2_windlaxy_thatbai','A');
           else{
              if(rows.length==0)socket.emit('C_regis_2_windlaxy_thatbai','B');
              else {
+               console.log('AAAA');
                if(rows[0].chuoi==chuoi){
+                 console.log('BBBBB');
                   con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` CHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                   con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE, `idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                   con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
@@ -763,7 +766,7 @@ con.connect(function(err) {
                   });
 
                 }
-                else socket.emit('C_regis_2_windlaxy_thatbai','C');
+               else socket.emit('C_regis_2_windlaxy_thatbai','C');
               }
             }
         });
