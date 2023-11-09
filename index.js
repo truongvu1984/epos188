@@ -741,9 +741,9 @@ con.connect(function(err) {
       console.log(chuoi+":"+id_phone);
       if(chuoi&&id_phone){
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+id_phone +"' LIMIT 1", (err, rows)=>{
-          if (err)socket.emit('C_regis_2_windlaxy_thatbai','A');
+          if (err)socket.emit('S_regis_2_windlaxy_thatbai','A');
           else{
-             if(rows.length==0)socket.emit('C_regis_2_windlaxy_thatbai','B');
+             if(rows.length==0)socket.emit('S_regis_2_windlaxy_thatbai','B');
              else {
                console.log('AAAA');
                if(rows[0].chuoi==chuoi){
@@ -756,7 +756,7 @@ con.connect(function(err) {
                   var matkhau = passwordHash.generate(''+tin.pass);
                   var values = [[rows[0].mail,rows[0].name, matkhau]];
                   con.query(sql, [values],  (err1, result)=> {
-                    if (err1)socket.emit('C_regis_2_windlaxy_thatbai','A');
+                    if (err1)socket.emit('S_regis_2_windlaxy_thatbai','A');
                     else  {
                       con.query("DELETE FROM `active` WHERE `mail` LIKE '"+id_phone+"'", (err2)=>{
                         if (err2)socket.emit('C_regis_2_windlaxy_ok',rows[0].mail);
@@ -766,7 +766,7 @@ con.connect(function(err) {
                   });
 
                 }
-               else socket.emit('C_regis_2_windlaxy_thatbai','C');
+               else socket.emit('S_regis_2_windlaxy_thatbai','C');
               }
             }
         });
