@@ -745,9 +745,7 @@ con.connect(function(err) {
           else{
              if(rows.length==0)socket.emit('S_regis_2_windlaxy_thatbai','B');
              else {
-               console.log('AAAA');
                if(rows[0].chuoi==chuoi){
-                 console.log('BBBBB');
                   con.query("CREATE TABLE IF NOT EXISTS  `"+tin.mail+"main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` CHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                   con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"diem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE, `idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
                   con.query("CREATE TABLE IF NOT EXISTS `"+tin.mail+"line_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
@@ -766,7 +764,18 @@ con.connect(function(err) {
                   });
 
                 }
-               else socket.emit('S_regis_2_windlaxy_thatbai','C');
+               else {
+                 if(row1s[0].dem>3){socket.emit('S_regis_1_windlaxy_thatbai','C');
+                 else {
+                   let dem = row1s[0].dem+1;
+                   var time = Math.floor(Date.now() / 1000);
+                   con.query("UPDATE `active` SET `time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+id_phone+"'",(err1)=>{
+                     if(err1)socket.emit('S_regis_2_windlaxy_thatbai','A');
+                     else socket.emit('S_regis_2_windlaxy_thatbai','C');
+                   });
+                 }
+
+               }
               }
             }
         });
