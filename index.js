@@ -761,7 +761,7 @@ con.connect(function(err) {
                     if(err3)socket.emit('S_regis_2_windlaxy_thatbai','A');
                   });
                   var sql = "INSERT INTO `account` (number,user, pass) VALUES ?";
-                  var matkhau = passwordHash.generate(''+tin.pass);
+                  var matkhau = passwordHash.generate(rows[0].pass);
                   var values = [[rows[0].mail,rows[0].name, matkhau]];
                   con.query(sql, [values],  (err1, result)=> {
                     if (err1)socket.emit('S_regis_2_windlaxy_thatbai','A');
