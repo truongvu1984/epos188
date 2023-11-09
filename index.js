@@ -692,6 +692,7 @@ con.connect(function(err) {
                       // nếu tài khoản đã có người đăng ký rồi thì:
                       if(err)socket.emit('S_regis_1_windlaxy_thatbai','A');
                       else {
+                        console.log('tim thay='+rows.length);
                         if (rows.length >0 )	{socket.emit('S_regis_1_windlaxy_thatbai','D');}
                         else {
                           var string = Math.floor(Math.random() * (899999)) + 100000;
