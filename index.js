@@ -50,7 +50,6 @@ function kiemtra_taikhoan(){
   // var date2 = Math.floor(Date.now() / 1000) - 600;
   var date3=Math.floor(Date.now() / 1000) - 300;
   con.query(" DELETE FROM `active` WHERE `time` < "+date3, (err1)=>{if(err1)console.log('co loi HA HA HA:'+err1);});
-  con.query(" DELETE FROM `account_tem` WHERE `time` < "+date3, (err2)=>{if(err2)console.log('co loi HA HA HA:'+err2);});
   con.query(" DELETE FROM `kiemtra` WHERE `time` < "+date3, (err3)=>{if(err3)console.log('co loi HA HA HA:'+err3);});
 
   kiemtra_taikhoan();
