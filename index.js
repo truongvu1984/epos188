@@ -172,13 +172,17 @@ con.connect(function(err) {
         });
       }
     });
-    socket.on('forget_pass_caro',(mail)=>{
-      if(mail!=null){
-        con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ mail +"' LIMIT 1", (err, rows)=>{
-                // nếu tài khoản đã có người đăng ký rồi thì:
-                if(err)socket.emit('forget_pass_caro_loi','A');
+    socket.on('forget_pass_1_caro',(mail,phone_id)=>{
+      if(mail!=null&&phone_id!=null){
+        con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ phone_id +"' LIMIT 1", (err3, row1s)=>{
+          if(err3){socket.emit('forget_pass_1_caro_thatbai','A');}
+          else {
+            if(row1s.length>0 && row1s[0].dem>2)socket.emit('forget_pass_1_caro_thatbai','C');
+            else {
+              con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ mail +"' LIMIT 1", (err, rows)=>{
+                if(err)socket.emit('forget_pass_1_caro_thatbai','A');
                 else {
-                  if (rows.length ==0 )	{socket.emit('forget_pass_caro_loi','B');}
+                  if (rows.length ==0 )	{socket.emit('forget_pass_1_caro_thatbai','B');}
                   else {
                     var string = Math.floor(Math.random() * (899999)) + 100000;
                     var mailOptions = {
@@ -186,89 +190,32 @@ con.connect(function(err) {
                       to: mail,
                       subject: 'Caro OTP',
                       text: 'Your Caro OTP:'+string
-                    };
+                      };
                     transporter.sendMail(mailOptions, function(error, info){
-                      if (error) {socket.emit('forget_pass_caro_loi','D');console.log(error);}
-                      else {
-                        con.query("DELETE FROM `account_tem` WHERE `user` LIKE '"+mail+"'", (err2)=>{
-                            if (err2)console.log(err2);
-                            else {
-                              var sql = "INSERT INTO `account_tem` (user,chuoi,time) VALUES ?";
-                              var time = Math.floor(Date.now() / 1000);
-                              var values = [[mail,string, time]];
-                              con.query(sql, [values], (err1, result)=>{
-                                if (err1)socket.emit('forget_pass_caro_loi','A');
-                                else socket.emit('S_check_mail_forget',mail);
-                              });
+                        if (error) {socket.emit('forget_pass_1_caro_thatbai','D');console.log(error);}
+                        else {
+                          var time = Math.floor(Date.now() / 1000);
+                          if(row1s.length==0){
+                                var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
+                                var values = [[mail, string,time,1,phone_id]];
+                                con.query(sql, [values],  (err1, result) =>{
+                                  if ( err1)socket.emit('forget_pass_1_caro_thatbai','A');
+                                  else  socket.emit('forget_pass_1_caro_ok');
+                                });
+                              }
+                          else {
+                                //nếu có rồi thì cập nhật và cộng số đếm lên 1
+                                let dem = row1s[0].dem+1;
+                                con.query("UPDATE `active` SET `chuoi`='"+string+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+phone_id+"'",(err1)=>{
+                                  if(err1)socket.emit('forget_pass_1_caro_thatbai','A');
+                                  else socket.emit('forget_pass_1_caro_ok');
+                                });
                             }
-                        });
-
-
-
-
-                        var time = Math.floor(Date.now() / 1000);
-
-                          var sql = "INSERT INTO `active` (mail,chuoi,time) VALUES ?";
-                          var values = [[mail, string1,time,1,phone_id]];
-                          con.query(sql, [values], function (err1, result) {
-                            if ( err1)socket.emit('regis_1_thatbai_A','A');
-                            else  socket.emit('regis_1_thanhcong_A');
-                          });
-
-
-                      }
+                       }
                     });
-
-
                   }
                 }
-        });
-
-      }
-    });
-    socket.on('forget_pass_2_caro',(tin)=>{
-      if(tin.mail&&tin.chuoi&&tin.pass){
-        con.query("SELECT `dem` FROM `kiemtra` WHERE `username` LIKE '"+tin.mail+"' LIMIT 1", (err1, row1s)=>{
-          if(err1)console.log(err1);
-          else {
-            if(row1s.length>0&&row1s[0].dem>4)socket.emit('C_reg_qua_solan');
-            else {
-              var time = Math.floor(Date.now() / 1000);
-              if(row1s.length==0){
-                var sql = "INSERT INTO `kiemtra` (username,loai,dem,time) VALUES ?";
-                var values = [[tin.mail,'A',0, time]];
-                con.query(sql, [values], function (err4, result) {
-                    if (err1)console.log(err1);
-                });
-              }
-              else {
-                let dem=row1s[0].dem+1;
-                con.query("UPDATE `kiemtra` SET `dem` = "+dem+",`time`="+time+" WHERE `username` LIKE '"+tin.mail+"'", (err6)=>{
-                  if (err6)console.log(err6);
-                });
-              }
-              con.query("SELECT * FROM `account_tem` WHERE `user` LIKE '"+tin.mail+"' LIMIT 1", (err, rows)=>{
-                      if (err){socket.emit('forget_pass_2_caro_thatbai','A');console.log(err);}
-                      else{
-                        if(rows.length==0)socket.emit('forget_pass_2_caro_thatbai','B');
-                        else {
-                          if(rows[0].chuoi===tin.chuoi){
-                            let pass1 = passwordHash.generate(''+tin.pass);
-                            con.query("UPDATE `account2` SET `pass` = '"+pass1+"' WHERE `number` LIKE '"+tin.mail+"'", (err2)=>{
-                               if (err2){socket.emit('forget_pass_2_caro_thatbai','A');console.log(err2);}
-                              else {
-                                con.query("DELETE FROM `account_tem` WHERE `user` LIKE '"+tin.mail+"'", (err3)=>{
-                                   if (err3)console.log(err3);
-                                });
-                                socket.emit('forget_pass_2_caro_ok');
-                              }
-                            });
-                          }
-                          else socket.emit('forget_pass_2_caro_thatbai','C');
-                        }
-
-                      }
-                    });
+              });
             }
           }
         });
@@ -276,9 +223,34 @@ con.connect(function(err) {
 
 
 
-
+      }
+    });
+    socket.on('forget_pass_2_caro',(chuoi,pass,phone_id)=>{
+      if(chuoi&&pass&&phone_id){
+        con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+phone_id+"' LIMIT 1", (err, rows)=>{
+          if (err)socket.emit('forget_pass_2_caro_thatbai','A');
+          else{
+            if(rows.length==0)socket.emit('forget_pass_2_caro_thatbai','A');
+            else {
+              if(rows[0].chuoi==chuoi){
+                let pass1 = passwordHash.generate(pass);
+                con.query("UPDATE `account2` SET `pass` = '"+pass1+"' WHERE `number` LIKE '"+rows[0].mail+"'", (err2)=>{
+                  if (err2)socket.emit('forget_pass_2_caro_thatbai','A');
+                  else {
+                    socket.emit('forget_pass_2_caro_ok');
+                    con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", (err2)=>{
+                       if (err2)console.log(err2);
+                    });
+                  }
+                });
               }
-            });
+              else socket.emit('forget_pass_2_caro_thatbai','B');
+            }
+
+          }
+        });
+      }
+    });
     socket.on('login1_Caro',(user1, pass1)=>{
       if(user1&&pass1){
         con.query("SELECT `dem` FROM `kiemtra` WHERE `username` LIKE '"+user1+"' LIMIT 1", (err1, row1s)=>{
@@ -788,80 +760,50 @@ con.connect(function(err) {
         });
       }
     });
-    socket.on('forget_pass_1_windlaxy',(mail,code,phone_id)=>{
-      if(mail&&code&&phone_id){
+    socket.on('forget_pass_1_windlaxy',(mail,phone_id)=>{
+      if(mail&&phone_id){
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ phone_id +"' LIMIT 1", function(err3, row1s){
-          if(err3){socket.emit('regis_1_thatbai','A');}
+          if(err3){socket.emit('forget_pass_1_windlaxy_thatbai','A');}
           else {
-            if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
+            if(row1s.length>0 && row1s[0].dem>2)socket.emit('forget_pass_1_windlaxy_thatbai','C');
             else {
               con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ mail +"' LIMIT 1", function(err, rows){
                       // nếu tài khoản đã có người đăng ký rồi thì:
-                      if(err)socket.emit('regis_1_thatbai','A');
+                      if(err)socket.emit('forget_pass_1_windlaxy_thatbai','A');
                       else {
-                        if (rows.length ==0 )	{socket.emit('regis_1_thatbai','D');}
+                        if (rows.length ==0 )	{socket.emit('forget_pass_1_windlaxy_thatbai','D');}
                         else {
                           var string = Math.floor(Math.random() * (899999)) + 100000;
-                          var string1 = passwordHash.generate(''+string);
-                          if(code=="A"){
-                            cb.sendMessage({"to": mail, "text": 'Windlaxy OTP:'+string}, (error, response) => {
-                                if(error)socket.emit('regis_1_thatbai','E');
-                                else {
-                                  var time = Math.floor(Date.now() / 1000);
-                                  if(row1s.length==0){
-                                    var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
-                                    var values = [[mail, string1,time,1,phone_id]];
-                                    con.query(sql, [values], function (err1, result) {
-                                      if ( err1)socket.emit('regis_1_thatbai','A');
-                                      else  socket.emit('regis_1_thanhcong');
-                                    });
-                                  }
-                                  else {
-                                    //nếu có rồi thì cập nhật và cộng số đếm lên 1
-                                    let dem = row1s[0].dem+1;
-                                    if(dem>2)time=time+300;
-                                    con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+phone_id+"'",function(err1){
-                                      if(err1)socket.emit('regis_1_thatbai','A');
-                                      else socket.emit('regis_1_thanhcong');
-                                    });
-
-                                  }
-                                }
-
-                              });
-                          }
-                          else {
-                            var mailOptions = {
+                          var mailOptions = {
                             from: 'windlaxy@gmail.com',
                             to: mail,
                             subject: 'Windlaxy OTP',
                             text: 'Your Windlaxy OTP:'+string
                           };
-                          transporter.sendMail(mailOptions, function(error, info){
-                            if (error) {socket.emit('regis_1_thatbai','B');console.log('that bai:'+mail);}
+                          transporter.sendMail(mailOptions, (error, info)=>{
+                            if (error) {socket.emit('forget_pass_1_windlaxy_thatbai','B');console.log('that bai:'+mail);}
                             else {
                               var time = Math.floor(Date.now() / 1000);
                               if(row1s.length==0){
                                 var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
-                                var values = [[mail, string1,time,1,phone_id]];
-                                con.query(sql, [values], function (err1, result) {
-                                  if ( err1)socket.emit('regis_1_thatbai','A');
-                                  else  socket.emit('regis_1_thanhcong');
+                                var values = [[mail, string,time,1,phone_id]];
+                                con.query(sql, [values],  (err1, result) =>{
+                                  if ( err1)socket.emit('forget_pass_1_windlaxy_thatbai','A');
+                                  else  socket.emit('forget_pass_1_windlaxy_ok');
                                 });
                               }
                               else {
                                 //nếu có rồi thì cập nhật và cộng số đếm lên 1
                                 let dem = row1s[0].dem+1;
-                                if(dem>2)time=time+300;
-                                con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+phone_id+"'",function(err1){
-                                  if(err1)socket.emit('regis_1_thatbai','A');
-                                  else socket.emit('regis_1_thanhcong');
+                                con.query("UPDATE `active` SET `chuoi`='"+string+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+phone_id+"'",(err1)=>{
+                                  if(err1)socket.emit('forget_pass_1_windlaxy_thatbai','A');
+                                  else socket.emit('forget_pass_1_windlaxy_ok');
                                 });
 
                               }
                             }
                           });
-                          }
+
 
                         }
                       }
@@ -872,26 +814,28 @@ con.connect(function(err) {
         });
       }
     });
-    socket.on('forget_pass_2_windlaxy',(tin)=>{
-      if(tin.mail&&tin.chuoi&&tin.pass){
-        con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+tin.mail+"' LIMIT 1", function(err, rows){
-          if (err)socket.emit('forget_pass_2_thatbai','A');
+    socket.on('forget_pass_2_windlaxy',(chuoi,pass,phone_id)=>{
+      if(chuoi&&pass&&phone_id){
+        con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+phone_id+"' LIMIT 1", (err, rows)=>{
+          if (err)socket.emit('forget_pass_2_windlaxy_thatbai','A');
           else{
-            if(rows.length==0)socket.emit('forget_pass_2_thatbai','A');
+            if(rows.length==0)socket.emit('forget_pass_2_windlaxy_thatbai','A');
             else {
-              if(passwordHash.verify(tin.chuoi, rows[0].chuoi)){
-                let pass1 = passwordHash.generate(''+tin.pass);
-                con.query("UPDATE `account` SET `pass` = '"+pass1+"' WHERE `number` LIKE '"+tin.mail+"'", function(err2){
-                   if (err2)socket.emit('forget_pass_2_thatbai','B');
+              if(rows[0].chuoi==chuoi){
+                let pass1 = passwordHash.generate(pass);
+                con.query("UPDATE `account` SET `pass` = '"+pass1+"' WHERE `number` LIKE '"+rows[0].mail+"'", (err2)=>{
+                  if (err2)socket.emit('forget_pass_2_windlaxy_thatbai','A');
                   else {
-                    con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", function(err2){
-                       if (err2)socket.emit('forget_pass_2_ok');
+                    socket.emit('forget_pass_2_windlaxy_ok');
+                    con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", (err2)=>{
+                       if (err2)console.log(err2);
                       });
-                    socket.emit('forget_pass_2_ok');}
+
+                  }
                 });
               }
-                else socket.emit('forget_pass_2_thatbai','B');
-              }
+              else socket.emit('forget_pass_2_windlaxy_thatbai','B');
+            }
 
           }
         });
