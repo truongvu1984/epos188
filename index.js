@@ -767,9 +767,10 @@ con.connect(function(err) {
                   con.query(sql, [values],  (err1, result)=> {
                     if (err1)socket.emit('S_regis_2_windlaxy_thatbai','A');
                     else  {
+                      socket.emit('S_regis_2_windlaxy_ok',rows[0].mail);
                       con.query("DELETE FROM `active` WHERE `mail` LIKE '"+id_phone+"'", (err2)=>{
-                        if (err2)socket.emit('C_regis_2_windlaxy_ok',rows[0].mail);
-                        else {socket.emit('C_regis_2_windlaxy_ok',rows[0].mail)}
+                        if (err2)console.log('C_regis_2_windlaxy='+err2);
+
                       });
                     }
                   });
@@ -1271,7 +1272,7 @@ con.connect(function(err) {
     });
     socket.on('del_acc_2',(chuoi)=>{
       if(socket.number && chuoi){
-        con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+socket.number+"' LIMIT 1", function(err, rows){
+        con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+socket.number+"' LIMIT 1", (err, rows)=>{
           if (err)socket.emit('del_acc_2_thatbai','A');
           else{
             if(rows.length==0)socket.emit('del_acc_2_thatbai','B');
@@ -1283,11 +1284,10 @@ con.connect(function(err) {
                     let abc= socket.number;
                     socket.emit('del_acc_2_thanhcong');
                     socket.number = null;socket.roomabc = undefined;
-                con.query("DROP TABLE IF EXISTS `"+abc+"contact`", function(err4){ if (err4)console.log(err4);});
-                con.query("DROP TABLE IF EXISTS `"+abc+"main`", function(err4){ if (err4)console.log(err4);});
-                con.query("DROP TABLE IF EXISTS `"+abc+"diem`", function(err4){ if (err4)console.log(err4);});
-                con.query("DROP TABLE IF EXISTS `"+abc+"line_main`", function(err4){ if (err4)console.log(err4);});
-                con.query("DROP TABLE IF EXISTS `"+abc+"line_detail`", function(err4){ if (err4)console.log(err4);});
+                con.query("DROP TABLE IF EXISTS `"+abc+"main`", (err4)=>{ if (err4)console.log(err4);});
+                con.query("DROP TABLE IF EXISTS `"+abc+"diem`", (err4)=>{ if (err4)console.log(err4);});
+                con.query("DROP TABLE IF EXISTS `"+abc+"line_main`", (err4)=>{ if (err4)console.log(err4);});
+                con.query("DROP TABLE IF EXISTS `"+abc+"line_detail`", (err4)=>{ if (err4)console.log(err4);});
 
                   }
                 });
