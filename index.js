@@ -692,7 +692,6 @@ con.connect(function(err) {
                       // nếu tài khoản đã có người đăng ký rồi thì:
                       if(err)socket.emit('S_regis_1_windlaxy_thatbai','A');
                       else {
-                        console.log('tim thay='+rows.length);
                         if (rows.length >0 )	{socket.emit('S_regis_1_windlaxy_thatbai','D');}
                         else {
                           var string = Math.floor(Math.random() * (899999)) + 100000;
@@ -707,15 +706,14 @@ con.connect(function(err) {
                               else {
                                 var time = Math.floor(Date.now() / 1000);
                                 if(row1s.length==0){
-                                        var sql = "INSERT INTO `active` (mail,name,pass,chuoi,time,dem,phone_id) VALUES ?";
-                                        var time = Math.floor(Date.now() / 1000);
-                                        // var matkhau = passwordHash.generate(''+tin.pass);
-                                        var values = [[tin.username,tin.displayname, tin.pass,string,time,1,id_phone]];
-                                        con.query(sql, [values],  (err1, result)=>{
-                                          if (err1)socket.emit('S_regis_1_windlaxy_thatbai','A');
-                                          else socket.emit('S_regis_1_windlaxy_ok');
-                                        });
-
+                                    var sql = "INSERT INTO `active` (mail,name,pass,chuoi,time,dem,phone_id) VALUES ?";
+                                    var time = Math.floor(Date.now() / 1000);
+                                    // var matkhau = passwordHash.generate(''+tin.pass);
+                                    var values = [[tin.username,tin.displayname, tin.pass,string,time,1,id_phone]];
+                                    con.query(sql, [values],  (err1, result)=>{
+                                      if (err1)socket.emit('S_regis_1_windlaxy_thatbai','A');
+                                      else socket.emit('S_regis_1_windlaxy_ok');
+                                    });
                                 }
                                 else {
                                   //nếu có rồi thì cập nhật và cộng số đếm lên 1
@@ -741,7 +739,6 @@ con.connect(function(err) {
       }
     });
     socket.on('C_regis_2_windlaxy',(chuoi,id_phone)=>{
-      console.log(chuoi+":"+id_phone);
       if(chuoi&&id_phone){
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+id_phone +"' LIMIT 1", (err, rows)=>{
           if (err)socket.emit('S_regis_2_windlaxy_thatbai','A');
@@ -777,15 +774,13 @@ con.connect(function(err) {
 
                 }
                else {
-                 if(rows[0].dem>3)socket.emit('S_regis_2_windlaxy_thatbai','D');
-                 else {
                    let dem = rows[0].dem+1;
                    var time = Math.floor(Date.now() / 1000);
                    con.query("UPDATE `active` SET `time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+id_phone+"'",(err1)=>{
                      if(err1)socket.emit('S_regis_2_windlaxy_thatbai','A');
                      else socket.emit('S_regis_2_windlaxy_thatbai','C');
                    });
-                 }
+
 
                }
               }
