@@ -172,65 +172,6 @@ con.connect(function(err) {
             }
         });
 
-
-
-
-
-
-
-
-
-
-        con.query("SELECT `dem` FROM `kiemtra` WHERE `username` LIKE '"+mail+"' LIMIT 1", (err1, row1s)=>{
-          if(err1)console.log(err1);
-          else {
-            if(row1s.length>0&&row1s[0].dem>4)socket.emit('C_reg_qua_solan');
-            else {
-              var time = Math.floor(Date.now() / 1000);
-              if(row1s.length==0){
-                var sql = "INSERT INTO `kiemtra` (username,loai,dem,time) VALUES ?";
-                var values = [[mail,'A',0, time]];
-                con.query(sql, [values], function (err4, result) {
-                    if (err1)console.log(err1);
-                });
-              }
-              else {
-                let dem=row1s[0].dem+1;
-                con.query("UPDATE `kiemtra` SET `dem` = "+dem+",`time`="+time+" WHERE `username` LIKE '"+mail+"'", (err6)=>{
-                  if (err6)console.log(err6);
-                });
-              }
-              con.query("SELECT * FROM `account_tem` WHERE `user` LIKE '"+mail+"' LIMIT 1", (err, rows)=>{
-                if (err)socket.emit('check_mail_regis_caro_thatbai','A');
-                else if(rows.length==0)socket.emit('check_mail_regis_caro_thatbai','B');
-                else {
-                  if(chuoi===rows[0].chuoi){
-                    con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(2) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
-                      if(err3)socket.emit('check_mail_regis_caro_thatbai','A');
-                    });
-                    con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
-                      if(err3)socket.emit('check_mail_regis_caro_thatbai','A');
-                    });
-
-
-                    var sql = "INSERT INTO `account2` (number,user,pass) VALUES ?";
-                    var values = [[rows[0].user,rows[0].name,rows[0].pass]];
-                    con.query(sql, [values], (err1, result)=>{
-                      if (err1)socket.emit('C_regis_caro_loi','A');
-                      else {
-                        socket.emit('C_regis_caro_ok',mail);
-                        con.query("DELETE FROM `account_tem` WHERE `user` LIKE '"+mail+"'", (err2)=>{
-                            if (err2)console.log(err2);
-                        });
-                      }
-                    });
-                  }
-                  else socket.emit('check_mail_regis_caro_thatbai','C');
-                }
-              });
-            }
-          }
-        });
       }
     });
     socket.on('forget_pass_1_caro',(mail,phone_id)=>{
