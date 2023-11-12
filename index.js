@@ -68,7 +68,6 @@ con.connect(function(err) {
     socket.emit('check_pass');
     socket.emit('check_pass_1_login');
     socket.on('C_regis_caro',(tin,id_phone)=>{
-
       if(tin.username&&tin.displayname&&tin.pass){
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", (err3, row1s)=>{
           if(err3)socket.emit('C_regis_caro_thatbai','A');
@@ -100,7 +99,7 @@ con.connect(function(err) {
                                     var values = [[tin.username,tin.displayname, tin.pass,string,time,1,id_phone]];
                                     con.query(sql, [values],  (err1, result)=>{
                                       if (err1)socket.emit('C_regis_caro_thatbai','A');
-                                      else socket.emit('C_regis_caro_ok');
+                                      else socket.emit('C_regis_caro_ok',tin.username);
                                     });
                                 }
                                 else {
