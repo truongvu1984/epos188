@@ -50,7 +50,6 @@ function kiemtra_taikhoan(){
   // var date2 = Math.floor(Date.now() / 1000) - 600;
   var date3=Math.floor(Date.now() / 1000) - 300;
   con.query(" DELETE FROM `active` WHERE `time` < "+date3, (err1)=>{if(err1)console.log('co loi HA HA HA:'+err1);});
-  con.query(" DELETE FROM `kiemtra` WHERE `time` < "+date3, (err3)=>{if(err3)console.log('co loi HA HA HA:'+err3);});
 
   kiemtra_taikhoan();
 }, 5000);
@@ -69,14 +68,13 @@ con.connect(function(err) {
     socket.emit('check_pass');
     socket.emit('check_pass_1_login');
     socket.on('C_regis_caro',(tin,id_phone)=>{
-      console.log('id_phone='+id_phone);
+
       if(tin.username&&tin.displayname&&tin.pass){
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", (err3, row1s)=>{
           if(err3)socket.emit('C_regis_caro_thatbai','A');
           else {
             if(row1s.length>0 && row1s[0].dem>2)socket.emit('C_regis_caro_thatbai','C');
             else {
-                console.log('AAAAA');
               con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ tin.username +"' LIMIT 1", (err, rows)=>{
                       // nếu tài khoản đã có người đăng ký rồi thì:
                       if(err)socket.emit('C_regis_caro_thatbai','A');
@@ -95,7 +93,7 @@ con.connect(function(err) {
                               else {
                                 var time = Math.floor(Date.now() / 1000);
                                 if(row1s.length==0){
-                                    console.log('BBBB');
+
                                     var sql = "INSERT INTO `active` (mail,name,pass,chuoi,time,dem,phone_id) VALUES ?";
                                     var time = Math.floor(Date.now() / 1000);
                                     // var matkhau = passwordHash.generate(''+tin.pass);
