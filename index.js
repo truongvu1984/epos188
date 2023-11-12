@@ -253,39 +253,17 @@ con.connect(function(err) {
     });
     socket.on('login1_Caro',(user1, pass1)=>{
       if(user1&&pass1){
-        con.query("SELECT `dem` FROM `kiemtra` WHERE `username` LIKE '"+user1+"' LIMIT 1", (err1, row1s)=>{
-          if(err1)console.log(err1);
-          else {
-            if(row1s.length>0&&row1s[0].dem>4)socket.emit('C_reg_qua_solan');
-            else {
-              var time = Math.floor(Date.now() / 1000);
-              if(row1s.length==0){
-                var sql = "INSERT INTO `kiemtra` (username,loai,dem,time) VALUES ?";
-                var values = [[user1,'A',0, time]];
-                con.query(sql, [values], function (err4, result) {
-                    if (err1)console.log(err1);
-                });
-              }
-              else {
-                let dem=row1s[0].dem+1;
-                con.query("UPDATE `kiemtra` SET `dem` = "+dem+",`time`="+time+" WHERE `username` LIKE '"+user1+"'", (err6)=>{
-                  if (err6)console.log(err6);
-                });
-              }
-              con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+user1+"' LIMIT 1", (err, rows)=>{
-          	     if (err)socket.emit('login1_Caro_loi','A');
-                 else if ( rows.length ==0)socket.emit('login1_Caro_loi','B');
-          			 else{
-                  if (passwordHash.verify(pass1, rows[0].pass)) {
-                    socket.number = user1;
-                    socket.username = rows[0].user;
-                    socket.join(user1);
-                    socket.emit('login1_caro_dung', {user:user1,name:rows[0].user,pass:pass1});
-                  }
-                  else  socket.emit('login1_Caro_loi','C');
-                }
-              });
+        con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+user1+"' LIMIT 1", (err, rows)=>{
+           if (err)socket.emit('login1_Caro_loi','A');
+           else if ( rows.length ==0)socket.emit('login1_Caro_loi','B');
+           else{
+            if (passwordHash.verify(pass1, rows[0].pass)) {
+              socket.number = user1;
+              socket.username = rows[0].user;
+              socket.join(user1);
+              socket.emit('login1_caro_dung', {user:user1,name:rows[0].user,pass:pass1});
             }
+            else  socket.emit('login1_Caro_loi','C');
           }
         });
       }
