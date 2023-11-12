@@ -65,6 +65,7 @@ con.connect(function(err) {
 
   io.on('connection',(socket)=>
   {
+    console.log(socket.id);
     socket.emit('check_pass');
     socket.emit('check_pass_1_login');
     socket.on('C_regis_caro',(tin,id_phone)=>{
