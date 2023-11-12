@@ -68,6 +68,9 @@ con.connect(function(err) {
     console.log('id='+socket.id);
     socket.emit('check_pass');
     socket.emit('check_pass_1_login');
+    socket.on('ABCD',()=>{
+      console.log('ABCD');
+    });
     socket.on('C_regis_caro',(tin,id_phone)=>{
       console.log('id_phone='+id_phone);
       if(stt!=null&&tin.username&&tin.displayname&&tin.pass){
