@@ -65,15 +65,12 @@ con.connect(function(err) {
 
   io.on('connection',(socket)=>
   {
-    console.log('id='+socket.id);
+
     socket.emit('check_pass');
     socket.emit('check_pass_1_login');
-    socket.on('ABCD',()=>{
-      console.log('ABCD');
-    });
     socket.on('C_regis_caro',(tin,id_phone)=>{
       console.log('id_phone='+id_phone);
-      if(stt!=null&&tin.username&&tin.displayname&&tin.pass){
+      if(tin.username&&tin.displayname&&tin.pass){
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", (err3, row1s)=>{
           if(err3)socket.emit('C_regis_caro_thatbai','A');
           else {
