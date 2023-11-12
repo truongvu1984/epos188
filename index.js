@@ -126,18 +126,18 @@ con.connect(function(err) {
 
       }
     });
-    socket.on('check_mail_caro',(mail,chuoi)=>{
-      if(mail!=null&&chuoi!=null){
+    socket.on('check_mail_caro',(chuoi,id_phone)=>{
+      if(id_phone&&chuoi){
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+id_phone +"' LIMIT 1", (err, rows)=>{
           if (err)socket.emit('check_mail_caro_thatbai','A');
           else{
              if(rows.length==0)socket.emit('check_mail_caro_thatbai','B');
              else {
                if(rows[0].chuoi==chuoi){
-                 con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(2) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
+                 con.query("CREATE TABLE IF NOT EXISTS  `"+rows[0].mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(2) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
                    if(err3)socket.emit('check_mail_caro_thatbai','A');
                  });
-                 con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
+                 con.query("CREATE TABLE IF NOT EXISTS  `"+rows[0].mail+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
                    if(err3)socket.emit('check_mail_caro_thatbai','A');
                  });
                   var sql = "INSERT INTO `account2` (number,user, pass) VALUES ?";
