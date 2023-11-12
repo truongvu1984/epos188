@@ -67,60 +67,116 @@ con.connect(function(err) {
   {
     socket.emit('check_pass');
     socket.emit('check_pass_1_login');
-    socket.on('C_regis_caro',(stt,tin)=>{
+    socket.on('C_regis_caro',(tin,id_phone)=>{
       if(stt!=null&&tin.username&&tin.displayname&&tin.pass){
-          con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ tin.username +"' LIMIT 1", (err, rows)=>{
-            if(err){console.log(err);socket.emit('C_regis_caro_loi','A');}
-            else if(rows.length>0)socket.emit('C_regis_caro_loi','B');
+        con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", (err3, row1s)=>{
+          if(err3)socket.emit('C_regis_caro_thatbai','A');
+          else {
+            if(row1s.length>0 && row1s[0].dem>2)socket.emit('C_regis_caro_thatbai','C');
             else {
-              if(stt=='A'){
-                var string = Math.floor(Math.random() * (899999)) + 100000;
-                var mailOptions = {
-                  from: 'windlaxy@gmail.com',
-                  to: tin.username,
-                  subject: 'Caro OTP',
-                  text: 'Your Caro OTP:'+string
-                };
-                transporter.sendMail(mailOptions, (error, info)=>{
-                if (error){ socket.emit('C_regis_caro_loi','D');console.log(error);}
-                else {
-                  con.query("DELETE FROM `account_tem` WHERE `user` LIKE '"+tin.username+"'", (err2)=>{
-                      if (err2)console.log(err2);
+              con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+ tin.username +"' LIMIT 1", (err, rows)=>{
+                      // nếu tài khoản đã có người đăng ký rồi thì:
+                      if(err)socket.emit('C_regis_caro_thatbai','A');
                       else {
-                        var sql = "INSERT INTO `account_tem` (user,name,pass,chuoi,time) VALUES ?";
-                        var time = Math.floor(Date.now() / 1000);
-                        var matkhau = passwordHash.generate(''+tin.pass);
-                        var values = [[tin.username,tin.displayname, matkhau,string,time]];
-                        con.query(sql, [values], function (err1, result) {
-                          if (err1)socket.emit('C_regis_caro_loi','A');
-                          else socket.emit('S_regis_caro_check_mail',tin.username);
-                        });
+                        if (rows.length >0 )	{socket.emit('C_regis_caro_thatbai','D');}
+                        else {
+                          var string = Math.floor(Math.random() * (899999)) + 100000;
+                          var mailOptions = {
+                              from: 'windlaxy@gmail.com',
+                              to: tin.username,
+                              subject: 'Caro OTP',
+                              text: 'Your Caro game OTP:'+string
+                            };
+                            transporter.sendMail(mailOptions, (error, info)=>{
+                              if (error) socket.emit('C_regis_caro_thatbai','B');
+                              else {
+                                var time = Math.floor(Date.now() / 1000);
+                                if(row1s.length==0){
+                                    var sql = "INSERT INTO `active` (mail,name,pass,chuoi,time,dem,phone_id) VALUES ?";
+                                    var time = Math.floor(Date.now() / 1000);
+                                    // var matkhau = passwordHash.generate(''+tin.pass);
+                                    var values = [[tin.username,tin.displayname, tin.pass,string,time,1,id_phone]];
+                                    con.query(sql, [values],  (err1, result)=>{
+                                      if (err1)socket.emit('C_regis_caro_thatbai','A');
+                                      else socket.emit('C_regis_caro_ok');
+                                    });
+                                }
+                                else {
+                                  //nếu có rồi thì cập nhật và cộng số đếm lên 1
+                                  let dem = row1s[0].dem+1;
+                                  con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+id_phone+"'",(err1)=>{
+                                    if(err1)socket.emit('C_regis_caro_thatbai','A');
+                                    else socket.emit('C_regis_caro_ok',tin.username);
+                                  });
+
+                                }
+                              }
+                          });
+
+
+                        }
                       }
+              });
+
+            }
+          }
+        });
+
+
+      }
+    });
+    socket.on('check_mail_caro',(mail,chuoi)=>{
+      if(mail!=null&&chuoi!=null){
+        con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+id_phone +"' LIMIT 1", (err, rows)=>{
+          if (err)socket.emit('check_mail_caro_thatbai','A');
+          else{
+             if(rows.length==0)socket.emit('check_mail_caro_thatbai','B');
+             else {
+               if(rows[0].chuoi==chuoi){
+                 con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(2) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
+                   if(err3)socket.emit('check_mail_caro_thatbai','A');
+                 });
+                 con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
+                   if(err3)socket.emit('check_mail_caro_thatbai','A');
+                 });
+                  var sql = "INSERT INTO `account2` (number,user, pass) VALUES ?";
+                  var matkhau = passwordHash.generate(rows[0].pass);
+                  var values = [[rows[0].mail,rows[0].name, matkhau]];
+                  con.query(sql, [values],  (err1, result)=> {
+                    if (err1)socket.emit('check_mail_caro_thatbai','A');
+                    else  {
+                      socket.emit('check_mail_caro_ok',rows[0].mail);
+                      con.query("DELETE FROM `active` WHERE `mail` LIKE '"+id_phone+"'", (err2)=>{
+                        if (err2)console.log('C_regis_2_caro='+err2);
+
+                      });
+                    }
                   });
 
                 }
-              });
-              }
-              else {
-                con.query("CREATE TABLE IF NOT EXISTS  `"+tin.username+"caro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(2) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
-                con.query("CREATE TABLE IF NOT EXISTS  `"+tin.username+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", function(){});
+               else {
+                   let dem = rows[0].dem+1;
+                   var time = Math.floor(Date.now() / 1000);
+                   con.query("UPDATE `active` SET `time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+id_phone+"'",(err1)=>{
+                     if(err1)socket.emit('check_mail_caro_thatbai','A');
+                     else socket.emit('check_mail_caro_thatbai','C');
+                   });
 
 
-
-                var sql = "INSERT INTO `account2` (number,user,pass) VALUES ?";
-                var matkhau = passwordHash.generate(''+tin.pass);
-                var values = [[tin.username,tin.displayname, matkhau]];
-                con.query(sql, [values], function (err1, result) {
-                    if (err1)socket.emit('C_regis_caro_loi','A');
-                    else {socket.emit('C_regis_caro_ok',tin.username);}
-                });
+               }
               }
             }
         });
-      }
-    });
-    socket.on('check_mail_regis_caro',(mail,chuoi)=>{
-      if(mail!=null&&chuoi!=null){
+
+
+
+
+
+
+
+
+
+
         con.query("SELECT `dem` FROM `kiemtra` WHERE `username` LIKE '"+mail+"' LIMIT 1", (err1, row1s)=>{
           if(err1)console.log(err1);
           else {
@@ -151,6 +207,8 @@ con.connect(function(err) {
                     con.query("CREATE TABLE IF NOT EXISTS  `"+mail+"caro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
                       if(err3)socket.emit('check_mail_regis_caro_thatbai','A');
                     });
+
+
                     var sql = "INSERT INTO `account2` (number,user,pass) VALUES ?";
                     var values = [[rows[0].user,rows[0].name,rows[0].pass]];
                     con.query(sql, [values], (err1, result)=>{
@@ -237,7 +295,7 @@ con.connect(function(err) {
                   if (err2)socket.emit('forget_pass_2_caro_thatbai','A');
                   else {
                     socket.emit('forget_pass_2_caro_ok');
-                    con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", (err2)=>{
+                    con.query("DELETE FROM `active` WHERE `phone_id` LIKE '"+phone_id+"'", (err2)=>{
                        if (err2)console.log(err2);
                     });
                   }
@@ -826,7 +884,7 @@ con.connect(function(err) {
                   if (err2)socket.emit('forget_pass_2_windlaxy_thatbai','A');
                   else {
                     socket.emit('forget_pass_2_windlaxy_ok');
-                    con.query("DELETE FROM `active` WHERE `mail` LIKE '"+tin.mail+"'", (err2)=>{
+                    con.query("DELETE FROM `active` WHERE `phone_id` LIKE '"+phone_id+"'", (err2)=>{
                        if (err2)console.log(err2);
                       });
 
@@ -886,6 +944,7 @@ con.connect(function(err) {
       return ketqua;
 
     }
+
     // lắng nghe sự kiện đăng ký tài khoản mới
     socket.on('login1',(user1, pass1)=>{
       if(user1&&pass1){
