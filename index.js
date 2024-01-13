@@ -2,8 +2,13 @@ var express = require("express");
 var app = express();
 const fs = require('fs');
 const path = require('path');
-var http = require("http");
-var server = require("http").createServer(app);
+var http = require("https");
+const privateKey = fs.readFileSync('../private-key.pem', 'utf8');
+const certificate = fs.readFileSync('../certificate.pem', 'utf8');
+
+const credentials = { key: privateKey, cert: certificate };
+
+var server = require("https").createServer(credentials,app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start hi hi")});
 var mysql = require('mysql');
@@ -63,7 +68,6 @@ con.connect(function(err) {
   kiemtra_taikhoan();
   io.on('connection',(socket)=>
   {
-
     socket.emit('check_pass');
     socket.emit('check_pass_1_login');
     socket.on('C_regis_caro',(tin,id_phone)=>{
@@ -483,7 +487,7 @@ con.connect(function(err) {
     });
     socket.on('C_reg_choi_lai',(type,mail)=>{
       if(socket.number != null&&mail!=null){
-        // bên kia đề nghị chơi lại
+        // C đề nghị chơi lại
         if(type=='N'){
           // đề nghị được chơi lại
           con.query("UPDATE `"+socket.number+"caro` SET `thongbao` = 'N' WHERE `mail` LIKE '"+mail+"'", (err2)=>{
@@ -563,6 +567,7 @@ con.connect(function(err) {
         });
       }
     });
+
     socket.on('C_xoa_game',(nhom_mail)=>{
       if(socket.number != null&&isArray(nhom_mail)){
         socket.emit('S_get_xoagame',nhom_mail);
