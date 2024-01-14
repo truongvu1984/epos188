@@ -2,13 +2,23 @@ var express = require("express");
 var app = express();
 const fs = require('fs');
 const path = require('path');
-var http = require("https");
-const privateKey = fs.readFileSync('../private-key.pem');
-const certificate = fs.readFileSync('../certificate.pem');
+var http = require("http");
+// const privateKey = fs.readFileSync('../private-key.pem', 'utf8');
+// const certificate = fs.readFileSync('../certificate.pem', 'utf8');
+// var https_options = {
+// key: fs.readFileSync("../private-key.pem"),
+// cert: fs.readFileSync("/path/to/your_domain_name.crt"),
+// ca: [
+// fs.readFileSync('path/to/CA_root.crt'),
+// fs.readFileSync('path/to/ca_bundle_certificate.crt')
+// ] };
 
-const credentials = { key: privateKey, cert: certificate };
 
-var server = require("https").createServer(credentials,app);
+
+// const credentials = { key: privateKey, cert: certificate };
+
+
+var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start hi hi")});
 var mysql = require('mysql');
