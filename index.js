@@ -2,9 +2,9 @@ var express = require("express");
 var app = express();
 const fs = require('fs');
 const path = require('path');
-var http = require("http");
-// const privateKey = fs.readFileSync('../private-key.pem', 'utf8');
-// const certificate = fs.readFileSync('../certificate.pem', 'utf8');
+var http = require("https");
+const privateKey = fs.readFileSync('private-key.pem', 'utf8');
+const certificate = fs.readFileSync('certificate.pem', 'utf8');
 // var https_options = {
 // key: fs.readFileSync("../private-key.pem"),
 // cert: fs.readFileSync("/path/to/your_domain_name.crt"),
@@ -15,10 +15,10 @@ var http = require("http");
 
 
 
-// const credentials = { key: privateKey, cert: certificate };
+const credentials = { key: privateKey, cert: certificate };
 
 
-var server = require("http").createServer(app);
+var server = require("https").createServer(credentials,app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000, function(){console.log("server start hi hi")});
 var mysql = require('mysql');
