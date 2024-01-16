@@ -844,18 +844,13 @@ con.connect(function(err) {
     			 else{
             if (passwordHash.verify(pass1, rows[0].pass)){
                 socket.emit('login1_dung', {name:rows[0].user});
-
             }
-            else {
-              socket.emit('login1_sai', {name:rows[0].user});
-
-            }
+            else {socket.emit('login1_sai', {name:rows[0].user});}
           }
         });
       }
     });
     socket.on('login2',(data)=>{
-      console.log(data);
       if(data.rightuser&&data.right_pass){
         con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
     	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
