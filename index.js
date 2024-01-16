@@ -5,15 +5,6 @@ const path = require('path');
 var http = require("https");
 const privateKey = fs.readFileSync('/etc/letsencrypt/live/nganvu25594.com/privkey.pem', 'utf8');
 const certificate = fs.readFileSync('/etc/letsencrypt/live/nganvu25594.com/fullchain.pem', 'utf8');
-// var https_options = {
-// key: fs.readFileSync("../private-key.pem"),
-// cert: fs.readFileSync("/path/to/your_domain_name.crt"),
-// ca: [
-// fs.readFileSync('path/to/CA_root.crt'),
-// fs.readFileSync('path/to/ca_bundle_certificate.crt')
-// ] };
-
-
 
 const credentials = { key: privateKey, cert: certificate };
 
@@ -49,7 +40,6 @@ var bodyParser = require('body-parser');
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
-let cb = new CheckMobi('BECCEBC1-DB76-4EE7-B475-29FCF807849C');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 isArray = function(a) {
     return (!!a) && (a.constructor === Array);
@@ -832,40 +822,7 @@ con.connect(function(err) {
         });
       }
     });
-    socket.on('C_check_phonenumber',(phone,code,id_phone)=>{
-      if(phone&&code&&id_phone){
 
-        con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", function(err3, row1s){
-          if(err3)socket.emit('regis_1_thatbai','A');
-          else {
-            if(row1s.length>0 && row1s[0].dem>2)socket.emit('regis_1_thatbai','C');
-            else {
-              con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ phone +"' LIMIT 1", function(err, rows){
-                      // nếu tài khoản đã có người đăng ký rồi thì:
-                      if(err)socket.emit('regis_1_thatbai','A');
-                      else {
-                        if (rows.length >0 )	{socket.emit('regis_1_thatbai','D');}
-                        else {
-                          if(code=="A"){
-                            cb.phoneInformation(phone, (error, response) => {
-                              if(error)socket.emit('regis_1_thatbai','E');
-                              else {
-                                socket.emit('checkphone_ok');
-                              }
-                            });
-                          }
-                          else socket.emit('checkphone_ok');
-                        }
-                      }
-              });
-
-            }
-          }
-        });
-
-      }
-
-  });
    function get_time(gio){
       let year1 = gio.getFullYear();
       let month1 = gio.getMonth();
@@ -898,6 +855,7 @@ con.connect(function(err) {
       }
     });
     socket.on('login2',(data)=>{
+      console.log(data);
       if(data.rightuser&&data.right_pass){
         con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
     	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -1118,8 +1076,8 @@ con.connect(function(err) {
         }
 
     });
-    socket.on('C_del_acc',(pass,code,phone_id)=>{
-      if(socket.number && pass&&code){
+    socket.on('C_del_acc',(pass,phone_id)=>{
+      if(socket.number && pass){
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ phone_id +"' LIMIT 1", function(err3, row1s){
           if(err3)socket.emit('del_acc_thatbai','A');
           else {
@@ -1131,41 +1089,13 @@ con.connect(function(err) {
                   if (passwordHash.verify(pass, rows[0].pass)){
                     var string = Math.floor(Math.random() * (899999)) + 100000;
                     var string1 = passwordHash.generate(''+string);
-                    if(code =="A"){
-                      cb.sendMessage({"to": socket.number, "text": 'Windlaxy OTP:'+string}, (error, response) => {
-                          if(error)socket.emit('del_acc_thatbai','E');
-                          else {
-                            var time = Math.floor(Date.now() / 1000);
-                            if(row1s.length==0){
-                              var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
-                              var values = [[socket.number, string1,time,1,phone_id]];
-                              con.query(sql, [values], function (err1, result) {
-                                if ( err1)socket.emit('del_acc_thatbai','A');
-                                else  socket.emit('del_acc_thanhcong');
-                              });
-                            }
-                            else {
-                              //nếu có rồi thì cập nhật và cộng số đếm lên 1
-                              let dem = row1s[0].dem+1;
-                              if(dem>2)time=time+300;
-                              con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+phone_id+"'",function(err1){
-                                if(err1)socket.emit('regis_1_thatbai','A');
-                                else socket.emit('regis_1_thanhcong');
-                              });
-
-                            }
-                          }
-
-                          });
-                    }
-                    else {
-                      var mailOptions = {
+                    var mailOptions = {
                         from: 'windlaxy@gmail.com',
                         to: socket.number,
                         subject: 'Windlaxy OTP',
                         text: 'Your Windlaxy OTP:'+string
                       };
-                      transporter.sendMail(mailOptions, function(error, info){
+                    transporter.sendMail(mailOptions, function(error, info){
                       if (error) socket.emit('del_acc_thatbai','A');
                       else {
                         var time = Math.floor(Date.now() / 1000);
@@ -1188,7 +1118,7 @@ con.connect(function(err) {
                         }
                       }
                     });
-                    }
+
                   }
                   else socket.emit('del_acc_thatbai','D');
                 }
