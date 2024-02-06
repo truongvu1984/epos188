@@ -67,41 +67,6 @@ con.connect(function(err) {
   else {
   kiemtra_taikhoan();
 
-  con.query("CREATE TABLE IF NOT EXISTS  `test@gmail.comcaro` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`time` BIGINT , `thongbao` CHAR(2) , `stt` CHAR(1),`luotchoi` CHAR(1),`ditruoc` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
-    if(err3)socket.emit('check_mail_caro_thatbai','A');
-  });
-  con.query("CREATE TABLE IF NOT EXISTS  `test@gmail.comcaro1` (`id` BIGINT NOT NULL AUTO_INCREMENT, `mail` VARCHAR(45) NOT NULL,`name` VARCHAR(45)  ,`toado` INT(11) , `ta` CHAR(1), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
-    if(err3)socket.emit('check_mail_caro_thatbai','A');
-  });
-  con.query("CREATE TABLE IF NOT EXISTS  `mdevendar.hyd@gmail.commain` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` CHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
-    if(err3)socket.emit('S_regis_2_windlaxy_thatbai','A');
-  });
-  con.query("CREATE TABLE IF NOT EXISTS `mdevendar.hyd@gmail.comdiem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE, `idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
-    if(err3)socket.emit('S_regis_2_windlaxy_thatbai','A');
-  });
-  con.query("CREATE TABLE IF NOT EXISTS `mdevendar.hyd@gmail.comline_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
-    if(err3)socket.emit('S_regis_2_windlaxy_thatbai','A');
-  });
-  con.query("CREATE TABLE IF NOT EXISTS `mdevendar.hyd@gmail.comline_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(15),`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
-    if(err3)socket.emit('S_regis_2_windlaxy_thatbai','A');
-  });
-
-  con.query("CREATE TABLE IF NOT EXISTS  `daigaiquan6@gmail.commain` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20), `subject` VARCHAR(60),`number` VARCHAR(25),`name` VARCHAR(45),`stt` CHAR(2), `time` DATETIME(6), PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
-    if(err3)socket.emit('S_regis_2_windlaxy_thatbai','A');
-  });
-  con.query("CREATE TABLE IF NOT EXISTS `daigaiquan6@gmail.comdiem` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`lat` DOUBLE,`lon` DOUBLE, `idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
-    if(err3)socket.emit('S_regis_2_windlaxy_thatbai','A');
-  });
-  con.query("CREATE TABLE IF NOT EXISTS `daigaiquan6@gmail.comline_main` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(20),`name` VARCHAR(45),`culy` BIGINT,`idlo` CHAR(15),PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
-    if(err3)socket.emit('S_regis_2_windlaxy_thatbai','A');
-  });
-  con.query("CREATE TABLE IF NOT EXISTS `daigaiquan6@gmail.comline_detail` (`id` BIGINT NOT NULL AUTO_INCREMENT,`idc` CHAR(15),`lat` DOUBLE,`lon` DOUBLE,`name` VARCHAR(45),`color` INT,`rieng1_id` INT,`stt_rieng1` INT,`rieng2_id` INT,`stt_rieng2` INT,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC))", (err3)=>{
-    if(err3)socket.emit('S_regis_2_windlaxy_thatbai','A');
-  });
-
-
-
-
 
 
   io.on('connection',(socket)=>
