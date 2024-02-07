@@ -11,7 +11,7 @@ const credentials = { key: privateKey, cert: certificate };
 
 var server = require("https").createServer(credentials,app);
 var io = require("socket.io").listen(server);
-server.listen(process.env.PORT || 3000, function(){console.log("server start hi hi")});
+server.listen(process.env.PORT || 3000,'localhost' ,()=>{console.log("server start hi hi")});
 var mysql = require('mysql');
 var nodemailer = require('nodemailer');
 var con = mysql.createConnection({
