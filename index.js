@@ -659,8 +659,14 @@ con.connect((err)=> {
                               text: 'Your Windlaxy OTP:'+string
                             };
                             transporter.sendMail(mailOptions, (error, info)=>{
-                              if (error) socket.emit('S_regis_1_windlaxy_thatbai','B');
+                              console.log('4444');
+                              if (error) {
+                                console.log('666');
+                                console.log(error);
+                                socket.emit('S_regis_1_windlaxy_thatbai','B');
+                              }
                               else {
+                                console.log('55555');
                                 var time = Math.floor(Date.now() / 1000);
                                 if(row1s.length==0){
                                     var sql = "INSERT INTO `active` (mail,name,pass,chuoi,time,dem,phone_id) VALUES ?";
