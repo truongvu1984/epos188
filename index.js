@@ -637,9 +637,11 @@ con.connect((err)=> {
       console.log(tin);
       console.log(id_phone);
       if(tin&&id_phone){
+        console.log('11111');
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", (err3, row1s)=>{
           if(err3)socket.emit('S_regis_1_windlaxy_thatbai','A');
           else {
+            console.log('2222');
             if(row1s.length>0 && row1s[0].dem>2)socket.emit('S_regis_1_windlaxy_thatbai','C');
             else {
               con.query("SELECT * FROM `account` WHERE `number` LIKE '"+ tin.username +"' LIMIT 1", (err, rows)=>{
@@ -648,6 +650,7 @@ con.connect((err)=> {
                       else {
                         if (rows.length >0 )	{socket.emit('S_regis_1_windlaxy_thatbai','D');}
                         else {
+                          console.log('3333');
                           var string = Math.floor(Math.random() * (899999)) + 100000;
                           var mailOptions = {
                               from: 'windlaxy@gmail.com',
