@@ -676,8 +676,15 @@ con.connect((err)=> {
                                     console.log('AAAA');
                                     var values = [[tin.username,tin.displayname, tin.pass,string,time,1,id_phone]];
                                     con.query(sql, [values],  (err1, result)=>{
-                                      if (err1)socket.emit('S_regis_1_windlaxy_thatbai','A');
-                                      else socket.emit('S_regis_1_windlaxy_ok');
+                                      if (err1){
+                                        console.log(err1);
+
+                                        socket.emit('S_regis_1_windlaxy_thatbai','A');
+                                      }
+                                      else {
+                                        console.log('Gui di ok');
+                                        socket.emit('S_regis_1_windlaxy_ok');
+                                      }
                                     });
                                 }
                                 else {
