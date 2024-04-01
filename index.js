@@ -50,25 +50,21 @@ function isNumeric(str) {
          !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
 }
 function kiemtra_taikhoan(){
-  setTimeout(function() {
-  //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
-  // var date2 = Math.floor(Date.now() / 1000) - 600;
-  var date3=Math.floor(Date.now() / 1000) - 300;
-  con.query(" DELETE FROM `active` WHERE `time` < "+date3, (err1)=>{if(err1)console.log('co loi HA HA HA:'+err1);});
-
-  kiemtra_taikhoan();
-}, 5000);
+    setTimeout(function() {
+    //sau mỗi phút, kiêm tra db và xóa các bản tin đã quá 10 phút ==600 giây
+    // var date2 = Math.floor(Date.now() / 1000) - 600;
+    var date3=Math.floor(Date.now() / 1000) - 300;
+    con.query(" DELETE FROM `active` WHERE `time` < "+date3, (err1)=>{if(err1)console.log('co loi HA HA HA:'+err1);});
+    kiemtra_taikhoan();
+  }, 5000);
 }
-app.get('/', (req, res) => res.render('privacy'));
-app.get('/privacy-policy', (req, res) => res.render('privacy'));
+// app.get('/', (req, res) => res.render('privacy'));
+// app.get('/privacy-policy', (req, res) => res.render('privacy'));
 
-con.connect(function(err) {
+con.connect((err)=> {
   if (err) { console.log(" da co loi:" + err);}
   else {
   kiemtra_taikhoan();
-
-
-
   io.on('connection',(socket)=>
   {
     socket.emit('check_pass');
