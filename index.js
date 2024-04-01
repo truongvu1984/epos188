@@ -27,7 +27,7 @@ var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'windlaxy@gmail.com',
-    pass: 'bnzjtzumamyrqcrz'
+    pass: 'Vuyeungan1994@'
   }
 });
 
@@ -36,6 +36,7 @@ function strdecode( data ){
   return JSON.parse( decodeURIComponent( escape ( data ) ) );
 }
 var passwordHash = require('password-hash');
+// bnzjtzumamyrqcrz
 var bodyParser = require('body-parser');
 app.set('view engine', 'ejs');
 app.set('views', './views');
