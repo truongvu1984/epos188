@@ -254,9 +254,9 @@ con.connect((err)=> {
       }
     });
     socket.on('login1_Caro',(user1, pass1)=>{
-      console.log('Co login1_Caro ');
+
       if(user1&&pass1){
-        console.log('aaaaa ');
+        
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+user1+"' LIMIT 1", (err, rows)=>{
            if (err)socket.emit('login1_Caro_loi','A');
            else if ( rows.length ==0)socket.emit('login1_Caro_loi','B');
