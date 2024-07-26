@@ -256,7 +256,7 @@ con.connect((err)=> {
     socket.on('login1_Caro',(user1, pass1)=>{
 
       if(user1&&pass1){
-        
+
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+user1+"' LIMIT 1", (err, rows)=>{
            if (err)socket.emit('login1_Caro_loi','A');
            else if ( rows.length ==0)socket.emit('login1_Caro_loi','B');
@@ -335,10 +335,12 @@ con.connect((err)=> {
       }
     });
     socket.on('C_send_ketban_caro',(type,mail,name)=>{
+      console.log('A1');
       if(socket.number!=null&&mail!=null&&type!=null){
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", (err, rows)=>{
           if (err)console.log(err);
           else if(rows.length>0){
+            console.log('A2');
             socket.emit('S_danhan_reg_ketban',type,mail,name);
             // gửi lời đề nghị kết bạn với tôi nhé
             if(type=="B1"){
