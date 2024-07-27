@@ -273,6 +273,7 @@ con.connect((err)=> {
       }
     });
     socket.on('login2_caro',(data,game)=>{
+      console.log('login2_caro');
       if(data.rightuser&&data.right_pass){
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", (err, rows)=>{
           if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
@@ -281,6 +282,7 @@ con.connect((err)=> {
               socket.number = data.rightuser;
               socket.username = rows[0].user;
               socket.join(data.rightuser);
+              console.log('pass ok nhe');
               // tìm các thông báo gửi về cho người chơi, bao gồm cả thông báo kết bạn và chơi game
               // thông báo ở đây không bao gồm các nước đi mới
               con.query("SELECT `thongbao`,`mail`,`name`,`luotchoi` FROM `"+socket.number+"caro` WHERE `stt` LIKE 'B' ORDER BY time ASC", (err2, a2s)=>{
@@ -336,6 +338,10 @@ con.connect((err)=> {
     });
     socket.on('C_send_ketban_caro',(type,mail,name)=>{
       console.log('A1');
+      console.log(socket.number);
+      console.log(mail);
+      console.log(type);
+      console.log(name);
       if(socket.number!=null&&mail!=null&&type!=null){
         con.query("SELECT * FROM `account2` WHERE `number` LIKE '"+mail+"' LIMIT 1", (err, rows)=>{
           if (err)console.log(err);
