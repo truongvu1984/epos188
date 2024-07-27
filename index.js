@@ -587,6 +587,7 @@ con.connect((err)=> {
       }
     });
     socket.on('C_send_diem',(toado,mail)=>{
+      console.log('C_send_diem'+toado+'   '+ mail);
       if(socket.number != null){
         if(toado!=null && mail !=null){
           con.query("SELECT `toado` FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"' AND `toado`="+toado+" ORDER BY id LIMIT 1", (err, as)=>{
