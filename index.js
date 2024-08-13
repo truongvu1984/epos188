@@ -1069,7 +1069,9 @@ con.connect((err)=> {
 
     });
     socket.on('C_del_acc',(pass,phone_id)=>{
+      console.log('BBBB1');
       if(socket.number && pass){
+        console.log('AAA');
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ phone_id +"' LIMIT 1", function(err3, row1s){
           if(err3)socket.emit('del_acc_thatbai','A');
           else {
@@ -1079,6 +1081,7 @@ con.connect((err)=> {
                  if (err || rows.length ==0)socket.emit('del_acc_thatbai','A');
                  else{
                   if (passwordHash.verify(pass, rows[0].pass)){
+                    console.log('CCCCC');
                     var string = Math.floor(Math.random() * (899999)) + 100000;
                     var mailOptions = {
                         from: 'windlaxy@gmail.com',
@@ -1094,8 +1097,8 @@ con.connect((err)=> {
                           var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
                           var values = [[socket.number, string,time,1,phone_id]];
                           con.query(sql, [values],  (err1, result)=>{
-                            if ( err1){socket.emit('del_acc_thatbai','A');console.log('AAAAA'+err1);}
-                            else {socket.emit('del_acc_thanhcong');console.log('BBBBB');}
+                            if ( err1){socket.emit('del_acc_thatbai','A');console.log('A1111'+err1);}
+                            else {socket.emit('del_acc_thanhcong');console.log('BBBBB1111');}
                           });
                         }
                         else {
