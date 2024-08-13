@@ -663,7 +663,7 @@ con.connect((err)=> {
                                     var values = [[tin.username,tin.displayname, tin.pass,string,time,1,id_phone]];
                                     con.query(sql, [values],  (err1, result)=>{
                                       if (err1) socket.emit('S_regis_1_windlaxy_thatbai','A');
-                                      else {socket.emit('S_regis_1_windlaxy_ok');console.log('CCCCC');}
+                                      else {socket.emit('S_regis_1_windlaxy_ok');}
                                     });
                                 }
                                 else {
@@ -716,7 +716,7 @@ con.connect((err)=> {
                     if (err1)socket.emit('S_regis_2_windlaxy_thatbai','A');
                     else  {
                       socket.emit('S_regis_2_windlaxy_ok',rows[0].mail);
-                      con.query("DELETE FROM `active` WHERE `mail` LIKE '"+id_phone+"'", (err2)=>{
+                      con.query("DELETE FROM `active` WHERE `phone_id` LIKE '"+id_phone+"'", (err2)=>{
                         if (err2)console.log('C_regis_2_windlaxy='+err2);
 
                       });
