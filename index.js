@@ -841,6 +841,137 @@ con.connect((err)=> {
     			 else{
             if (passwordHash.verify(pass1, rows[0].pass)){
                 socket.emit('login1_dung', {name:rows[0].user});
+                socket.number = data.rightuser;
+                socket.username = rows[0].user;
+                socket.join(data.rightuser);
+                if(data.room != null && data.room!=""){
+                    if(socket.roomabc){
+                        socket.leave(socket.roomabc);
+                        socket.join(data.room );
+                        socket.roomabc = data.room;
+                    }
+                    else {
+                        socket.join(data.room );
+                        socket.roomabc = data.room;
+                    }
+                }
+                // bản tin đến
+                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'N'", (err, rows)=>{
+                  if (err){socket.emit('login2_khongtaikhoan');console.log(err);}
+                  else if(rows.length>0){
+                    rows.forEach((row, i) => {
+                        let idc=row.idc;
+                        let list_line=[];
+                        let list_diem=[];
+                        con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `idc` LIKE '"+idc+"'", function(err1, row1s){
+                          if (err1){socket.emit('login2_khongtaikhoan');}
+                          else if(row1s.length>0){
+                            row1s.forEach((row1, i1) => {
+                              con.query("SELECT * FROM `"+socket.number+"line_detail` WHERE `idc` LIKE '"+row1.idlo+"'", function(err2, row2s){
+                                if (err2){socket.emit('login2_khongtaikhoan');}
+                                else if(row2s.length>0){
+                                  list_line.push({name:row1.name,culy:row1.culy,up_id:idc,list_line1:row2s,idlo:row1.idlo});
+                                  if(i1===(row1s.length-1)){
+                                    con.query("SELECT * FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err3, row3s){
+                                      if(err3){socket.emit('login2_khongtaikhoan');}
+                                      else if(row3s.length>0){
+                                        socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
+                                                                  subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:row3s});
+                                      }
+
+                                    });
+                                  }
+
+                                }
+                              });
+                            });
+                          }
+                          else {
+                            con.query("SELECT * FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err3, row3s){
+                              if(err3){socket.emit('login2_khongtaikhoan');}
+                              else {
+                                socket.emit('S_send_tinnhan',{name_nguoigui:row.name,number_nguoigui:row.number,
+                                                          subject: row.subject, idc:row.idc, time:get_time(row.time),list_line:list_line,list_diem:row3s});
+                              }
+
+                            });
+
+                          }
+                        });
+
+
+                    });
+                  }
+                });
+                // những người đã nhận tin của mình
+                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'K'", (err, rows)=>{
+                  if(err)console.log(err);
+                  else if(rows.length>0){
+                    rows.forEach((row, i) => {
+
+                      io.sockets.in(socket.number).emit('C_danhantinnhan',{nguoinhan:row.number,subject:row.subject, idc:row.idc,time:get_time(row.time)});
+                    });
+                  }
+                });
+                // bản tin room online
+                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'R'", (err, rows)=>{
+                  if(err)console.log(err);
+                  else if(rows.length>0){
+                    rows.forEach((row, i) => {
+                      con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+row.idc+"'", function(err2, rows2){
+                        if(err2)console.log(err2);
+                        else if(rows2.length>0){
+                        socket.emit('S_send_room',{room_name:row.subject, room_id_server:row.idc, nguoigui_name:row.name, nguoigui_number:row.number,member:rows2, time:get_time(row.time)});
+                        }
+                      });
+                    });
+                  }
+                });
+                //gửi danh sách bổ sung nếu chưa nhận được
+                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'Z'", (err, rows)=>{
+                  if(err)console.log(err);
+                  else if(rows.length>0){
+                    rows.forEach((row, i) => {
+                      con.query("SELECT * FROM `list_member_w` WHERE `idc` LIKE '"+row.idc+"'", function(err2, rows2){
+                        if(err2)console.log(err2);
+                        else if(rows2.length>0){
+                          socket.emit('S_send_member_bosung',{ idc:row.idc, name:row.name, number:row.number,list:rows2});
+                        }
+                      });
+                    });
+
+
+                  }
+                });
+                // gửi danh sách thành viên rời khỏi nhóm
+                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'H'", (err, rows)=>{
+                  if(err)console.log(err);
+                  else if(rows.length>0){
+                    rows.forEach((row, i) => {
+                      socket.emit('S_send_roi_nhom',row.idc,row.number);
+                    });
+                  }
+                });
+                // gửi danh sách new admin, có chuyển cho người khác
+                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'V'", (err, rows)=>{
+                  if(err)console.log(err);
+                  else if(rows.length>0){
+                    rows.forEach((row, i) => {
+                      socket.emit('S_send_new_admin',row.idc,row.number);
+                    });
+                  }
+                });
+                // gửi danh sách new admin, có chuyển cho người khác
+                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'X'", (err, rows)=>{
+                  if(err)console.log(err);
+                  else if(rows.length>0){
+                    rows.forEach((row, i) => {
+                      socket.emit('S_kick_off',row.idc);
+                    });
+                  }
+                });
+
+
             }
             else {socket.emit('login1_sai', {name:rows[0].user});}
           }
@@ -849,7 +980,7 @@ con.connect((err)=> {
     });
     socket.on('login2',(data)=>{
       if(data.rightuser&&data.right_pass){
-        con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", function(err, rows){
+        con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", (err, rows)=>{
     	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
           else{
             if (passwordHash.verify(data.right_pass, rows[0].pass)){
@@ -868,7 +999,7 @@ con.connect((err)=> {
                   }
               }
               // bản tin đến
-              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'N'", function(err, rows){
+              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'N'", (err, rows)=>{
                 if (err){socket.emit('login2_khongtaikhoan');console.log(err);}
                 else if(rows.length>0){
                   rows.forEach((row, i) => {
@@ -916,7 +1047,7 @@ con.connect((err)=> {
                 }
               });
               // những người đã nhận tin của mình
-              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'K'", function(err, rows){
+              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'K'", (err, rows)=>{
                 if(err)console.log(err);
                 else if(rows.length>0){
                   rows.forEach((row, i) => {
@@ -926,7 +1057,7 @@ con.connect((err)=> {
                 }
               });
               // bản tin room online
-              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'R'", function(err, rows){
+              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'R'", (err, rows)=>{
                 if(err)console.log(err);
                 else if(rows.length>0){
                   rows.forEach((row, i) => {
@@ -940,7 +1071,7 @@ con.connect((err)=> {
                 }
               });
               //gửi danh sách bổ sung nếu chưa nhận được
-              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'Z'", function(err, rows){
+              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'Z'", (err, rows)=>{
                 if(err)console.log(err);
                 else if(rows.length>0){
                   rows.forEach((row, i) => {
@@ -956,7 +1087,7 @@ con.connect((err)=> {
                 }
               });
               // gửi danh sách thành viên rời khỏi nhóm
-              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'H'", function(err, rows){
+              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'H'", (err, rows)=>{
                 if(err)console.log(err);
                 else if(rows.length>0){
                   rows.forEach((row, i) => {
@@ -965,7 +1096,7 @@ con.connect((err)=> {
                 }
               });
               // gửi danh sách new admin, có chuyển cho người khác
-              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'V'", function(err, rows){
+              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'V'", (err, rows)=>{
                 if(err)console.log(err);
                 else if(rows.length>0){
                   rows.forEach((row, i) => {
@@ -974,7 +1105,7 @@ con.connect((err)=> {
                 }
               });
               // gửi danh sách new admin, có chuyển cho người khác
-              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'X'", function(err, rows){
+              con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'X'", (err, rows)=>{
                 if(err)console.log(err);
                 else if(rows.length>0){
                   rows.forEach((row, i) => {
