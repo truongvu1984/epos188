@@ -8,7 +8,6 @@ const certificate = fs.readFileSync('/etc/letsencrypt/live/nganvu25594.com/fullc
 
 const credentials = { key: privateKey, cert: certificate };
 
-
 var server = require("https").createServer(credentials,app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000,()=>{console.log("server start hi hi")});
@@ -568,7 +567,6 @@ con.connect((err)=> {
         });
       }
     });
-
     socket.on('C_xoa_game',(nhom_mail)=>{
       if(socket.number != null&&isArray(nhom_mail)){
         socket.emit('S_get_xoagame',nhom_mail);
@@ -587,7 +585,6 @@ con.connect((err)=> {
       }
     });
     socket.on('C_send_diem',(toado,mail)=>{
-      
       if(socket.number != null){
         if(toado!=null && mail !=null){
           con.query("SELECT `toado` FROM `"+socket.number+"caro1` WHERE `mail` LIKE '"+mail+"' AND `toado`="+toado+" ORDER BY id LIMIT 1", (err, as)=>{
@@ -637,6 +634,7 @@ con.connect((err)=> {
 
     });
     socket.on('C_regis_1_windlaxy',(tin,id_phone)=>{
+      console.log('AAA:'+tin);
       if(tin&&id_phone){
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", (err3, row1s)=>{
           if(err3)socket.emit('S_regis_1_windlaxy_thatbai','A');
@@ -649,6 +647,7 @@ con.connect((err)=> {
                       else {
                         if (rows.length >0 )	{socket.emit('S_regis_1_windlaxy_thatbai','D');}
                         else {
+                          console.log('BBBBB');
                           var string = Math.floor(Math.random() * (899999)) + 100000;
                           var mailOptions = {
                               from: 'windlaxy@gmail.com',
@@ -825,7 +824,6 @@ con.connect((err)=> {
         });
       }
     });
-
    function get_time(gio){
       let year1 = gio.getFullYear();
       let month1 = gio.getMonth();
