@@ -836,27 +836,16 @@ con.connect((err)=> {
     // lắng nghe sự kiện đăng ký tài khoản mới
     socket.on('login1',(user1, pass1)=>{
       if(user1&&pass1){
-        con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", function(err, rows){
+        con.query("SELECT * FROM `account` WHERE `number` LIKE '"+user1+"' LIMIT 1", (err, rows)=>{
     	     if (err || rows.length ==0){socket.emit('login1_khongtaikhoan');}
     			 else{
             if (passwordHash.verify(pass1, rows[0].pass)){
                 socket.emit('login1_dung', {name:rows[0].user});
-                socket.number = data.rightuser;
+                socket.number = user1;
                 socket.username = rows[0].user;
-                socket.join(data.rightuser);
-                if(data.room != null && data.room!=""){
-                    if(socket.roomabc){
-                        socket.leave(socket.roomabc);
-                        socket.join(data.room );
-                        socket.roomabc = data.room;
-                    }
-                    else {
-                        socket.join(data.room );
-                        socket.roomabc = data.room;
-                    }
-                }
+                socket.join(user1);
                 // bản tin đến
-                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'N'", (err, rows)=>{
+                con.query("SELECT * FROM `"+user1+"main` WHERE `stt` LIKE 'N'", (err, rows)=>{
                   if (err){socket.emit('login2_khongtaikhoan');console.log(err);}
                   else if(rows.length>0){
                     rows.forEach((row, i) => {
@@ -904,7 +893,7 @@ con.connect((err)=> {
                   }
                 });
                 // những người đã nhận tin của mình
-                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'K'", (err, rows)=>{
+                con.query("SELECT * FROM `"+user1+"main` WHERE `stt` LIKE 'K'", (err, rows)=>{
                   if(err)console.log(err);
                   else if(rows.length>0){
                     rows.forEach((row, i) => {
@@ -914,7 +903,7 @@ con.connect((err)=> {
                   }
                 });
                 // bản tin room online
-                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'R'", (err, rows)=>{
+                con.query("SELECT * FROM `"+user1+"main` WHERE `stt` LIKE 'R'", (err, rows)=>{
                   if(err)console.log(err);
                   else if(rows.length>0){
                     rows.forEach((row, i) => {
@@ -928,7 +917,7 @@ con.connect((err)=> {
                   }
                 });
                 //gửi danh sách bổ sung nếu chưa nhận được
-                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'Z'", (err, rows)=>{
+                con.query("SELECT * FROM `"+user1+"main` WHERE `stt` LIKE 'Z'", (err, rows)=>{
                   if(err)console.log(err);
                   else if(rows.length>0){
                     rows.forEach((row, i) => {
@@ -944,7 +933,7 @@ con.connect((err)=> {
                   }
                 });
                 // gửi danh sách thành viên rời khỏi nhóm
-                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'H'", (err, rows)=>{
+                con.query("SELECT * FROM `"+user1+"main` WHERE `stt` LIKE 'H'", (err, rows)=>{
                   if(err)console.log(err);
                   else if(rows.length>0){
                     rows.forEach((row, i) => {
@@ -953,7 +942,7 @@ con.connect((err)=> {
                   }
                 });
                 // gửi danh sách new admin, có chuyển cho người khác
-                con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'V'", (err, rows)=>{
+                con.query("SELECT * FROM `"+user1+"main` WHERE `stt` LIKE 'V'", (err, rows)=>{
                   if(err)console.log(err);
                   else if(rows.length>0){
                     rows.forEach((row, i) => {
