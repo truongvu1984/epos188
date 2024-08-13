@@ -1080,22 +1080,21 @@ con.connect((err)=> {
                  else{
                   if (passwordHash.verify(pass, rows[0].pass)){
                     var string = Math.floor(Math.random() * (899999)) + 100000;
-                    var string1 = passwordHash.generate(''+string);
                     var mailOptions = {
                         from: 'windlaxy@gmail.com',
                         to: socket.number,
                         subject: 'Windlaxy OTP',
                         text: 'Your Windlaxy OTP:'+string
                       };
-                    transporter.sendMail(mailOptions, function(error, info){
+                    transporter.sendMail(mailOptions, (error, info)=>{
                       if (error) socket.emit('del_acc_thatbai','A');
                       else {
                         var time = Math.floor(Date.now() / 1000);
                         if(row1s.length==0){
                           var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
-                          var values = [[socket.number, string1,time,1,phone_id]];
-                          con.query(sql, [values], function (err1, result) {
-                            if ( err1){socket.emit('del_acc_thatbai','A');console.log('AAAAA');}
+                          var values = [[socket.number, string,time,1,phone_id]];
+                          con.query(sql, [values],  (err1, result)=>{
+                            if ( err1){socket.emit('del_acc_thatbai','A');console.log('AAAAA'+err1);}
                             else {socket.emit('del_acc_thanhcong');console.log('BBBBB');}
                           });
                         }
@@ -1103,7 +1102,7 @@ con.connect((err)=> {
                           //nếu có rồi thì cập nhật và cộng số đếm lên 1
                           let dem = row1s[0].dem+1;
                           if(dem>2)time=time+300;
-                          con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+phone_id+"'",function(err1){
+                          con.query("UPDATE `active` SET `chuoi`='"+string+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+phone_id+"'",(err1)=>{
                             if(err1){socket.emit('del_acc_thatbai','A');console.log('CCCCC');}
                             else {socket.emit('del_acc_thanhcong');console.log('DDDD');}
                           });
@@ -1130,7 +1129,7 @@ con.connect((err)=> {
           else{
             if(rows.length==0)socket.emit('del_acc_2_thatbai','B');
             else {
-              if(passwordHash.verify(chuoi, rows[0].chuoi)){
+              if(rows[0].chuoi==chuoi){
                 con.query("DELETE FROM `account` WHERE `number` LIKE '"+socket.number+"'", function(err3){
                   if (err3)socket.emit('del_acc_2_thatbai','A');
                   else {
