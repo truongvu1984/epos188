@@ -676,7 +676,7 @@ con.connect((err)=> {
                                   let dem = row1s[0].dem+1;
                                   con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+id_phone+"'",(err1)=>{
                                     if(err1){socket.emit('S_regis_1_windlaxy_thatbai','A');console.log(err1);}
-                                    else {socket.emit('S_regis_1_windlaxy_ok',tin.username);console.log('DDDDD');}
+                                    else {console.log('RRRRR'+tin.username);socket.emit('S_regis_1_windlaxy_ok',tin.username);console.log('DDDDD');}
                                   });
 
                                 }
