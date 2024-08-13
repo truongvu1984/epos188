@@ -660,22 +660,23 @@ con.connect((err)=> {
                               else {
                                 var time = Math.floor(Date.now() / 1000);
                                 if(row1s.length==0){
+                                  console.log('GGGG');
                                     var sql = "INSERT INTO `active` (mail,name,pass,chuoi,time,dem,phone_id) VALUES ?";
                                     var time = Math.floor(Date.now() / 1000);
-                                    // var matkhau = passwordHash.generate(''+tin.pass);
                                     var values = [[tin.username,tin.displayname, tin.pass,string,time,1,id_phone]];
                                     con.query(sql, [values],  (err1, result)=>{
                                       if (err1) socket.emit('S_regis_1_windlaxy_thatbai','A');
-                                      else socket.emit('S_regis_1_windlaxy_ok');
+                                      else {socket.emit('S_regis_1_windlaxy_ok');console.log('CCCCC');}
 
                                     });
                                 }
                                 else {
+                                  console.log('TTTTT');
                                   //nếu có rồi thì cập nhật và cộng số đếm lên 1
                                   let dem = row1s[0].dem+1;
                                   con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+id_phone+"'",(err1)=>{
                                     if(err1)socket.emit('S_regis_1_windlaxy_thatbai','A');
-                                    else socket.emit('S_regis_1_windlaxy_ok',tin.username);
+                                    else {socket.emit('S_regis_1_windlaxy_ok',tin.username);console.log('DDDDD');}
                                   });
 
                                 }
