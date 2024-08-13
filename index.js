@@ -1095,8 +1095,8 @@ con.connect((err)=> {
                           var sql = "INSERT INTO `active` (mail,chuoi,time,dem,phone_id ) VALUES ?";
                           var values = [[socket.number, string1,time,1,phone_id]];
                           con.query(sql, [values], function (err1, result) {
-                            if ( err1)socket.emit('del_acc_thatbai','A');
-                            else socket.emit('del_acc_thanhcong');
+                            if ( err1){socket.emit('del_acc_thatbai','A');console.log('AAAAA');}
+                            else {socket.emit('del_acc_thanhcong');console.log('BBBBB');}
                           });
                         }
                         else {
@@ -1104,8 +1104,8 @@ con.connect((err)=> {
                           let dem = row1s[0].dem+1;
                           if(dem>2)time=time+300;
                           con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+phone_id+"'",function(err1){
-                            if(err1)socket.emit('del_acc_thatbai','A');
-                            else socket.emit('del_acc_thanhcong');
+                            if(err1){socket.emit('del_acc_thatbai','A');console.log('CCCCC');}
+                            else {socket.emit('del_acc_thanhcong');console.log('DDDD');}
                           });
                         }
                       }
