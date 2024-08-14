@@ -968,10 +968,11 @@ con.connect((err)=> {
       }
     });
     socket.on('login2',(data)=>{
+      console.log('login2');
       if(data.rightuser&&data.right_pass){
         con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", (err, rows)=>{
-    	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
-          else{
+    	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');console.log('AAAA');}
+          else{ console.log('BBBB');
             if (passwordHash.verify(data.right_pass, rows[0].pass)){
               socket.number = data.rightuser;
               socket.username = rows[0].user;
