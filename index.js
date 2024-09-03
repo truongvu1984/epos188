@@ -969,15 +969,17 @@ con.connect((err)=> {
       }
     });
     socket.on('login2',(data)=>{
-
+      console.log('co log 2');
       if(data.rightuser&&data.right_pass){
+          console.log('co log 2 ok');
         con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", (err, rows)=>{
     	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
-          else{ 
+          else{
             if (passwordHash.verify(data.right_pass, rows[0].pass)){
               socket.number = data.rightuser;
               socket.username = rows[0].user;
               socket.join(data.rightuser);
+                console.log('pass ok');
               if(data.room != null && data.room!=""){
                             if(socket.roomabc){
                               socket.leave(socket.roomabc);
