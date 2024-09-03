@@ -995,6 +995,7 @@ con.connect((err)=> {
               con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'N'", (err, rows)=>{
                 if (err){socket.emit('login2_khongtaikhoan');console.log(err);}
                 else if(rows.length>0){
+                  console.log('lon hon 0');
                   rows.forEach((row, i) => {
                       let idc=row.idc;
                       let list_line=[];
@@ -1002,10 +1003,12 @@ con.connect((err)=> {
                       con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `idc` LIKE '"+idc+"'", function(err1, row1s){
                         if (err1){socket.emit('login2_khongtaikhoan');}
                         else if(row1s.length>0){
+                          console.log('AAAA'+row1s.length);
                           row1s.forEach((row1, i1) => {
                             con.query("SELECT * FROM `"+socket.number+"line_detail` WHERE `idc` LIKE '"+row1.idlo+"'", function(err2, row2s){
                               if (err2){socket.emit('login2_khongtaikhoan');}
                               else if(row2s.length>0){
+                                  console.log('BBBBB'+row2s.length);
                                 list_line.push({name:row1.name,culy:row1.culy,up_id:idc,list_line1:row2s,idlo:row1.idlo});
                                 if(i1===(row1s.length-1)){
                                   con.query("SELECT * FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", function(err3, row3s){
