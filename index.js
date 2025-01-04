@@ -1687,7 +1687,7 @@ con.connect((err)=> {
       console.log(tin);
       if(tin.mail&&tin.matkhau&&tin.donvi&&tin.code&&tin.arr_member){
         console.log('CCCC');
-        con.query("SELECT * FROM `active` WHERE `mai` LIKE '"+ tin.mail +"' LIMIT 1", (err1, row1s)=>{
+        con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ tin.mail +"' LIMIT 1", (err1, row1s)=>{
           if(err1)socket.emit('C_suachua_regis_thatbai','A');
           else {
             console.log('BBBB');
