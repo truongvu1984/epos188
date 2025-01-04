@@ -9,6 +9,7 @@ const certificate = fs.readFileSync('/etc/letsencrypt/live/nganvu25594.com/fullc
 const credentials = { key: privateKey, cert: certificate };
 
 var server = require("https").createServer(credentials,app);
+// var server = require("https").createServer(app);
 var io = require("socket.io").listen(server);
 server.listen(process.env.PORT || 3000,()=>{console.log("server start hi hi")});
 var mysql = require('mysql');
@@ -634,6 +635,30 @@ con.connect((err)=> {
       }
 
     });
+    socket.on('C_suachua_taomoi',(object)=>{
+        var sql = "INSERT INTO `"+mail+"caro1` (mail,toado, ta) VALUES ?";
+        var val = [[socket.number,toado,'B']];
+        con.query(sql, [val],  (err1, res1)=> {
+          if ( err1){console.log('a5'+err1);}
+          else {
+            socket.emit('C_send_diem_ok',mail,toado);
+            // đây là send điểm có thông báo, còn hiển thị điểm thì tùy trạng thái bên nhận, nếu đang ở game thì hiển thị
+            io.sockets.in(mail).emit('S_send_diem',socket.number,socket.username,toado);
+            con.query("UPDATE `"+socket.number+"caro` SET `thongbao`='A',`luotchoi` = 'B' WHERE `mail` LIKE '"+mail+"'",(err,res)=>{
+              if(err)console.log('a8'+err);
+              else {
+                var sql = "INSERT INTO `"+socket.number+"caro1` (mail,toado, ta) VALUES ?";
+                var val = [[mail,toado,'A']];
+                con.query(sql, [val],  (err1, res1)=> {
+                  if ( err1){console.log('a5'+err1);}
+
+                });
+              }
+            });
+          }
+        });
+
+    });
     socket.on('C_regis_1_windlaxy',(tin,id_phone)=>{
       if(tin&&id_phone){
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", (err3, row1s)=>{
@@ -969,9 +994,7 @@ con.connect((err)=> {
       }
     });
     socket.on('login2',(data)=>{
-      console.log('co log 2');
       if(data.rightuser&&data.right_pass){
-          console.log('co log 2 ok');
         con.query("SELECT * FROM `account` WHERE `number` LIKE '"+data.rightuser+"' LIMIT 1", (err, rows)=>{
     	    if (err || rows.length ==0){socket.emit('login2_khongtaikhoan');}
           else{
@@ -979,7 +1002,6 @@ con.connect((err)=> {
               socket.number = data.rightuser;
               socket.username = rows[0].user;
               socket.join(data.rightuser);
-                console.log('pass ok');
               if(data.room != null && data.room!=""){
                             if(socket.roomabc){
                               socket.leave(socket.roomabc);
@@ -995,7 +1017,6 @@ con.connect((err)=> {
               con.query("SELECT * FROM `"+socket.number+"main` WHERE `stt` LIKE 'N'", (err, rows)=>{
                 if (err){socket.emit('login2_khongtaikhoan');console.log(err);}
                 else if(rows.length>0){
-                  console.log('lon hon 0');
                   rows.forEach((row, i) => {
                       let idc=row.idc;
                       let list_line=[];
@@ -1003,13 +1024,11 @@ con.connect((err)=> {
                       con.query("SELECT * FROM `"+socket.number+"line_main` WHERE `idc` LIKE '"+idc+"'", (err1, row1s)=>{
                         if (err1){socket.emit('login2_khongtaikhoan');}
                         else if(row1s.length>0){
-                          console.log('AAAA'+row1s.length);
                           row1s.forEach((row1, i1) => {
                             con.query("SELECT * FROM `"+socket.number+"line_detail` WHERE `idc` LIKE '"+row1.idlo+"'", (err2, row2s)=>{
                               if (err2){socket.emit('login2_khongtaikhoan');}
                               else if(row2s.length>0){
-                                  console.log('BBBBB'+row2s.length);
-                                list_line.push({name:row1.name,culy:row1.culy,up_id:idc,list_line1:row2s,idlo:row1.idlo});
+                              list_line.push({name:row1.name,culy:row1.culy,up_id:idc,list_line1:row2s,idlo:row1.idlo});
                                 if(i1===(row1s.length-1)){
                                   con.query("SELECT * FROM `"+socket.number+"diem` WHERE `idc` LIKE '"+idc+"'", (err3, row3s)=>{
                                     if(err3){socket.emit('login2_khongtaikhoan');}
@@ -1645,7 +1664,111 @@ con.connect((err)=> {
 
     }
     });
+    socket.on('C_suachua_regis_otp',(otp,mail)=>{
+      if(tin&&mail){
+        con.query("SELECT * FROM `active` WHERE `mai` LIKE '"+ mail +"' LIMIT 1", (err1, row1s)=>{
+          if(err1)socket.emit('S_suachua_regis_2thatbai','A');
+          else {
+            if(row1s.length>0 && row1s[0].dem>2)socket.emit('S_suachua_regis_2thatbai','C');
+            else {
+              if(row1s[0].chuoi==otp){
 
+              }
+              else socket.emit('S_suachua_regis_2thatbai','B');
+            }
+          }
+        });
+
+
+      }
+    });
+    socket.on('C_suachua_regis',(tin)=>{
+      if(tin.mail&&tin.matkhau&&tin.donvi&&tin.code&&tin.arr_member){
+        con.query("SELECT * FROM `active` WHERE `mai` LIKE '"+ tin.mail +"' LIMIT 1", (err1, row1s)=>{
+          if(err1)socket.emit('C_suachua_regis_thatbai','A');
+          else {
+            if(row1s.length>0 && row1s[0].dem>2)socket.emit('C_suachua_regis_thatbai','C');
+            else {
+              con.query("SELECT * FROM `account_suachua` WHERE `mail` LIKE '"+ tin.mail +"' LIMIT 1", (err2, row2s)=>{
+                      // nếu tài khoản đã có người đăng ký rồi thì:
+                      if(err2)socket.emit('C_suachua_regis_thatbai','A');
+                      else {
+                        if (row2s.length >0 )	{socket.emit('C_suachua_regis_thatbai','B');}
+                        else {
+                          var string = Math.floor(Math.random() * (899999)) + 100000;
+                          var mailOptions = {
+                              from: 'windlaxy@gmail.com',
+                              to: tin.mail,
+                              subject: 'Caro OTP',
+                              text: 'Your OTP:'+string
+                            };
+                            transporter.sendMail(mailOptions, (error, info)=>{
+                              if (error) socket.emit('C_suachua_regis_thatbai','D');
+                              else {
+                                var time = Math.floor(Date.now() / 1000);
+                                con.query(" DELETE FROM `suachua_member` WHERE `mail_admin`LIKE '"+tin.mail+"'", (err5)=>{
+                                  if(err5)socket.emit('C_suachua_regis_thatbai','A');
+                                  else {
+                                    if(row1s.length==0){
+                                        var sql = "INSERT INTO `active` (mail,name,pass,chuoi,time,dem,phone_id,cty) VALUES ?";
+                                        var time = Math.floor(Date.now() / 1000);
+                                        var matkhau = passwordHash.generate(''+tin.pass);
+                                        var values = [[tin.mail,tin.fullname, matkhau,string,time,1,tin.code,tin.donvi]];
+                                        con.query(sql, [values],  (err3, res3)=>{
+                                          if (err3)socket.emit('C_suachua_regis_thatbai','A');
+                                          else {
+                                            socket.emit('S_suachua_regis_ok1',tin.username);
+                                            var sql2 = "INSERT INTO `suachua_member` (username,realname,pass,mail_admin,chucvu,phongban) VALUES ?";
+                                            tin.arr_member.forEach((mem,key)=>{
+                                                var val = [[mem.username,mem.full_name,mem.matkhau,tin.mail,mem.chucvu,mem.donvi]];
+                                                con.query(sql2, [val],  (err4, res4)=>{
+                                                    if (err4)socket.emit('C_suachua_regis_thatbai','E',mem.username);
+
+                                                });
+
+                                            });
+
+                                          }
+                                        });
+                                    }
+                                    else {
+                                      //nếu có rồi thì cập nhật và cộng số đếm lên 1
+                                      let dem = row1s[0].dem+1;
+                                      con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+id_phone+"'",(err6)=>{
+                                        if(err6)socket.emit('C_regis_caro_thatbai','A');
+                                        else {
+                                          socket.emit('S_suachua_regis_ok1',tin.username);
+                                          var sql2 = "INSERT INTO `suachua_member` (username,realname,pass,mail_admin,chucvu,phongban) VALUES ?";
+                                          tin.arr_member.forEach((mem,key)=>{
+                                              var val = [[mem.username,mem.full_name,mem.matkhau,tin.mail,mem.chucvu,mem.donvi]];
+                                              con.query(sql2, [val],  (err4, res4)=>{
+                                                  if (err4)socket.emit('C_suachua_regis_thatbai','E',mem.username);
+                                              });
+
+                                          });
+                                        }
+                                      });
+
+                                    }
+                                  }
+                                });
+
+                              }
+                          });
+
+
+                        }
+                      }
+              });
+
+            }
+          }
+        });
+
+
+      }
+
+    });
 
   });
   }
