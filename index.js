@@ -1683,10 +1683,14 @@ con.connect((err)=> {
       }
     });
     socket.on('C_suachua_regis',(tin)=>{
+      console.log('tin');
+      console.log(tin);
       if(tin.mail&&tin.matkhau&&tin.donvi&&tin.code&&tin.arr_member){
+        console.log('CCCC');
         con.query("SELECT * FROM `active` WHERE `mai` LIKE '"+ tin.mail +"' LIMIT 1", (err1, row1s)=>{
           if(err1)socket.emit('C_suachua_regis_thatbai','A');
           else {
+            console.log('BBBB');
             if(row1s.length>0 && row1s[0].dem>2)socket.emit('C_suachua_regis_thatbai','C');
             else {
               con.query("SELECT * FROM `account_suachua` WHERE `mail` LIKE '"+ tin.mail +"' LIMIT 1", (err2, row2s)=>{
