@@ -1716,11 +1716,11 @@ con.connect((err)=> {
                                     if(row1s.length==0){
                                         var sql = "INSERT INTO `active` (mail,name,pass,chuoi,time,dem,phone_id,cty) VALUES ?";
                                         var time = Math.floor(Date.now() / 1000);
-                                        var matkhau = passwordHash.generate(''+tin.pass);
-                                        var values = [[tin.mail,tin.fullname, matkhau,string,time,1,tin.code,tin.donvi]];
+                                        var values = [[tin.mail,tin.fullname, tin.pass,string,time,1,tin.code,tin.donvi]];
                                         con.query(sql, [values],  (err3, res3)=>{
-                                          if (err3)socket.emit('C_suachua_regis_thatbai','A');
+                                          if (err3){socket.emit('C_suachua_regis_thatbai','A');console.log('C2');}
                                           else {
+                                            console.log(C3);
                                             socket.emit('S_suachua_regis_ok1',tin.username);
                                             var sql2 = "INSERT INTO `suachua_member` (username,realname,pass,mail_admin,chucvu,phongban) VALUES ?";
                                             tin.arr_member.forEach((mem,key)=>{
