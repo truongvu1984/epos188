@@ -1720,7 +1720,7 @@ con.connect((err)=> {
                                         con.query(sql, [values],  (err3, res3)=>{
                                           if (err3){socket.emit('C_suachua_regis_thatbai','A');console.log('C2');}
                                           else {
-                                            console.log(C3);
+                                            console.log("C3");
                                             socket.emit('S_suachua_regis_ok1',tin.username);
                                             var sql2 = "INSERT INTO `suachua_member` (username,realname,pass,mail_admin,chucvu,phongban) VALUES ?";
                                             tin.arr_member.forEach((mem,key)=>{
