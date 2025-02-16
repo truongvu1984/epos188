@@ -1665,8 +1665,8 @@ con.connect((err)=> {
     }
     });
     socket.on('C_suachua_regis_otp',(otp,mail)=>{
-      if(tin&&mail){
-        con.query("SELECT * FROM `active` WHERE `mai` LIKE '"+ mail +"' LIMIT 1", (err1, row1s)=>{
+      if(otp&&mail){
+        con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ mail +"' LIMIT 1", (err1, row1s)=>{
           if(err1)socket.emit('S_suachua_regis_2thatbai','A');
           else {
             if(row1s.length>0 && row1s[0].dem>2)socket.emit('S_suachua_regis_2thatbai','C');
@@ -1683,14 +1683,11 @@ con.connect((err)=> {
       }
     });
     socket.on('C_suachua_regis',(tin)=>{
-      console.log('tin');
-      console.log(tin);
-      if(tin.mail&&tin.matkhau&&tin.donvi&&tin.code&&tin.arr_member){
-        console.log('CCCC');
+      if(tin.mail&&tin.matkhau&&tin.fullname&&tin.donvi&&tin.code&&tin.arr_member){
         con.query("SELECT * FROM `active` WHERE `mail` LIKE '"+ tin.mail +"' LIMIT 1", (err1, row1s)=>{
           if(err1)socket.emit('C_suachua_regis_thatbai','A');
           else {
-            console.log('BBBB');
+
             if(row1s.length>0 && row1s[0].dem>2)socket.emit('C_suachua_regis_thatbai','C');
             else {
               con.query("SELECT * FROM `account_suachua` WHERE `mail` LIKE '"+ tin.mail +"' LIMIT 1", (err2, row2s)=>{
@@ -1738,7 +1735,7 @@ con.connect((err)=> {
                                     else {
                                       //nếu có rồi thì cập nhật và cộng số đếm lên 1
                                       let dem = row1s[0].dem+1;
-                                      con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `phone_id` LIKE '"+id_phone+"'",(err6)=>{
+                                      con.query("UPDATE `active` SET `chuoi`='"+string1+"',`time`="+time+",`dem`="+dem+" WHERE `mail` LIKE '"+tin.mail+"'",(err6)=>{
                                         if(err6)socket.emit('C_regis_caro_thatbai','A');
                                         else {
                                           socket.emit('S_suachua_regis_ok1',tin.username);
@@ -1771,6 +1768,24 @@ con.connect((err)=> {
 
 
       }
+
+    });
+    socket.on('C_suachua_taomoi',(tin)=>{
+      if(tin.ngaynhan&&tin.tentrangbi&&tin.donviquanly&&tin.tinhtranghonghong&&tin.noidungsuachua&&tin.tieuhao&&tin.ngaybangiao&&tin.nguoinhan&&tin.time_giaotra){
+        var sql5 = "INSERT INTO `list_sua_chua` (ngaynhan, tentrangbi, donviquanly, tinhtranghonghong,noidungsuachua,tieuhao,ngaybangiao,nguoinhan,time_giaotra) VALUES ?";
+        var val5 = [[ tin.ngaynhan,tin.tentrangbi,tin.donviquanly,tin.tinhtranghonghong,tin.noidungsuachua,tin.tieuhao,tin.ngaybangiao,tin.nguoinhan,tin.time_giaotra]];
+        con.query(sql5, [val5], (err5, res5)=>{
+            if ( err5){console.log(err5);}
+            else {
+              io.sockets.in(row.number).emit('S_suachua_danhan_taomoi',res5.insertId);
+            }
+          });
+
+
+      }
+
+
+
 
     });
 
