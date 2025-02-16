@@ -1754,7 +1754,7 @@ con.connect((err)=> {
         con.query(sql5, [val5], (err5, res5)=>{
             if ( err5){console.log(err5);}
             else {
-              io.sockets.in(row.number).emit('S_suachua_danhan_taomoi',res5.insertId);
+              socket.emit('S_suachua_danhan_taomoi',res5.insertId);
             }
           });
 
