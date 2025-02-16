@@ -635,30 +635,6 @@ con.connect((err)=> {
       }
 
     });
-    socket.on('C_suachua_taomoi',(object)=>{
-        var sql = "INSERT INTO `"+mail+"caro1` (mail,toado, ta) VALUES ?";
-        var val = [[socket.number,toado,'B']];
-        con.query(sql, [val],  (err1, res1)=> {
-          if ( err1){console.log('a5'+err1);}
-          else {
-            socket.emit('C_send_diem_ok',mail,toado);
-            // đây là send điểm có thông báo, còn hiển thị điểm thì tùy trạng thái bên nhận, nếu đang ở game thì hiển thị
-            io.sockets.in(mail).emit('S_send_diem',socket.number,socket.username,toado);
-            con.query("UPDATE `"+socket.number+"caro` SET `thongbao`='A',`luotchoi` = 'B' WHERE `mail` LIKE '"+mail+"'",(err,res)=>{
-              if(err)console.log('a8'+err);
-              else {
-                var sql = "INSERT INTO `"+socket.number+"caro1` (mail,toado, ta) VALUES ?";
-                var val = [[mail,toado,'A']];
-                con.query(sql, [val],  (err1, res1)=> {
-                  if ( err1){console.log('a5'+err1);}
-
-                });
-              }
-            });
-          }
-        });
-
-    });
     socket.on('C_regis_1_windlaxy',(tin,id_phone)=>{
       if(tin&&id_phone){
         con.query("SELECT * FROM `active` WHERE `phone_id` LIKE '"+ id_phone +"' LIMIT 1", (err3, row1s)=>{
@@ -1771,6 +1747,7 @@ con.connect((err)=> {
 
     });
     socket.on('C_suachua_taomoi',(tin)=>{
+      console.log(tin);
       if(tin.ngaynhan&&tin.tentrangbi&&tin.donviquanly&&tin.tinhtranghonghong&&tin.noidungsuachua&&tin.tieuhao&&tin.ngaybangiao&&tin.nguoinhan&&tin.time_giaotra){
         var sql5 = "INSERT INTO `list_sua_chua` (ngaynhan, tentrangbi, donviquanly, tinhtranghonghong,noidungsuachua,tieuhao,ngaybangiao,nguoinhan,time_giaotra) VALUES ?";
         var val5 = [[ tin.ngaynhan,tin.tentrangbi,tin.donviquanly,tin.tinhtranghonghong,tin.noidungsuachua,tin.tieuhao,tin.ngaybangiao,tin.nguoinhan,tin.time_giaotra]];
