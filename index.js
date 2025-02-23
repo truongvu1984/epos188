@@ -5,9 +5,7 @@ const path = require('path');
 var http = require("https");
 const privateKey = fs.readFileSync('/etc/letsencrypt/live/nganvu25594.com/privkey.pem', 'utf8');
 const certificate = fs.readFileSync('/etc/letsencrypt/live/nganvu25594.com/fullchain.pem', 'utf8');
-
 const credentials = { key: privateKey, cert: certificate };
-
 var server = require("https").createServer(credentials,app);
 // var server = require("https").createServer(app);
 var io = require("socket.io").listen(server);
@@ -1748,12 +1746,14 @@ con.connect((err)=> {
     });
     socket.on('C_suachua_taomoi',(tin)=>{
       console.log(tin);
-      if(tin.ngaynhan&&tin.tentrangbi&&tin.donviquanly&&tin.tinhtranghonghong&&tin.noidungsuachua&&tin.tieuhao&&tin.ngaybangiao&&tin.nguoinhan&&tin.time_giaotra){
-        var sql5 = "INSERT INTO `list_sua_chua` (ngaynhan, tentrangbi, donviquanly, tinhtranghonghong,noidungsuachua,tieuhao,ngaybangiao,nguoinhan,time_giaotra) VALUES ?";
-        var val5 = [[ tin.ngaynhan,tin.tentrangbi,tin.donviquanly,tin.tinhtranghonghong,tin.noidungsuachua,tin.tieuhao,tin.ngaybangiao,tin.nguoinhan,tin.time_giaotra]];
+      if(tin.ngaynhan&&tin.tentrangbi&&tin.donviquanly&&tin.tinhtranghonghong&&tin.noidungsuachua&&tin.tieuhao&&tin.time_sua_xong&&tin.nguoinhan&&tin.time_giaotra){
+console.log('AAA');
+        var sql5 = "INSERT INTO `list_sua_chua` (ngaynhan, tentrangbi, donviquanly, tinhtranghonghong,noidungsuachua,tieuhao,time_sua_xong,nguoinhan,time_giaotra) VALUES ?";
+        var val5 = [[ tin.ngaynhan,tin.tentrangbi,tin.donviquanly,tin.tinhtranghonghong,tin.noidungsuachua,tin.tieuhao,tin.time_sua_xong,tin.nguoinhan,tin.time_giaotra]];
         con.query(sql5, [val5], (err5, res5)=>{
             if ( err5){console.log(err5);}
             else {
+              console.log('OKKKK');
               socket.emit('S_suachua_danhan_taomoi',res5.insertId);
             }
           });
